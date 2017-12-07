@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: jbossmq-destinations-service.xml 43322 2006-04-03 16:19:24Z aguizar $ -->
+
+<!-- 
+   | This file defines the default Queues and Topics that JBossMQ
+   | ships with.  The default Queues and Topics are used by the 
+   | JBoss test suite and by the sample jms programs.
+   |
+   | You can add other destinations to this file, or you can create other
+   | *-service.xml files to contain your application's destinations.
+ -->
+
+<server>
+  <!-- Destination without a configured SecurityManager or without a 
+       a SecurityConf will default to role guest with read=true, write=true,
+       create=false.
+  -->
+  <!--mbean code="org.jboss.mq.server.jmx.Topic"
+	 name="jboss.mq.destination:name=testTopic,service=Topic">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+    <depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+    <attribute name="SecurityConf">
+      <security>
+        <role name="guest" read="true" write="true"/>
+        <role name="publisher" read="true" write="true" create="false"/>
+        <role name="durpublisher" read="true" write="true" create="true"/>
+      </security>
+    </attribute>
+  </mbean-->
+
+  <!--mbean code="org.jboss.mq.server.jmx.Topic"
+	 name="jboss.mq.destination:name=securedTopic,service=Topic">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+    <depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+    <attribute name="SecurityConf">
+      <security>
+        <role name="publisher" read="true" write="true" create="false"/>
+      </security>
+    </attribute>
+  </mbean-->
+
+  <!--mbean code="org.jboss.mq.server.jmx.Topic"
+	 name="jboss.mq.destination:name=testDurableTopic,service=Topic">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+    <depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+    <attribute name="SecurityConf">
+       <security>
+         <role name="guest" read="true" write="true"/>
+         <role name="publisher" read="true" write="true" create="false"/>
+         <role name="durpublisher" read="true" write="true" create="true"/>
+      </security>
+    </attribute>
+  </mbean-->
+
+  <mbean code="org.jboss.mq.server.jmx.Queue"
+	 name="jboss.mq.destination:name=testQueue,service=Queue">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+    <depends optional-attribute-name="SecurityManager">jboss.mq:service=SecurityManager</depends>
+    <attribute name="MessageCounterHistoryDayLimit">-1</attribute>
+    <attribute name="SecurityConf">
+      <security>
+        <role name="guest" read="true" write="true"/>
+        <role name="publisher" read="true" write="true" create="false"/>
+        <role name="noacc" read="false" write="false" create="false"/>
+      </security>
+    </attribute>
+  </mbean>
+  <!--mbean code="org.jboss.mq.server.jmx.Queue"
+	 name="jboss.mq.destination:name=A,service=Queue">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean-->
+  <!--mbean code="org.jboss.mq.server.jmx.Queue"
+	 name="jboss.mq.destination:name=B,service=Queue">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean-->
+  <!--mbean code="org.jboss.mq.server.jmx.Queue"
+	 name="jboss.mq.destination:name=C,service=Queue">
+	 <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean-->
+  <!--mbean code="org.jboss.mq.server.jmx.Queue"
+	 name="jboss.mq.destination:name=D,service=Queue">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean-->
+  <!--mbean code="org.jboss.mq.server.jmx.Queue"
+	 name="jboss.mq.destination:name=ex,service=Queue">
+    <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+  </mbean-->
+
+</server>

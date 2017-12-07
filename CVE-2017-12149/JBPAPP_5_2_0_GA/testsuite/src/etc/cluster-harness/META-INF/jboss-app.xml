@@ -1,0 +1,6 @@
+<jboss-app>
+   <!--<loader-repository>com.simple:loader=simpleClusterSession.ear-->
+   <!--<loader-repository-config>java2ParentDelegation=false</loader-repository-config>-->
+   <!--</loader-repository>-->
+</jboss-app>
+

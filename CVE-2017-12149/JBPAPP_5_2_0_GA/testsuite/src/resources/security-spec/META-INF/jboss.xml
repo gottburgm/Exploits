@@ -1,0 +1,216 @@
+<?xml version="1.0"?>
+<!DOCTYPE jboss PUBLIC
+   "-//JBoss//DTD JBOSS 4.0//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<!-- The jboss.xml descriptor for the security-spec.jar ejb unit.
+This descriptor redefines the JNDI names of the beans in the ejb-jar.xml
+descriptor so that there is no conflict with the security.jar deployment.
+-->
+<jboss>
+   <security-domain>java:/jaas/spec-test</security-domain>
+   <unauthenticated-principal>nobody</unauthenticated-principal>
+
+   <enterprise-beans>
+      <entity>
+         <ejb-name>Entity</ejb-name>
+         <jndi-name>spec.Entity</jndi-name>
+      </entity>
+      <entity>
+         <ejb-name>PrivateEntity</ejb-name>
+         <jndi-name>spec.PrivateEntity</jndi-name>
+      </entity>
+      <session>
+         <ejb-name>StatefulSession</ejb-name>
+         <jndi-name>spec.StatefulSession</jndi-name>
+         <configuration-name>Standard Stateful SessionBean</configuration-name>
+      </session>
+      <session>
+         <ejb-name>StatelessSession</ejb-name>
+         <jndi-name>spec.StatelessSession</jndi-name>
+         <configuration-name>Standard Stateless SessionBean</configuration-name>
+      </session>
+      <session>
+         <ejb-name>UncheckedSession</ejb-name>
+         <jndi-name>spec.UncheckedSession</jndi-name>
+         <configuration-name>Standard Stateless SessionBean</configuration-name>
+      </session>
+      <session>
+         <ejb-name>UncheckedSessionRemoteFirst</ejb-name>
+         <jndi-name>spec.UncheckedSessionRemoteFirst</jndi-name>
+         <configuration-name>Standard Stateless SessionBean</configuration-name>
+      </session>
+      <session>
+         <ejb-name>UncheckedSessionRemoteLast</ejb-name>
+         <jndi-name>spec.UncheckedSessionRemoteLast</jndi-name>
+         <configuration-name>Standard Stateless SessionBean</configuration-name>
+      </session>
+      <session>
+         <ejb-name>StatelessSessionInDomain</ejb-name>
+         <jndi-name>spec.StatelessSessionInDomain</jndi-name>
+         <configuration-name>Domain Stateless SessionBean</configuration-name>
+      </session>
+      <session>
+         <ejb-name>CallerBean</ejb-name>
+         <jndi-name>spec.CallerBean</jndi-name>
+      </session>
+      <session>
+         <ejb-name>CallerFacadeBean-testRunAsSFSB</ejb-name>
+         <jndi-name>spec.CallerFacadeBean-testRunAsSFSB</jndi-name>
+      </session>
+      <session>
+         <ejb-name>CallerFacadeTargetSFSB</ejb-name>
+         <jndi-name>spec.CallerFacadeTargetSFSB</jndi-name>
+      </session>
+      <session>
+        <ejb-name>Level1CallerBean</ejb-name>
+        <jndi-name>spec.Level1CallerBean</jndi-name>
+      </session>
+      <session>
+        <ejb-name>Level2CallerBean</ejb-name>
+        <jndi-name>spec.Level2CallerBean</jndi-name>
+      </session>
+      <session>
+        <ejb-name>Level3CalleeBean</ejb-name>
+        <jndi-name>spec.Level3CalleeBean</jndi-name>
+      </session>
+      <session>
+         <ejb-name>SecureCreateSession</ejb-name>
+         <jndi-name>spec.SecureCreateSession</jndi-name>
+      </session>
+      <session>
+         <ejb-name>org/jboss/test/security/ejb/StatelessSession_test</ejb-name>
+         <jndi-name>spec.StatelessSession_test</jndi-name>
+      </session>
+      <session>
+         <ejb-name>StatelessSession2</ejb-name>
+         <jndi-name>spec.StatelessSession2</jndi-name>
+         <ejb-ref>
+            <ejb-ref-name>ejb/Entity</ejb-ref-name>
+            <jndi-name>spec.Entity</jndi-name>
+         </ejb-ref>
+         <ejb-ref>
+            <ejb-ref-name>ejb/Session</ejb-ref-name>
+            <jndi-name>spec.StatelessSession</jndi-name>
+         </ejb-ref>
+      </session>
+      <session>
+         <ejb-name>RunAsStatelessSession</ejb-name>
+         <jndi-name>spec.RunAsStatelessSession</jndi-name>
+         <configuration-name>Standard Stateless SessionBean</configuration-name>
+         <ejb-ref>
+            <ejb-ref-name>ejb/Entity</ejb-ref-name>
+            <jndi-name>spec.PrivateEntity</jndi-name>
+         </ejb-ref>
+         <ejb-ref>
+            <ejb-ref-name>ejb/Session</ejb-ref-name>
+            <jndi-name>spec.StatelessSession</jndi-name>
+         </ejb-ref>
+      </session>
+      <session>
+         <ejb-name>UnsecureStatelessSession</ejb-name>
+         <jndi-name>spec.UnsecureStatelessSession</jndi-name>
+         <configuration-name>Unsecure Stateless SessionBean</configuration-name>
+      </session>
+      <session>
+         <ejb-name>UnsecureStatelessSession2</ejb-name>
+         <jndi-name>spec.UnsecureStatelessSession2</jndi-name>
+         <configuration-name>Unsecure Stateless SessionBean</configuration-name>
+         <ejb-ref>
+            <ejb-ref-name>ejb/Entity</ejb-ref-name>
+            <jndi-name>spec.Entity</jndi-name>
+         </ejb-ref>
+         <ejb-ref>
+            <ejb-ref-name>ejb/Session</ejb-ref-name>
+            <jndi-name>spec.StatelessSession</jndi-name>
+         </ejb-ref>
+      </session>
+      <session>
+         <ejb-name>UserInRoleContextSession</ejb-name>
+         <jndi-name>spec.UserInRoleContextSession</jndi-name>
+      </session>
+      <session>
+         <ejb-name>UserInRoleContextSessionTarget</ejb-name>
+         <jndi-name>spec.UserInRoleContextSessionTarget</jndi-name>
+         <configuration-name>Domain2 Stateless SessionBean</configuration-name>
+      </session>
+
+      <session>
+         <ejb-name>PublicSessionFacade</ejb-name>
+         <jndi-name>spec.PublicSessionFacade</jndi-name>
+      </session>
+      <session>
+         <ejb-name>PublicSession</ejb-name>
+         <jndi-name>spec.PublicSession</jndi-name>
+      </session>
+      <session>
+         <ejb-name>PrivateSession</ejb-name>
+         <jndi-name>spec.PrivateSession</jndi-name>
+      </session>
+
+      <message-driven>
+         <ejb-name>RunAsMDB</ejb-name>
+         <destination-jndi-name>queue/QueueA</destination-jndi-name>
+         <resource-ref>
+            <res-ref-name>jms/QueFactory</res-ref-name>
+            <jndi-name>ConnectionFactory</jndi-name>
+         </resource-ref>
+      </message-driven>
+      <message-driven>
+         <ejb-name>RunAsWithRolesMDB</ejb-name>
+         <destination-jndi-name>queue/QueueC</destination-jndi-name>
+         <security-identity>
+            <run-as-principal>RunAsWithRolesMDBPrincipal</run-as-principal>
+         </security-identity>
+         <resource-ref>
+            <res-ref-name>jms/QueFactory</res-ref-name>
+            <jndi-name>ConnectionFactory</jndi-name>
+         </resource-ref>
+      </message-driven>
+      <message-driven>
+         <ejb-name>DeepRunAsMDB</ejb-name>
+         <destination-jndi-name>queue/QueueD</destination-jndi-name>
+         <security-identity>
+            <run-as-principal>InternalUser</run-as-principal>
+         </security-identity>
+         <resource-ref>
+            <res-ref-name>jms/QueFactory</res-ref-name>
+            <jndi-name>ConnectionFactory</jndi-name>
+         </resource-ref>
+      </message-driven>
+
+   </enterprise-beans>
+
+   <assembly-descriptor>
+      <security-role>
+         <role-name>ProjectAdmin</role-name>
+         <principal-name>RunAsWithRolesMDBPrincipal</principal-name>
+      </security-role>
+      <security-role>
+         <role-name>CreateFolder</role-name>
+         <principal-name>RunAsWithRolesMDBPrincipal</principal-name>
+      </security-role>
+      <security-role>
+         <role-name>DeleteFolder</role-name>
+         <principal-name>RunAsWithRolesMDBPrincipal</principal-name>
+      </security-role>
+   </assembly-descriptor>
+
+   <container-configurations>
+      <!-- A stateless session config that is not secured -->
+      <container-configuration extends="Standard Stateless SessionBean">
+         <container-name>Unsecure Stateless SessionBean</container-name>
+         <security-domain/>
+      </container-configuration>
+      <!-- A stateless session config that uses the spec-test-domain -->
+      <container-configuration extends="Standard Stateless SessionBean">
+         <container-name>Domain Stateless SessionBean</container-name>
+         <security-domain>java:/jaas/spec-test-domain</security-domain>
+      </container-configuration>
+      <!-- A stateless session config that uses the spec-test-domain2 -->
+      <container-configuration extends="Standard Stateless SessionBean">
+         <container-name>Domain2 Stateless SessionBean</container-name>
+         <security-domain>java:/jaas/spec-test-domain2</security-domain>
+      </container-configuration>
+   </container-configurations>
+</jboss>

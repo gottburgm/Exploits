@@ -1,0 +1,11 @@
+<structure>
+  <context modification="temp">
+    <path name=""/>
+    <metaDataPath>
+      <path name="META-INF"/>
+    </metaDataPath>
+    <classpath>
+      <path name=""/>
+    </classpath>
+  </context>
+</structure>

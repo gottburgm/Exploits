@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+   "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+
+
+<web-app>
+    <servlet>
+        <servlet-name>ServerInvokerServlet</servlet-name>
+        <description>The ServerInvokerServlet receives requests via HTTP
+           protocol from within a web container and passes it onto the
+           ServletServerInvoker for processing.
+        </description>
+        <servlet-class>org.jboss.remoting.transport.servlet.web.ServerInvokerServlet</servlet-class>
+      
+        <init-param>
+            <param-name>locatorUrl</param-name>
+            <param-value>servlet://${jboss.bind.address}:8080/servlet-invoker/ServerInvokerServlet</param-value>
+            <description>The servlet server invoker</description>
+        </init-param>
+
+
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+
+   
+    <servlet>
+        <servlet-name>SSLServerInvokerServlet</servlet-name>
+        <description>The ServerInvokerServlet receives requests via HTTPS
+           protocol from within a web container and passes it onto the
+           ServletServerInvoker for processing.
+        </description>
+        <servlet-class>org.jboss.remoting.transport.servlet.web.ServerInvokerServlet</servlet-class>
+      
+        <init-param>
+            <param-name>locatorUrl</param-name>
+            <param-value>sslservlet://${jboss.bind.address}:8445/servlet-invoker/SSLServerInvokerServlet</param-value>
+            <description>The servlet server invoker</description>
+        </init-param>
+
+
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+   
+    <servlet-mapping>
+        <servlet-name>ServerInvokerServlet</servlet-name>
+        <url-pattern>/ServerInvokerServlet/*</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet-mapping>
+        <servlet-name>SSLServerInvokerServlet</servlet-name>
+        <url-pattern>/SSLServerInvokerServlet/*</url-pattern>
+    </servlet-mapping>
+   
+</web-app>
+
+
+

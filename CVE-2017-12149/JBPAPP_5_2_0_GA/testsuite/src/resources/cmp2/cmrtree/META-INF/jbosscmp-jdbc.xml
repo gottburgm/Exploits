@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jbosscmp-jdbc PUBLIC "-//JBoss//DTD JBOSSCMP-JDBC 3.2//EN" "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_2.dtd">
+
+<jbosscmp-jdbc>
+   <defaults>
+     <preferred-relation-mapping>foreign-key</preferred-relation-mapping>
+   </defaults>
+
+   <enterprise-beans>
+
+     <!--
+       To add beans that you have deployment descriptor info for, add
+       a file to your XDoclet merge directory called jbosscmp-jdbc-beans.xml
+       that contains the <entity></entity> markup for those beans.
+     -->
+
+      <entity>
+         <ejb-name>B</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>CMRTREEB</table-name>
+
+         <cmp-field>
+            <field-name>majorId</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>minorId</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>name</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>AMinorId</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>parentBMinorId</field-name>
+
+        </cmp-field>
+
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+      <entity>
+         <ejb-name>A</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>CMRTREEA</table-name>
+
+         <cmp-field>
+            <field-name>majorId</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>minorId</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>name</field-name>
+
+        </cmp-field>
+
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+   </enterprise-beans>
+
+  <relationships>
+    <ejb-relation>
+      <ejb-relation-name>B-Children</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>child-has-Parent</ejb-relationship-role-name>
+          <fk-constraint>false</fk-constraint>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>B-has-children</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>majorId</field-name>
+               <column-name>majorId</column-name>
+             </key-field>
+             <key-field>
+               <field-name>minorId</field-name>
+               <column-name>parentBMinorId</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+    <ejb-relation>
+      <ejb-relation-name>A-B</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>B-has-A</ejb-relationship-role-name>
+          <fk-constraint>false</fk-constraint>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>A-has-B</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>majorId</field-name>
+               <column-name>majorId</column-name>
+             </key-field>
+             <key-field>
+               <field-name>minorId</field-name>
+               <column-name>AMinorId</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+  </relationships>
+
+</jbosscmp-jdbc>

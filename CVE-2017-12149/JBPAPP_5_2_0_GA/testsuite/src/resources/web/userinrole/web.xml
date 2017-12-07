@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app version="2.4"
+   xmlns="http://java.sun.com/xml/ns/j2ee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+   <description>Test of isUserInRole Behavior</description>
+
+   <!-- ### Servlets -->
+   <servlet>
+      <servlet-name>testRoleWithLink</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.UserInRoleServlet</servlet-class>
+      <init-param>
+         <param-name>expectedUserRoles</param-name>
+         <param-value>AuthorizedUser,ServletUser</param-value>
+      </init-param>
+      <init-param>
+         <param-name>unexpectedUserRoles</param-name>
+         <param-value>Anonymous</param-value>
+      </init-param>
+      <security-role-ref>
+         <description>A mapping for the ServletUser role</description>
+         <role-name>ServletUser</role-name>
+         <role-link>ServletUserRole</role-link>
+      </security-role-ref>
+   </servlet>
+   <servlet>
+      <servlet-name>testUnreferencedRole</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.UserInRoleServlet</servlet-class>
+      <init-param>
+         <param-name>expectedUserRoles</param-name>
+         <param-value>AuthorizedUser,AnotherUserRole</param-value>
+      </init-param>
+      <init-param>
+         <param-name>unexpectedUserRoles</param-name>
+         <param-value>Anonymous</param-value>
+      </init-param>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>testRoleWithLink</servlet-name>
+      <url-pattern>/testRoleWithLink</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+      <servlet-name>testUnreferencedRole</servlet-name>
+      <url-pattern>/testUnreferencedRole</url-pattern>
+   </servlet-mapping>
+
+   <!-- The Welcome File List -->
+   <welcome-file-list>
+      <welcome-file>index.html</welcome-file>
+   </welcome-file-list>
+
+   <!-- ### Security -->
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Restricted</web-resource-name>
+         <description>All content is secured</description>
+         <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+         <description>Only authenticated users can access secure content</description>
+         <role-name>AuthorizedUser</role-name>
+      </auth-constraint>
+      <user-data-constraint>
+         <description>no description</description>
+         <transport-guarantee>NONE</transport-guarantee>
+      </user-data-constraint>
+   </security-constraint>
+
+   <login-config>
+      <auth-method>BASIC</auth-method>
+      <realm-name>UserInRoleRealm</realm-name>
+   </login-config>
+
+   <security-role>
+      <role-name>AuthorizedUser</role-name>
+   </security-role>
+   <security-role>
+      <role-name>ServletUserRole</role-name>
+   </security-role>
+   <security-role>
+      <role-name>AnotherUserRole</role-name>
+   </security-role>
+</web-app>
+

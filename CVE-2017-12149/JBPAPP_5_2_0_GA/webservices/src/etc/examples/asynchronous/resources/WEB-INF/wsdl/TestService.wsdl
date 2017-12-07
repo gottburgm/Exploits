@@ -1,0 +1,44 @@
+<!--
+  This wsdl is only used for client artifact generation
+  
+  wsimport -keep -verbose -d ../../../java ./WEB-INF/wsdl/TestService.wsdl
+-->
+<definitions name='EndpointService' targetNamespace='http://org.jboss.ws/jaxws/asynchronous' xmlns='http://schemas.xmlsoap.org/wsdl/'
+  xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://org.jboss.ws/jaxws/asynchronous' xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+  xmlns:jaxws="http://java.sun.com/xml/ns/jaxws" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb">
+  
+  <jaxws:bindings>
+    <jaxws:package name="org.jboss.test.ws.jaxws.asynchronous"/>
+    <jaxws:enableAsyncMapping>true</jaxws:enableAsyncMapping>
+  </jaxws:bindings>
+  
+  <message name='Endpoint_echoResponse'>
+    <part name='result' type='xsd:string'/>
+  </message>
+  <message name='Endpoint_echo'>
+    <part name='String_1' type='xsd:string'/>
+  </message>
+  <portType name='Endpoint'>
+    <operation name='echo' parameterOrder='String_1'>
+      <input message='tns:Endpoint_echo'/>
+      <output message='tns:Endpoint_echoResponse'/>
+    </operation>
+  </portType>
+  <binding name='EndpointBinding' type='tns:Endpoint'>
+    <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+    <operation name='echo'>
+      <soap:operation soapAction=''/>
+      <input>
+        <soap:body namespace='http://org.jboss.ws/jaxws/asynchronous' use='literal'/>
+      </input>
+      <output>
+        <soap:body namespace='http://org.jboss.ws/jaxws/asynchronous' use='literal'/>
+      </output>
+    </operation>
+  </binding>
+  <service name='EndpointService'>
+    <port binding='tns:EndpointBinding' name='EndpointPort'>
+      <soap:address location='http://tdvaio:8080/jaxws-samples-asynchronous/Endpoint'/>
+    </port>
+  </service>
+</definitions>

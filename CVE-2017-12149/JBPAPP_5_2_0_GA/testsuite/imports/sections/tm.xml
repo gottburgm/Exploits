@@ -1,0 +1,93 @@
+<project name="tests-tm-jars">
+   <!-- transaction test -->
+   <target name="_jars-tm">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build tmtest.sar -->
+      <jar destfile="${build.lib}/tmtest.sar">
+         <metainf dir="${build.resources}/tm/mbean">
+            <include name="jboss-service.xml"/>
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/tm/mbean/**"/>
+            <include name="org/jboss/test/tm/resource/**"/>
+         </fileset>
+      </jar>
+      <!-- build mttest.sar -->
+      <jar destfile="${build.lib}/mttest.sar">
+         <metainf dir="${build.resources}/tm/mbean2">
+            <include name="jboss-service.xml"/>
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/tm/mbean2/**"/>
+            <include name="org/jboss/test/tm/resource/**"/>
+         </fileset>
+      </jar>
+      
+      <!-- build txtimeouttest.jar -->
+      <jar destfile="${build.lib}/txtimeouttest.jar">
+         <metainf dir="${build.resources}/tm/txtimeout">
+            <include name="*.xml"/>
+         </metainf>
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/tm/ejb/**"/>
+            <include name="org/jboss/test/tm/interfaces/**"/>
+         </fileset>
+      </jar>
+
+      <!-- build txtimeoutanottest.jar -->
+      <jar destfile="${build.lib}/txtimeoutannottest.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/tm/ejb/TxTimeoutAnnot*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build bmtcleanuptest.jar -->
+      <jar destfile="${build.lib}/bmtcleanuptest.jar">
+         <metainf dir="${build.resources}/tm/bmtcleanup">
+            <include name="*.xml"/>
+         </metainf>
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/tm/ejb/**"/>
+            <include name="org/jboss/test/tm/interfaces/**"/>
+         </fileset>
+      </jar>
+      
+      <!-- build webbmtcleanuptest.sar -->
+      <jar destfile="${build.lib}/webbmtcleanuptest.war">
+         <fileset dir="${build.resources}/tm/webbmtcleanup/war">
+            <include name="**"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/webbmtcleanuptest.sar">
+         <metainf dir="${build.resources}/tm/webbmtcleanup/sar/META-INF">
+            <include name="*.xml"/>
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/tm/webmbean/**"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="webbmtcleanuptest.war"/>
+         </fileset>
+      </jar>
+      
+      <jar destfile="${build.lib}/transaction-test.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/tm/**"/>
+            <include name="org/jboss/test/util/ejb/*"/>
+         </fileset>
+         <fileset dir="${build.resources}/tm/test">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${junit.junit.lib}/junit.jar">
+            <patternset refid="ejbrunner.set"/>
+         </zipfileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar">
+            <patternset refid="jboss.test.set"/>
+         </zipfileset>
+      </jar>
+   </target>
+</project>

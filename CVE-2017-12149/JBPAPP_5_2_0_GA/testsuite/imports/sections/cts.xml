@@ -1,0 +1,194 @@
+<project name="tests-cts-jars">
+   <!-- cts test -->
+   <target name="_jars-cts">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build ctstest.jar -->
+      <jar destfile="${build.lib}/ctstest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cts/interfaces/**"/>
+            <include name="org/jboss/test/cts/test/**"/>
+            <include name="org/jboss/test/cts/jms/**"/>
+            <include name="org/jboss/test/cts/keys/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cts">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build cts.jar -->
+      <jar destfile="${build.lib}/cts.jar">
+         <metainf dir="${build.resources}/cts/META-INF">
+            <include name="ejb-jar.xml"/>
+            <include name="jboss.xml"/>
+            <include name="jbosscmp-jdbc.xml"/>
+         </metainf>
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/cts/interfaces/**"/>
+            <include name="org/jboss/test/cts/ejb/**"/>
+            <include name="org/jboss/test/cts/beans/**"/>
+            <include name="org/jboss/test/cts/jms/**"/>
+            <include name="org/jboss/test/cts/keys/**"/>
+            <include name="org/jboss/test/cts/test/*_Stub*.class"/>
+            <include name="org/jboss/test/util/ejb/*"/>
+         </fileset>
+         <zipfileset src="${junit.junit.lib}/junit.jar">
+            <patternset refid="ejbrunner.set"/>
+         </zipfileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar">
+            <patternset refid="jboss.test.set"/>
+         </zipfileset>
+      </jar>
+      <!-- build a duplicate cts.jar with new home bindings -->
+      <jar destfile="${build.lib}/cts2.jar">
+         <metainf dir="${build.resources}/cts/metainf2">
+            <include name="ejb-jar.xml"/>
+            <include name="jboss.xml"/>
+         </metainf>
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/cts/interfaces/**"/>
+            <include name="org/jboss/test/cts/ejb/**"/>
+            <include name="org/jboss/test/cts/beans/**"/>
+            <include name="org/jboss/test/cts/jms/**"/>
+            <include name="org/jboss/test/cts/keys/**"/>
+            <include name="org/jboss/test/cts/test/*_Stub*.class"/>
+         </fileset>
+      </jar>
+      
+      <!-- Build version 1 of the cts-cmp2 ear -->
+      <delete dir="${build.gen-src}/org/jboss/test/cts"/>
+      <mkdir dir="${build.gen-src}/org/jboss/test/cts/ejb"/>
+      <mkdir dir="${build.gen-src}/org/jboss/test/cts/interfaces"/>
+      <copy
+         tofile="${build.gen-src}/org/jboss/test/cts/interfaces/CtsCmp2Local.java"
+         file="${source.java}/org/jboss/test/cts/interfaces/CtsCmp2Local_V1.txt"
+         overwrite="true"/>
+      <copy tofile="${build.gen-src}/org/jboss/test/cts/ejb/CtsCmp2Bean.java"
+         file="${source.java}/org/jboss/test/cts/ejb/CtsCmp2Bean_V1.txt"
+         overwrite="true"/>
+      <copy
+         tofile="${build.gen-src}/org/jboss/test/cts/service/CtsCmpService.java"
+         file="${source.java}/org/jboss/test/cts/service/CtsCmpService_V1.txt"
+         overwrite="true"/>
+      <javac destdir="${build.classes}" optimize="${javac.optimize}"
+         source="${javac.source}" target="${javac.target}"
+         debug="${javac.debug}">
+         <src path="${build.gen-src}"/>
+         <src path="${source.java}"/>
+         <classpath refid="tests.compile.classpath"/>
+         <include name="org/jboss/test/cts/**"/>
+      </javac>
+      <jar destfile="${build.lib}/cts-v1cmp.sar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/cts/service/CtsCmpService*.class"/>
+            <include name="org/jboss/test/util/Debug.class"/>
+         </fileset>
+         <metainf dir="${build.resources}/cts/cmpv1">
+            <include name="jboss-service.xml"/>
+         </metainf>
+      </jar>
+      <jar destfile="${build.lib}/cts-v1cmp.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/cts/ejb/CtsCmp2*.class"/>
+            <include name="org/jboss/test/cts/interfaces/CtsCmp2*"/>
+         </fileset>
+         <metainf dir="${build.resources}/cts/cmpv1">
+            <include name="ejb-jar.xml"/>
+            <include name="jboss.xml"/>
+            <include name="jbosscmp-jdbc.xml"/>
+         </metainf>
+      </jar>
+      <ear earfile="${build.lib}/cts-v1cmp.ear"
+         appxml="${build.resources}/cts/cmpv1/application.xml">
+         <metainf dir="${build.resources}/cts/cmpv1">
+            <include name="jboss-app.xml"/>
+         </metainf>
+         <fileset dir="${build.lib}">
+            <include name="cts-v1cmp.jar"/>
+         </fileset>
+      </ear>
+      <ear earfile="${build.lib}/cts-v1cmp-sar.ear"
+         appxml="${build.resources}/cts/cmpv1/application.xml">
+         <metainf dir="${build.resources}/cts/cmpv1/ear+sar">
+            <include name="jboss-app.xml"/>
+         </metainf>
+         <fileset dir="${build.lib}">
+            <include name="cts-v1cmp.jar"/>
+            <include name="cts-v1cmp.sar"/>
+         </fileset>
+      </ear>
+      
+      <!-- Build version 2 of the cts-cmp2 ear -->
+      <delete dir="${build.classes}/org/jboss/test/cts">
+         <include name="**/CtsCmp2Local.class"/>
+         <include name="**/CtsCmp2Bean.class"/>
+         <include name="**/CtsCmpService*.class"/>
+      </delete>
+      <delete dir="${build.gen-src}/org/jboss/test/cts"/>
+      <copy
+         tofile="${build.gen-src}/org/jboss/test/cts/interfaces/CtsCmp2Local.java"
+         file="${source.java}/org/jboss/test/cts/interfaces/CtsCmp2Local_V2.txt"
+         overwrite="true"/>
+      <copy tofile="${build.gen-src}/org/jboss/test/cts/ejb/CtsCmp2Bean.java"
+         file="${source.java}/org/jboss/test/cts/ejb/CtsCmp2Bean_V2.txt"
+         overwrite="true"/>
+      <copy
+         tofile="${build.gen-src}/org/jboss/test/cts/service/CtsCmpService.java"
+         file="${source.java}/org/jboss/test/cts/service/CtsCmpService_V2.txt"
+         overwrite="true"/>
+      <javac destdir="${build.classes}" optimize="${javac.optimize}"
+         source="${javac.source}" target="${javac.target}"
+         debug="${javac.debug}">
+         <src path="${build.gen-src}"/>
+         <src path="${source.java}"/>
+         <classpath refid="tests.compile.classpath"/>
+         <include name="org/jboss/test/cts/**"/>
+      </javac>
+      <jar destfile="${build.lib}/cts-v2cmp.sar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/cts/service/CtsCmpService*.class"/>
+            <include name="org/jboss/test/util/Debug.class"/>
+         </fileset>
+         <metainf dir="${build.resources}/cts/cmpv2">
+            <include name="jboss-service.xml"/>
+         </metainf>
+      </jar>
+      <jar destfile="${build.lib}/cts-v2cmp.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/cts/ejb/CtsCmp2*.class"/>
+            <include name="org/jboss/test/cts/interfaces/CtsCmp2*"/>
+         </fileset>
+         <metainf dir="${build.resources}/cts/cmpv2">
+            <include name="ejb-jar.xml"/>
+            <include name="jboss.xml"/>
+            <include name="jbosscmp-jdbc.xml"/>
+         </metainf>
+      </jar>
+      <ear earfile="${build.lib}/cts-v2cmp.ear"
+         appxml="${build.resources}/cts/cmpv2/application.xml">
+         <metainf dir="${build.resources}/cts/cmpv2">
+            <include name="jboss-app.xml"/>
+         </metainf>
+         <fileset dir="${build.lib}">
+            <include name="cts-v2cmp.jar"/>
+         </fileset>
+      </ear>
+      <ear earfile="${build.lib}/cts-v2cmp-sar.ear"
+         appxml="${build.resources}/cts/cmpv2/application.xml">
+         <metainf dir="${build.resources}/cts/cmpv2/ear+sar">
+            <include name="jboss-app.xml"/>
+         </metainf>
+         <fileset dir="${build.lib}">
+            <include name="cts-v2cmp.jar"/>
+            <include name="cts-v2cmp.sar"/>
+         </fileset>
+      </ear>
+      
+   </target>
+</project>

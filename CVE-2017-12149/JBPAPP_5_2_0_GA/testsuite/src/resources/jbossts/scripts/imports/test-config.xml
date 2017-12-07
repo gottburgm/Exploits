@@ -1,0 +1,97 @@
+<project name="crashrecovery-tests-server-config" 
+         xmlns:astest="http://jboss.org/ns/test/ant/astest">
+
+  <taskdef name="config" classname="org.jboss.test.jbossts.taskdefs.ASTestConfig"
+           uri="http://jboss.org/ns/test/ant/astest" loaderref="astest.loader">
+  </taskdef>
+
+  <!--
+    - Task to start/stop servers with attribute for deploying and undeploying artifacts
+    -->
+  <taskdef name="server" classname="org.jboss.test.jbossts.taskdefs.ServerTask"
+           uri="http://jboss.org/ns/test/ant/astest" loaderref="astest.loader">
+  </taskdef>
+
+  <!--
+    - Task to perform an arbitary action. The action will have access to the test configuration
+    - specified in the configuration.
+    -->
+  <taskdef name="action" classname="org.jboss.test.jbossts.taskdefs.ASClientTask"
+           uri="http://jboss.org/ns/test/ant/astest" loaderref="astest.loader">
+  </taskdef>
+
+  <!--
+    - a spec is specification of how to inject faults into the XA protocol operations
+    -->
+  <typedef name="spec" classname="org.jboss.test.jbossts.recovery.ASFailureSpec"
+           uri="http://jboss.org/ns/test/ant/astest" loaderref="astest.loader">
+  </typedef>
+
+
+  <!--
+    - If the product directory where this test is running from contains an AS installation then use it,
+    - otherwise use the value of the JBOSS_HOME environment variable
+    -->
+  <!--
+    - The framework detects whether a server is running via the httpPort if the server has a web server,
+    - otherwise it uses the servers rmi port.
+    - To specify the http port use the httpPort attribute in the server definition.
+    - To specify the rmi port in the server definition use the rmiPort attribute together with hasWebServer="false"
+    - 
+    - The port numbers must match the ports used by the actual server. Note that the default port bindings for a
+    - server can be changed via the server.binding.name and server.binding.location properties.
+    -->
+  <astest:config javaHome="${env.JAVA_HOME}" debug="false">
+     <spec name= "none" mode="NONE" type="NONE" />
+     <spec name= "prepare_ex" mode="XAEXCEPTION" type="XARES_PREPARE" modeArg="XAER_RMFAIL" />
+     <spec name= "prepare_halt" mode="HALT" type="XARES_PREPARE" />
+     <spec name= "commit_halt" mode="HALT" type="XARES_COMMIT" />
+
+      <!--
+         Profiles for JBossAS Testsuite integration
+       -->
+     <server name="crashrecovery-jta" host="${node0}">
+       <jvmarg value="-Xms128m" />
+       <jvmarg value="-Xmx512m" />
+       <jvmarg value="-XX:MaxPermSize=512m" />
+       <jvmarg value="-server" />
+       <sysproperty key="java.net.preferIPv4Stack" value="true" />
+       <sysproperty key="org.jboss.resolver.warning" value="true" />
+       <sysproperty key="sun.rmi.dgc.client.gcInterval" value="3600000" />
+       <sysproperty key="sun.rmi.dgc.server.gcInterval" value="3600000" />
+       <sysproperty key="xb.builder.useUnorderedSequence" value="true" />
+        <!-- jvmarg value="-Djboss.home.dir=${jboss.dist}" />
+        <jvmarg value="-Djboss.server.home.dir=${jboss.dist}${/}server${/}cc" />
+        <jvmarg value="-Djboss.test.deploy.dir=${jboss.test.deploy.dir}" />
+        <jvmarg value="-Djava.security.manager"/>
+        <jvmarg value="-Djava.security.policy==${jboss.dist}${/}server${/}cc/cc.policy"/>
+        <jvmarg value="-D${cc.java.security.debug}=access,failure"/> 
+        <jvmarg value="-D${cc.prop.java.library.path}=${cc.java.library.path}"/> 
+        <jvmarg value="-Dcc.jdbc.driver=${cc.jdbc.driver}"/> 
+        <sysproperty key="java.protocol.handler.pkgs" value="org.jboss.handlers.stub"/>
+
+        <! - - Replace for security manager debug verbose info
+        <jvmarg value="-Djava.security.debug=access,failure,policy"/>
+        -->
+
+        <!-- sysproperty key="java.net.preferIPv4Stack" value="true" />
+        <sysproperty key="java.endorsed.dirs" value="${jboss.dist}/lib/endorsed" / -->
+        
+       <!--jvmarg value="-Xdebug"/>
+       <jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"/-->
+     </server>
+
+     <server name="crashrecovery-jts" host="${node0}">
+       <jvmarg value="-Xms128m" />
+       <jvmarg value="-Xmx512m" />
+       <jvmarg value="-XX:MaxPermSize=512m" />
+       <jvmarg value="-server" />
+       <sysproperty key="java.net.preferIPv4Stack" value="true" />
+       <sysproperty key="org.jboss.resolver.warning" value="true" />
+       <sysproperty key="sun.rmi.dgc.client.gcInterval" value="3600000" />
+       <sysproperty key="sun.rmi.dgc.server.gcInterval" value="3600000" />
+       <sysproperty key="xb.builder.useUnorderedSequence" value="true" />
+     </server>
+
+  </astest:config>
+</project>

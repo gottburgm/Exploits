@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+   "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+   <description>Clustered Session Test</description>
+
+   <distributable/>
+
+   <listener>
+      <listener-class>org.jboss.test.cluster.web.SessionListener</listener-class>
+   </listener>
+
+   <servlet>
+      <servlet-name>StatefulSessionServlet</servlet-name>
+      <display-name>Distrubutable StatefulSessionServlet</display-name>
+      <description>A distributable servlet with stateful sessions</description>
+      <servlet-class>org.jboss.test.cluster.web.StatefulSessionServlet</servlet-class>
+      <init-param>
+         <param-name>synchSessionAccess</param-name>
+         <param-value>true</param-value>
+      </init-param>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>StatefulSessionServlet</servlet-name>
+      <url-pattern>/StatefulSessionServlet/*</url-pattern>
+   </servlet-mapping>
+
+</web-app>

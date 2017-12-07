@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <mbean name="jboss.test:type=test" code="org.jboss.test.system.controller.support.Simple">
+      <depends-list optional-attribute-name="ObjectNames">
+         <depends-list-element>jboss.test:type=depends1</depends-list-element>
+      </depends-list>
+   </mbean>
+   
+   <mbean name="jboss.test:type=depends1" code="org.jboss.test.system.controller.support.Simple"/>
+</server>

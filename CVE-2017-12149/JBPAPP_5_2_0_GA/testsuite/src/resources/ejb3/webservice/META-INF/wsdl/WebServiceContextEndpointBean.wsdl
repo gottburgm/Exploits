@@ -1,0 +1,84 @@
+<definitions name='WebServiceContextEndpointBeanService' targetNamespace='http://webservice.ejb3.test.jboss.org/' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://webservice.ejb3.test.jboss.org/' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://webservice.ejb3.test.jboss.org/' version='1.0' xmlns:tns='http://webservice.ejb3.test.jboss.org/' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='echo' type='tns:echo'/>
+   <xs:element name='echoResponse' type='tns:echoResponse'/>
+   <xs:element name='report' type='tns:report'/>
+   <xs:element name='reportResponse' type='tns:reportResponse'/>
+   <xs:complexType name='echo'>
+    <xs:sequence>
+
+     <xs:element minOccurs='0' name='arg0' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='echoResponse'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='return' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='report'>
+
+    <xs:sequence/>
+   </xs:complexType>
+   <xs:complexType name='reportResponse'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='return' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </types>
+
+ <message name='WebServiceContextEndpoint_echo'>
+  <part element='tns:echo' name='echo'></part>
+ </message>
+ <message name='WebServiceContextEndpoint_reportResponse'>
+  <part element='tns:reportResponse' name='reportResponse'></part>
+ </message>
+ <message name='WebServiceContextEndpoint_report'>
+  <part element='tns:report' name='report'></part>
+ </message>
+
+ <message name='WebServiceContextEndpoint_echoResponse'>
+  <part element='tns:echoResponse' name='echoResponse'></part>
+ </message>
+ <portType name='WebServiceContextEndpoint'>
+  <operation name='echo' parameterOrder='echo'>
+   <input message='tns:WebServiceContextEndpoint_echo'></input>
+   <output message='tns:WebServiceContextEndpoint_echoResponse'></output>
+  </operation>
+  <operation name='report' parameterOrder='report'>
+
+   <input message='tns:WebServiceContextEndpoint_report'></input>
+   <output message='tns:WebServiceContextEndpoint_reportResponse'></output>
+  </operation>
+ </portType>
+ <binding name='WebServiceContextEndpointBinding' type='tns:WebServiceContextEndpoint'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='echo'>
+   <soap:operation soapAction=''/>
+   <input>
+
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+  <operation name='report'>
+   <soap:operation soapAction=''/>
+   <input>
+
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='WebServiceContextEndpointBeanService'>
+  <port binding='tns:WebServiceContextEndpointBinding' name='WebServiceContextEndpointBeanPort'>
+
+   <soap:address location='http://@jboss.bind.address@:8080/ejb3-webservice/WebServiceContextEndpointBean'/>
+  </port>
+ </service>
+</definitions>

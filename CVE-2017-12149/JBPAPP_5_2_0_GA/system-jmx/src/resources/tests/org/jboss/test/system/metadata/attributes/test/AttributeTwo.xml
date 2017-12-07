@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mbean name="jboss.test:type=BasicMBeanName" code="BasicMBeanCode">
+   <attribute name="Attribute1">value1</attribute>
+   <attribute name="Attribute2">value2</attribute>
+</mbean>

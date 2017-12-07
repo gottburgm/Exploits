@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<aop xmlns="urn:jboss:aop-beans:1.0">
+   <aspect class="org.jboss.test.aop.scopedextender.BaseParentAspect"/>
+   <aspect class="org.jboss.test.aop.scopedextender.ChildAspect"/>
+
+   <bind pointcut="execution(* $instanceof{org.jboss.test.aop.scopedextender.Child_A2}->*(..))">
+      <advice aspect="org.jboss.test.aop.scopedextender.ChildAspect" name="invoke"/>
+   </bind>
+   <bind pointcut="execution(* $instanceof{org.jboss.test.aop.scopedextender.Child_B1}->*(..))">
+      <advice aspect="org.jboss.test.aop.scopedextender.ChildAspect" name="invoke"/>
+   </bind>
+   <bind pointcut="execution(* $instanceof{org.jboss.test.aop.scopedextender.Base_Base}->*(..))">
+      <advice aspect="org.jboss.test.aop.scopedextender.BaseParentAspect" name="invoke"/>
+   </bind>
+   <bind pointcut="field(* $instanceof{org.jboss.test.aop.scopedextender.Child_A2}->*)">
+      <advice aspect="org.jboss.test.aop.scopedextender.ChildAspect" name="invoke"/>
+   </bind>
+   <bind pointcut="field(* $instanceof{org.jboss.test.aop.scopedextender.Child_B1}->*)">
+      <advice aspect="org.jboss.test.aop.scopedextender.ChildAspect" name="invoke"/>
+   </bind>
+   <bind pointcut="field(* $instanceof{org.jboss.test.aop.scopedextender.Base_Base}->*)">
+      <advice aspect="org.jboss.test.aop.scopedextender.BaseParentAspect" name="invoke"/>
+   </bind>
+   <bind pointcut="execution($instanceof{org.jboss.test.aop.scopedextender.Child_A2}->new(..))">
+      <advice aspect="org.jboss.test.aop.scopedextender.ChildAspect" name="invoke"/>
+   </bind>
+   <bind pointcut="execution($instanceof{org.jboss.test.aop.scopedextender.Child_B1}->new(..))">
+      <advice aspect="org.jboss.test.aop.scopedextender.ChildAspect" name="invoke"/>
+   </bind>
+   <bind pointcut="execution($instanceof{org.jboss.test.aop.scopedextender.Base_Base}->new(..))">
+      <advice aspect="org.jboss.test.aop.scopedextender.BaseParentAspect" name="invoke"/>
+   </bind>
+
+</aop>

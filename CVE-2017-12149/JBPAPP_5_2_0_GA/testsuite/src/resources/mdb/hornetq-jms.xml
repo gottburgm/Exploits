@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration xmlns="urn:hornetq"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="urn:hornetq /schema/hornetq-jms.xsd">
+
+   <queue name="myMDBQueue">
+      <entry name="/queue/myMDBQueue"/>
+      <entry name="anotherContext/QueueInADifferentContext"/>
+   </queue>
+
+
+
+   <topic name="myMDBTopic">
+      <entry name="/topic/myMDBTopic"/>
+      <entry name="anotherContext/TopicInADifferentContext"/>
+   </topic>
+
+</configuration>

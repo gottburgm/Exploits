@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE jboss PUBLIC
+      "-//JBoss//DTD JBOSS 5.0//EN"
+      "http://www.jboss.org/j2ee/dtd/jboss_5_0.dtd">
+
+<!-- The jboss.xml descriptor for the naming.jar ejb unit -->
+<jboss>
+
+    <enterprise-beans>
+        <session>
+            <ejb-name>ENCBean</ejb-name>
+            <ejb-ref>
+                <ejb-ref-name>ejb/bean1</ejb-ref-name>
+                <jndi-name>jnp://${jboss.bind.address}:1099/ENCTests/ejbs/ENCBean1</jndi-name>
+            </ejb-ref>
+            <ejb-ref>
+                <ejb-ref-name>ejb/remote-bean</ejb-ref-name>
+                <jndi-name>jnp://banshee:1099/ENCTests/ejbs/RemoteENCBean</jndi-name>
+            </ejb-ref>
+            <resource-ref>
+                <res-ref-name>jdbc/DefaultDS</res-ref-name>
+                <resource-name>DefaultDS</resource-name>
+            </resource-ref>
+            <resource-ref>
+                <res-ref-name>mail/DefaultMail</res-ref-name>
+                <resource-name>DefaultMail</resource-name>
+            </resource-ref>
+            <!-- Use the abbreviated form of the mapping -->
+            <resource-ref>
+                <res-ref-name>jms/QueFactory</res-ref-name>
+                <jndi-name>ConnectionFactory</jndi-name>
+            </resource-ref>
+            <!-- Use the abbreviated form of the mapping -->
+            <resource-ref>
+                <res-ref-name>url/JBossHomePage</res-ref-name>
+                <res-url>http://www.jboss.org/</res-url>
+            </resource-ref>
+            <resource-ref>
+                <res-ref-name>url/SourceforgeHomePage</res-ref-name>
+                <resource-name>SourceforgeHomePage</resource-name>
+            </resource-ref>
+           <resource-ref>
+               <res-ref-name>url/IndirectURL</res-ref-name>
+               <jndi-name>java:SomeWebSite</jndi-name>
+           </resource-ref>
+
+            <resource-env-ref>
+                <resource-env-ref-name>res/aQueue</resource-env-ref-name>
+                <jndi-name>queue/testQueue</jndi-name>
+            </resource-env-ref>
+
+            <message-destination-ref>
+               <message-destination-ref-name>mdr/ConsumesProducesJNDIName</message-destination-ref-name>
+               <jndi-name>queue/A</jndi-name>
+            </message-destination-ref>
+
+        </session>
+        <session>
+            <ejb-name>ENCBean1</ejb-name>
+            <jndi-name>ENCTests/ejbs/ENCBean1</jndi-name>
+        </session>
+        <session>
+            <ejb-name>ENCBean2</ejb-name>
+            <jndi-name>psuedo-url:/ejb/ENCBean2</jndi-name>
+        </session>
+        <session>
+           <ejb-name>SecuredENCBean</ejb-name>
+           <jndi-name>ENCTests/ejbs/SecuredENCBean</jndi-name>
+           <configuration-name>Secured SessionBean</configuration-name>
+        </session>
+    </enterprise-beans>
+
+   <assembly-descriptor>
+      <message-destination>
+         <message-destination-name>TestQueue</message-destination-name>
+         <jndi-name>queue/testQueue</jndi-name>
+      </message-destination>
+      <message-destination>
+         <message-destination-name>TestTopic</message-destination-name>
+         <jndi-name>topic/testTopic</jndi-name>
+      </message-destination>
+   </assembly-descriptor>
+
+    <resource-managers>
+        <resource-manager>
+            <res-name>DefaultDS</res-name>
+            <res-jndi-name>java:/DefaultDS</res-jndi-name>
+        </resource-manager>
+        <resource-manager>
+            <res-name>DefaultMail</res-name>
+            <res-jndi-name>java:/Mail</res-jndi-name>
+        </resource-manager>
+        <resource-manager>
+            <res-name>SourceforgeHomePage</res-name>
+            <res-url>http://sourceforge.net/</res-url>
+        </resource-manager>
+    </resource-managers>
+
+   <container-configurations>
+      <container-configuration extends="Standard Stateless SessionBean">
+         <container-name>Secured SessionBean</container-name>
+         <security-domain>java:/jaas/naming-tests</security-domain>
+      </container-configuration>
+   </container-configurations>
+</jboss>

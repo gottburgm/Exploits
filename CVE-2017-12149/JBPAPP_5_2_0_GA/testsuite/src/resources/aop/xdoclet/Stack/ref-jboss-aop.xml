@@ -1,0 +1,29 @@
+<aop>
+  <advisable class="org.jboss.test.aop.xdoclet.Stack"/>
+  
+  <stack name="MyFirstStack">
+    <interceptor class="com.foo.SingleInterceptor"/>
+    <interceptor factory="com.foo.AnotherInterceptorFactory"/>
+    <interceptor class="com.foo.TestingInterceptor" singleton="true">
+      <config>Some config data</config>
+    </interceptor>
+    <interceptor factory="com.foo.TestingInterceptorFactory">
+      <singleton>true</singleton>
+      <factoryconfig>Some config data</factoryconfig>
+    </interceptor>
+    <interceptor factory="com.foo.XmlInterceptorFactory">
+      <config-data/>
+    </interceptor>
+  </stack>
+  
+  <interceptor-pointcut class="org.jboss.test.aop.xdoclet.Stack">
+    <interceptors>
+      <stack-ref name="MyFirstStack"/>
+      <interceptor class="com.test.AnonymousInterceptor" singleton="true">
+        <config>random</config>
+      </interceptor>
+    </interceptors>
+  </interceptor-pointcut>
+
+</aop>
+

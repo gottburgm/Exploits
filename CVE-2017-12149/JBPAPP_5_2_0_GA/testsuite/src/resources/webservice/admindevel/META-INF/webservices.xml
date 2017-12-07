@@ -1,0 +1,15 @@
+<webservices version='1.1' xmlns='http://java.sun.com/xml/ns/j2ee' xmlns:impl='http://org.jboss.webservice/example' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://java.sun.com/xml/ns/j2ee http://www.ibm.com/webservices/xsd/j2ee_web_services_1_1.xsd'>
+ <webservice-description>
+  <webservice-description-name>HelloService</webservice-description-name>
+  <wsdl-file>META-INF/wsdl/HelloService.wsdl</wsdl-file>
+  <jaxrpc-mapping-file>META-INF/jaxrpc-mapping.xml</jaxrpc-mapping-file>
+  <port-component>
+   <port-component-name>HelloPort</port-component-name>
+   <wsdl-port>impl:HelloPort</wsdl-port>
+   <service-endpoint-interface>org.jboss.test.webservice.admindevel.Hello</service-endpoint-interface>
+   <service-impl-bean>
+    <ejb-link>HelloBean</ejb-link>
+   </service-impl-bean>
+  </port-component>
+ </webservice-description>
+</webservices>

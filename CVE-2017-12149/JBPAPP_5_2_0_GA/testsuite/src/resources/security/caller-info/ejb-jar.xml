@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+         http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd"
+         version="2.1">
+
+   <enterprise-beans>
+      <session>
+         <description>The session facade</description>
+         <ejb-name>SubjectSessionFacade</ejb-name>
+         <home>org.jboss.test.security.interfaces.SubjectSessionHome</home>
+         <remote>org.jboss.test.security.interfaces.SubjectSession</remote>
+         <ejb-class>org.jboss.test.security.ejb.SubjectSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+         <ejb-ref>
+            <ejb-ref-name>ejb/StatelessSession</ejb-ref-name>
+            <ejb-ref-type>Session</ejb-ref-type>
+            <home>org.jboss.test.security.interfaces.StatelessSessionHome</home>
+            <remote>org.jboss.test.security.interfaces.StatelessSession</remote>
+            <ejb-link>StatelessSessionCallee</ejb-link>
+         </ejb-ref>
+         <ejb-ref>
+            <ejb-ref-name>ejb/StatefulSession</ejb-ref-name>
+            <ejb-ref-type>Session</ejb-ref-type>
+            <home>org.jboss.test.security.interfaces.StatefulSessionHome</home>
+            <remote>org.jboss.test.security.interfaces.StatefulSession</remote>
+            <ejb-link>StatefulSessionCallee</ejb-link>
+         </ejb-ref>
+         <ejb-ref>
+            <ejb-ref-name>ejb/Entity</ejb-ref-name>
+            <ejb-ref-type>Entity</ejb-ref-type>
+            <home>org.jboss.test.security.interfaces.EntityHome</home>
+            <remote>org.jboss.test.security.interfaces.Entity</remote>
+            <ejb-link>EntityCallee</ejb-link>
+         </ejb-ref>
+      </session>
+
+      <session>
+         <description>A secured stateless session bean</description>
+         <ejb-name>StatelessSessionCallee</ejb-name>
+         <home>org.jboss.test.security.interfaces.StatelessSessionHome</home>
+         <remote>org.jboss.test.security.interfaces.StatelessSession</remote>
+         <ejb-class>org.jboss.test.security.ejb.StatelessSessionBean4</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+
+      <session>
+         <description>A secured stateful session bean</description>
+         <ejb-name>StatefulSessionCallee</ejb-name>
+         <home>org.jboss.test.security.interfaces.StatefulSessionHome</home>
+         <remote>org.jboss.test.security.interfaces.StatefulSession</remote>
+         <ejb-class>org.jboss.test.security.ejb.StatefulSessionBean</ejb-class>
+         <session-type>Stateful</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+
+      <entity>
+         <description>A secured entity bean</description>
+         <ejb-name>EntityCallee</ejb-name>
+         <home>org.jboss.test.security.interfaces.EntityHome</home>
+         <remote>org.jboss.test.security.interfaces.Entity</remote>
+         <ejb-class>org.jboss.test.security.ejb.Cmp2Bean</ejb-class>
+         <persistence-type>Container</persistence-type>
+         <prim-key-class>java.lang.String</prim-key-class>
+         <reentrant>false</reentrant>
+         <cmp-version>2.x</cmp-version>
+         <abstract-schema-name>EntityCallee</abstract-schema-name>
+         <cmp-field>
+            <field-name>key</field-name>
+         </cmp-field>
+         <primkey-field>key</primkey-field>
+      </entity>
+   </enterprise-beans>
+
+   <assembly-descriptor>
+      <security-role>
+         <role-name>CallerInfoFacadeRole</role-name>
+      </security-role>
+      <security-role>
+         <role-name>CallerInfoStatelessRole</role-name>
+      </security-role>
+      <security-role>
+         <role-name>CallerInfoStatefulRole</role-name>
+      </security-role>
+      <security-role>
+         <role-name>CallerInfoEntityRole</role-name>
+      </security-role>
+
+      <method-permission>
+         <role-name>CallerInfoFacadeRole</role-name>
+         <method>
+            <ejb-name>SubjectSessionFacade</ejb-name>
+            <method-name>*</method-name>
+         </method>
+      </method-permission>
+      <method-permission>
+         <role-name>CallerInfoStatelessRole</role-name>
+         <method>
+            <ejb-name>StatelessSessionCallee</ejb-name>
+            <method-name>*</method-name>
+         </method>
+      </method-permission>
+      <method-permission>
+         <role-name>CallerInfoStatefulRole</role-name>
+         <method>
+            <ejb-name>StatefulSessionCallee</ejb-name>
+            <method-name>*</method-name>
+         </method>
+      </method-permission>
+      <method-permission>
+         <role-name>CallerInfoEntityRole</role-name>
+         <method>
+            <ejb-name>EntityCallee</ejb-name>
+            <method-name>*</method-name>
+         </method>
+      </method-permission>
+
+   </assembly-descriptor>
+</ejb-jar>

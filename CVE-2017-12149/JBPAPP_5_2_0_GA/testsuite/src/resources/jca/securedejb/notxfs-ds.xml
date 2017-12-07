@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<connection-factories>
+   <no-tx-connection-factory>
+      <jndi-name>RunAsIdentityFS</jndi-name>
+      <rar-name>jca-securedejb.jar#notxfs.rar</rar-name>
+      <connection-definition>org.jboss.test.jca.fs.DirContextFactory</connection-definition>
+      <config-property name="FileSystemRootDir" type="java.lang.String">/tmp/db/fs_store</config-property>
+      <config-property name="Roles" type="java.lang.String">RunAsIdentityRole,RunAsRole2</config-property>
+      <security-domain>RunAsIdentityFSRealm</security-domain>
+   </no-tx-connection-factory>
+</connection-factories>

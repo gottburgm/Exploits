@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE jboss-client PUBLIC "-//JBoss//DTD Application Client 4.0//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss-client_4_0.dtd">
+<jboss-client>
+
+  <!-- JNDI name bound to the client's environment context -->
+  <jndi-name>ws4ee-client</jndi-name>
+
+  <service-ref>
+    <!-- the service-ref element to configure -->
+    <service-ref-name>service/Hello</service-ref-name>
+    <!-- published WSDL file -->
+    <wsdl-override>http://@jbosstest.host.name@:8080/hello/caller?wsdl</wsdl-override>
+  </service-ref>
+  
+</jboss-client>

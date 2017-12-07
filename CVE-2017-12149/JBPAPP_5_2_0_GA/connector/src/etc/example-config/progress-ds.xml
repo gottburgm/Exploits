@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  JBoss Server Configuration                                           -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+<!-- See http://www.jboss.org/community/wiki/Multiple1PC for information about local-tx-datasource -->
+<!-- $Id: progress-ds.xml 106980 2010-07-21 13:56:15Z rrajesh $ -->
+<!-- ==================================================================== -->
+<!--  Datasource config for Progress 9.1                                  -->
+<!--                                                                      -->
+<!--  Based on config provided by victorstar in the forums                -->
+<!--                                                                      -->
+<!--  Beside adding the driver jar to server/[config]/lib you also        -->
+<!--  need to add the native library to your path.                        -->
+<!--  e.g. JdbcProgress.dll on windows                                    -->
+<!-- ==================================================================== -->
+
+<datasources>
+
+   <local-tx-datasource>
+      <jndi-name>ProgressDS</jndi-name>
+
+      <connection-url>jdbc:JdbcProgress:T:dbserver:3305:liveappl</connection-url>
+      <driver-class>com.progress.sql.jdbc.JdbcProgressDriver</driver-class>
+      <user-name>user</user-name>
+      <password>password</password>
+
+      <!-- corresponding type-mapping in the standardjbosscmp-jdbc.xml (optional) -->
+      <metadata>
+         <type-mapping>PostgreSQL</type-mapping>
+      </metadata>
+   </local-tx-datasource>
+
+</datasources>

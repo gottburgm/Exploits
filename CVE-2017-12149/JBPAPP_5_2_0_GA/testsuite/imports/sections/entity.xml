@@ -1,0 +1,118 @@
+<project name="tests-entity-jars">
+   <!-- entity test -->
+   <target name="_jars-entity">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build jboss-test-entity.jar -->
+      <jar destfile="${build.lib}/jboss-test-entity.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/entity/interfaces/**"/>
+            <include name="org/jboss/test/entity/beans/**"/>
+            <include name="org/jboss/test/entity/test/EntityUnitTestCase"/>
+         </fileset>
+         <fileset dir="${build.resources}/entity/entity">
+            <include name="**"/>
+         </fileset>
+      </jar>
+      
+      <!-- build jboss-test-pathological-entity.jar -->
+      <jar destfile="${build.lib}/jboss-test-pathological-entity.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/entity/interfaces/**"/>
+            <include name="org/jboss/test/entity/ejb/**"/>
+            <include
+               name="org/jboss/test/entity/test/PathologicalUnitTestCase"/>
+         </fileset>
+         <fileset dir="${build.resources}/entity/pathological">
+            <include name="**"/>
+         </fileset>
+      </jar>
+      
+      <!-- build jboss-test-ejbload.jar -->
+      <jar destfile="${build.lib}/jboss-test-ejbload.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/entity/interfaces/**"/>
+            <include name="org/jboss/test/entity/ejb/**"/>
+            <include name="org/jboss/test/entity/test/EJBLoadUnitTestCase"/>
+         </fileset>
+         <fileset dir="${build.resources}/entity/ejbload">
+            <include name="**"/>
+         </fileset>
+      </jar>
+      
+      <!-- build jboss-test-unsetentitycontext.jar -->
+      <jar destfile="${build.lib}/jboss-test-unsetentitycontext.jar">
+         <fileset dir="${build.classes}">
+            <include
+               name="org/jboss/test/entity/interfaces/UnsetEntityContext**"/>
+            <include name="org/jboss/test/entity/ejb/UnsetEntityContext**"/>
+         </fileset>
+         <fileset dir="${build.resources}/entity/unsetentitycontext">
+            <include name="**"/>
+         </fileset>
+      </jar>
+   </target>
+   
+   <!-- entityexc test -->
+   <target name="_jars-entityexc">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build entityexctest.jar -->
+      <jar destfile="${build.lib}/entityexctest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/entityexc/interfaces/**"/>
+            <include name="org/jboss/test/entityexc/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/entityexc">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build entityexc.jar -->
+      <jar destfile="${build.lib}/entityexc.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/entityexc/interfaces/**"/>
+            <include name="org/jboss/test/entityexc/ejb/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/entityexc">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+   </target>
+
+   <!-- entitydepends test -->
+   <target name="_jars-entitydepends">
+      <mkdir dir="${build.lib}"/>
+      <!-- build entitydepends.sar -->
+      <jar destfile="${build.lib}/entitydepends.sar" manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/entitydepends/service/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/entitydepends/sar">
+            <include name="**"/>
+         </fileset>
+      </jar>
+      <!-- build entitydepends.jar -->
+      <jar destfile="${build.lib}/entitydepends.jar" manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/entitydepends/ejb/**"/>
+            <include name="org/jboss/test/entitydepends/test/**"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="entitydepends.sar"/>
+         </fileset>
+         <fileset dir="${build.resources}/entitydepends/ejb">
+            <include name="**"/>
+         </fileset>
+      </jar>
+   </target>
+   
+</project>

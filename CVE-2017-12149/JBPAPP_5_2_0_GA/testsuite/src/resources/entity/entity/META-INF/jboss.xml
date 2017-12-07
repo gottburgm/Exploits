@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 3.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_3_0.dtd">
+
+<jboss>
+
+   <enterprise-beans>
+
+     <!--
+       To add beans that you have deployment descriptor info for, add
+       a file to your XDoclet merge directory called jboss-beans.xml that contains
+       the <session></session>, <entity></entity> and <message-driven></message-driven>
+       markup for those beans.
+     -->
+
+      <entity>
+         <ejb-name>TestEntity</ejb-name>
+         <jndi-name>test/entity/TestEntity</jndi-name>
+         <local-jndi-name>test/entity/TestEntityLocal</local-jndi-name>
+         <configuration-name>TestEntity Container Configuration</configuration-name>
+
+      </entity>
+
+   </enterprise-beans>
+
+   <resource-managers>
+   </resource-managers>
+
+      <container-configurations>
+        <!-- Commit option B CMP Bean -->
+        <container-configuration extends="Standard CMP 2.x EntityBean">
+            <container-name>TestEntity Container Configuration</container-name>
+            <commit-option>B</commit-option>
+        </container-configuration>
+    </container-configurations>
+
+</jboss>

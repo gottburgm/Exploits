@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app version="2.5"
+   xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+   http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+ 
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Restricted</web-resource-name>
+         <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+         <role-name>allowed</role-name>
+      </auth-constraint>
+   </security-constraint>
+
+   <servlet>
+      <servlet-name>EJBServlet</servlet-name>
+      <servlet-class>org.jboss.test.ejb3.servlet.servlets.EJBServlet</servlet-class>
+   </servlet>
+
+   <!-- The servlet and jsp page mappings -->
+   <servlet-mapping>
+      <servlet-name>EJBServlet</servlet-name>
+      <url-pattern>/EJBServlet</url-pattern>
+   </servlet-mapping>
+   
+   <ejb-ref>
+      <ejb-ref-name>ejb/remote/Session30</ejb-ref-name>
+      <ejb-ref-type>Session</ejb-ref-type>
+      <home>org.jboss.test.ejb3.servlet.Session30Home</home>
+      <remote>org.jboss.test.ejb3.servlet.Session30Remote</remote>
+   </ejb-ref>
+   
+   <ejb-local-ref>
+      <ejb-ref-name>ejb/local/Session30</ejb-ref-name>
+      <ejb-ref-type>Session</ejb-ref-type>
+      <local-home>org.jboss.test.ejb3.servlet.Session30LocalHome</local-home>
+      <local>org.jboss.test.ejb3.servlet.Session30Local</local>
+   </ejb-local-ref>
+   
+   <security-role>
+      <role-name>allowed</role-name>
+   </security-role>
+   
+   <login-config>
+      <auth-method>BASIC</auth-method>
+      <realm-name>JBossTest Servlets</realm-name>
+   </login-config>
+</web-app>
+

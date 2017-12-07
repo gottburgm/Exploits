@@ -1,0 +1,14 @@
+<project name="tests-dummy-jars">
+   <!-- dummy -->
+   <target name="_jars-dummy">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build dummy.jar -->
+      <jar destfile="${build.lib}/tests-dummy.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.resources}/dummy">
+            <include name="**"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

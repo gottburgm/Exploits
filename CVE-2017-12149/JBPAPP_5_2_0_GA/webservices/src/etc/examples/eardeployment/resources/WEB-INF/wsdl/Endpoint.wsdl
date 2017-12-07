@@ -1,0 +1,46 @@
+<!--
+  This wsdl is used for client artifact generation
+  
+  wsimport -keep -verbose -d ../../../java ./META-INF/wsdl/Endpoint.wsdl
+-->
+<definitions name="EndpointService" 
+  targetNamespace="http://eardeployment.jaxws/" 
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:jbws1616="http://jira.jboss.org/jira/browse/JBWS-1616"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://eardeployment.jaxws/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <!-- Test a schema import -->  
+  <types>
+    <xsd:import namespace="http://org.jboss.ws/jaxrpc/types" schemaLocation="TestService.xsd"/>
+  </types>
+  
+  <message name="Endpoint_echoResponse">
+    <part name="return" type="xsd:string"/>
+  </message>
+  <message name="Endpoint_echo">
+    <part name="arg0" type="xsd:string"/>
+  </message>
+  <portType name="Endpoint">
+    <operation name="echo" parameterOrder="arg0">
+      <input message="tns:Endpoint_echo"/>
+      <output message="tns:Endpoint_echoResponse"/>
+    </operation>
+  </portType>
+  <binding name="EndpointBinding" type="tns:Endpoint">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="echo">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body namespace="http://eardeployment.jaxws/" use="literal"/>
+      </input>
+      <output>
+        <soap:body namespace="http://eardeployment.jaxws/" use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="EndpointService">
+    <port binding="tns:EndpointBinding" name="EndpointPort">
+      <soap:address location="http://REPLACE_ON_DEPLOY"/>
+    </port>
+  </service>
+</definitions>

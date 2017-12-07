@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <!-- First we create a Configuration object for the cache -->
+   <bean name="TomcatClusteringCacheConfig" class="org.jboss.cache.config.Configuration">
+      
+      <!-- Externally injected services -->  
+      <property name="runtimeConfig">
+         <bean name="TomcatClusteringCacheRuntimeConfig" class="org.jboss.cache.config.RuntimeConfig">
+            <property name="transactionManager">
+            	<bean name="TomcatClusteringBatchManager" class="org.jboss.cache.transaction.BatchModeTransactionManager"/>
+            </property>
+            <property name="muxChannelFactory"><inject bean="JChannelFactory"/></property>
+         </bean>
+      </property>
+      
+      <property name="multiplexerStack">${jboss.multiplexer.stack:udp}</property>
+   
+      <property name="clusterName">${jboss.partition.name:DefaultPartition}-TomcatCache</property>
+   
+      <property name="nodeLockingSchemeString" class="java.lang.String">PESSIMISTIC</property>
+      <property name="isolationLevelString" class="java.lang.String">REPEATABLE_READ</property>
+      <property name="cacheModeString">REPL_ASYNC</property>
+   
+      <property name="syncReplTimeout">17500</property>
+      <property name="lockAcquisitionTimeout">15000</property>
+      <property name="stateRetrievalTimeout">60000</property>
+   
+      <property name="useRegionBasedMarshalling">false</property>
+      <property name="inactiveOnStartup">false</property>
+        
+      <property name="exposeManagementStatistics">true</property>
+   
+      <property name="buddyReplicationConfig">
+      	<bean name="TomcatClusteringBuddyReplicationConfig" 
+      		class="org.jboss.cache.config.BuddyReplicationConfig">
+      		
+      		<property name="enabled">false</property>
+            <property name="buddyPoolName">default</property>
+            <property name="buddyCommunicationTimeout">17500</property>
+
+            <property name="autoDataGravitation">false</property>
+            <property name="dataGravitationRemoveOnFind">true</property>
+            <property name="dataGravitationSearchBackupTrees">true</property>
+            
+            <property name="buddyLocatorConfig">
+            	<bean name="TomcatClusteringBuddyLocatorConfig" class="org.jboss.cache.buddyreplication.NextMemberBuddyLocatorConfig">
+            		<property name="numBuddies">1</property>
+            		<property name="ignoreColocatedBuddies">true</property>
+                </bean>
+      		</property>
+      	</bean>
+      </property>
+      <property name="cacheLoaderConfig">
+      	<bean name="TomcatClusteringCacheLoaderConfig" 
+      		class="org.jboss.cache.config.CacheLoaderConfig">
+      			<property name="passivation">true</property>
+                <property name="preload">/</property>
+                <property name="shared">false</property>
+                <property name="individualCacheLoaderConfigs">
+                	<list>
+                		<bean name="TomcatClusteringFileCacheLoader" class="org.jboss.cache.loader.FileCacheLoaderConfig">
+                			<property name="location">${jboss.server.data.dir}${/}tomcat-cluster</property>
+                    		<property name="async">false</property>
+                    		<property name="fetchPersistentState">true</property>
+                    		<property name="ignoreModifications">false</property>
+                    		<property name="checkCharacterPortability">false</property>
+                		</bean>
+                	</list>
+                </property>
+      	</bean>
+      </property>
+     
+      <!-- Enable eviction for use by FIELD granularity webapps. Can be
+           removed if FIELD granularity is not used -->
+      <property name="evictionConfig">
+          <bean name="TomcatClusteringEvictionConfig" class="org.jboss.cache.config.EvictionConfig">
+            <property name="defaultEvictionPolicyClass">org.jboss.cache.eviction.LRUPolicy</property>
+            <property name="wakeupIntervalSeconds">5</property>
+            <property name="evictionRegionConfigs">
+               <list>
+                  <!-- Default region will never timeout. Do not change this -->
+                  <bean name="TomcatClusteringDefaultEvictionRegionConfig" 
+                        class="org.jboss.cache.config.EvictionRegionConfig">
+                     <property name="regionName">/_default_</property>
+                     <property name="evictionPolicyConfig">
+                        <bean name="TomcatClusteringDefaultEvictionConfig" 
+                              class="org.jboss.cache.eviction.NullEvictionPolicyConfig"/>
+                        </property>
+                  </bean>
+                  <!-- JBossWeb integration code may programatically create other
+                       regions as webapps are deployed -->
+               </list>
+         </property>
+         </bean>
+      </property>
+      
+   </bean>
+    
+   <!-- Now we use the above configuration to construct the cache itself -->
+   <bean name="TomcatClusteringCache" class="org.jboss.cache.pojo.jmx.PojoCacheJmxWrapper">
+      
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.cache:service=TomcatClusteringCache", exposedInterface=org.jboss.cache.pojo.jmx.PojoCacheJmxWrapperMBean.class, registerDirectly=true)</annotation>
+      
+      <property name="configuration"><inject bean="TomcatClusteringCacheConfig"/></property>
+      <property name="registerPlainCache">true</property>
+      
+   </bean>
+	
+</deployment>

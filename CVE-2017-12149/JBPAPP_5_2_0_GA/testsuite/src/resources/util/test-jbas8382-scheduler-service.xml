@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Tests of the Scheduler services
+$Id: test-default-scheduler-service.xml 81742 2008-11-27 17:07:11Z adrian@jboss.org $
+-->
+
+<server>
+
+   <!-- ScheduleManager -->
+
+   <mbean code="org.jboss.varia.scheduler.example.SchedulableMBeanExample"
+      name="test:name=SchedulableMBeanExample">
+   </mbean>
+
+   <mbean code="org.jboss.varia.scheduler.ScheduleManager"
+      name="test:service=Scheduler,name=ScheduleManager">
+   </mbean>
+
+   <mbean code="org.jboss.varia.scheduler.SingleScheduleProvider"
+      name="test:service=SingleScheduleProvider">
+      <attribute name="TargetMethod">hit( NOTIFICATION, DATE, REPETITIONS, SCHEDULER_NAME, java.lang.String )</attribute>
+	  <depends optional-attribute-name="ScheduleManagerName">test:service=Scheduler,name=ScheduleManager</depends>
+	  <depends optional-attribute-name="TargetName">test:name=SchedulableMBeanExample</depends>
+      <attribute name="StartDate">NOW</attribute>
+      <attribute name="Repetitions">1</attribute>
+      <attribute name="Period">1</attribute>
+   </mbean>
+
+</server>

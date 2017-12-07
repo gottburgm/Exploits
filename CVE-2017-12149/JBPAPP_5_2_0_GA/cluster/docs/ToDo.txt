@@ -1,0 +1,13 @@
+Features that are in Weblogic that we should consider as well:
+
+1. Two phase deployment. Like 2pc in transaction, if cluster-wide deployment
+fails, we should rollback. We should be able to do this fairly easily in
+farming service.
+
+2. Idempotent operations in clustering failover, i.e., if we declare an
+ejb method call is cluster-idempotent, then when it fail-over (can be
+network error, etc.), our smart proxy should execute this operation again,
+or we should  check to see whether we need to re-execute. Idempotent means
+the operation can be execute multiple times without affect the state, e.g.,
+setName().
+

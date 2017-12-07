@@ -1,0 +1,15 @@
+	 <operation>
+		 <description>Output JNDI info as text</description>
+		 <name>list</name>
+		 <parameter>
+			 <description>If true, list the class of each object in addition to its name</description>
+			 <name>verbose</name>
+			 <type>boolean</type>
+		 </parameter>
+		 <return-type>java.lang.String</return-type>
+	 </operation>
+	 <operation>
+		 <description>Output JNDI info in XML format</description>
+		 <name>listXML</name>
+		 <return-type>java.lang.String</return-type>
+	 </operation>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <bean name="TestAnnotatedJMXPojo" class="org.jboss.test.jmx.annotated.AnnotatedJMXPojo"/>
+
+   <bean name="TestAnnotatedJMXPojoNotDirect" class="org.jboss.test.jmx.annotated.AnnotatedJMXPojo">
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="test:name=AnnotatedJMXPojoNotDirect", exposedInterface=org.jboss.test.jmx.annotated.AnnotatedJMXPojoMBean.class)</annotation>
+   </bean>
+
+</deployment>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 4.2//EN" "http://www.jboss.org/j2ee/dtd/jboss_4_2.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <session>
+         <ejb-name>TestStatus</ejb-name>
+      </session>   
+
+      <message-driven>
+         <ejb-name>Mdb</ejb-name>
+         <destination-jndi-name>queue/mdbsessionpoolclearQueue</destination-jndi-name>
+         <configuration-name>Standard Message Driven Bean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>my-message-driven-bean</invoker-proxy-binding-name>
+            </invoker>
+         </invoker-bindings>
+      </message-driven>
+   </enterprise-beans>
+
+   <invoker-proxy-bindings>
+      <invoker-proxy-binding>
+         <name>my-message-driven-bean</name>
+         <invoker-mbean>default</invoker-mbean>
+         <proxy-factory>org.jboss.ejb.plugins.jms.JMSContainerInvoker</proxy-factory>
+         <proxy-factory-config>
+            <JMSProviderAdapterJNDI>DefaultJMSProvider</JMSProviderAdapterJNDI>
+            <ServerSessionPoolFactoryJNDI>StdJMSPool</ServerSessionPoolFactoryJNDI>
+            <MaximumSize>1</MaximumSize>
+            <MaxMessages>1</MaxMessages>
+            <!--ForceClearOnShutdown>true</ForceClearOnShutdown>
+            <ForceClearAttempts>5</ForceClearAttempts> 
+            <ForceClearInterval>500</ForceClearInterval-->
+            <MDBConfig>
+               <ReconnectIntervalSec>10</ReconnectIntervalSec>
+               <DLQConfig>
+                  <DestinationQueue>queue/DLQ</DestinationQueue>
+                  <MaxTimesRedelivered>10</MaxTimesRedelivered>
+                  <TimeToLive>0</TimeToLive>
+               </DLQConfig>
+            </MDBConfig>
+         </proxy-factory-config>
+      </invoker-proxy-binding>
+   </invoker-proxy-bindings>
+
+</jboss>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server>
+
+<server>
+
+   <mbean code="org.jboss.test.aop.bean.SimpleBeanTester"
+     name="jboss.aop:name=SimpleBeanTester"/>  
+
+
+</server>

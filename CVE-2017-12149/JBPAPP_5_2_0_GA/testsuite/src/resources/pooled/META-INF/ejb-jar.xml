@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ejb-jar xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd"
+         version="2.1">
+   <enterprise-beans>
+
+      <session>
+         <description>Nextgen test bean stateless</description>
+         <ejb-name>StatelessSession</ejb-name>
+         <home>org.jboss.test.pooled.interfaces.StatelessSessionHome</home>
+         <remote>org.jboss.test.pooled.interfaces.StatelessSession</remote>
+         <ejb-class>org.jboss.test.pooled.bean.StatelessSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      <session>
+         <description>Stateless session with SSL+PooledInvoker</description>
+         <ejb-name>StatelessSessionWithPooledSSL</ejb-name>
+         <home>org.jboss.test.pooled.interfaces.StatelessSessionHome</home>
+         <remote>org.jboss.test.pooled.interfaces.StatelessSession</remote>
+         <ejb-class>org.jboss.test.pooled.bean.StatelessSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+   </enterprise-beans>
+   <assembly-descriptor>
+      <method-permission>
+         <role-name>Echo</role-name>
+         <method>
+            <ejb-name>StatelessSessionWithPooledSSL</ejb-name>
+            <method-intf>Home</method-intf>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>StatelessSessionWithPooledSSL</ejb-name>
+            <method-intf>Remote</method-intf>
+            <method-name>echoCaller</method-name>
+         </method>
+         <method>
+            <ejb-name>StatelessSessionWithPooledSSL</ejb-name>
+            <method-intf>Remote</method-intf>
+            <method-name>remove</method-name>
+         </method>
+      </method-permission>
+      <method-permission>
+         <role-name>NotEcho</role-name>
+         <method>
+            <ejb-name>StatelessSessionWithPooledSSL</ejb-name>
+            <method-name>noop</method-name>
+         </method>
+      </method-permission>
+   </assembly-descriptor>
+</ejb-jar>

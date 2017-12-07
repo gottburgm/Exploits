@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jbosscmp-jdbc PUBLIC "-//JBoss//DTD JBOSSCMP-JDBC 3.0//EN" "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_0.dtd">
+
+<jbosscmp-jdbc>
+   <defaults>
+   </defaults>
+
+   <enterprise-beans>
+
+     <!--
+       To add beans that you have deployment descriptor info for, add
+       a file to your XDoclet merge directory called jbosscmp-jdbc-beans.xml
+       that contains the <entity></entity> markup for those beans.
+     -->
+
+      <entity>
+         <ejb-name>ProxyCompilerTest</ejb-name>
+
+         <cmp-field>
+            <field-name>pk</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>bool</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>byte</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>char</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>double</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>float</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>int</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>long</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>short</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>objectArray</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>intArray</field-name>
+
+        </cmp-field>
+
+      </entity>
+
+   </enterprise-beans>
+
+</jbosscmp-jdbc>

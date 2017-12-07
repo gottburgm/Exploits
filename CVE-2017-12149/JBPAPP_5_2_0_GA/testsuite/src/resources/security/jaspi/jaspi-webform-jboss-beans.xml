@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <application-policy xmlns="urn:jboss:security-beans:1.0" name="jaspi-test">
+       <authentication-jaspi>
+         <login-module-stack name="lm-stack">
+           <login-module
+              code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+              flag="required">
+           </login-module>
+         </login-module-stack>
+         <auth-module code="org.jboss.web.tomcat.security.jaspi.modules.HTTPFormServerAuthModule" login-module-stack-ref="lm-stack"/>
+       </authentication-jaspi>
+   </application-policy>
+
+</deployment>

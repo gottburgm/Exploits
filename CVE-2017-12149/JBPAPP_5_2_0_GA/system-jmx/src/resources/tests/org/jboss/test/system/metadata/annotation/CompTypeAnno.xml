@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: CompTypeAnno.xml 85945 2009-03-16 19:45:12Z dimitris@jboss.org $ -->
+<mbean name="jboss.test:type=BasicMBeanName" code="BasicMBeanCode">
+    <annotation>@org.jboss.test.system.metadata.annotation.CompType(type="DS",subtype="LocalTX")</annotation>
+</mbean>

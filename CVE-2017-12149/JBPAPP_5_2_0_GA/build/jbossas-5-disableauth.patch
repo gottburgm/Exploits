@@ -1,0 +1,949 @@
+diff -Naur ./server/all/conf/props/jbossws-users.properties ./server/all/conf/props/jbossws-users.properties
+--- ./server/all/conf/props/jbossws-users.properties	2009-09-08 13:43:11.000000000 -0400
++++ ./server/all/conf/props/jbossws-users.properties	2009-09-08 13:44:31.000000000 -0400
+@@ -1,2 +1,2 @@
+ # A sample users.properties file for use with the UsersRolesLoginModule
+-# kermit=thefrog
++kermit=thefrog
+diff -Naur ./server/all/conf/props/jmx-console-users.properties ./server/all/conf/props/jmx-console-users.properties
+--- ./server/all/conf/props/jmx-console-users.properties	2009-09-08 13:43:11.000000000 -0400
++++ ./server/all/conf/props/jmx-console-users.properties	2009-09-08 13:44:31.000000000 -0400
+@@ -1,2 +1,2 @@
+ # A sample users.properties file for use with the UsersRolesLoginModule
+-# admin=admin
++admin=admin
+diff -Naur ./server/all/deploy/httpha-invoker.sar/invoker.war/WEB-INF/web.xml ./server/all/deploy/httpha-invoker.sar/invoker.war/WEB-INF/web.xml
+--- ./server/all/deploy/httpha-invoker.sar/invoker.war/WEB-INF/web.xml	2012-08-09 12:56:21.629862631 +0100
++++ ./server/all/deploy/httpha-invoker.sar/invoker.war/WEB-INF/web.xml	2012-08-09 12:55:15.504762600 +0100
+@@ -203,11 +203,6 @@
+             role HttpInvoker to access the HTTP invoker servlets
+          </description>
+          <url-pattern>/restricted/*</url-pattern>
+-         <url-pattern>/JNDIFactory/*</url-pattern>
+-         <url-pattern>/EJBInvokerServlet/*</url-pattern>
+-         <url-pattern>/EJBInvokerHAServlet/*</url-pattern>
+-         <url-pattern>/JMXInvokerServlet/*</url-pattern>
+-         <url-pattern>/JMXInvokerHAServlet/*</url-pattern>
+       </web-resource-collection>
+       <auth-constraint>
+          <role-name>HttpInvoker</role-name>
+diff -Naur ./server/all/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml ./server/all/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml
+--- ./server/all/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/all/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -6,8 +6,9 @@
+ 
+ <jboss-web>
+ 
+-  <!-- A security domain that restricts access -->
+-  <security-domain>java:/jaas/jmx-console</security-domain>
++  <!-- A security domain that restricts access
++  <security-domain>java:/jaas/JBossWS</security-domain>
++  -->
+   
+   <context-root>jbossws</context-root>
+ 
+diff -Naur ./server/all/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml ./server/all/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml
+--- ./server/all/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/all/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -32,19 +32,20 @@
+     <url-pattern>/pclink</url-pattern>
+   </servlet-mapping>
+ 
+-   <!-- A security constraint that restricts access -->
++   <!-- A security constraint that restricts access
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>ContextServlet</web-resource-name>
+        <description>An example security config that only allows users with the
+-         role 'JBossAdmin' to access the JBossWS console web application
++         role 'friend' to access the JBossWS console web application
+        </description>
+        <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+-       <role-name>JBossAdmin</role-name>
++       <role-name>friend</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+ 
+    <login-config>
+       <auth-method>BASIC</auth-method>
+@@ -52,7 +53,7 @@
+    </login-config>
+ 
+    <security-role>
+-      <role-name>JBossAdmin</role-name>
++      <role-name>friend</role-name>
+    </security-role>
+   
+   <!-- 
+diff -Naur ./server/all/deploy/jmx-console.war/WEB-INF/jboss-web.xml ./server/all/deploy/jmx-console.war/WEB-INF/jboss-web.xml
+--- ./server/all/deploy/jmx-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/all/deploy/jmx-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -6,6 +6,6 @@
+    <!-- Uncomment the security-domain to enable security. You will
+       need to edit the htmladaptor login configuration to setup the
+       login modules used to authentication users.
+-   -->
+       <security-domain>java:/jaas/jmx-console</security-domain>
++   -->
+ </jboss-web>
+diff -Naur ./server/all/deploy/jmx-console.war/WEB-INF/web.xml ./server/all/deploy/jmx-console.war/WEB-INF/web.xml
+--- ./server/all/deploy/jmx-console.war/WEB-INF/web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/all/deploy/jmx-console.war/WEB-INF/web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -100,7 +100,6 @@
+    to users with the role JBossAdmin. Edit the roles to what you want and
+    uncomment the WEB-INF/jboss-web.xml/security-domain element to enable
+    secured access to the HTML JMX console.
+-   -->
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>HtmlAdaptor</web-resource-name>
+@@ -113,6 +112,7 @@
+        <role-name>JBossAdmin</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+ 
+    <login-config>
+       <auth-method>BASIC</auth-method>
+diff -Naur ./server/all/deploy/jmx-invoker-service.xml ./server/all/deploy/jmx-invoker-service.xml
+--- ./server/all/deploy/jmx-invoker-service.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/all/deploy/jmx-invoker-service.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -111,9 +111,10 @@
+             <return-type>java.lang.Object</return-type>
+             <descriptors>
+                <interceptors>
+-                  <!-- Interceptor to require authenticated users -->
++                  <!-- Uncomment to require authenticated users
+                   <interceptor code="org.jboss.jmx.connector.invoker.AuthenticationInterceptor"
+                      securityDomain="java:/jaas/jmx-console"/>
++                  -->               
+                   <!-- Interceptor that deals with non-serializable results -->
+                   <interceptor code="org.jboss.jmx.connector.invoker.SerializableInterceptor"
+                      policyClass="StripModelMBeanInfoPolicy"/>
+diff -Naur ./server/all/deploy/management/console-mgr.sar/web-console.war/WEB-INF/jboss-web.xml ./server/all/deploy/management/console-mgr.sar/web-console.war/WEB-INF/jboss-web.xml
+--- ./server/all/deploy/management/console-mgr.sar/web-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/all/deploy/management/console-mgr.sar/web-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -9,8 +9,8 @@
+    <!-- Uncomment the security-domain to enable security. You will
+    need to edit the htmladaptor login configuration to setup the
+    login modules used to authentication users.
+-   -->
+    <security-domain>java:/jaas/web-console</security-domain>
++   -->
+ 
+    <!-- The war depends on the -->
+    <depends>jboss.admin:service=PluginManager</depends>
+diff -Naur ./server/all/deploy/management/console-mgr.sar/web-console.war/WEB-INF/web.xml ./server/all/deploy/management/console-mgr.sar/web-console.war/WEB-INF/web.xml
+--- ./server/all/deploy/management/console-mgr.sar/web-console.war/WEB-INF/web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/all/deploy/management/console-mgr.sar/web-console.war/WEB-INF/web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -339,7 +339,6 @@
+    to users with the role JBossAdmin. Edit the roles to what you want and
+    uncomment the WEB-INF/jboss-web.xml/security-domain element to enable
+    secured access to the HTML JMX console.
+-   -->
+ 
+    <security-constraint>
+    <web-resource-collection>
+@@ -353,6 +352,7 @@
+    <role-name>JBossAdmin</role-name>
+    </auth-constraint>
+    </security-constraint>
++   -->
+ 
+    <login-config>
+       <auth-method>BASIC</auth-method>
+diff -Naur ./server/all/deploy/profileservice-jboss-beans.xml ./server/all/deploy/profileservice-jboss-beans.xml
+--- ./server/all/deploy/profileservice-jboss-beans.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/all/deploy/profileservice-jboss-beans.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -174,7 +174,7 @@
+         <!-- Server side security interceptor stack -->
+         <property name="serverProxyInterceptors">
+             <list>
+-            <!-- comment this list to disable auth checks for the profileservice -->
++            <!-- uncomment to enable auth checks for the profileservice
+                 <bean class="org.jboss.aspects.security.AuthenticationInterceptor">
+                     <constructor>
+                         <parameter>
+@@ -195,6 +195,7 @@
+                         </parameter>
+                     </constructor>
+                 </bean>
++            -->
+             </list>
+         </property>
+         <depends>ConnectorMBean</depends>
+diff -Naur ./server/default/conf/props/jbossws-users.properties ./server/default/conf/props/jbossws-users.properties
+--- ./server/default/conf/props/jbossws-users.properties	2009-09-08 13:43:11.000000000 -0400
++++ ./server/default/conf/props/jbossws-users.properties	2009-09-08 13:44:31.000000000 -0400
+@@ -1,2 +1,2 @@
+ # A sample users.properties file for use with the UsersRolesLoginModule
+-# kermit=thefrog
++kermit=thefrog
+diff -Naur ./server/default/conf/props/jmx-console-users.properties ./server/default/conf/props/jmx-console-users.properties
+--- ./server/default/conf/props/jmx-console-users.properties	2009-09-08 13:43:11.000000000 -0400
++++ ./server/default/conf/props/jmx-console-users.properties	2009-09-08 13:44:31.000000000 -0400
+@@ -1,2 +1,2 @@
+ # A sample users.properties file for use with the UsersRolesLoginModule
+-# admin=admin
++admin=admin
+diff -Naur ./server/default/deploy/http-invoker.sar/invoker.war/WEB-INF/web.xml ./server/default/deploy/http-invoker.sar/invoker.war/WEB-INF/web.xml
+--- ./server/default/deploy/http-invoker.sar/invoker.war/WEB-INF/web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/default/deploy/http-invoker.sar/invoker.war/WEB-INF/web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -156,9 +156,6 @@
+             role HttpInvoker to access the HTTP invoker servlets
+          </description>
+          <url-pattern>/restricted/*</url-pattern>
+-         <url-pattern>/JNDIFactory/*</url-pattern>
+-         <url-pattern>/EJBInvokerServlet/*</url-pattern>
+-         <url-pattern>/JMXInvokerServlet/*</url-pattern>
+       </web-resource-collection>
+       <auth-constraint>
+          <role-name>HttpInvoker</role-name>
+diff -Naur ./server/default/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml ./server/default/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml
+--- ./server/default/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/default/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -6,8 +6,9 @@
+ 
+ <jboss-web>
+ 
+-  <!-- A security domain that restricts access -->
+-  <security-domain>java:/jaas/jmx-console</security-domain>
++  <!-- A security domain that restricts access
++  <security-domain>java:/jaas/JBossWS</security-domain>
++  -->
+   
+   <context-root>jbossws</context-root>
+ 
+diff -Naur ./server/default/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml ./server/default/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml
+--- ./server/default/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/default/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -32,19 +32,20 @@
+     <url-pattern>/pclink</url-pattern>
+   </servlet-mapping>
+ 
+-   <!-- A security constraint that restricts access -->
++   <!-- A security constraint that restricts access
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>ContextServlet</web-resource-name>
+        <description>An example security config that only allows users with the
+-         role 'JBossAdmin' to access the JBossWS console web application
++         role 'friend' to access the JBossWS console web application
+        </description>
+        <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+-       <role-name>JBossAdmin</role-name>
++       <role-name>friend</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+ 
+    <login-config>
+       <auth-method>BASIC</auth-method>
+@@ -52,7 +53,7 @@
+    </login-config>
+ 
+    <security-role>
+-      <role-name>JBossAdmin</role-name>
++      <role-name>friend</role-name>
+    </security-role>
+   
+   <!-- 
+diff -Naur ./server/default/deploy/jmx-console.war/WEB-INF/jboss-web.xml ./server/default/deploy/jmx-console.war/WEB-INF/jboss-web.xml
+--- ./server/default/deploy/jmx-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/default/deploy/jmx-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -6,6 +6,6 @@
+    <!-- Uncomment the security-domain to enable security. You will
+       need to edit the htmladaptor login configuration to setup the
+       login modules used to authentication users.
+-   -->
+       <security-domain>java:/jaas/jmx-console</security-domain>
++   -->
+ </jboss-web>
+diff -Naur ./server/default/deploy/jmx-console.war/WEB-INF/web.xml ./server/default/deploy/jmx-console.war/WEB-INF/web.xml
+--- ./server/default/deploy/jmx-console.war/WEB-INF/web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/default/deploy/jmx-console.war/WEB-INF/web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -100,7 +100,6 @@
+    to users with the role JBossAdmin. Edit the roles to what you want and
+    uncomment the WEB-INF/jboss-web.xml/security-domain element to enable
+    secured access to the HTML JMX console.
+-   -->
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>HtmlAdaptor</web-resource-name>
+@@ -113,6 +112,7 @@
+        <role-name>JBossAdmin</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+ 
+    <login-config>
+       <auth-method>BASIC</auth-method>
+diff -Naur ./server/default/deploy/jmx-invoker-service.xml ./server/default/deploy/jmx-invoker-service.xml
+--- ./server/default/deploy/jmx-invoker-service.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/default/deploy/jmx-invoker-service.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -111,9 +111,10 @@
+             <return-type>java.lang.Object</return-type>
+             <descriptors>
+                <interceptors>
+-                  <!-- Interceptor to require authenticated users -->
++                  <!-- Uncomment to require authenticated users
+                   <interceptor code="org.jboss.jmx.connector.invoker.AuthenticationInterceptor"
+                      securityDomain="java:/jaas/jmx-console"/>
++                  -->               
+                   <!-- Interceptor that deals with non-serializable results -->
+                   <interceptor code="org.jboss.jmx.connector.invoker.SerializableInterceptor"
+                      policyClass="StripModelMBeanInfoPolicy"/>
+diff -Naur ./server/default/deploy/management/console-mgr.sar/web-console.war/WEB-INF/jboss-web.xml ./server/default/deploy/management/console-mgr.sar/web-console.war/WEB-INF/jboss-web.xml
+--- ./server/default/deploy/management/console-mgr.sar/web-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/default/deploy/management/console-mgr.sar/web-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -9,8 +9,8 @@
+    <!-- Uncomment the security-domain to enable security. You will
+    need to edit the htmladaptor login configuration to setup the
+    login modules used to authentication users.
+-   -->
+    <security-domain>java:/jaas/web-console</security-domain>
++   -->
+ 
+    <!-- The war depends on the -->
+    <depends>jboss.admin:service=PluginManager</depends>
+diff -Naur ./server/default/deploy/management/console-mgr.sar/web-console.war/WEB-INF/web.xml ./server/default/deploy/management/console-mgr.sar/web-console.war/WEB-INF/web.xml
+--- ./server/default/deploy/management/console-mgr.sar/web-console.war/WEB-INF/web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/default/deploy/management/console-mgr.sar/web-console.war/WEB-INF/web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -339,7 +339,6 @@
+    to users with the role JBossAdmin. Edit the roles to what you want and
+    uncomment the WEB-INF/jboss-web.xml/security-domain element to enable
+    secured access to the HTML JMX console.
+-   -->
+ 
+    <security-constraint>
+    <web-resource-collection>
+@@ -353,6 +352,7 @@
+    <role-name>JBossAdmin</role-name>
+    </auth-constraint>
+    </security-constraint>
++   -->
+ 
+    <login-config>
+       <auth-method>BASIC</auth-method>
+diff -Naur ./server/default/deploy/profileservice-jboss-beans.xml ./server/default/deploy/profileservice-jboss-beans.xml
+--- ./server/default/deploy/profileservice-jboss-beans.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/default/deploy/profileservice-jboss-beans.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -174,7 +174,7 @@
+         <!-- Server side security interceptor stack -->
+         <property name="serverProxyInterceptors">
+             <list>
+-            <!-- comment this list to disable auth checks for the profileservice -->
++            <!-- uncomment to enable auth checks for the profileservice
+                 <bean class="org.jboss.aspects.security.AuthenticationInterceptor">
+                     <constructor>
+                         <parameter>
+@@ -195,6 +195,7 @@
+                         </parameter>
+                     </constructor>
+                 </bean>
++            -->
+             </list>
+         </property>
+         <depends>ConnectorMBean</depends>
+diff -Naur ./server/production/conf/props/jbossws-users.properties ./server/production/conf/props/jbossws-users.properties
+--- ./server/production/conf/props/jbossws-users.properties	2009-09-08 13:43:11.000000000 -0400
++++ ./server/production/conf/props/jbossws-users.properties	2009-09-08 13:44:31.000000000 -0400
+@@ -1,2 +1,2 @@
+ # A sample users.properties file for use with the UsersRolesLoginModule
+-# kermit=thefrog
++kermit=thefrog
+diff -Naur ./server/production/conf/props/jmx-console-users.properties ./server/production/conf/props/jmx-console-users.properties
+--- ./server/production/conf/props/jmx-console-users.properties	2009-09-08 13:43:11.000000000 -0400
++++ ./server/production/conf/props/jmx-console-users.properties	2009-09-08 13:44:31.000000000 -0400
+@@ -1,2 +1,2 @@
+ # A sample users.properties file for use with the UsersRolesLoginModule
+-# admin=admin
++admin=admin
+diff -Naur ./server/production/deploy/httpha-invoker.sar/invoker.war/WEB-INF/web.xml ./server/production/deploy/httpha-invoker.sar/invoker.war/WEB-INF/web.xml
+--- ./server/production/deploy/httpha-invoker.sar/invoker.war/WEB-INF/web.xml	2012-08-09 13:22:19.018027082 +0100
++++ ./server/production/deploy/httpha-invoker.sar/invoker.war/WEB-INF/web.xml	2012-08-09 12:55:15.662762841 +0100
+@@ -203,11 +203,6 @@
+             role HttpInvoker to access the HTTP invoker servlets
+          </description>
+          <url-pattern>/restricted/*</url-pattern>
+-         <url-pattern>/JNDIFactory/*</url-pattern>
+-         <url-pattern>/EJBInvokerServlet/*</url-pattern>
+-         <url-pattern>/EJBInvokerHAServlet/*</url-pattern>
+-         <url-pattern>/JMXInvokerServlet/*</url-pattern>
+-         <url-pattern>/JMXInvokerHAServlet/*</url-pattern>
+       </web-resource-collection>
+       <auth-constraint>
+          <role-name>HttpInvoker</role-name>
+diff -Naur ./server/production/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml ./server/production/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml
+--- ./server/production/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/production/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -6,8 +6,9 @@
+ 
+ <jboss-web>
+ 
+-  <!-- A security domain that restricts access -->
+-  <security-domain>java:/jaas/jmx-console</security-domain>
++  <!-- A security domain that restricts access
++  <security-domain>java:/jaas/JBossWS</security-domain>
++  -->
+   
+   <context-root>jbossws</context-root>
+ 
+diff -Naur ./server/production/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml ./server/production/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml
+--- ./server/production/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/production/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -32,19 +32,20 @@
+     <url-pattern>/pclink</url-pattern>
+   </servlet-mapping>
+ 
+-   <!-- A security constraint that restricts access -->
++   <!-- A security constraint that restricts access
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>ContextServlet</web-resource-name>
+        <description>An example security config that only allows users with the
+-         role 'JBossAdmin' to access the JBossWS console web application
++         role 'friend' to access the JBossWS console web application
+        </description>
+        <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+-       <role-name>JBossAdmin</role-name>
++       <role-name>friend</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+ 
+    <login-config>
+       <auth-method>BASIC</auth-method>
+@@ -52,7 +53,7 @@
+    </login-config>
+ 
+    <security-role>
+-      <role-name>JBossAdmin</role-name>
++      <role-name>friend</role-name>
+    </security-role>
+   
+   <!-- 
+diff -Naur ./server/production/deploy/jmx-console.war/WEB-INF/jboss-web.xml ./server/production/deploy/jmx-console.war/WEB-INF/jboss-web.xml
+--- ./server/production/deploy/jmx-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/production/deploy/jmx-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -6,6 +6,6 @@
+    <!-- Uncomment the security-domain to enable security. You will
+       need to edit the htmladaptor login configuration to setup the
+       login modules used to authentication users.
+-   -->
+       <security-domain>java:/jaas/jmx-console</security-domain>
++   -->
+ </jboss-web>
+diff -Naur ./server/production/deploy/jmx-console.war/WEB-INF/web.xml ./server/production/deploy/jmx-console.war/WEB-INF/web.xml
+--- ./server/production/deploy/jmx-console.war/WEB-INF/web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/production/deploy/jmx-console.war/WEB-INF/web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -100,7 +100,6 @@
+    to users with the role JBossAdmin. Edit the roles to what you want and
+    uncomment the WEB-INF/jboss-web.xml/security-domain element to enable
+    secured access to the HTML JMX console.
+-   -->
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>HtmlAdaptor</web-resource-name>
+@@ -113,6 +112,7 @@
+        <role-name>JBossAdmin</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+ 
+    <login-config>
+       <auth-method>BASIC</auth-method>
+diff -Naur ./server/production/deploy/jmx-invoker-service.xml ./server/production/deploy/jmx-invoker-service.xml
+--- ./server/production/deploy/jmx-invoker-service.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/production/deploy/jmx-invoker-service.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -111,9 +111,10 @@
+             <return-type>java.lang.Object</return-type>
+             <descriptors>
+                <interceptors>
+-                  <!-- Interceptor to require authenticated users -->
++                  <!-- Uncomment to require authenticated users
+                   <interceptor code="org.jboss.jmx.connector.invoker.AuthenticationInterceptor"
+                      securityDomain="java:/jaas/jmx-console"/>
++                  -->               
+                   <!-- Interceptor that deals with non-serializable results -->
+                   <interceptor code="org.jboss.jmx.connector.invoker.SerializableInterceptor"
+                      policyClass="StripModelMBeanInfoPolicy"/>
+diff -Naur ./server/production/deploy/management/console-mgr.sar/web-console.war/WEB-INF/jboss-web.xml ./server/production/deploy/management/console-mgr.sar/web-console.war/WEB-INF/jboss-web.xml
+--- ./server/production/deploy/management/console-mgr.sar/web-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/production/deploy/management/console-mgr.sar/web-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -9,8 +9,8 @@
+    <!-- Uncomment the security-domain to enable security. You will
+    need to edit the htmladaptor login configuration to setup the
+    login modules used to authentication users.
+-   -->
+    <security-domain>java:/jaas/web-console</security-domain>
++   -->
+ 
+    <!-- The war depends on the -->
+    <depends>jboss.admin:service=PluginManager</depends>
+diff -Naur ./server/production/deploy/management/console-mgr.sar/web-console.war/WEB-INF/web.xml ./server/production/deploy/management/console-mgr.sar/web-console.war/WEB-INF/web.xml
+--- ./server/production/deploy/management/console-mgr.sar/web-console.war/WEB-INF/web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/production/deploy/management/console-mgr.sar/web-console.war/WEB-INF/web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -339,7 +339,6 @@
+    to users with the role JBossAdmin. Edit the roles to what you want and
+    uncomment the WEB-INF/jboss-web.xml/security-domain element to enable
+    secured access to the HTML JMX console.
+-   -->
+ 
+    <security-constraint>
+    <web-resource-collection>
+@@ -353,6 +352,7 @@
+    <role-name>JBossAdmin</role-name>
+    </auth-constraint>
+    </security-constraint>
++   -->
+ 
+    <login-config>
+       <auth-method>BASIC</auth-method>
+diff -Naur ./server/production/deploy/profileservice-jboss-beans.xml ./server/production/deploy/profileservice-jboss-beans.xml
+--- ./server/production/deploy/profileservice-jboss-beans.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/production/deploy/profileservice-jboss-beans.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -174,7 +174,7 @@
+         <!-- Server side security interceptor stack -->
+         <property name="serverProxyInterceptors">
+             <list>
+-            <!-- comment this list to disable auth checks for the profileservice -->
++            <!-- uncomment to enable auth checks for the profileservice
+                 <bean class="org.jboss.aspects.security.AuthenticationInterceptor">
+                     <constructor>
+                         <parameter>
+@@ -195,6 +195,7 @@
+                         </parameter>
+                     </constructor>
+                 </bean>
++            -->
+             </list>
+         </property>
+         <depends>ConnectorMBean</depends>
+diff -Naur ./server/standard/conf/props/jbossws-users.properties ./server/standard/conf/props/jbossws-users.properties
+--- ./server/standard/conf/props/jbossws-users.properties	2009-09-08 13:43:11.000000000 -0400
++++ ./server/standard/conf/props/jbossws-users.properties	2009-09-08 13:44:31.000000000 -0400
+@@ -1,2 +1,2 @@
+ # A sample users.properties file for use with the UsersRolesLoginModule
+-# kermit=thefrog
++kermit=thefrog
+diff -Naur ./server/standard/conf/props/jmx-console-users.properties ./server/standard/conf/props/jmx-console-users.properties
+--- ./server/standard/conf/props/jmx-console-users.properties	2009-09-08 13:43:11.000000000 -0400
++++ ./server/standard/conf/props/jmx-console-users.properties	2009-09-08 13:44:31.000000000 -0400
+@@ -1,2 +1,2 @@
+ # A sample users.properties file for use with the UsersRolesLoginModule
+-# admin=admin
++admin=admin
+diff -Naur ./server/standard/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml ./server/standard/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml
+--- ./server/standard/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/standard/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -6,8 +6,9 @@
+ 
+ <jboss-web>
+ 
+-  <!-- A security domain that restricts access -->
+-  <security-domain>java:/jaas/jmx-console</security-domain>
++  <!-- A security domain that restricts access
++  <security-domain>java:/jaas/JBossWS</security-domain>
++  -->
+   
+   <context-root>jbossws</context-root>
+ 
+diff -Naur ./server/standard/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml ./server/standard/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml
+--- ./server/standard/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/standard/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -32,19 +32,20 @@
+     <url-pattern>/pclink</url-pattern>
+   </servlet-mapping>
+ 
+-   <!-- A security constraint that restricts access -->
++   <!-- A security constraint that restricts access
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>ContextServlet</web-resource-name>
+        <description>An example security config that only allows users with the
+-         role 'JBossAdmin' to access the JBossWS console web application
++         role 'friend' to access the JBossWS console web application
+        </description>
+        <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+-       <role-name>JBossAdmin</role-name>
++       <role-name>friend</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+ 
+    <login-config>
+       <auth-method>BASIC</auth-method>
+@@ -52,7 +53,7 @@
+    </login-config>
+ 
+    <security-role>
+-      <role-name>JBossAdmin</role-name>
++      <role-name>friend</role-name>
+    </security-role>
+   
+   <!-- 
+diff -Naur ./server/standard/deploy/jmx-console.war/WEB-INF/jboss-web.xml ./server/standard/deploy/jmx-console.war/WEB-INF/jboss-web.xml
+--- ./server/standard/deploy/jmx-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/standard/deploy/jmx-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -6,6 +6,6 @@
+    <!-- Uncomment the security-domain to enable security. You will
+       need to edit the htmladaptor login configuration to setup the
+       login modules used to authentication users.
+-   -->
+       <security-domain>java:/jaas/jmx-console</security-domain>
++   -->
+ </jboss-web>
+diff -Naur ./server/standard/deploy/jmx-console.war/WEB-INF/web.xml ./server/standard/deploy/jmx-console.war/WEB-INF/web.xml
+--- ./server/standard/deploy/jmx-console.war/WEB-INF/web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/standard/deploy/jmx-console.war/WEB-INF/web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -100,7 +100,6 @@
+    to users with the role JBossAdmin. Edit the roles to what you want and
+    uncomment the WEB-INF/jboss-web.xml/security-domain element to enable
+    secured access to the HTML JMX console.
+-   -->
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>HtmlAdaptor</web-resource-name>
+@@ -113,6 +112,7 @@
+        <role-name>JBossAdmin</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+ 
+    <login-config>
+       <auth-method>BASIC</auth-method>
+diff -Naur ./server/standard/deploy/jmx-invoker-service.xml ./server/standard/deploy/jmx-invoker-service.xml
+--- ./server/standard/deploy/jmx-invoker-service.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/standard/deploy/jmx-invoker-service.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -111,9 +111,10 @@
+             <return-type>java.lang.Object</return-type>
+             <descriptors>
+                <interceptors>
+-                  <!-- Interceptor to require authenticated users -->
++                  <!-- Uncomment to require authenticated users
+                   <interceptor code="org.jboss.jmx.connector.invoker.AuthenticationInterceptor"
+                      securityDomain="java:/jaas/jmx-console"/>
++                  -->               
+                   <!-- Interceptor that deals with non-serializable results -->
+                   <interceptor code="org.jboss.jmx.connector.invoker.SerializableInterceptor"
+                      policyClass="StripModelMBeanInfoPolicy"/>
+diff -Naur ./server/standard/deploy/profileservice-jboss-beans.xml ./server/standard/deploy/profileservice-jboss-beans.xml
+--- ./server/standard/deploy/profileservice-jboss-beans.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/standard/deploy/profileservice-jboss-beans.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -174,7 +174,7 @@
+         <!-- Server side security interceptor stack -->
+         <property name="serverProxyInterceptors">
+             <list>
+-            <!-- comment this list to disable auth checks for the profileservice -->
++            <!-- uncomment to enable auth checks for the profileservice
+                 <bean class="org.jboss.aspects.security.AuthenticationInterceptor">
+                     <constructor>
+                         <parameter>
+@@ -195,6 +195,7 @@
+                         </parameter>
+                     </constructor>
+                 </bean>
++            -->
+             </list>
+         </property>
+         <depends>ConnectorMBean</depends>
+diff -Naur ./server/web/conf/props/jbossws-users.properties ./server/web/conf/props/jbossws-users.properties
+--- ./server/web/conf/props/jbossws-users.properties	2009-09-08 13:43:11.000000000 -0400
++++ ./server/web/conf/props/jbossws-users.properties	2009-09-08 13:44:31.000000000 -0400
+@@ -1,2 +1,2 @@
+ # A sample users.properties file for use with the UsersRolesLoginModule
+-# kermit=thefrog
++kermit=thefrog
+diff -Naur ./server/web/conf/props/jmx-console-users.properties ./server/web/conf/props/jmx-console-users.properties
+--- ./server/web/conf/props/jmx-console-users.properties	2009-09-08 13:43:11.000000000 -0400
++++ ./server/web/conf/props/jmx-console-users.properties	2009-09-08 13:44:31.000000000 -0400
+@@ -1,2 +1,2 @@
+ # A sample users.properties file for use with the UsersRolesLoginModule
+-# admin=admin
++admin=admin
+diff -Naur ./server/web/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml ./server/web/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml
+--- ./server/web/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/web/deploy/jbossws.sar/jbossws-management.war/WEB-INF/jboss-web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -6,8 +6,9 @@
+ 
+ <jboss-web>
+ 
+-  <!-- A security domain that restricts access -->
+-  <security-domain>java:/jaas/jmx-console</security-domain>
++  <!-- A security domain that restricts access
++  <security-domain>java:/jaas/JBossWS</security-domain>
++  -->
+   
+   <context-root>jbossws</context-root>
+ 
+diff -Naur ./server/web/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml ./server/web/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml
+--- ./server/web/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/web/deploy/jbossws.sar/jbossws-management.war/WEB-INF/web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -32,19 +32,20 @@
+     <url-pattern>/pclink</url-pattern>
+   </servlet-mapping>
+ 
+-   <!-- A security constraint that restricts access -->
++   <!-- A security constraint that restricts access
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>ContextServlet</web-resource-name>
+        <description>An example security config that only allows users with the
+-         role 'JBossAdmin' to access the JBossWS console web application
++         role 'friend' to access the JBossWS console web application
+        </description>
+        <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+-       <role-name>JBossAdmin</role-name>
++       <role-name>friend</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+ 
+    <login-config>
+       <auth-method>BASIC</auth-method>
+@@ -52,7 +53,7 @@
+    </login-config>
+ 
+    <security-role>
+-      <role-name>JBossAdmin</role-name>
++      <role-name>friend</role-name>
+    </security-role>
+   
+   <!-- 
+diff -Naur ./server/web/deploy/jmx-console.war/WEB-INF/jboss-web.xml ./server/web/deploy/jmx-console.war/WEB-INF/jboss-web.xml
+--- ./server/web/deploy/jmx-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/web/deploy/jmx-console.war/WEB-INF/jboss-web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -6,6 +6,6 @@
+    <!-- Uncomment the security-domain to enable security. You will
+       need to edit the htmladaptor login configuration to setup the
+       login modules used to authentication users.
+-   -->
+       <security-domain>java:/jaas/jmx-console</security-domain>
++   -->
+ </jboss-web>
+diff -Naur ./server/web/deploy/jmx-console.war/WEB-INF/web.xml ./server/web/deploy/jmx-console.war/WEB-INF/web.xml
+--- ./server/web/deploy/jmx-console.war/WEB-INF/web.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/web/deploy/jmx-console.war/WEB-INF/web.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -100,7 +100,6 @@
+    to users with the role JBossAdmin. Edit the roles to what you want and
+    uncomment the WEB-INF/jboss-web.xml/security-domain element to enable
+    secured access to the HTML JMX console.
+-   -->
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>HtmlAdaptor</web-resource-name>
+@@ -113,6 +112,7 @@
+        <role-name>JBossAdmin</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+ 
+    <login-config>
+       <auth-method>BASIC</auth-method>
+diff -Naur ./server/web/deploy/jmx-invoker-service.xml ./server/web/deploy/jmx-invoker-service.xml
+--- ./server/web/deploy/jmx-invoker-service.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/web/deploy/jmx-invoker-service.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -111,9 +111,10 @@
+             <return-type>java.lang.Object</return-type>
+             <descriptors>
+                <interceptors>
+-                  <!-- Interceptor to require authenticated users -->
++                  <!-- Uncomment to require authenticated users
+                   <interceptor code="org.jboss.jmx.connector.invoker.AuthenticationInterceptor"
+                      securityDomain="java:/jaas/jmx-console"/>
++                  -->               
+                   <!-- Interceptor that deals with non-serializable results -->
+                   <interceptor code="org.jboss.jmx.connector.invoker.SerializableInterceptor"
+                      policyClass="StripModelMBeanInfoPolicy"/>
+diff -Naur ./server/web/deploy/profileservice-jboss-beans.xml ./server/web/deploy/profileservice-jboss-beans.xml
+--- ./server/web/deploy/profileservice-jboss-beans.xml	2009-09-08 13:43:11.000000000 -0400
++++ ./server/web/deploy/profileservice-jboss-beans.xml	2009-09-08 13:44:31.000000000 -0400
+@@ -174,7 +174,7 @@
+         <!-- Server side security interceptor stack -->
+         <property name="serverProxyInterceptors">
+             <list>
+-            <!-- comment this list to disable auth checks for the profileservice -->
++            <!-- uncomment to enable auth checks for the profileservice
+                 <bean class="org.jboss.aspects.security.AuthenticationInterceptor">
+                     <constructor>
+                         <parameter>
+@@ -195,6 +195,7 @@
+                         </parameter>
+                     </constructor>
+                 </bean>
++            -->
+             </list>
+         </property>
+         <depends>ConnectorMBean</depends>
+diff -Naur ./server/production/deploy/ROOT.war/WEB-INF/jboss-web.xml ./server/production/deploy/ROOT.war/WEB-INF/jboss-web.xml
+--- ./server/production/deploy/ROOT.war/WEB-INF/jboss-web.xml       2010-05-11 15:39:33.000000000 -0400
++++ ./server/production/deploy/ROOT.war/WEB-INF/jboss-web.xml       2010-05-11 16:09:03.000000000 -0400
+@@ -6,6 +6,7 @@
+    <!-- Uncomment the security-domain to enable security. You will
+       need to edit the htmladaptor login configuration to setup the
+       login modules used to authentication users.
++      <security-domain>java:/jaas/jmx-console</security-domain>
+    -->
+-   <security-domain>java:/jaas/jmx-console</security-domain>
++
+ </jboss-web>
+diff -Naur ./server/production/deploy/ROOT.war/WEB-INF/web.xml ./server/production/deploy/ROOT.war/WEB-INF/web.xml
+--- ./server/production/deploy/ROOT.war/WEB-INF/web.xml     2010-05-11 16:04:10.000000000 -0400
++++ ./server/production/deploy/ROOT.war/WEB-INF/web.xml     2010-05-11 16:07:20.000000000 -0400
+@@ -22,7 +22,7 @@
+    to users with the role JBossAdmin. Edit the roles to what you want and
+    uncomment the WEB-INF/jboss-web.xml/security-domain element to enable
+    secured access to the HTML JMX console.
+-   -->
++   
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>HtmlAdaptor</web-resource-name>
+@@ -35,6 +35,7 @@
+        <role-name>JBossAdmin</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+
+    <login-config>
+       <auth-method>BASIC</auth-method>
+diff -Naur ./server/all/deploy/ROOT.war/WEB-INF/jboss-web.xml ./server/all/deploy/ROOT.war/WEB-INF/jboss-web.xml
+--- ./server/all/deploy/ROOT.war/WEB-INF/jboss-web.xml       2010-05-11 15:39:33.000000000 -0400
++++ ./server/all/deploy/ROOT.war/WEB-INF/jboss-web.xml       2010-05-11 16:09:03.000000000 -0400
+@@ -6,6 +6,7 @@
+    <!-- Uncomment the security-domain to enable security. You will
+       need to edit the htmladaptor login configuration to setup the
+       login modules used to authentication users.
++      <security-domain>java:/jaas/jmx-console</security-domain>
+    -->
+-   <security-domain>java:/jaas/jmx-console</security-domain>
++
+ </jboss-web>
+diff -Naur ./server/all/deploy/ROOT.war/WEB-INF/web.xml ./server/all/deploy/ROOT.war/WEB-INF/web.xml
+--- ./server/all/deploy/ROOT.war/WEB-INF/web.xml     2010-05-11 16:04:10.000000000 -0400
++++ ./server/all/deploy/ROOT.war/WEB-INF/web.xml     2010-05-11 16:07:20.000000000 -0400
+@@ -22,7 +22,7 @@
+    to users with the role JBossAdmin. Edit the roles to what you want and
+    uncomment the WEB-INF/jboss-web.xml/security-domain element to enable
+    secured access to the HTML JMX console.
+-   -->
++   
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>HtmlAdaptor</web-resource-name>
+@@ -35,6 +35,7 @@
+        <role-name>JBossAdmin</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+
+    <login-config>
+       <auth-method>BASIC</auth-method>
+diff -Naur ./server/default/deploy/ROOT.war/WEB-INF/jboss-web.xml ./server/default/deploy/ROOT.war/WEB-INF/jboss-web.xml
+--- ./server/default/deploy/ROOT.war/WEB-INF/jboss-web.xml       2010-05-11 15:39:33.000000000 -0400
++++ ./server/default/deploy/ROOT.war/WEB-INF/jboss-web.xml       2010-05-11 16:09:03.000000000 -0400
+@@ -6,6 +6,7 @@
+    <!-- Uncomment the security-domain to enable security. You will
+       need to edit the htmladaptor login configuration to setup the
+       login modules used to authentication users.
++      <security-domain>java:/jaas/jmx-console</security-domain>
+    -->
+-   <security-domain>java:/jaas/jmx-console</security-domain>
++
+ </jboss-web>
+diff -Naur ./server/default/deploy/ROOT.war/WEB-INF/web.xml ./server/default/deploy/ROOT.war/WEB-INF/web.xml
+--- ./server/default/deploy/ROOT.war/WEB-INF/web.xml     2010-05-11 16:04:10.000000000 -0400
++++ ./server/default/deploy/ROOT.war/WEB-INF/web.xml     2010-05-11 16:07:20.000000000 -0400
+@@ -22,7 +22,7 @@
+    to users with the role JBossAdmin. Edit the roles to what you want and
+    uncomment the WEB-INF/jboss-web.xml/security-domain element to enable
+    secured access to the HTML JMX console.
+-   -->
++   
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>HtmlAdaptor</web-resource-name>
+@@ -35,6 +35,7 @@
+        <role-name>JBossAdmin</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+
+    <login-config>
+       <auth-method>BASIC</auth-method>
+diff -Naur ./server/standard/deploy/ROOT.war/WEB-INF/jboss-web.xml ./server/standard/deploy/ROOT.war/WEB-INF/jboss-web.xml
+--- ./server/standard/deploy/ROOT.war/WEB-INF/jboss-web.xml       2010-05-11 15:39:33.000000000 -0400
++++ ./server/standard/deploy/ROOT.war/WEB-INF/jboss-web.xml       2010-05-11 16:09:03.000000000 -0400
+@@ -6,6 +6,7 @@
+    <!-- Uncomment the security-domain to enable security. You will
+       need to edit the htmladaptor login configuration to setup the
+       login modules used to authentication users.
++      <security-domain>java:/jaas/jmx-console</security-domain>
+    -->
+-   <security-domain>java:/jaas/jmx-console</security-domain>
++
+ </jboss-web>
+diff -Naur ./server/standard/deploy/ROOT.war/WEB-INF/web.xml ./server/standard/deploy/ROOT.war/WEB-INF/web.xml
+--- ./server/standard/deploy/ROOT.war/WEB-INF/web.xml     2010-05-11 16:04:10.000000000 -0400
++++ ./server/standard/deploy/ROOT.war/WEB-INF/web.xml     2010-05-11 16:07:20.000000000 -0400
+@@ -22,7 +22,7 @@
+    to users with the role JBossAdmin. Edit the roles to what you want and
+    uncomment the WEB-INF/jboss-web.xml/security-domain element to enable
+    secured access to the HTML JMX console.
+-   -->
++   
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>HtmlAdaptor</web-resource-name>
+@@ -35,6 +35,7 @@
+        <role-name>JBossAdmin</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+
+    <login-config>
+       <auth-method>BASIC</auth-method>
+diff -Naur ./server/web/deploy/ROOT.war/WEB-INF/jboss-web.xml ./server/web/deploy/ROOT.war/WEB-INF/jboss-web.xml
+--- ./server/web/deploy/ROOT.war/WEB-INF/jboss-web.xml       2010-05-11 15:39:33.000000000 -0400
++++ ./server/web/deploy/ROOT.war/WEB-INF/jboss-web.xml       2010-05-11 16:09:03.000000000 -0400
+@@ -6,6 +6,7 @@
+    <!-- Uncomment the security-domain to enable security. You will
+       need to edit the htmladaptor login configuration to setup the
+       login modules used to authentication users.
++      <security-domain>java:/jaas/jmx-console</security-domain>
+    -->
+-   <security-domain>java:/jaas/jmx-console</security-domain>
++
+ </jboss-web>
+diff -Naur ./server/web/deploy/ROOT.war/WEB-INF/web.xml ./server/web/deploy/ROOT.war/WEB-INF/web.xml
+--- ./server/web/deploy/ROOT.war/WEB-INF/web.xml     2010-05-11 16:04:10.000000000 -0400
++++ ./server/web/deploy/ROOT.war/WEB-INF/web.xml     2010-05-11 16:07:20.000000000 -0400
+@@ -22,7 +22,7 @@
+    to users with the role JBossAdmin. Edit the roles to what you want and
+    uncomment the WEB-INF/jboss-web.xml/security-domain element to enable
+    secured access to the HTML JMX console.
+-   -->
++   
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>HtmlAdaptor</web-resource-name>
+@@ -35,6 +35,7 @@
+        <role-name>JBossAdmin</role-name>
+      </auth-constraint>
+    </security-constraint>
++   -->
+
+    <login-config>
+       <auth-method>BASIC</auth-method>

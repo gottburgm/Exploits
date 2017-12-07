@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: jboss-service.xml 34043 2005-07-26 23:41:06Z dimitris $ -->
+<!DOCTYPE server
+    PUBLIC "-//JBoss//DTD MBean Service 4.0//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-service_4_0.dtd">
+
+<server>
+   <mbean code="org.jboss.test.jmx.simpleservice.SimpleService"
+      name="jboss.test:service=SimpleService">
+   </mbean>
+   
+   <mbean code="org.jboss.test.jmx.simpleservice.SimpleService2"
+      name="jboss.test:service=SimpleService2">
+   </mbean>
+   
+   <mbean code="org.jboss.test.jmx.simpleservice.SimpleService"
+      name="jboss.test:service=SimpleService3">
+      <depends>
+         <mbean code="org.jboss.test.jmx.simpleservice.SimpleService"
+            name="jboss.test:service=SimpleService4">
+         </mbean>
+      </depends>
+   </mbean>
+   
+   <mbean code="org.jboss.test.jmx.simpleservice.SimpleService2"
+      name="jboss.test:service=SimpleService5">
+      <depends>
+         <!-- this must always be SimpleService, because SimpleService2
+              doesn't go through the ServiceController -->
+         <mbean code="org.jboss.test.jmx.simpleservice.SimpleService"
+            name="jboss.test:service=SimpleService6">
+         </mbean>
+      </depends>
+   </mbean>   
+</server>

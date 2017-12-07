@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns="http://java.sun.com/xml/ns/j2ee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd" version="2.1">
+   <description>EJB Timer Tests</description>
+   <enterprise-beans>
+      <session>
+         <description>Stateless Session Bean Timer Test</description>
+         <display-name>Timer in Stateless Session Bean</display-name>
+         <ejb-name>TimerSLSB</ejb-name>
+         <home>org.jboss.test.timer.interfaces.TimerSLSBHome</home>
+         <remote>org.jboss.test.timer.interfaces.TimerSLSB</remote>
+         <ejb-class>org.jboss.test.timer.ejb.TimerSLSBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      <session>
+         <description>Stateful Session Bean Timer Test</description>
+         <display-name>Timer in Stateful Session Bean</display-name>
+         <ejb-name>TimerSFSB</ejb-name>
+         <home>org.jboss.test.timer.interfaces.TimerSFSBHome</home>
+         <remote>org.jboss.test.timer.interfaces.TimerSFSB</remote>
+         <ejb-class>org.jboss.test.timer.ejb.TimerSFSBean</ejb-class>
+         <session-type>Stateful</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      <entity>
+         <description>Entity Bean Timer Test</description>
+         <display-name>Timer in Entity Bean</display-name>
+         <ejb-name>TimerEntity</ejb-name>
+         <home>org.jboss.test.timer.interfaces.TimerEntityHome</home>
+         <remote>org.jboss.test.timer.interfaces.TimerEntity</remote>
+         <ejb-class>org.jboss.test.timer.ejb.TimerEntityBean</ejb-class>
+         <persistence-type>Bean</persistence-type>
+         <prim-key-class>java.lang.Integer</prim-key-class>
+         <reentrant>false</reentrant>
+      </entity>
+      <entity>
+         <description>Extended Entity Bean Timer Standard Container</description>
+         <display-name>Timer in Extended Entity Bean Standard Container</display-name>
+         <ejb-name>TimerEntityExtStd</ejb-name>
+         <home>org.jboss.test.timer.interfaces.TimerEntityExtHome</home>
+         <remote>org.jboss.test.timer.interfaces.TimerEntityExt</remote>
+         <ejb-class>org.jboss.test.timer.ejb.TimerEntityExtBean</ejb-class>
+         <persistence-type>Bean</persistence-type>
+         <prim-key-class>java.lang.Integer</prim-key-class>
+         <reentrant>false</reentrant>
+      </entity>
+      <entity>
+         <description>Extended Entity Bean Timer Instance Per Tx</description>
+         <display-name>Timer in Extended Entity Bean Instance Per Tx</display-name>
+         <ejb-name>TimerEntityExtInstPerTx</ejb-name>
+         <home>org.jboss.test.timer.interfaces.TimerEntityExtHome</home>
+         <remote>org.jboss.test.timer.interfaces.TimerEntityExt</remote>
+         <ejb-class>org.jboss.test.timer.ejb.TimerEntityExtBean</ejb-class>
+         <persistence-type>Bean</persistence-type>
+         <prim-key-class>java.lang.Integer</prim-key-class>
+         <reentrant>false</reentrant>
+      </entity>
+
+      <session>
+         <description>Secured Stateless Session Bean Timer Test</description>
+         <display-name>Timer in Stateless Session Bean</display-name>
+         <ejb-name>SecuredTimerSLSB</ejb-name>
+         <home>org.jboss.test.timer.interfaces.TimerSLSBHome</home>
+         <remote>org.jboss.test.timer.interfaces.TimerSLSB</remote>
+         <ejb-class>org.jboss.test.timer.ejb.TimerSLSBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      <session>
+         <description>Secured Stateful Session Bean Timer Test</description>
+         <display-name>Timer in Stateful Session Bean</display-name>
+         <ejb-name>SecuredTimerSFSB</ejb-name>
+         <home>org.jboss.test.timer.interfaces.TimerSFSBHome</home>
+         <remote>org.jboss.test.timer.interfaces.TimerSFSB</remote>
+         <ejb-class>org.jboss.test.timer.ejb.TimerSFSBean</ejb-class>
+         <session-type>Stateful</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      <entity>
+         <description>Secured Entity Bean Timer Test</description>
+         <display-name>Timer in Entity Bean</display-name>
+         <ejb-name>SecuredTimerEntity</ejb-name>
+         <home>org.jboss.test.timer.interfaces.TimerEntityHome</home>
+         <remote>org.jboss.test.timer.interfaces.TimerEntity</remote>
+         <ejb-class>org.jboss.test.timer.ejb.TimerEntityBean</ejb-class>
+         <persistence-type>Bean</persistence-type>
+         <prim-key-class>java.lang.Integer</prim-key-class>
+         <reentrant>false</reentrant>
+      </entity>
+      <!-- Message Driven Beans -->
+      <message-driven>
+         <description>TimerMDB unit test bean</description>
+         <ejb-name>TimerMDB</ejb-name>
+         <ejb-class>org.jboss.test.timer.ejb.TimerMessageBean</ejb-class>
+         <transaction-type>Container</transaction-type>
+         <activation-config>
+            <activation-config-property>
+               <activation-config-property-name>acknowledgeMode</activation-config-property-name>
+               <activation-config-property-value>Auto-acknowledge</activation-config-property-value>
+            </activation-config-property>
+            <activation-config-property>
+               <activation-config-property-name>destinationType</activation-config-property-name>
+               <activation-config-property-value>javax.jms.Queue</activation-config-property-value>
+            </activation-config-property>
+         </activation-config>
+         <resource-ref>
+            <res-ref-name>jms/QCF</res-ref-name>
+            <res-type>javax.jms.QueueConnectionFactory</res-type>
+            <res-auth>Container</res-auth>
+         </resource-ref>
+      </message-driven>
+      <message-driven>
+         <description>OnCreateTimerMDB unit test bean</description>
+         <ejb-name>OnCreateTimerMDB</ejb-name>
+         <ejb-class>org.jboss.test.timer.ejb.OnCreateTimerMessageBean</ejb-class>
+         <transaction-type>Container</transaction-type>
+         <activation-config>
+            <activation-config-property>
+               <activation-config-property-name>acknowledgeMode</activation-config-property-name>
+               <activation-config-property-value>Auto-acknowledge</activation-config-property-value>
+            </activation-config-property>
+            <activation-config-property>
+               <activation-config-property-name>destinationType</activation-config-property-name>
+               <activation-config-property-value>javax.jms.Queue</activation-config-property-value>
+            </activation-config-property>
+         </activation-config>
+         <resource-ref>
+            <res-ref-name>jms/QCF</res-ref-name>
+            <res-type>javax.jms.QueueConnectionFactory</res-type>
+            <res-auth>Container</res-auth>
+         </resource-ref>
+      </message-driven>
+
+      <session>
+         <description>An ejb that does not implement TimedObject</description>
+         <ejb-name>NoTimedObjectBean</ejb-name>
+         <home>org.jboss.test.timer.interfaces.TimerSLSBHome</home>
+         <remote>org.jboss.test.timer.interfaces.TimerSLSB</remote>
+         <ejb-class>org.jboss.test.timer.ejb.NoTimedObjectBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+   </enterprise-beans>
+   <!-- Relationships -->
+   <!-- Assembly Descriptor -->
+   <assembly-descriptor>
+      <security-role>
+         <role-name>AuthorizedUser</role-name>
+      </security-role>
+      <method-permission>
+         <role-name>AuthorizedUser</role-name>
+         <method>
+            <ejb-name>SecuredTimerSLSB</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>SecuredTimerSFSB</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>SecuredTimerEntity</ejb-name>
+            <method-name>*</method-name>
+         </method>
+      </method-permission>
+      <!-- transactions -->
+      <container-transaction>
+         <method>
+            <ejb-name>TimerSLSB</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>TimerSFSB</ejb-name>
+            <method-name>*</method-name>            
+         </method>
+         <method>
+            <ejb-name>TimerEntity</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>NoTimedObjectBean</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <trans-attribute>Required</trans-attribute>
+      </container-transaction>
+   </assembly-descriptor>
+</ejb-jar>

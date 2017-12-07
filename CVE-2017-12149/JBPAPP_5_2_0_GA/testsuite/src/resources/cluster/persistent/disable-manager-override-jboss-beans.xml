@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0"> 
+
+   <!-- Tell the WarDeployer not to override the Manager -->
+   <bean name="ManagerOverrideDisabler" class="org.jboss.test.cluster.web.persistent.ManagerOverrideDisabler">
+      <constructor>
+         <parameter><inject bean="WarDeployer"/></parameter>
+      </constructor>
+   </bean>
+
+</deployment>

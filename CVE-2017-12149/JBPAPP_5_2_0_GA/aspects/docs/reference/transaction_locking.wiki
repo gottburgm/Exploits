@@ -1,0 +1,43 @@
+!!!Transactional Locking
+
+The synchronized keyword in Java allows you to protect an object from concurrent access. AOP transactional locking allows you to protect access to an object or class throughout the duration of a transaction. A transactional lock is applied through an annotation.
+
+When a {{@TxSynchronized}} member method is called, the object instance's lock monitor is held for the duration of the transaction, until it commits or rolls back.  When a {{@TxSynchronized}} annotated static method or constructor is invoked, the Class's lock monitor is held for the duration of the transaction. This lock works like synchronized, in that the lock is only acquired when a tagged member is called.  Using this annotation with JDK 1.4 requires our AnnotationCompiler.
+
+__JDK 1.4__
+{{{
+public class POJO
+{
+   /**
+    * @@org.jboss.aspects.txlock.TxSynchronized
+    */
+   public void POJO() {}
+ 
+   /**
+    * @@org.jboss.aspects.txlock.TxSynchronized
+    */
+   public static void someStaticMethod() {}
+
+   /**
+    * @@org.jboss.aspects.txlock.TxSynchronized
+    */
+   public void someMethod() {}
+}
+}}}
+
+__JDK 5.0__
+{{{
+import org.jboss.aspects.txlock.TxSynchronized;
+public class POJO
+{
+   @TxSynchronized
+   public void POJO() {}
+ 
+   @TxSynchronized
+   public static void someStaticMethod() {}
+
+   @TxSynchronized
+   public void someMethod() {}
+}
+}}}
+

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+   <local-tx-datasource>
+      <jndi-name>ProfileServiceNestedTestDS</jndi-name>
+      <connection-url>jdbc:hsqldb:${jboss.server.data.dir}${/}hypersonic${/}localDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <user-name>sa</user-name>
+      <password></password>
+      <min-pool-size>5</min-pool-size>
+      <max-pool-size>20</max-pool-size>
+      <idle-timeout-minutes>0</idle-timeout-minutes>
+      <security-domain>HsqlDbRealm</security-domain>
+      <prepared-statement-cache-size>32</prepared-statement-cache-size>
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+   </local-tx-datasource>
+
+
+   <mbean code="org.jboss.jdbc.HypersonicDatabase" 
+     name="jboss:service=Hypersonic,database=profileserviceNestedTestDB">
+     <attribute name="Database">profileserviceNestedTestDB</attribute>
+     <attribute name="InProcessMode">true</attribute>
+   </mbean>
+
+</datasources>

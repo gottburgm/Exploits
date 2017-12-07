@@ -1,0 +1,107 @@
+<project name="tests-bank-jars">
+   <!-- bank test -->
+   <target name="_jars-bank">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build banktest.jar -->
+      <jar destfile="${build.lib}/banktest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/bank/interfaces/**"/>
+            <include name="org/jboss/test/bank/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/bank">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build bank.jar -->
+      <jar destfile="${build.lib}/bank.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/bank/interfaces/**"/>
+            <include name="org/jboss/test/bank/ejb/**"/>
+            <include name="org/jboss/test/bank/beans/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/bank/ejb11">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- build bank.jar -->
+      <jar destfile="${build.lib}/bank-ejb20.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/bank/interfaces/**"/>
+            <include name="org/jboss/test/bank/ejb/**"/>
+            <include name="org/jboss/test/bank/beans/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/bank/ejb20">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+   </target>
+   
+   <!-- bank-new test -->
+   <target name="_jars-bank-new">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build banknewtest.jar -->
+      <jar destfile="${build.lib}/banknewtest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/banknew/interfaces/**"/>
+            <include name="org/jboss/test/banknew/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/bank">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build banknew.jar -->
+      <jar destfile="${build.lib}/banknew.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/banknew/interfaces/**"/>
+            <include name="org/jboss/test/banknew/ejb/**"/>
+            <include name="org/jboss/test/banknew/beans/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/banknew">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+   </target>
+   
+   <!-- bankiiop test -->
+   <target name="_jars-bankiiop">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build bankiioptest.jar -->
+      <jar destfile="${build.lib}/bankiioptest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/bankiiop/interfaces/**"/>
+            <include name="org/jboss/test/bankiiop/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/bankiiop">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build bankiiop.jar -->
+      <jar destfile="${build.lib}/bankiiop.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/bankiiop/interfaces/**"/>
+            <include name="org/jboss/test/bankiiop/ejb/**"/>
+            <include name="org/jboss/test/bankiiop/beans/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/bankiiop">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

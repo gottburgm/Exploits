@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<repository-content domain="default" server="default" name="farm">
+    <repository-root name="farm">
+        <content relative-path="farmA.war/" directory="true" removed="false" originator="127.0.0.1:1099" timestamp="2009-03-30T21:38:53.000-0500"/>
+        <content relative-path="farmA.war/WEB-INF/" directory="true" removed="false" originator="127.0.0.1:1099" timestamp="2009-03-30T21:38:53.000-0500"/>
+        <content relative-path="farmA.war/WEB-INF/web.xml" directory="false" removed="false" originator="127.0.0.1:1099" timestamp="2009-03-30T21:38:53.000-0500"/>
+        <content relative-path="farmA.war/index.html" directory="false" removed="false" originator="127.0.0.1:1099" timestamp="2009-03-30T21:38:53.000-0500"/>
+        <content relative-path="farmC.war/" directory="true" removed="false" originator="127.0.0.1:1099" timestamp="2009-03-30T21:38:53.000-0500"/>
+        <content relative-path="farmC.war/WEB-INF/" directory="true" removed="false" originator="127.0.0.1:1099" timestamp="2009-03-30T21:38:53.000-0500"/>
+        <content relative-path="farmC.war/WEB-INF/web.xml" directory="false" removed="false" originator="192.168.1.145:1099" timestamp="2009-03-30T21:38:54.000-0500"/>
+        <content relative-path="farmC.war/index.html" directory="false" removed="false" originator="192.168.1.145:1099" timestamp="2009-03-30T21:38:54.000-0500"/>
+        <content relative-path="farmC.war/node0.html" directory="false" removed="false" originator="127.0.0.1:1099" timestamp="2009-03-30T21:38:53.000-0500"/>
+        <content relative-path="farmD.war/" directory="true" removed="true" originator="192.168.1.145:1099" timestamp="NOW"/>
+        <content relative-path="farmD.war/WEB-INF/" directory="true" removed="true" originator="192.168.1.145:1099" timestamp="NOW"/>
+        <content relative-path="farmD.war/WEB-INF/web.xml" directory="false" removed="true" originator="192.168.1.145:1099" timestamp="NOW"/>
+        <content relative-path="farmD.war/index.html" directory="false" removed="true" originator="192.168.1.145:1099" timestamp="NOW"/>
+        <content relative-path="node0-farm-deployment-service.xml" directory="false" removed="false" originator="127.0.0.1:1099" timestamp="2009-03-30T21:38:53.000-0500"/>
+    </repository-root>
+</repository-content>

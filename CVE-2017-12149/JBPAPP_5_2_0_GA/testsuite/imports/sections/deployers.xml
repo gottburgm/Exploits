@@ -1,0 +1,475 @@
+<project name="tests-deployers-jars">
+   <!-- deployers test -->
+   <target name="_jars-deployers">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- EJB -->
+      <jar destfile="${build.lib}/testdeployers-bean1ejb.jar">
+         <fileset dir="${build.resources}/deployers/bean1">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/deployers/ejb/bean1/**"/>
+         </fileset>
+      </jar>
+      
+      <copy tofile="${build.lib}/notinapplicationxml-bean1ejb.jar"
+         file="${build.lib}/testdeployers-bean1ejb.jar"/>
+      
+      <copy tofile="${build.lib}/bean1ejb-not.ajar"
+         file="${build.lib}/testdeployers-bean1ejb.jar"/>
+      
+      <mkdir dir="${build.lib}/unpacked-bean1ejb.jar"/>
+      <unzip dest="${build.lib}/unpacked-bean1ejb.jar"
+         src="${build.lib}/testdeployers-bean1ejb.jar"/>
+      
+      <copy todir="${build.lib}/unpacked-bean1ejb-not.ajar">
+         <fileset dir="${build.lib}/unpacked-bean1ejb.jar"/>
+      </copy>
+      
+      <!-- WAR -->
+      <jar destfile="${build.lib}/testdeployers-web1.war">
+         <fileset dir="${build.resources}/deployers/web1">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <copy tofile="${build.lib}/notinapplicationxml-web1.war"
+         file="${build.lib}/testdeployers-web1.war"/>
+      
+      <copy tofile="${build.lib}/web1-not.awar"
+         file="${build.lib}/testdeployers-web1.war"/>
+      
+      <mkdir dir="${build.lib}/unpacked-web1.war"/>
+      <unzip dest="${build.lib}/unpacked-web1.war"
+         src="${build.lib}/testdeployers-web1.war"/>
+      
+      <copy todir="${build.lib}/unpacked-web1-not.awar">
+         <fileset dir="${build.lib}/unpacked-web1.war"/>
+      </copy>
+      
+      <!-- RAR -->
+      <jar destfile="${build.lib}/testdeployers-mcf1.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/deployers/rar/mcf1/**"/>
+         </fileset>
+      </jar>
+      
+      <jar destfile="${build.lib}/testdeployers-mcf1.rar">
+         <fileset dir="${build.resources}/deployers/mcf1">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="testdeployers-mcf1.jar"/>
+         </fileset>
+      </jar>
+
+      <!-- invalidmcf -->
+      <jar destfile="${build.lib}/testdeployers-invalidmcf.rar">
+         <fileset dir="${build.resources}/deployers/invalidmcf">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="testdeployers-invalidmcf.jar"/>
+         </fileset>
+      </jar>
+      
+      <copy tofile="${build.lib}/notinapplicationxml-mcf1.rar"
+         file="${build.lib}/testdeployers-mcf1.rar"/>
+      
+      <copy tofile="${build.lib}/mcf1-not.arar"
+         file="${build.lib}/testdeployers-mcf1.rar"/>
+      
+      <mkdir dir="${build.lib}/unpacked-mcf1.rar"/>
+      <unzip dest="${build.lib}/unpacked-mcf1.rar"
+         src="${build.lib}/testdeployers-mcf1.rar"/>
+      
+      <copy todir="${build.lib}/unpacked-mcf1-not.arar">
+         <fileset dir="${build.lib}/unpacked-mcf1.rar"/>
+      </copy>
+      
+      <!-- APPCLIENT -->
+      <jar destfile="${build.lib}/testdeployers-client1.jar">
+         <fileset dir="${build.resources}/deployers/client1">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <copy tofile="${build.lib}/notinapplicationxml-client1.jar"
+         file="${build.lib}/testdeployers-client1.jar"/>
+      
+      <copy tofile="${build.lib}/client1-not.ajar"
+         file="${build.lib}/testdeployers-client1.jar"/>
+      
+      <mkdir dir="${build.lib}/unpacked-client1.jar"/>
+      <unzip dest="${build.lib}/unpacked-client1.jar"
+         src="${build.lib}/testdeployers-client1.jar"/>
+      
+      <copy todir="${build.lib}/unpacked-client1-not.ajar">
+         <fileset dir="${build.lib}/unpacked-client1.jar"/>
+      </copy>
+      
+      <!-- DATASOURCE -->
+      <copy tofile="${build.lib}/testdeployers-mcf1-ds.xml"
+         file="${build.resources}/deployers/ds1/testdeployers-mcf1-ds.xml"/>
+      
+      <copy tofile="${build.lib}/notinjbossappxml-mcf1-ds.xml"
+         file="${build.lib}/testdeployers-mcf1-ds.xml"/>
+      
+      <!-- SERVICE -->
+      <copy tofile="${build.lib}/testdeployers-1-service.xml"
+         file="${build.resources}/deployers/service1/testdeployers-1-service.xml"/>
+      
+      <copy tofile="${build.lib}/notinjbossappxml-1-service.xml"
+         file="${build.lib}/testdeployers-1-service.xml"/>
+      
+      <!-- SAR -->
+      <jar destfile="${build.lib}/testdeployers-mbean1.sar">
+         <fileset dir="${build.resources}/deployers/mbean1">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/deployers/sar/mbean1/**"/>
+         </fileset>
+      </jar>
+
+      <!-- JBAS-2904 SAR -->
+	  <jar destfile="${build.lib}/Atestdeployerorder-jbas2904.sar">
+         <fileset dir="${build.resources}/deployers/jbas2904/mbean1">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/deployers/jbas2904/sar/mbean1/**"/>
+         </fileset>
+      </jar>
+	  <jar destfile="${build.lib}/Btestdeployerorder-jbas2904.sar">
+         <fileset dir="${build.resources}/deployers/jbas2904/mbean2">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/deployers/jbas2904/sar/mbean2/**"/>
+         </fileset>
+      </jar>
+	  <jar destfile="${build.lib}/testdeployers-jbas2904.ear">
+         <fileset dir="${build.resources}/deployers/jbas2904/ear">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="Atestdeployerorder-jbas2904.sar"/>
+            <include name="Btestdeployerorder-jbas2904.sar"/>
+         </fileset>
+      </jar>
+	<!-- JBAS-2904 -->
+
+      <copy tofile="${build.lib}/notinjbossappxml-mbean1.sar"
+         file="${build.lib}/testdeployers-mbean1.sar"/>
+      
+      <copy tofile="${build.lib}/mbean1-not.asar"
+         file="${build.lib}/testdeployers-mbean1.sar"/>
+      
+      <mkdir dir="${build.lib}/unpacked-mbean1.sar"/>
+      <unzip dest="${build.lib}/unpacked-mbean1.sar"
+         src="${build.lib}/testdeployers-mbean1.sar"/>
+      
+      <copy todir="${build.lib}/unpacked-mbean1-not.asar">
+         <fileset dir="${build.lib}/unpacked-mbean1.sar"/>
+      </copy>
+      
+      <!-- EAR -->
+      <jar destfile="${build.lib}/testdeployers-ear1.ear">
+         <fileset dir="${build.resources}/deployers/ear1">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="notinapplicationxml-bean1ejb.jar"/>
+            <include name="testdeployers-bean1ejb.jar"/>
+            <include name="notinapplicationxml-web1.war"/>
+            <include name="testdeployers-web1.war"/>
+            <include name="notinapplicationxml-mcf1.rar"/>
+            <include name="testdeployers-mcf1.rar"/>
+            <include name="notinapplicationxml-client1.jar"/>
+            <include name="testdeployers-client1.jar"/>
+            <include name="notinjbossappxml-mcf1-ds.xml"/>
+            <include name="testdeployers-mcf1-ds.xml"/>
+            <include name="notinjbossappxml-1-service.xml"/>
+            <include name="testdeployers-1-service.xml"/>
+            <include name="notinjbossappxml-mbean1.sar"/>
+            <include name="testdeployers-mbean1.sar"/>
+         </fileset>
+      </jar>
+
+      <!-- EAR with alternative ejb-jar DDs -->
+      <jar destfile="${build.lib}/testdeployers-ear-altdd.ear">
+         <fileset dir="${build.resources}/deployers/ear-altdd">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="testdeployers-bean1ejb.jar"/>
+         </fileset>
+      </jar>
+
+      <!-- EAR with alternative client DDs -->
+      <jar destfile="${build.lib}/testdeployers-ear-altdd-client.ear">
+         <fileset dir="${build.resources}/deployers/ear-altdd-client">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="testdeployers-client1.jar"/>
+         </fileset>
+      </jar>
+
+      <!-- EAR with alternative connector DDs -->
+      <jar destfile="${build.lib}/testdeployers-ear-altdd-connector.ear">
+         <fileset dir="${build.resources}/deployers/ear-altdd-connector">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="testdeployers-invalidmcf.rar"/>
+         </fileset>
+      </jar>
+      
+      <!-- Ear without application.xml -->
+      <jar destfile="${build.lib}/testdeployers-ear-noappxml.ear">
+         <fileset dir="${build.lib}">
+            <include name="testdeployers-bean1ejb.jar"/>
+            <include name="testdeployers-web1.war"/>
+            <include name="testdeployers-mcf1.rar"/>
+            <include name="testdeployers-client1.jar"/>
+         </fileset>
+      </jar>
+
+      <mkdir dir="${build.lib}/unpacked-ear1.ear"/>
+      <unzip dest="${build.lib}/unpacked-ear1.ear"
+         src="${build.lib}/testdeployers-ear1.ear">
+         <patternset>
+            <exclude name="META-INF/*.xml"/>
+         </patternset>
+      </unzip>
+      <copy todir="${build.lib}/unpacked-ear1.ear"
+         file="${build.resources}/deployers/ds1/unpacked-mcf1-ds.xml"/>
+      <copy todir="${build.lib}/unpacked-ear1.ear">
+         <fileset dir="${build.resources}/deployers/ear1unpacked">
+            <include name="**/*.xml"/>
+         </fileset>
+      </copy>
+      
+      <mkdir dir="${build.lib}/unpacked-ear2.ear"/>
+      <copy todir="${build.lib}/unpacked-ear2.ear">
+         <fileset dir="${build.resources}/deployers/ear2">
+            <include name="**/*.xml"/>
+         </fileset>
+      </copy>
+      <mkdir dir="${build.lib}/unpacked-ear2.ear/unpacked-bean1ejb.jar"/>
+      <copy todir="${build.lib}/unpacked-ear2.ear/unpacked-bean1ejb.jar">
+         <fileset dir="${build.lib}/unpacked-bean1ejb.jar"/>
+      </copy>
+      <mkdir dir="${build.lib}/unpacked-ear2.ear/unpacked-web1.war"/>
+      <copy todir="${build.lib}/unpacked-ear2.ear/unpacked-web1.war">
+         <fileset dir="${build.lib}/unpacked-web1.war"/>
+      </copy>
+      <mkdir dir="${build.lib}/unpacked-ear2.ear/unpacked-mcf1.rar"/>
+      <copy todir="${build.lib}/unpacked-ear2.ear/unpacked-mcf1.rar">
+         <fileset dir="${build.lib}/unpacked-mcf1.rar"/>
+      </copy>
+      <mkdir dir="${build.lib}/unpacked-ear2.ear/unpacked-client1.jar"/>
+      <copy todir="${build.lib}/unpacked-ear2.ear/unpacked-client1.jar">
+         <fileset dir="${build.lib}/unpacked-client1.jar"/>
+      </copy>
+      <copy todir="${build.lib}/unpacked-ear2.ear"
+         file="${build.resources}/deployers/ds1/unpacked2-mcf1-ds.xml"/>
+      <copy todir="${build.lib}/unpacked-ear2.ear"
+         file="${build.lib}/testdeployers-1-service.xml"/>
+      <mkdir dir="${build.lib}/unpacked-ear2.ear/unpacked-mbean1.sar"/>
+      <copy todir="${build.lib}/unpacked-ear2.ear/unpacked-mbean1.sar">
+         <fileset dir="${build.lib}/unpacked-mbean1.sar"/>
+      </copy>
+      
+      <!-- JBAS-4548 -->
+      
+      <!-- DATASOURCE -->
+      <copy tofile="${build.lib}/testdeployers-jbas4548-ds.xml"
+         file="${build.resources}/deployers/jbas4548-ds/jbas4548-ds.xml"/>
+      
+      <jar destfile="${build.lib}/testdeployers-jbas4548ejb.jar">
+         <fileset dir="${build.resources}/deployers/jbas4548-bean">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/deployers/jbas4548/ejb/**"/>
+         </fileset>
+      </jar>
+      
+      <jar destfile="${build.lib}/testdeployers-jbas4548.ear">
+         <fileset dir="${build.resources}/deployers/jbas4548-ear">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="testdeployers-jbas4548ejb.jar"/>
+            <include name="testdeployers-jbas4548-ds.xml"/>
+         </fileset>
+      </jar>
+   	
+   	<!-- JBAS-4763 -->
+
+      <jar destfile="${build.lib}/testdeployers-jbas4763.war">
+         <fileset dir="${build.resources}/deployers/jbas4763">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+      
+   </target>
+   
+   <!-- deployment test -->
+   <target name="_jars-deployment">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build deployment-web.war -->
+      <war warfile="${build.lib}/deployment-web.war"
+         webxml="${build.resources}/deployment/WEB-INF/web.xml">
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/deployment/SampleServlet.class"/>            
+         </classes>
+      </war>
+      
+      <!-- build baddeployment-web.war -->
+      <war warfile="${build.lib}/baddeployment-web.war"
+         webxml="${build.resources}/deployment/WEB-INF/badweb.xml">
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/deployment/SampleServlet.class"/>            
+         </classes>
+      </war>
+      
+      <!-- build deployment-web-jboss.war -->
+      <war warfile="${build.lib}/deployment-web-jboss.war"
+         webxml="${build.resources}/deployment/WEB-INF/web.xml">
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/deployment/SampleServlet.class"/>            
+         </classes>
+         <fileset dir="${build.resources}/deployment/">
+            <include name="META-INF/jboss-web.xml"/>
+         </fileset>
+      </war>
+      
+      <!-- build deployment-ejb.jar -->
+      <jar destfile="${build.lib}/deployment-ejb.jar">
+         
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/deployment/Echo*"/>
+         </fileset>
+         
+         <fileset dir="${build.resources}/deployment/">
+            <include name="META-INF/ejb-jar.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- build deployment-ejb-jboss.jar -->
+      <jar destfile="${build.lib}/deployment-ejb-jboss.jar">
+         
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/deployment/Echo*"/>
+         </fileset>
+         
+         <fileset dir="${build.resources}/deployment/">
+            <include name="META-INF/ejb-jar.xml"/>
+         </fileset>
+         <fileset dir="${build.resources}/deployment/">
+            <include name="META-INF/jboss.xml"/>
+         </fileset>
+         
+      </jar>
+      
+      <!-- build deployment-ear.ear -->
+      <ear destfile="${build.lib}/deployment-ear.ear"
+         appxml="${build.resources}/deployment/META-INF/application.xml"
+         update="true">
+         <fileset dir="${build.lib}">
+            <include name="deployment-ejb-jboss.jar"/>
+            <include name="deployment-web-jboss.war"/>
+         </fileset>
+      </ear>
+
+    <copy tofile="${build.lib}/hd-jboss-beans.xml"
+             file="${build.resources}/deployers/hd-jboss-beans.xml"/>
+    <copy tofile="${build.lib}/deployers-empty-jboss-beans.xml"
+             file="${build.resources}/deployers/failed/empty-jboss-beans.xml"/>
+    <copy tofile="${build.lib}/deployers-failing-jboss-beans.xml"
+             file="${build.resources}/deployers/failed/failing-jboss-beans.xml"/>
+
+		<!-- JBPAPP-6517 -->
+ 	  <!-- mcbean -->
+	  <jar destfile="${build.lib}/jbpapp-6517-bean.jar">
+       <fileset dir="${build.classes}">
+          <include name="org/jboss/test/deployment/jbpapp6517/mcbean/**"/>
+       </fileset>
+       <fileset dir="${build.resources}/org/jboss/test/deployment/jbpapp6517/mcbean/">
+          <include name="META-INF/jboss-beans.xml"/>
+       </fileset>
+    </jar>
+
+		<!-- ejb3 -->
+	  <jar destfile="${build.lib}/jbpapp-6517-ejb.jar">
+       <fileset dir="${build.classes}">
+          <include name="org/jboss/test/deployment/jbpapp6517/ejb3/*"/>
+       </fileset>
+    </jar>
+
+		<!-- ear -->
+    <ear destfile="${build.lib}/jbpapp-6517.ear"
+       appxml="${build.resources}/org/jboss/test/deployment/jbpapp6517/ear/META-INF/application.xml"
+       update="true">
+       <fileset dir="${build.lib}">
+          <include name="jbpapp-6517-bean.jar"/>
+          <include name="jbpapp-6517-ejb.jar"/>
+       </fileset>
+
+       <fileset dir="${build.resources}/org/jboss/test/deployment/jbpapp6517/ear/">
+          <include name="META-INF/jboss-app.xml"/>
+       </fileset>
+    </ear>
+
+		<!-- sar -->
+	  <jar destfile="${build.lib}/jbpapp-6517.sar">
+       <fileset dir="${build.lib}">
+          <include name="jbpapp-6517-bean.jar"/>
+          <include name="jbpapp-6517-ejb.jar"/>
+       </fileset>
+   </jar>
+
+
+   <!-- JBPAPP-9412 -->
+	  <jar destfile="${build.lib}/jbpapp-9412-x.jar">
+       <manifest>
+          <attribute name="Class-Path" value="jbpapp-9412-y.jar"/>
+       </manifest>
+       <fileset dir="${build.classes}">
+          <include name="org/jboss/test/deployers/test/jbpapp9412/x/**/*"/>
+       </fileset>
+   </jar>
+
+	  <jar destfile="${build.lib}/jbpapp-9412-y.jar">
+       <fileset dir="${build.classes}">
+          <include name="org/jboss/test/deployers/test/jbpapp9412/y/**/*"/>
+       </fileset>
+   </jar>
+
+	  <jar destfile="${build.lib}/jbpapp-9412-z.jar">
+       <fileset dir="${build.classes}">
+          <include name="org/jboss/test/deployers/test/jbpapp9412/z/**/*"/>
+       </fileset>
+   </jar>
+
+    <ear destfile="${build.lib}/jbpapp-9412.ear" appxml="${build.resources}/org/jboss/test/deployers/test/jbpapp9412/ear/META-INF/application.xml">
+       <fileset dir="${build.lib}/">
+          <include name="jbpapp-9412-x.jar"/>
+          <include name="jbpapp-9412-y.jar"/>
+          <include name="jbpapp-9412-z.jar"/>
+       </fileset>
+       <fileset dir="${build.resources}/org/jboss/test/deployers/test/jbpapp9412/ear/">
+          <include name="META-INF/jboss-app.xml"/>
+          <include name="META-INF/jboss-service.xml"/>
+       </fileset>
+    </ear>
+
+   </target>
+   
+</project>

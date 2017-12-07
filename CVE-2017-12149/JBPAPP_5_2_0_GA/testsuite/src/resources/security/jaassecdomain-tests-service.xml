@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <!-- Test a plaintext password -->
+   <mbean code="org.jboss.security.plugins.JaasSecurityDomain"
+      name="jboss.security:service=JaasSecurityDomain,domain=encode-decode">
+      <constructor>
+         <arg type="java.lang.String" value="encode-decode"/>
+      </constructor>
+      <attribute name="KeyStorePass">unit-tests</attribute>
+      <attribute name="Salt">abcdefgh</attribute>
+      <attribute name="IterationCount">13</attribute>
+   </mbean>
+
+   <!-- Test a password obtained from a class using a tmp file -->
+   <mbean code="org.jboss.security.plugins.JaasSecurityDomain"
+      name="jboss.security:service=JaasSecurityDomain,domain=testTmpFilePassword">
+      <constructor>
+         <arg type="java.lang.String" value="testTmpFilePassword"/>
+      </constructor>
+      <attribute name="KeyStorePass">{CLASS}org.jboss.security.plugins.TmpFilePassword:${java.io.tmpdir}/tmp.password</attribute>
+      <attribute name="Salt">abcdefgh</attribute>
+      <attribute name="IterationCount">13</attribute>
+   </mbean>
+
+   <!-- Test a password obtained from a class using an opaqued file -->
+   <mbean code="org.jboss.security.plugins.JaasSecurityDomain"
+      name="jboss.security:service=JaasSecurityDomain,domain=testFilePassword">
+      <constructor>
+         <arg type="java.lang.String" value="testFilePassword"/>
+      </constructor>
+      <attribute name="KeyStorePass">{CLASS}org.jboss.security.plugins.FilePassword:${java.io.tmpdir}/tst.password</attribute>
+      <attribute name="Salt">abcdefgh</attribute>
+      <attribute name="IterationCount">13</attribute>
+   </mbean>
+
+</server>

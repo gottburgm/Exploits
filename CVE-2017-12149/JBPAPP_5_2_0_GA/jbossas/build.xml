@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<!--
+ JBoss, the OpenSource J2EE webOS
+ 
+ Distributable under LGPL license.
+ See terms of license at gnu.org.
+-->
+
+<!-- ================================================================== -->
+<!-- Dummy build file until this becomes the main build                 -->
+<!-- ================================================================== -->
+
+<project name="main.build"
+         default="build" 
+         basedir="."
+>
+   <!-- Import the types -->
+   <import file="jbossbuild.xml"/>
+
+</project>

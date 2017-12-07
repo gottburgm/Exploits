@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions name="BenchmarkWebService" targetNamespace="http://org.jboss.ws/benchmark" xmlns:tns="http://org.jboss.ws/benchmark" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:ns2="http://org.jboss.ws/benchmark/types" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <types>
+    <schema targetNamespace="http://org.jboss.ws/benchmark/types" xmlns:tns="http://org.jboss.ws/benchmark/types" xmlns:soap11-enc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns="http://www.w3.org/2001/XMLSchema">
+      <complexType name="echoArrayOfSimpleUserType">
+        <sequence>
+          <element name="arrayOfSimpleUserType_1" type="tns:SimpleUserType" nillable="true" minOccurs="0" maxOccurs="unbounded"/></sequence></complexType>
+      <complexType name="SimpleUserType">
+        <sequence>
+          <element name="f" type="float"/>
+          <element name="i" type="int"/>
+          <element name="s" type="string" nillable="true"/></sequence></complexType>
+      <complexType name="echoArrayOfSimpleUserTypeResponse">
+        <sequence>
+          <element name="result" type="tns:SimpleUserType" nillable="true" minOccurs="0" maxOccurs="unbounded"/></sequence></complexType>
+      <complexType name="echoSimpleType">
+        <sequence>
+          <element name="SimpleUserType_1" type="tns:SimpleUserType" nillable="true"/></sequence></complexType>
+      <complexType name="echoSimpleTypeResponse">
+        <sequence>
+          <element name="result" type="tns:SimpleUserType" nillable="true"/></sequence></complexType>
+      <complexType name="echoSynthetic">
+        <sequence>
+          <element name="Synthetic_1" type="tns:Synthetic" nillable="true"/></sequence></complexType>
+      <complexType name="Synthetic">
+        <sequence>
+          <element name="b" type="base64Binary" nillable="true"/>
+          <element name="s" type="string" nillable="true"/>
+          <element name="sut" type="tns:SimpleUserType" nillable="true"/></sequence></complexType>
+      <complexType name="echoSyntheticResponse">
+        <sequence>
+          <element name="result" type="tns:Synthetic" nillable="true"/></sequence></complexType>
+      <complexType name="getOrder">
+        <sequence>
+          <element name="int_1" type="int"/>
+          <element name="int_2" type="int"/>
+        </sequence>
+      </complexType>
+      <complexType name="getOrderResponse">
+        <sequence>
+          <element name="result" type="tns:Order" nillable="true"/>
+        </sequence>
+      </complexType>
+      <complexType name="Order">
+        <sequence>
+          <element name="customer" type="tns:Customer" nillable="true"/>
+          <element name="lineItems" type="tns:LineItem" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+          <element name="orderDate" type="dateTime" nillable="true"/>
+          <element name="orderId" type="int"/>
+          <element name="orderStatus" type="int"/>
+          <element name="orderTotalAmount" type="float"/>
+        </sequence>
+      </complexType>
+      <complexType name="Customer">
+        <sequence>
+          <element name="billingAddress" type="tns:Address" nillable="true"/>
+          <element name="contactFirstName" type="string" nillable="true"/>
+          <element name="contactLastName" type="string" nillable="true"/>
+          <element name="contactPhone" type="string" nillable="true"/>
+          <element name="creditCardExpirationDate" type="string" nillable="true"/>
+          <element name="creditCardNumber" type="string" nillable="true"/>
+          <element name="customerId" type="int"/>
+          <element name="lastActivityDate" type="dateTime" nillable="true"/>
+          <element name="shippingAddress" type="tns:Address" nillable="true"/>
+        </sequence>
+      </complexType>
+      <complexType name="Address">
+        <sequence>
+          <element name="address1" type="string" nillable="true"/>
+          <element name="address2" type="string" nillable="true"/>
+          <element name="city" type="string" nillable="true"/>
+          <element name="firstName" type="string" nillable="true"/>
+          <element name="lastName" type="string" nillable="true"/>
+          <element name="state" type="string" nillable="true"/>
+          <element name="zip" type="string" nillable="true"/>
+        </sequence>
+      </complexType>
+      <complexType name="LineItem">
+        <sequence>
+          <element name="itemId" type="int"/>
+          <element name="orderId" type="int"/>
+          <element name="orderQuantity" type="int"/>
+          <element name="productDescription" type="string" nillable="true"/>
+          <element name="productId" type="int"/>
+          <element name="unitPrice" type="float"/>
+        </sequence>
+      </complexType>
+      <element name="echoArrayOfSimpleUserType" type="tns:echoArrayOfSimpleUserType"/>
+      <element name="echoArrayOfSimpleUserTypeResponse" type="tns:echoArrayOfSimpleUserTypeResponse"/>
+      <element name="echoSimpleType" type="tns:echoSimpleType"/>
+      <element name="echoSimpleTypeResponse" type="tns:echoSimpleTypeResponse"/>
+      <element name="echoSynthetic" type="tns:echoSynthetic"/>
+      <element name="echoSyntheticResponse" type="tns:echoSyntheticResponse"/>
+      <element name="getOrder" type="tns:getOrder"/>
+      <element name="getOrderResponse" type="tns:getOrderResponse"/>
+    </schema>
+  </types>
+
+  <message name="BenchmarkService_echoArrayOfSimpleUserType">
+    <part name="parameters" element="ns2:echoArrayOfSimpleUserType"/>
+  </message>
+  <message name="BenchmarkService_echoArrayOfSimpleUserTypeResponse">
+    <part name="result" element="ns2:echoArrayOfSimpleUserTypeResponse"/>
+  </message>
+  <message name="BenchmarkService_echoSimpleType">
+    <part name="parameters" element="ns2:echoSimpleType"/>
+  </message>
+  <message name="BenchmarkService_echoSimpleTypeResponse">
+    <part name="result" element="ns2:echoSimpleTypeResponse"/>
+  </message>
+  <message name="BenchmarkService_echoSynthetic">
+    <part name="parameters" element="ns2:echoSynthetic"/>
+  </message>
+  <message name="BenchmarkService_echoSyntheticResponse">
+    <part name="result" element="ns2:echoSyntheticResponse"/>
+  </message>
+  <message name="BenchmarkService_getOrder">
+    <part name="parameters" element="ns2:getOrder"/>
+  </message>
+  <message name="BenchmarkService_getOrderResponse">
+    <part name="result" element="ns2:getOrderResponse"/>
+  </message>
+
+  <portType name="BenchmarkService">
+    <operation name="echoArrayOfSimpleUserType">
+      <input message="tns:BenchmarkService_echoArrayOfSimpleUserType"/>
+      <output message="tns:BenchmarkService_echoArrayOfSimpleUserTypeResponse"/>
+    </operation>
+    <operation name="echoSimpleType">
+      <input message="tns:BenchmarkService_echoSimpleType"/>
+      <output message="tns:BenchmarkService_echoSimpleTypeResponse"/>
+    </operation>
+    <operation name="echoSynthetic">
+      <input message="tns:BenchmarkService_echoSynthetic"/>
+      <output message="tns:BenchmarkService_echoSyntheticResponse"/>
+    </operation>
+    <operation name="getOrder">
+      <input message="tns:BenchmarkService_getOrder"/>
+      <output message="tns:BenchmarkService_getOrderResponse"/>
+    </operation>
+  </portType>
+
+  <binding name="BenchmarkServiceBinding" type="tns:BenchmarkService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <operation name="echoArrayOfSimpleUserType">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/></input>
+      <output>
+        <soap:body use="literal"/></output>
+
+    </operation>
+    <operation name="echoSimpleType">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/></input>
+      <output>
+        <soap:body use="literal"/></output>
+
+    </operation>
+    <operation name="echoSynthetic">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/></input>
+      <output>
+        <soap:body use="literal"/></output>
+
+    </operation>
+    <operation name="getOrder">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/></input>
+      <output>
+        <soap:body use="literal"/></output>
+    </operation>
+  
+  </binding>
+  <service name="BenchmarkWebService">
+    <port name="BenchmarkServicePort" binding="tns:BenchmarkServiceBinding">
+      <soap:address location="REPLACE_WITH_ACTUAL_URL"/>
+    </port>
+  </service>
+</definitions>

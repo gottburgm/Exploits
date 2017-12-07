@@ -1,0 +1,40 @@
+EJB3 SFSB fine-grained replication
+
+Goal: To enable fine-grained replication in JBoss EJB3 SFSB state 
+replication. Currently, we support SFSB replication using JBossCache. 
+But it is replicated in a whole-sale fashion. E.g., a user can 
+annotate her SFSB with @Clustered and it will be replicated automatically.
+
+User, however, will need to do isModified() API to have fine-grained 
+control of the bean replication. By using TreeCacheAop (aka POJO Cache), 
+there will be no need of user implementing isModified flag. POJO Cache 
+will track the field replication automatically (if there is one).
+
+Here are the main steps needed:
+
+- There is an additional annotation @PojoCachable that declares this 
+SFSB to be instrumented.
+- (Optional??) Determine a consistent annotation flag, such as "FIELD" 
+tag inside the clustering annotation, e.g., @Clustered(ReplType=FIELD) 
+(with ReplType default being SESSION)
+- Requires JBossCache 1.3 that supports 1.5 JDK with annotation
+- Depending on whether "FIELD" is specified, we should do two different 
+paths:
+  + If set, pojo cache API is used (putObject and removeObject). We need 
+    to instrument the SFSB first on the fly (based on PojoCacheable 
+    annotation), LoadTime mode (or it can be pre-compiled, CompileMode). 
+    Then, we need to do putObject and removeObject for pojo cache operation 
+    instead of regular ones. Maybe we should use different SessionContext 
+    that stores the SFSB. One for regular and the other for FieldBased, 
+    like we did with Session in Tomcat.
+  + If not, regular cache API is used (e.g., pure, remove). Then replication 
+    is "SESSION" based. User will need to implement isModified for 
+    fine-grained control.
+- For fine-grained, it should mimic the implementation in http session, 
+e.g., issues of marshalling, etc.
+- Configuration. Should not change much. User will need to annotate by 
+itself on the POJOs.
+ 
+Some of the expected use cases are:
+
+- Applications that have large stateful session bean object.  The large data fields do not change often but the small data fields do change frequently.  Note: An open design decision is whether field changes should be replicated right away or at the end of the current server container invocation.  If we replicate after each field change, we will have improved reliability but at the cost of increased network traffic.  This use case depends on the outcome of this decision.

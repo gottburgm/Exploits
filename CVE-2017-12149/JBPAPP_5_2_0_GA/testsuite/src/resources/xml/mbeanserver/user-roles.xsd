@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: user-roles.xsd 42013 2006-03-10 15:14:01Z aloubyansky $ -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  targetNamespace="urn:jboss:user-roles"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:jbxb="http://www.jboss.org/xml/ns/jbxb"
+  xmlns:ur="urn:jboss:user-roles">
+  <xs:element name="users">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="unbounded" ref="ur:user"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="user">
+    <xsd:annotation>
+      <xsd:appinfo>
+        <jbxb:class impl="org.jboss.test.xml.mbeanserver.Users$User"/>
+        <jbxb:addMethod name="addUser" valueType="child"/>
+      </xsd:appinfo>
+    </xsd:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="ur:role"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="xs:NCName"/>
+      <xs:attribute name="password" use="required" type="xs:NCName"/>
+    </xs:complexType>
+  </xs:element>
+
+   <xsd:element name="role">
+      <xsd:annotation>
+         <xsd:appinfo>
+            <jbxb:mapEntry/>
+            <jbxb:putMethod name="addRole"
+               keyType="java.lang.String" valueType="java.lang.String" />
+         </xsd:appinfo>
+      </xsd:annotation>
+
+      <xsd:complexType>
+         <xsd:attribute name="group" use="optional" type="xsd:NCName" default="Roles">
+            <xsd:annotation>
+               <xsd:appinfo>
+                  <jbxb:mapEntryValue/>
+               </xsd:appinfo>
+            </xsd:annotation>
+         </xsd:attribute>
+         <xsd:attribute name="name" use="required" type="xsd:NCName">
+            <xsd:annotation>
+               <xsd:appinfo>
+                  <jbxb:mapEntryKey/>
+               </xsd:appinfo>
+            </xsd:annotation>
+         </xsd:attribute> 
+      </xsd:complexType>
+   </xsd:element>
+</xs:schema>

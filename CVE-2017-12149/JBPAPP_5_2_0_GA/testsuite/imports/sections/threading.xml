@@ -1,0 +1,30 @@
+<project name="tests-threading-jars">
+<!-- threading test -->
+   <target name="_jars-threading">
+      <mkdir dir="${build.lib}"/>
+
+      <!-- build threadingMBean.jar -->
+      <jar destfile="${build.lib}/threadingMBean.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/threading/interfaces/**"/>
+            <include name="org/jboss/test/threading/mbean/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/threading">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+
+      <!-- build threadingBean.jar -->
+      <jar destfile="${build.lib}/threadingBean.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/threading/interfaces/**"/>
+            <include name="org/jboss/test/threading/ejb/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/threading">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

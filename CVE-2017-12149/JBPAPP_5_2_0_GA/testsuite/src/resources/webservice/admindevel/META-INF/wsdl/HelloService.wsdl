@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name='HelloService' targetNamespace='http://org.jboss.webservice/example' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:ns1='http://org.jboss.webservice/example/types' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://org.jboss.webservice/example' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <schema targetNamespace='http://org.jboss.webservice/example/types' xmlns='http://www.w3.org/2001/XMLSchema' xmlns:soap11-enc='http://schemas.xmlsoap.org/soap/encoding/' xmlns:tns='http://org.jboss.webservice/example/types' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'>
+   <complexType name='HelloObj'>
+    <sequence>
+     <element name='msg' nillable='true' type='string'/>
+    </sequence>
+   </complexType>
+   <complexType name='HelloObj.Array'>
+    <sequence>
+     <element maxOccurs='unbounded' minOccurs='0' name='value' nillable='true' type='tns:HelloObj'/>
+    </sequence>
+   </complexType>
+  </schema>
+ </types>
+ <message name='Hello_helloArray'>
+  <part name='arrayOfHelloObj_1' type='ns1:HelloObj.Array'/>
+ </message>
+ <message name='Hello_helloArrayResponse'>
+  <part name='result' type='ns1:HelloObj.Array'/>
+ </message>
+ <message name='Hello_helloBean'>
+  <part name='HelloObj_1' type='ns1:HelloObj'/>
+ </message>
+ <message name='Hello_helloBeanResponse'>
+  <part name='result' type='ns1:HelloObj'/>
+ </message>
+ <message name='Hello_helloString'>
+  <part name='String_1' type='xsd:string'/>
+ </message>
+ <message name='Hello_helloStringResponse'>
+  <part name='result' type='xsd:string'/>
+ </message>
+ <portType name='Hello'>
+  <operation name='helloArray' parameterOrder='arrayOfHelloObj_1'>
+   <input message='tns:Hello_helloArray'/>
+   <output message='tns:Hello_helloArrayResponse'/>
+  </operation>
+  <operation name='helloBean' parameterOrder='HelloObj_1'>
+   <input message='tns:Hello_helloBean'/>
+   <output message='tns:Hello_helloBeanResponse'/>
+  </operation>
+  <operation name='helloString' parameterOrder='String_1'>
+   <input message='tns:Hello_helloString'/>
+   <output message='tns:Hello_helloStringResponse'/>
+  </operation>
+ </portType>
+ <binding name='HelloBinding' type='tns:Hello'>
+  <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='helloArray'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://org.jboss.webservice/example' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://org.jboss.webservice/example' use='literal'/>
+   </output>
+  </operation>
+  <operation name='helloBean'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://org.jboss.webservice/example' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://org.jboss.webservice/example' use='literal'/>
+   </output>
+  </operation>
+  <operation name='helloString'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://org.jboss.webservice/example' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://org.jboss.webservice/example' use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='HelloService'>
+  <port binding='tns:HelloBinding' name='HelloPort'>
+   <soap:address location='REPLACE_WITH_ACTUAL_URL'/>
+  </port>
+ </service>
+</definitions>

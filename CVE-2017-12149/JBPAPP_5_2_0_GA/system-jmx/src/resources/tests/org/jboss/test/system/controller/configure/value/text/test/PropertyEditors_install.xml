@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <mbean name="jboss.test:type=test" code="org.jboss.test.system.controller.support.Simple">
+      <attribute name="AString">StringValue</attribute>
+      <attribute name="AByte">12</attribute>
+      <attribute name="ABoolean">true</attribute>
+      <attribute name="AShort">123</attribute>
+      <attribute name="AnInt">1234</attribute>
+      <attribute name="ALong">12345</attribute>
+      <attribute name="AFloat">3.14</attribute>
+      <attribute name="ADouble">3.14e12</attribute>
+      <attribute name="ADate">Mon Jan 01 00:00:00 CET 2001</attribute>
+      <attribute name="ABigDecimal">12e4</attribute>
+      <!--attribute name="ABigInteger">123456</attribute-->
+      <attribute name="Abyte">12</attribute>
+      <attribute name="Aboolean">true</attribute>
+      <attribute name="Ashort">123</attribute>
+      <attribute name="Anint">1234</attribute>
+      <attribute name="Along">12345</attribute>
+      <attribute name="Afloat">3.14</attribute>
+      <attribute name="Adouble">3.14e12</attribute>
+   </mbean>
+</server>

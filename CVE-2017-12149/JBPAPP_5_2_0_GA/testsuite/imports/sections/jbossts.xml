@@ -1,0 +1,39 @@
+<project name="tests-jbossts-jars">
+   <!-- JBossTS tests -->
+   <target name="_jars-jbossts" depends="jbqa2176, jbqa3370"/>
+   
+   <!-- JBossTS crash recovery tests -->
+   <target name="jbqa2176" depends="compile">
+      <jar destfile="${build.lib}/crashrecovery-astest.jar">
+         <fileset dir="${build.resources}/jbossts/crashrecovery">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+         <fileset dir="${build.resources}/jbossts/resources">
+            <include name="java.policy"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jbossts/ASCrashRecovery01/*.class"/>
+            <include name="org/jboss/test/jbossts/crash/*.class"/>
+            <include name="org/jboss/test/jbossts/recovery/*.class"/>
+            <include name="org/jboss/test/jbossts/taskdefs/*.class"/> 
+         </fileset>
+      </jar>
+      <antcall target="sign-file">
+        <param name="file" value="crashrecovery-astest.jar"/>
+      </antcall>
+   </target>
+
+   <target name="jbqa3370" depends="compile">
+      <jar destfile="${build.lib}/crashrecovery-jms-astest.jar">
+         <fileset dir="${build.resources}/jbossts/resources">
+            <include name="java.policy"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jbossts/ASCrashRecovery02/*.class"/>
+            <include name="org/jboss/test/jbossts/jms/*.class"/>
+            <include name="org/jboss/test/jbossts/recovery/*.class"/>
+            <include name="org/jboss/test/jbossts/taskdefs/*.class"/> 
+         </fileset>
+      </jar>
+   </target>
+</project>

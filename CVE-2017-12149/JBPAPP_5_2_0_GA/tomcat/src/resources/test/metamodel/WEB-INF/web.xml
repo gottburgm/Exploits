@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app version="2.4"
+   xmlns="http://java.sun.com/xml/ns/j2ee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+   http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd">
+
+   <description>EJB3 Servlet Access Test</description>
+   
+   <filter>
+      <filter-name>JASPISecurityFilter</filter-name>
+      <filter-class>org.jboss.test.web.security.JASPISecurityFilter</filter-class>
+      <init-param>
+         <param-name>testJASPIServerAuthContext</param-name>
+         <param-value>TRUE</param-value>
+      </init-param>
+   </filter>
+   
+   <filter-mapping>
+      <filter-name>SubjectFilter</filter-name>
+      <servlet-name>SubjectServlet</servlet-name>
+   </filter-mapping>
+   
+   <listener>
+      <listener-class>org.jboss.test.cluster.web.SessionListener</listener-class>
+   </listener>
+
+   <servlet>
+      <servlet-name>EJBServlet</servlet-name>
+      <servlet-class>org.jboss.ejb3.test.servlet.servlets.EJBServlet</servlet-class>
+      <init-param>
+         <param-name>scope</param-name>
+         <param-value>1</param-value>
+      </init-param>
+      <load-on-startup>1</load-on-startup>
+      <run-as>
+         <role-name>identitySubstitutionCaller</role-name>
+      </run-as>
+      <security-role-ref>
+         <description>A mapping for the ServletUser role</description>
+         <role-name>ServletUser</role-name>
+         <role-link>ServletUserRole</role-link>
+      </security-role-ref>
+   </servlet>
+   
+   <servlet>
+      <servlet-name>EJBJsp</servlet-name>
+      <jsp-file>/test.jsp</jsp-file>
+   </servlet>
+   
+   <servlet-mapping>
+      <servlet-name>EJBServlet</servlet-name>
+      <url-pattern>/EJBServlet</url-pattern>
+   </servlet-mapping>
+   
+   <session-config>
+      <session-timeout>1</session-timeout>
+   </session-config>
+   
+   <error-page>
+      <error-code>404</error-code>
+      <location>/ErrorPagesServlet/404.jsp</location>
+   </error-page>
+   
+   <security-role>
+      <role-name>JBossAdmin</role-name>
+   </security-role>
+   
+   <security-role>
+      <role-name>JBossUser</role-name>
+   </security-role>
+   
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Restricted</web-resource-name>
+         <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+         <role-name>AuthorizedUser</role-name>
+      </auth-constraint>
+      <user-data-constraint>
+         <transport-guarantee>NONE</transport-guarantee>
+      </user-data-constraint>
+   </security-constraint>
+   
+   <login-config>
+      <auth-method>FORM</auth-method>
+      <realm-name>WebConstraintsUnitTestCase</realm-name>
+      <form-login-config>
+         <form-login-page>/login.html</form-login-page>
+         <form-error-page>/error.html</form-error-page>
+      </form-login-config>
+   </login-config>
+   
+   <env-entry>
+      <description>A string</description>
+      <env-entry-name>prop1</env-entry-name>
+      <env-entry-type>java.lang.String</env-entry-type>
+      <env-entry-value>value1</env-entry-value>
+      <injection-target>
+         <injection-target-class>org.jboss.ejb3.test.metamodel.EnvEntry</injection-target-class>
+         <injection-target-name>envEntry</injection-target-name>
+      </injection-target>
+   </env-entry>
+   
+   <ejb-ref>
+      <ejb-ref-name>ejb/remote/Session30</ejb-ref-name>
+      <ejb-ref-type>Session</ejb-ref-type>
+      <home>org.jboss.ejb3.test.servlet.Session30Home</home>
+      <remote>org.jboss.ejb3.test.servlet.Session30</remote>
+      <injection-target>
+         <injection-target-class>org.jboss.ejb3.test.metamodel.EjbRef</injection-target-class>
+         <injection-target-name>ejbRef</injection-target-name>
+      </injection-target>
+   </ejb-ref>
+   
+   <ejb-local-ref>
+      <ejb-ref-name>ejb/local/Session30</ejb-ref-name>
+      <ejb-ref-type>Session</ejb-ref-type>
+      <local-home>org.jboss.ejb3.test.servlet.Session30LocalHome</local-home>
+      <local>org.jboss.ejb3.test.servlet.Session30</local>
+      <injection-target>
+         <injection-target-class>org.jboss.ejb3.test.metamodel.EjbLocalRef</injection-target-class>
+         <injection-target-name>ejbLocalRef</injection-target-name>
+      </injection-target>
+   </ejb-local-ref>
+   
+   <resource-ref>
+      <res-ref-name>jms/ConnectionFactory</res-ref-name>
+      <res-type>javax.jms.ConnectionFactory</res-type>
+      <res-auth>Container</res-auth>
+      <res-sharing-scope>Shareable</res-sharing-scope>
+      <injection-target>
+         <injection-target-class>org.jboss.ejb3.test.metamodel.ResourceRef</injection-target-class>
+         <injection-target-name>resourceRef</injection-target-name>
+      </injection-target>
+   </resource-ref>
+   
+   <message-destination-ref>
+      <message-destination-ref-name>jms/callerQueue</message-destination-ref-name>
+      <message-destination-type>javax.jms.Queue</message-destination-type>
+      <message-destination-usage>ConsumesProduces</message-destination-usage>
+      <injection-target>
+         <injection-target-class>org.jboss.ejb3.test.metamodel.MessageDestinationRef</injection-target-class>
+         <injection-target-name>messageDestinationRef</injection-target-name>
+      </injection-target>
+   </message-destination-ref>
+   
+   <message-destination>
+      <message-destination-name>TestQueue</message-destination-name>
+   </message-destination>
+   
+</web-app>
+

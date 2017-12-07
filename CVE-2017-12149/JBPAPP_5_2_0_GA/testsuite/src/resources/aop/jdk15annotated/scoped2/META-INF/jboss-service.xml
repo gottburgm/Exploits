@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+    <loader-repository>
+   	aop.loading:loader=scopedannotated2
+    </loader-repository>
+	<mbean code="org.jboss.test.aop.jdk15annotated.ScopedAnnotatedTester" name="jboss.aop:name=ScopedAnnotatedTester2"/>
+</server>

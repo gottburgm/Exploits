@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+
+   <loader-repository>
+      profile.service.test.ds:sar=profile.test.ds
+      <loader-repository-config>
+         java2ParentDelegation=true
+      </loader-repository-config>
+   </loader-repository>
+
+   <classpath codebase="${jboss.server.lib.url}" archives="*"/>
+   <classpath codebase="${jboss.shared.lib.url}" archives="*"/>
+
+   <mbean code="org.jboss.deployment.MainDeployer"
+          name="jboss.system:service=MainDeployer">
+    
+    <annotation>@org.jboss.managed.api.annotation.ManagementObject</annotation>
+   	<!-- This is used to delegate the deployment handling -->
+      <attribute name="KernelMainDeployer"><inject bean="MainDeployer" /></attribute>
+      <!-- This is used to validate incomplete deployments -->
+      <attribute name="Controller"><inject bean="jboss.kernel:service=Kernel" property="controller"/></attribute>
+   </mbean>
+
+   <mbean code="org.jboss.system.pm.AttributePersistenceService"
+      name="jboss:service=AttributePersistenceService"
+      xmbean-dd="resource:xmdesc/AttributePersistenceService-xmbean.xml">
+   </mbean>
+
+   <!-- A Thread pool service -->
+   <mbean code="org.jboss.util.threadpool.BasicThreadPool"
+      name="jboss.system:service=ThreadPool">
+      <attribute name="Name">JBoss System Threads</attribute>
+      <attribute name="ThreadGroupName">System Threads</attribute>
+      <!-- How long a thread will live without any tasks in MS -->
+      <attribute name="KeepAliveTime">60000</attribute>
+      <!-- The max number of threads in the pool -->
+      <attribute name="MaximumPoolSize">10</attribute>
+      <!-- The max number of tasks before the queue is full -->
+      <attribute name="MaximumQueueSize">1000</attribute>
+      <attribute name="BlockingMode">run</attribute>
+   </mbean>
+
+   <mbean code="org.jboss.logging.Log4jService"
+      name="jboss.system:type=Log4jService,service=Logging"
+	  xmbean-dd="resource:xmdesc/Log4jService-xmbean.xml">
+      <attribute name="ConfigurationURL">resource:jboss-log4j.xml</attribute>
+      <!-- Set the org.apache.log4j.helpers.LogLog.setQuiteMode. As of log4j1.2.8
+      this needs to be set to avoid a possible deadlock on exception at the
+      appender level. See bug#696819.
+      -->
+      <attribute name="Log4jQuietMode">true</attribute>
+      <!-- How frequently in seconds the ConfigurationURL is checked for changes -->
+      <attribute name="RefreshPeriod">60</attribute>
+   </mbean>
+
+   <mbean code="org.jboss.util.property.jmx.SystemPropertyClassValue"
+      name="jboss.rmi:type=RMIClassLoader">
+      <attribute name="Property">java.rmi.server.RMIClassLoaderSpi</attribute>
+      <attribute name="ClassName">org.jboss.system.JBossRMIClassLoader</attribute>
+   </mbean>
+ 
+   <mbean code="org.jboss.web.WebService"
+      name="jboss:service=WebService">
+      <!-- The Bind address and Port -->
+      <attribute name="BindAddress">${jboss.bind.address}</attribute>      
+      <attribute name="Port">
+         <!-- Get the port to use from ServiceBindingManager. -->
+         <value-factory bean="ServiceBindingManager" method="getIntBinding" parameter="jboss:service=WebService"/>
+      </attribute>
+      <!--  The address to use for the host portion of the RMI codebase URL -->
+      <attribute name="Host">${java.rmi.server.hostname}</attribute>
+      <!-- Should non-EJB .class files be downloadable -->
+      <attribute name="DownloadServerClasses">true</attribute>
+      <attribute name="DownloadResources">false</attribute>
+
+      <!-- Use the default thread pool for dynamic class loading -->
+      <depends optional-attribute-name="ThreadPool"
+         proxy-type="attribute">jboss.system:service=ThreadPool</depends>
+   </mbean>
+
+   <mbean code="org.jnp.server.NamingBeanImpl"
+      name="jboss:service=NamingBeanImpl"
+      xmbean-dd="resource:xmdesc/NamingBean-xmbean.xml">
+   </mbean>
+   
+   <mbean code="org.jboss.naming.NamingService"
+      name="jboss:service=Naming"
+      xmbean-dd="resource:xmdesc/NamingService-xmbean.xml">
+      <attribute name="CallByValue">false</attribute>
+      <attribute name="Port">
+         <value-factory bean="ServiceBindingManager" method="getIntBinding">
+            <parameter>jboss:service=Naming</parameter>
+            <parameter>Port</parameter>
+         </value-factory>
+      </attribute>
+      
+      <attribute name="BindAddress">${jboss.bind.address}</attribute>
+      <!-- The port of the RMI naming service, 0 == anonymous -->
+      <attribute name="RmiPort">
+         <value-factory bean="ServiceBindingManager" method="getIntBinding">
+            <parameter>jboss:service=Naming</parameter>
+            <parameter>RmiPort</parameter>
+         </value-factory>
+      </attribute>
+      <!-- The RMI service bind address. Empty == all addresses
+      -->
+      <attribute name="RmiBindAddress">${jboss.bind.address}</attribute>
+      <!-- The thread pool service used to control the bootstrap lookups -->
+      <depends optional-attribute-name="LookupPool"
+         proxy-type="attribute">jboss.system:service=ThreadPool</depends>
+      <depends optional-attribute-name="Naming"
+         proxy-type="attribute">jboss:service=NamingBeanImpl</depends>
+   </mbean>
+   
+   <mbean code="org.jboss.naming.JNDIView"
+   	name="jboss:service=JNDIView"
+   	xmbean-dd="resource:xmdesc/JNDIView-xmbean.xml">
+   	<!-- The HANamingService service name -->
+   	<attribute name="HANamingService">jboss:service=HAJNDI</attribute>
+   </mbean>
+
+   <mbean code="org.jboss.security.plugins.JaasSecurityManagerService"
+      name="jboss.security:service=JaasSecurityManager">
+      <attribute name="ServerMode">true</attribute>
+      <attribute name="SecurityManagerClassName">org.jboss.security.plugins.JaasSecurityManager</attribute>
+      <attribute name="DefaultUnauthenticatedPrincipal">anonymous</attribute>
+       <attribute name="DefaultCacheTimeout">1800</attribute>
+      <attribute name="DefaultCacheResolution">60</attribute>
+      <attribute name="DeepCopySubjectMode">false</attribute>
+   </mbean>
+
+   <mbean code="org.jboss.ejb.plugins.cmp.jdbc.metadata.MetaDataLibrary"
+      name="jboss.jdbc:service=metadata"/>
+      
+   <mbean name="jboss.test:type=BasicMBeanName" code="BasicMBeanCode">
+    <depends-list optional-attribute-name="Attribute">
+      <depends-list-element>
+         <mbean name="test:test=1" code="Nested"/>
+      </depends-list-element>
+      <depends-list-element>test:test=2</depends-list-element>
+    </depends-list>
+   </mbean>
+</server>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+   | Targets that run the jbpapp6469
+-->
+<project xmlns:server="http://jboss.org/ns/test/ant/server" name="jbpapp6469.tests">
+  <patternset id="jbpapp6469.includes">
+    <include name="org/jboss/test/iiop/test/Jbpapp6469TestCase.class"/>
+  </patternset>
+  <target name="tests-jbpapp6469" description="Tests JBPAPP-6469">
+    <create-config baseconf="standard" newconf="jbpapp6469">
+      <patternset>
+        <include name="**/*"/>
+      </patternset>
+    </create-config>
+    <!-- set jmx user/pass to admin=admin -->
+    <copy file="${source.resources}/org/jboss/test/deployment/jbpapp6517/jmx-console-users.properties" overwrite="true" todir="${jboss.dist}/server/jbpapp6469/conf/props/"/>
+    <!-- default case -->
+    <server:start name="jbpapp6469"/>
+    <run-junit junit.patternset="jbpapp6469.includes" junit.configuration="jbpapp6469"/>
+    <server:stop name="jbpapp6469"/>
+  </target>
+</project>

@@ -1,0 +1,5 @@
+.settings
+output
+build.log
+run.tstamp
+junit*.properties

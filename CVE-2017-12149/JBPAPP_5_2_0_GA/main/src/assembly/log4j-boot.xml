@@ -1,0 +1,24 @@
+<assembly>
+  <id>log4j-boot</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <dependencySets>
+    <dependencySet>
+      <unpack>true</unpack>
+      <unpackOptions>
+        <includes>
+          <include>org/apache/log4j/*</include>
+          <include>org/apache/log4j/config/*</include>
+          <include>org/apache/log4j/helpers/*</include>
+          <include>org/apache/log4j/or/*</include>
+          <include>org/apache/log4j/spi/*</include>
+        </includes>
+      </unpackOptions>
+      <includes>
+        <include>log4j:log4j</include>
+      </includes>
+    </dependencySet>
+  </dependencySets>
+</assembly>

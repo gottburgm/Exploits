@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Created-By: @java.vm.version@ (@java.vm.vendor@)
+Specification-Title: @ejb3.title@
+Specification-Version: @ejb3.version@
+Specification-Vendor: @ejb3.vendor@
+Implementation-Title: @ejb3.title@
+Implementation-URL: @ejb3.url@
+Implementation-Version: @ejb3.version@
+Implementation-Vendor: @ejb3.vendor@

@@ -1,0 +1,18 @@
+<!-- This file should be equivalent to jboss-appclient.jar -->
+<assembly>
+  <id>client</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/ejb3/client/**</include>
+        <include>org/jboss/ejb3/clientmodule/**</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

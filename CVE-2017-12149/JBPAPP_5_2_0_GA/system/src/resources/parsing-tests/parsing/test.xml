@@ -1,0 +1,30 @@
+<profiles
+	xmlns="urn:jboss:profileservice:profiles:1.0"
+	name="profiles">
+
+	<profile name="immutable">
+		<profile-source>
+			<source>${jboss.server.home.url}deployers</source>
+			<source>${jboss.server.home.url}conf</source> 
+		</profile-source>
+		<sub-profile>ejb3</sub-profile>
+		<deployment>myEjb3Deployment.ear</deployment>
+	</profile>
+	
+	<hotdeployment-profile name="mutable">
+		<profile-source>
+			<source>${jboss.server.home.url}deploy</source>
+			<source>${jboss.server.home.url}deploy2</source>
+		</profile-source>
+		<sub-profile>immutable</sub-profile>
+	</hotdeployment-profile>
+
+	<maven-profile name="maven" xmlns="urn:jboss:profileservice:profile:maven:1.0">
+		<profile-source>
+			<source>http://repository.jboss.org/maven2</source>
+		</profile-source>
+		<sub-profile>hotdeployment</sub-profile>
+		<deployment>org/jboss/jboss-profileservice/6.0.0-GA/profileservice-spi.jar</deployment>
+	</maven-profile>
+
+</profiles>

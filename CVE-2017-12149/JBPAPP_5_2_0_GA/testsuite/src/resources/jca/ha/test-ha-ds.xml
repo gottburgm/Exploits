@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The Hypersonic embedded database JCA connection factory config
+$Id: test-ha-ds.xml 113230 2012-07-17 13:54:45Z jeff.zhang $ -->
+
+
+<datasources>
+   <local-tx-datasource>
+
+      <!-- The jndi name of the DataSource, it is prefixed with java:/ -->
+      <!-- Datasources are not available outside the virtual machine -->
+      <jndi-name>TestHADefaultDS</jndi-name>
+
+      <!-- for tcp connection, allowing other processes to use the hsqldb
+      database. This requires the org.jboss.jdbc.HypersonicDatabase mbean.
+      The last url in the list is not valid. -->
+      <connection-url>jdbc:hsqldb:hsql://localhost:1702|jdbc:hsqldb:hsql://localhost:1703|jdbc:hsql:hsql://localhost:1234</connection-url>
+      <url-delimiter>|</url-delimiter>
+	  <url-selector-strategy-class-name>org.jboss.test.jca.support.MyURLSelector</url-selector-strategy-class-name>
+
+      <!-- for in-process persistent db, saved when jboss stops. The
+      org.jboss.jdbc.HypersonicDatabase mbean is necessary for properly db shutdown
+      <connection-url>jdbc:hsqldb:${jboss.server.data.dir}${/}hypersonic${/}localDB</connection-url>
+-->
+
+      <!-- The driver class -->
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+
+      <!-- The login and password -->
+      <user-name>sa</user-name>
+      <password></password>
+
+      <!-- this will be run before a managed connection is removed from the pool for use by a client-->
+      <check-valid-connection-sql>create table test_a (id integer); drop table test_a;</check-valid-connection-sql>
+
+      <!-- The minimum connections in a pool/sub-pool. Pools are lazily constructed on first use -->
+      <min-pool-size>5</min-pool-size>
+
+      <!-- The maximum connections in a pool/sub-pool -->
+      <max-pool-size>20</max-pool-size>
+
+      <!-- The time before an unused connection is destroyed -->
+      <!-- NOTE: This is the check period. It will be destroyed somewhere between 1x and 2x this timeout after last use -->
+      <!-- TEMPORARY FIX! - Disable idle connection removal, HSQLDB has a problem with not reaping threads on closed connections -->
+      <idle-timeout-minutes>0</idle-timeout-minutes>
+
+      <!-- sql to call when connection is created
+        <new-connection-sql>some arbitrary sql</new-connection-sql>
+      -->
+
+      <!-- Whether to check all statements are closed when the connection is returned to the pool,
+           this is a debugging feature that should be turned off in production -->
+      <track-statements/>
+
+      <!-- corresponding type-mapping in the standardjbosscmp-jdbc.xml (optional) -->
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+
+      <!-- Don't use depends... when one of the dbs is stopped the ds will be undeployed
+           and this is not what we want
+      <depends>jboss:service=Hypersonic,database=localDB</depends>
+      -->
+   </local-tx-datasource>
+
+   <!-- This mbean should be used only when using tcp connections. Uncomment
+   when the tcp based connection-url is used.
+   Had to use TCP connection since otherwise I seemed to be able to connect
+   to the db even after stopping the MBean -->
+   <mbean code="org.jboss.jdbc.HypersonicDatabase" 
+     name="jboss:service=Hypersonic,database=haLocalDB1">
+     <attribute name="Port">1702</attribute>
+     <attribute name="Silent">true</attribute>
+     <attribute name="Database">testHaLocalDB1</attribute>
+     <attribute name="Trace">false</attribute>
+     <attribute name="No_system_exit">true</attribute>
+   </mbean>
+   <mbean code="org.jboss.jdbc.HypersonicDatabase" 
+     name="jboss:service=Hypersonic,database=haLocalDB2">
+     <attribute name="Port">1703</attribute>
+     <attribute name="Silent">true</attribute>
+     <attribute name="Database">testHaLocalDB2</attribute>
+     <attribute name="Trace">false</attribute>
+     <attribute name="No_system_exit">true</attribute>
+   </mbean>
+
+</datasources>

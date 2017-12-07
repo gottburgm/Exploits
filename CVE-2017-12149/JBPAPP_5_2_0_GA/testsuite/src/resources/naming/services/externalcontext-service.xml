@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+   <mbean code="org.jboss.naming.ExternalContext" name="jboss.test:service=ExternalContext,jndiName=external/SubMockNamingContext">
+      <attribute name="JndiName">external/SubMockNamingContext</attribute>
+      <attribute name="InitialContext">org.jboss.test.naming.factory.MockInitialContext</attribute>
+      <attribute name="Properties">
+         # Dummy JNDI properties
+         java.naming.factory.initial=org.jboss.test.naming.factory.MockInitialContextFactory
+         java.naming.provider.url=http://www.jboss.org
+      </attribute>
+      <attribute name="RemoteAccess">true</attribute>
+   </mbean>
+</server>

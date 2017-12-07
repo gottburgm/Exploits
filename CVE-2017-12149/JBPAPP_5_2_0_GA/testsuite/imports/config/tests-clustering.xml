@@ -1,0 +1,964 @@
+<?xml version="1.0"?>
+
+<!--
+   | Targets that run the clustering tests
+-->
+ 
+<!-- $Id: tests-clustering.xml 112085 2011-08-17 08:18:01Z pferraro $ -->
+<project name="main.server.config.jacc" xmlns:server="http://jboss.org/ns/test/ant/server">
+
+  <!--
+  |  Define the Pattern Sets Here
+  --> 
+  <patternset id="apache_tomcat.cluster.includes">
+    <include name="org/jboss/test/cluster/apache_tomcat/*TestCase.class"/>
+  </patternset>
+  <patternset id="cluster.defaultcfg.non.http.includes">
+    <include name="org/jboss/test/cluster/defaultcfg/test/*TestCase.class"/>
+    <include name="org/jboss/test/cluster/defaultcfg/ejb2/test/*TestCase.class"/>
+   
+    <!-- These are web tier tests that shouldn't be repeated with REPL_SYNC, etc -->
+    <include name="org/jboss/test/cluster/defaultcfg/simpleweb/test/*TestCase.class"/>
+  	
+    <include name="org/jboss/test/cluster/defaultcfg/clusteredentity/test/*TestCase.class"/>
+    
+    <include name="org/jboss/test/cluster/multicfg/test/*TestCase.class"/>
+    <include name="org/jboss/test/cluster/multicfg/ejb2/test/*TestCase.class"/>
+    <!-- Exclude invalid JBC integration tests
+    <include name="org/jboss/test/cluster/defaultcfg/cache/test/*TestCase.class"/>
+    -->
+  </patternset>
+  <patternset id="cluster.defaultcfg.http.includes">
+    <include name="org/jboss/test/cluster/defaultcfg/web/test/*TestCase.class"/>
+    <include name="org/jboss/test/cluster/multicfg/web/test/*TestCase.class"/>
+    <!-- Problem tests -->
+    <exclude name="org/jboss/test/cluster/multicfg/web/test/*ConcurrentTestCase.class"/>
+  </patternset>
+  <patternset id="cluster.defaultcfg.http.field.includes">
+    <include name="org/jboss/test/cluster/defaultcfg/web/field/test/*TestCase.class"/>
+    <include name="org/jboss/test/cluster/multicfg/web/field/test/*TestCase.class"/>
+  </patternset>
+  <patternset id="cluster.defaultcfg.http.jk.includes">
+    <include name="org/jboss/test/cluster/defaultcfg/web/jk/test/*TestCase.class"/>
+  </patternset>
+  <patternset id="cluster.multicfg.non.http.includes">
+    <include name="org/jboss/test/cluster/multicfg/test/*TestCase.class"/>
+    <include name="org/jboss/test/cluster/multicfg/ejb2/test/*TestCase.class"/>
+  </patternset>
+  <patternset id="cluster.multicfg.http.includes">
+    <include name="org/jboss/test/cluster/multicfg/web/test/*TestCase.class"/>
+    <!-- Problem tests -->
+    <exclude name="org/jboss/test/cluster/multicfg/web/test/*ConcurrentTestCase.class"/>
+  </patternset>
+  <patternset id="cluster.multicfg.http.field.includes">
+    <include name="org/jboss/test/cluster/multicfg/web/field/test/*TestCase.class"/>
+  </patternset>
+  <patternset id="cluster.multicfg.http.jk.includes">
+    <include name="org/jboss/test/cluster/multicfg/web/jk/test/*TestCase.class"/>
+  </patternset>
+  <patternset id="cluster.classloader.leak.includes">
+    <include name="org/jboss/test/cluster/classloader/leak/test/*TestCase.class"/>
+  </patternset>
+  <patternset id="cluster.profileservice.includes">
+    <include name="org/jboss/test/cluster/defaultcfg/profileservice/test/*TestCase.class"/>
+  </patternset>
+  <patternset id="cluster.ustxsticky.includes">
+    <include name="org/jboss/test/cluster/defaultcfg/ejb*/ustxsticky/test/UserTransactionStickyUnitTestCase.class"/>
+  </patternset>
+  <patternset id="cluster.mod_cluster.includes">
+    <include name="org/jboss/test/cluster/mod_cluster/ModClusterServiceTestCase.class"/>
+  </patternset>
+  <patternset id="cluster.excludes">
+    <exclude name="org/jboss/test/cluster/**/*TestCase.class"/>
+  </patternset> 
+	
+  <!--
+    | Targets
+  -->
+
+   <target name="tests-apache-tomcat-clustering"
+      description="Execute clustering tests requiring an apache load balanced two TC nodes.">
+      <echo message="Will read config info from local.propeties file in testsuite dir"/>
+      <!-- Definition of apache is in imports/server-config.xml -->
+      <apache location="${apache.location}" action-type="start"/>
+      <create-cluster-node conf="node0"/>
+      <server:start name="node0" />
+      <create-cluster-node conf="node1"/>
+      <server:start name="node1"/>
+      <echo message="Nodes have started, waiting for cluster to stablize..."/>
+
+      <!-- Need a custom condition that queries for the node membership == 2 -->
+      <echo message="Going to call target tests-clustering-unit"/>
+
+      <antcall target="tests-clustering-unit">
+         <param name="cluster.includes.refid" value="apache_tomcat.cluster.includes"/>
+         <param name="jboss-junit-configuration" value="Tomcat Clustering"/>
+      </antcall>
+      <server:stop name="node0"/>
+      <server:stop name="node1"/>
+      <apache location="${apache.location}" action-type="stop"/>
+   </target>
+
+  <!-- 
+      Run the clustering tests with different JGroups stacks (UDP/TCP/TCP_NIO).
+      The full set of tests are run with UDP; with the other stacks tests that 
+      are unaffected by the protocol stack are not repeated.
+  -->
+  <target name="tests-clustering-all-stacks"
+    description="Execute clustering tests requiring two nodes.">
+    <!-- Test the default UDP stack. Run all the tests. -->
+    <antcall target="tests-clustering">
+      <param name="jboss.default.jgroups.stack" value="udp"/>
+      <param name="baseconf" value="all"/>
+    </antcall>
+    <!-- Test a TCP stack but with a more limited set of tests.-->
+    <antcall target="tests-clustering-multicfg">
+      <param name="jboss.default.jgroups.stack" value="tcp"/>
+      <param name="baseconf" value="all"/>
+    </antcall>
+  	
+    <!-- Test a TCPGOSSIP stack but with a more limited set of tests..
+	<antcall target="create-tcpgossip-test-configs-directories"/>
+    <antcall target="tests-clustering-multicfg">
+      <param name="jboss.default.jgroups.stack" value="tcpgossip"/>
+    </antcall>
+    -->
+  	
+    <!-- Test a TCP_NIO stack but with a more limited set of tests..
+         BES 2007/09/06 Eliminated pending final JGroups merge of TCP/TCP_NIO
+    <antcall target="tests-clustering-multicfg">
+      <param name="jboss.default.jgroups.stack" value="tcp_nio"/>
+    </antcall>
+    -->
+    <!-- Test user transaction sticky with default stack. Left out of the 
+    other clustering tests because it needs a separate different configuration.
+    -->
+    <antcall target="run-clustered-ustxsticky-tests">
+      <param name="jboss.default.jgroups.stack" value="udp"/>
+      <param name="baseconf" value="all"/>
+    </antcall>
+    <antcall target="run-clustered-profileservice-tests">
+      <param name="jboss.default.jgroups.stack" value="udp"/>
+      <param name="baseconf" value="all"/>
+    </antcall>
+    <antcall target="run-tomcat-sso-clustered-tests">
+      <param name="jboss.default.jgroups.stack" value="udp"/>
+      <param name="baseconf" value="all"/>
+    </antcall>
+  </target>
+  <target name="foo">
+   <antcall target="tests-clustered-profileservice">
+     <param name="jboss.default.jgroups.stack" value="tcp"/>
+   </antcall>
+	</target>
+  <target name="tests-clustering-tcpgossip"
+	      description="Execute clustering tests against a TCPGOSSIP-based configuration.">
+	  	
+	 <!-- Test a TCPGOSSIP stack but with a more limited set of tests..-->
+     <antcall target="create-tcpgossip-test-configs-directories"/>
+	 <antcall target="tests-clustering-multicfg">
+	    <param name="jboss.default.jgroups.stack" value="tcpgossip"/>
+	 </antcall>
+  </target>	
+	
+  <!-- Runs only the multicfg tests -->
+  <target name="tests-clustering-multicfg">
+   
+   <!-- Default jgroups stack to use -->
+   <property name="jboss.default.jgroups.stack" value="udp"/>
+   <!-- Default configuration to build the test config from -->
+   <property name="baseconf" value="all"/>
+  	
+   <antcall target="clustering-core-tests" inheritRefs="true">
+     <param name="baseconf" value="${baseconf}"/>
+     <param name="jboss.default.jgroups.stack" value="${jboss.default.jgroups.stack}"/>
+     <param name="cluster.non.http.includes" value="cluster.multicfg.non.http.includes"/>
+     <param name="cluster.http.includes" value="cluster.multicfg.http.includes"/>
+     <param name="cluster.http.field.includes" value="cluster.multicfg.http.field.includes"/>
+     <param name="cluster.http.jk.includes" value="cluster.multicfg.http.jk.includes"/>
+   </antcall>
+  
+  </target>
+   
+  <!-- Depending on the value of the ${jboss.default.jgroups.stack} variable, uses different JGroups stacks -->
+  <target name="tests-clustering"
+    description="Execute clustering tests requiring two nodes.">
+
+    <!-- Default jgroups stack to use -->
+    <property name="jboss.default.jgroups.stack" value="udp"/>
+    <!-- Default configuration to build the test config from -->
+    <property name="baseconf" value="all"/>
+  	
+  	 <antcall target="clustering-core-tests" inheritRefs="true">
+      <param name="baseconf" value="${baseconf}"/>
+      <param name="jboss.default.jgroups.stack" value="${jboss.default.jgroups.stack}"/>      
+      <param name="cluster.non.http.includes" value="cluster.defaultcfg.non.http.includes"/>
+      <param name="cluster.http.includes" value="cluster.defaultcfg.http.includes"/>
+      <param name="cluster.http.field.includes" value="cluster.defaultcfg.http.field.includes"/>
+      <param name="cluster.http.jk.includes" value="cluster.defaultcfg.http.jk.includes"/>
+  	 </antcall>
+  	
+  </target>
+	
+  <!-- Depending on the value of the ${jboss.default.jgroups.stack} variable, uses different JGroups stacks -->
+  <target name="clustering-core-tests"
+    description="Execute clustering tests requiring two nodes.">
+
+    <antcall target="tests-clustering-configure" inheritRefs="true"/>
+
+    <server:start name="cluster-${jboss.default.jgroups.stack}-0"/>
+    <server:start name="cluster-${jboss.default.jgroups.stack}-1"/>
+
+    <echo message="Going to call target tests-clustering-unit for non-HTTP tests"/>
+
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="${cluster.non.http.includes}"/>
+      <param name="jboss-junit-configuration" value="Default-${jboss.default.jgroups.stack}"/>
+      <param name="jbosstest.cluster.node0.config" value="cluster-${jboss.default.jgroups.stack}-0"/>
+      <param name="jbosstest.cluster.node1.config" value="cluster-${jboss.default.jgroups.stack}-1"/>
+    </antcall>
+    
+    <echo message="Going to call target tests-clustering-unit for HTTP tests (ASYNC, no BR)"/>
+
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="${cluster.http.includes}"/>
+      <param name="jboss-junit-configuration" value="Default-${jboss.default.jgroups.stack}"/>
+      <param name="jbosstest.cluster.web.cache.config" value="standard-session-cache"/>
+      <param name="jbosstest.cluster.node0.config" value="cluster-${jboss.default.jgroups.stack}-0"/>
+      <param name="jbosstest.cluster.node1.config" value="cluster-${jboss.default.jgroups.stack}-1"/>
+    </antcall>
+
+    <echo message="Going to call target tests-clustering-unit again for FIELD granularity tests (ASYNC, no BR)"/>
+
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="${cluster.http.field.includes}"/>
+      <param name="jboss-junit-configuration" value="Default-${jboss.default.jgroups.stack}"/>
+      <param name="jbosstest.cluster.web.cache.config" value="field-granularity-session-cache"/>
+      <param name="jbosstest.cluster.web.cache.pojo" value="true"/>
+      <param name="jbosstest.cluster.node0.config" value="cluster-${jboss.default.jgroups.stack}-0"/>
+      <param name="jbosstest.cluster.node1.config" value="cluster-${jboss.default.jgroups.stack}-1"/>
+    </antcall>
+
+    <server:stop name="cluster-${jboss.default.jgroups.stack}-0"/>
+    <server:stop name="cluster-${jboss.default.jgroups.stack}-1"/>
+
+    <sleep seconds="4"/>
+
+    <echo message="Going to call target tests-clustering-unit again with new configuration (SYNC, no BR)"/>
+
+    <antcall target="tests-clustering-sync-configure"/>
+
+    <server:start name="cluster-${jboss.default.jgroups.stack}-SYNC-0"/>
+    <server:start name="cluster-${jboss.default.jgroups.stack}-SYNC-1"/>
+
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="${cluster.http.jk.includes}"/>
+      <param name="jboss-junit-configuration" value="SyncModeNUseJvm-${jboss.default.jgroups.stack}"/>
+      <param name="jbosstest.cluster.web.cache.config" value="sync-standard-session-cache"/>
+      <param name="jbosstest.cluster.node0.config" value="cluster-${jboss.default.jgroups.stack}-SYNC-0"/>
+      <param name="jbosstest.cluster.node1.config" value="cluster-${jboss.default.jgroups.stack}-SYNC-1"/>
+    </antcall>
+
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="${cluster.http.includes}"/>
+      <param name="jboss-junit-configuration" value="SyncModeNUseJvm-${jboss.default.jgroups.stack}"/>
+      <param name="jbosstest.cluster.web.cache.config" value="sync-standard-session-cache"/>
+      <param name="jbosstest.cluster.node0.config" value="cluster-${jboss.default.jgroups.stack}-SYNC-0"/>
+      <param name="jbosstest.cluster.node1.config" value="cluster-${jboss.default.jgroups.stack}-SYNC-1"/>
+    </antcall>
+
+    <echo message="Going to call target tests-clustering-unit again for FIELD granularity tests (SYNC, no BR)"/>
+
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="${cluster.http.field.includes}"/>
+      <param name="jboss-junit-configuration" value="SyncModeNUseJvm-${jboss.default.jgroups.stack}"/>
+      <param name="jbosstest.cluster.web.cache.config" value="sync-field-granularity-session-cache"/>
+      <param name="jbosstest.cluster.web.cache.pojo" value="true"/>
+      <param name="jbosstest.cluster.node0.config" value="cluster-${jboss.default.jgroups.stack}-SYNC-0"/>
+      <param name="jbosstest.cluster.node1.config" value="cluster-${jboss.default.jgroups.stack}-SYNC-1"/>
+    </antcall>
+
+   <server:stop name="cluster-${jboss.default.jgroups.stack}-SYNC-0"/>
+   <server:stop name="cluster-${jboss.default.jgroups.stack}-SYNC-1"/>
+
+   <sleep seconds="4"/>
+
+   <echo message="Going to call target tests-clustering-unit again with new configuration (SYNC, BR)"/>
+
+   <antcall target="tests-clustering-br-configure"/>
+
+   <server:start name="cluster-${jboss.default.jgroups.stack}-BR-0"/>
+   <server:start name="cluster-${jboss.default.jgroups.stack}-BR-1"/>
+
+    <echo message="Going to call target tests-clustering-unit again with new configuration (SYNC, BR)"/>
+
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="${cluster.http.includes}"/>
+      <param name="jboss-junit-configuration" value="BuddyReplEnabled-${jboss.default.jgroups.stack}"/>
+      <param name="jbosstest.cluster.web.cache.config" value="br-enabled-sync-standard-session-cache"/>
+      <param name="jbosstest.cluster.web.cache.br" value="true"/>
+      <param name="jbosstest.cluster.node0.config" value="cluster-${jboss.default.jgroups.stack}-BR-0"/>
+      <param name="jbosstest.cluster.node1.config" value="cluster-${jboss.default.jgroups.stack}-BR-1"/>
+    </antcall>
+
+    <echo message="Going to call target tests-clustering-unit again for FIELD granularity tests with new configuration (SYNC, BR)"/>
+
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="${cluster.http.field.includes}"/>
+      <param name="jboss-junit-configuration" value="BuddyReplEnabled-${jboss.default.jgroups.stack}"/>
+      <param name="jbosstest.cluster.web.cache.config" value="br-enabled-sync-field-granularity-session-cache"/>
+      <param name="jbosstest.cluster.web.cache.br" value="true"/>
+      <param name="jbosstest.cluster.web.cache.pojo" value="true"/>
+      <param name="jbosstest.cluster.node0.config" value="cluster-${jboss.default.jgroups.stack}-BR-0"/>
+      <param name="jbosstest.cluster.node1.config" value="cluster-${jboss.default.jgroups.stack}-BR-1"/>
+    </antcall>
+
+    <server:stop name="cluster-${jboss.default.jgroups.stack}-BR-0"/>
+    <server:stop name="cluster-${jboss.default.jgroups.stack}-BR-1"/>
+
+  </target>
+  
+  <target name="tests-clustering-configure" unless="${tests.clustering.skip.startup}">
+  	 <!-- Default configuration to build the test config from -->
+  	 <property name="baseconf" value="all"/>
+     <property name="newconf-src" value="cluster-${jboss.default.jgroups.stack}"/>
+    <create-cluster-node-from-baseconf conf="cluster-${jboss.default.jgroups.stack}-0" baseconf="${baseconf}" newconf-src="${newconf-src}"/>
+    <create-cluster-node-from-baseconf conf="cluster-${jboss.default.jgroups.stack}-1" baseconf="${baseconf}" newconf-src="${newconf-src}"/>
+  </target>
+
+  <target name="tests-clustering-field-configure" unless="${tests.clustering.skip.startup}">
+  	  <!-- Default configuration to build the test config from -->
+  	  <property name="baseconf" value="all"/>
+  	  <create-cluster-node-from-baseconf conf="cluster-field-${jboss.default.jgroups.stack}-0" baseconf="${baseconf}"/>
+    <create-cluster-node-from-baseconf conf="cluster-field-${jboss.default.jgroups.stack}-1" baseconf="${baseconf}"/>
+  </target>
+
+  <target name="tests-clustering-sync-configure" unless="${tests.clustering.skip.startup}">
+  	
+  	 <!-- Default configuration to build the test config from -->
+  	 <property name="baseconf" value="all"/>
+  	
+  	 <create-cluster-node-from-baseconf conf="cluster-${jboss.default.jgroups.stack}-SYNC-0" baseconf="${baseconf}"/>
+    <create-cluster-node-from-baseconf conf="cluster-${jboss.default.jgroups.stack}-SYNC-1" baseconf="${baseconf}"/>
+
+    <echo message="Modifying the node0 and node1 Tomcat configuration for JK"/>
+    <http-cluster-node-config-change conf="cluster-${jboss.default.jgroups.stack}-SYNC-0"/>
+    <http-cluster-node-config-change conf="cluster-${jboss.default.jgroups.stack}-SYNC-1"/>
+  </target>
+
+  <target name="tests-clustering-field-sync-configure" unless="${tests.clustering.skip.startup}">
+  	 
+  	 <!-- Default configuration to build the test config from -->
+  	 <property name="baseconf" value="all"/>
+  	   
+  	 <create-cluster-node-from-baseconf conf="cluster-field-${jboss.default.jgroups.stack}-SYNC-0" baseconf="${baseconf}"/>
+    <create-cluster-node-from-baseconf conf="cluster-field-${jboss.default.jgroups.stack}-SYNC-1" baseconf="${baseconf}"/>
+
+    <echo message="Modifying the node0 and node1 Tomcat configuration for JK"/>
+    <http-cluster-node-config-change conf="cluster-field-${jboss.default.jgroups.stack}-SYNC-0"/>
+    <http-cluster-node-config-change conf="cluster-field-${jboss.default.jgroups.stack}-SYNC-1"/>
+  </target>
+
+  <target name="tests-clustering-br-configure" unless="${tests.clustering.skip.startup}">
+    
+  	 <!-- Default configuration to build the test config from -->
+  	 <property name="baseconf" value="all"/>
+  	   
+  	 <create-cluster-node-from-baseconf conf="cluster-${jboss.default.jgroups.stack}-BR-0" baseconf="${baseconf}"/>
+    <create-cluster-node-from-baseconf conf="cluster-${jboss.default.jgroups.stack}-BR-1" baseconf="${baseconf}"/>
+
+    <echo message="Modifying the node0 and node1 Tomcat configuration for JK"/>
+    <http-cluster-node-config-change conf="cluster-${jboss.default.jgroups.stack}-BR-0"/>
+    <http-cluster-node-config-change conf="cluster-${jboss.default.jgroups.stack}-BR-1"/>
+  </target>
+
+  <target name="tests-clustering-field-br-configure" unless="${tests.clustering.skip.startup}">
+  	 
+  	 <!-- Default configuration to build the test config from -->
+  	 <property name="baseconf" value="all"/>
+  	   
+  	 <create-cluster-node-from-baseconf conf="cluster-field-${jboss.default.jgroups.stack}-BR-0" baseconf="${baseconf}"/>
+    <create-cluster-node-from-baseconf conf="cluster-field-${jboss.default.jgroups.stack}-BR-1" baseconf="${baseconf}"/>
+
+    <echo message="Modifying the node0 and node1 Tomcat configuration for JK"/>
+    <http-cluster-node-config-change conf="cluster-field-${jboss.default.jgroups.stack}-BR-0"/>
+    <http-cluster-node-config-change conf="cluster-field-${jboss.default.jgroups.stack}-BR-1"/>
+  </target> 
+
+  <target name="tests-clustered-classloader-leak">
+
+	 <mkdir dir="${build.reports}"/>
+	 <mkdir dir="${build.testlog}"/>
+    
+  	 <create-cluster-node conf="cluster-classloader-leak-0"/>
+    <create-cluster-node conf="cluster-classloader-leak-1"/>
+	 
+  	 <server:start name="cluster-classloader-leak-0"/>
+    <server:start name="cluster-classloader-leak-1"/>
+  	
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="cluster.classloader.leak.includes"/>
+      <param name="jboss-junit-configuration" value="ClusteredClassLoaderLeak"/>
+      <param name="jbosstest.cluster.node0.config" value="cluster-classloader-leak-0"/>
+      <param name="jbosstest.cluster.node1.config" value="cluster-classloader-leak-1"/>
+    </antcall>
+   
+    <server:stop name="cluster-classloader-leak-0"/>
+    <server:stop name="cluster-classloader-leak-1"/>
+	    
+  </target>   
+
+  <target name="tests-clustered-profileservice">
+  	  <antcall target="run-clustered-profileservice-tests" inheritrefs="true">
+      <param name="jboss.default.jgroups.stack" value="udp"/>
+      <param name="baseconf" value="all"/>
+  	  </antcall>
+  </target>
+	
+  <target name="run-clustered-profileservice-tests">
+  	 
+  	 <!-- Default jgroups stack to use -->
+  	 <property name="jboss.default.jgroups.stack" value="udp"/>
+  	 <!-- Default configuration to build the test config from -->
+  	 <property name="baseconf" value="all"/>
+  	    
+	 <mkdir dir="${build.reports}"/>
+	 <mkdir dir="${build.testlog}"/>
+	    
+  	 <create-profileservice-config conf="cluster-profilesvc-0" baseconf="${baseconf}"/>    
+	 <create-profileservice-config conf="cluster-profilesvc-1" baseconf="${baseconf}"/>
+		 
+  	 <server:start name="cluster-profilesvc-0"/>
+     <server:start name="cluster-profilesvc-1"/>
+	  	
+     <antcall target="tests-clustering-unit">
+	      <param name="cluster.includes.refid" value="cluster.profileservice.includes"/>
+	      <param name="jboss-junit-configuration" value="Default-${jboss.default.jgroups.stack}"/>
+	      <param name="jbosstest.cluster.node0.config" value="cluster-profilesvc-0"/>
+	      <param name="jbosstest.cluster.node1.config" value="cluster-profilesvc-1"/>
+    </antcall>
+	   
+    <server:stop name="cluster-profilesvc-0"/>
+    <server:stop name="cluster-profilesvc-1"/>
+		    
+  </target> 
+
+  <target name="tests-clustered-ustxsticky">
+     <antcall target="run-clustered-ustxsticky-tests" inheritrefs="true">
+	    <param name="jboss.default.jgroups.stack" value="udp"/>
+	    <param name="baseconf" value="all"/>
+     	</antcall>
+  	</target>
+
+  <target name="run-clustered-ustxsticky-tests">
+  	       
+  	 <mkdir dir="${build.reports}"/>
+    <mkdir dir="${build.testlog}"/>
+      
+    <create-ustxsticky-config newconf="cluster-ustxsticky-0" baseconf="${baseconf}" />    
+    <create-ustxsticky-config newconf="cluster-ustxsticky-1" baseconf="${baseconf}" />
+     
+    <server:start name="cluster-ustxsticky-0"/>
+    <server:start name="cluster-ustxsticky-1"/>
+      
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="cluster.ustxsticky.includes"/>
+      <param name="jboss-junit-configuration" value="Default-${jboss.default.jgroups.stack}"/>
+      <param name="jbosstest.cluster.node0.config" value="cluster-ustxsticky-0"/>
+      <param name="jbosstest.cluster.node1.config" value="cluster-ustxsticky-1"/>
+    </antcall>
+     
+    <server:stop name="cluster-ustxsticky-0"/>
+    <server:stop name="cluster-ustxsticky-1"/>
+    
+  </target> 
+  
+  <target name="tests-clustering-cluster-ec2">
+
+    <antcall target="tests-clustering">
+      <param name="jboss.default.jgroups.stack" value="tcp"/>
+      <param name="newconf-src" value="cluster-udp"/>
+      <param name="baseconf" value="cluster-ec2"/>
+      <param name="cluster.excludes.refid" value="ec2.excludes"/>
+    </antcall>
+    <antcall target="run-clustered-ustxsticky-tests">
+      <param name="jboss.default.jgroups.stack" value="tcp"/>
+      <param name="baseconf" value="cluster-ec2"/>
+      <param name="cluster.excludes.refid" value="ec2.excludes"/>
+    </antcall>
+    <antcall target="run-clustered-profileservice-tests">
+      <param name="jboss.default.jgroups.stack" value="tcp"/>
+      <param name="baseconf" value="cluster-ec2"/>
+      <param name="cluster.excludes.refid" value="ec2.excludes"/>
+    </antcall>
+    <antcall target="run-tomcat-sso-clustered-tests">
+      <param name="jboss.default.jgroups.stack" value="tcp"/>
+      <param name="baseconf" value="cluster-ec2"/>
+      <param name="cluster.excludes.refid" value="ec2.excludes"/>
+    </antcall>
+
+  </target>
+
+  <target name="tests-clustering-mod_cluster-ec2">
+
+    <antcall target="tests-clustering">
+      <param name="jboss.default.jgroups.stack" value="tcp"/>
+      <param name="newconf-src" value="cluster-udp"/>
+      <param name="baseconf" value="mod_cluster-ec2"/>
+      <param name="cluster.excludes.refid" value="ec2.excludes"/>
+    </antcall>
+    <antcall target="tests-mod_cluster">
+      <param name="jboss.default.jgroups.stack" value="tcp"/>
+      <param name="baseconf" value="mod_cluster-ec2"/>
+      <param name="cluster.excludes.refid" value="ec2.excludes"/>
+    </antcall>
+    <antcall target="run-clustered-ustxsticky-tests">
+      <param name="jboss.default.jgroups.stack" value="tcp"/>
+      <param name="baseconf" value="mod_cluster-ec2"/>
+      <param name="cluster.excludes.refid" value="ec2.excludes"/>
+    </antcall>
+    <antcall target="run-clustered-profileservice-tests">
+      <param name="jboss.default.jgroups.stack" value="tcp"/>
+      <param name="baseconf" value="mod_cluster-ec2"/>
+      <param name="cluster.excludes.refid" value="ec2.excludes"/>
+    </antcall>
+    <antcall target="run-tomcat-sso-clustered-tests">
+      <param name="jboss.default.jgroups.stack" value="tcp"/>
+      <param name="baseconf" value="mod_cluster-ec2"/>
+      <param name="cluster.excludes.refid" value="ec2.excludes"/>
+    </antcall>
+
+  </target>
+	
+	<!--
+	  This target gets around the fact that we cannot easily create a set of related 
+	  cluster configs using a single test-configs subdirectory. Rather than pollute the
+	  test configs directory and complicate maintenance, this target makes the copies 
+	  dynamically from the single copy test-configs/cluster-tcpgossip-{0,1}.
+	-->
+	<target name="create-tcpgossip-test-configs-directories" 
+			description="Create the necessary copies of test-configs for the server configurations">
+		
+		<!-- deploy the gossiprouter MBean into cluster-tcpgossip-0 only -->
+		<copy todir="${build.resources}/test-configs/cluster-tcpgossip-0/deploy">
+		   <fileset dir="${build.lib}">
+		     <include name="gossiprouter-service.sar"/> 
+		   </fileset>
+		</copy>
+		
+		<!-- create replacement files for cluster-field-tcpgossip-{0,1} -->
+		<copy todir="${build.resources}/test-configs/cluster-field-tcpgossip-0">
+		   <fileset dir="${build.resources}/test-configs/cluster-tcpgossip-0"/>
+		</copy>
+		<copy todir="${build.resources}/test-configs/cluster-field-tcpgossip-1">
+		   <fileset dir="${build.resources}/test-configs/cluster-tcpgossip-1"/>
+		</copy>
+
+		<!-- create replacement files for cluster-tcpgossip-SYNC-{0,1} -->
+		<copy todir="${build.resources}/test-configs/cluster-tcpgossip-SYNC-0">
+		   <fileset dir="${build.resources}/test-configs/cluster-tcpgossip-0"/>
+		</copy>
+		<copy todir="${build.resources}/test-configs/cluster-tcpgossip-SYNC-1">
+		   <fileset dir="${build.resources}/test-configs/cluster-tcpgossip-1"/>
+		</copy>
+
+		<!-- create replacement files for cluster-field-tcpgossip-SYNC-{0,1} -->
+		<copy todir="${build.resources}/test-configs/cluster-field-tcpgossip-SYNC-0">
+		   <fileset dir="${build.resources}/test-configs/cluster-tcpgossip-0"/>
+		</copy>
+		<copy todir="${build.resources}/test-configs/cluster-field-tcpgossip-SYNC-1">
+		   <fileset dir="${build.resources}/test-configs/cluster-tcpgossip-1"/>
+		</copy>
+
+		<!-- create replacement files for cluster-tcpgossip-BR-{0,1} -->
+		<copy todir="${build.resources}/test-configs/cluster-tcpgossip-BR-0">
+		   <fileset dir="${build.resources}/test-configs/cluster-tcpgossip-0"/>
+		</copy>
+		<copy todir="${build.resources}/test-configs/cluster-tcpgossip-BR-1">
+		   <fileset dir="${build.resources}/test-configs/cluster-tcpgossip-1"/>
+		</copy>
+
+		<!-- create replacement files for cluster-field-tcpgossip-BR-{0,1} -->
+		<copy todir="${build.resources}/test-configs/cluster-field-tcpgossip-BR-0">
+		   <fileset dir="${build.resources}/test-configs/cluster-tcpgossip-0"/>
+		</copy>
+		<copy todir="${build.resources}/test-configs/cluster-field-tcpgossip-BR-1">
+		   <fileset dir="${build.resources}/test-configs/cluster-tcpgossip-1"/>
+		</copy>		
+	</target>
+
+   <target name="tests-clustered-sso"
+     description="Tomcat tests requiring clustered SSO configured">
+   	<antcall target="run-tomcat-sso-clustered-tests" inheritrefs="true">
+   	    <param name="jboss.default.jgroups.stack" value="udp"/>
+   	    <param name="baseconf" value="all"/>
+      </antcall>
+   </target>
+
+   <target name="run-tomcat-sso-clustered-tests"
+     description="Tomcat tests requiring clustered SSO configured">
+    
+    <!-- Create the sso enabled tomcat config starting with the all config -->
+    <create-cluster-sso-node newconf="tomcat-sso-cluster0" baseconf="${baseconf}"/>
+    <create-cluster-sso-node newconf="tomcat-sso-cluster1" baseconf="${baseconf}"/>
+  
+    <echo message="Modifying the node0 and node1 Tomcat configuration for REPL_SYNC/UseJK"/>
+    <http-cluster-node-config-change conf="tomcat-sso-cluster0"/>
+    <http-cluster-node-config-change conf="tomcat-sso-cluster1"/>
+
+   
+    <server:start name="tomcat-sso-cluster0"/>
+    <server:start name="tomcat-sso-cluster1"/>
+
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="tc-sso-clustered.includes"/>
+      <param name="jboss-junit-configuration" value="Default-${jboss.default.jgroups.stack}"/>
+    </antcall>
+
+    <server:stop name="tomcat-sso-cluster0"/>
+    <server:stop name="tomcat-sso-cluster1"/>
+
+    <!-- BuddyReplication enabled tests are eliminated as that's not a valid usage -->
+   </target>
+		
+	
+   <!-- Executes a set of tests in a clustered environment -->  
+   <target name="tests-clustering-unit">
+   	
+   	<property name="cluster.excludes.refid" value="empty.patternset"/>
+   	
+      <mkdir dir="${build.reports}"/>
+      <mkdir dir="${build.testlog}"/>
+      <junit dir="${module.output}"
+         printsummary="${junit.printsummary}"
+         haltonerror="${junit.haltonerror}"
+         haltonfailure="${junit.haltonfailure}"
+         fork="${junit.fork}"
+         timeout="${junit.timeout}"
+         jvm="${junit.jvm}"
+         failureProperty="tests.failure">
+
+         <sysproperty key="java.net.preferIPv4Stack" value="true"/>
+         
+         <sysproperty key="jboss.internal-server.serverroot" value="${jboss.dist}/server"/>
+         <sysproperty key="jbosstest.deploy.dir" file="${build.lib}"/>
+         <sysproperty key="jbosstest.cluster.node0" value="${node0}"/>
+         <sysproperty key="jbosstest.cluster.node0.http.url" value="${node0.http.url}"/>
+         <sysproperty key="jbosstest.cluster.node0.jndi.url" value="${node0.jndi.url}"/>
+         <sysproperty key="jbosstest.cluster.node0.hajndi.url" value="${node0.hajndi.url}"/>
+         <sysproperty key="jbosstest.cluster.node0.serverroot" value="${jboss.dist}/server/${jbosstest.cluster.node0.config}"/>
+         <sysproperty key="jbosstest.cluster.node1" value="${node1}"/>
+         <sysproperty key="jbosstest.cluster.node1.http.url" value="${node1.http.url}"/>
+         <sysproperty key="jbosstest.cluster.node1.jndi.url" value="${node1.jndi.url}"/>
+         <sysproperty key="jbosstest.cluster.node1.hajndi.url" value="${node1.hajndi.url}"/>
+         <sysproperty key="jbosstest.cluster.node1.serverroot" value="${jboss.dist}/server/${jbosstest.cluster.node1.config}"/>
+         <sysproperty key="build.testlog" value="${build.testlog}"/>
+         <sysproperty key="log4j.configuration" value="file:${build.resources}/log4j.xml"/>
+         <sysproperty key="jboss.default.jgroups.stack" value="${jboss.default.jgroups.stack}"/>
+         <!-- Pass along any jbosstest.* system properties -->
+         <syspropertyset>
+            <propertyref prefix="jbosstest."/>
+         </syspropertyset>
+
+         <!--Lets pass some parameters from local.properties file as system properties-->
+         <syspropertyset>
+            <propertyref prefix="org.apache."/>
+         </syspropertyset>
+         <syspropertyset>
+            <propertyref prefix="apache"/>
+         </syspropertyset>
+         <syspropertyset>
+            <propertyref prefix="node"/>
+         </syspropertyset>
+
+         <!--jvmarg value="${junit.jvm.options}"/>
+         <jvmarg value="-Xrunjdwp:transport=dt_socket,address=8789,server=y,suspend=y"/>
+         <jvmarg value="-Djava.compiler=NONE"/>
+         <jvmarg value="-Xdebug"/>
+         <jvmarg value="-Xnoagent"/-->
+
+         <classpath>
+            <pathelement location="${build.classes}"/>
+            <pathelement location="${build.resources}"/>
+            <path refid="tests.classpath"/>
+         </classpath>
+
+         <!-- definition of the property for keeping results between configuration -->
+         <sysproperty key="jboss-junit-configuration" value="${jboss-junit-configuration}"/>
+         <formatter classname="org.jboss.ant.taskdefs.XMLJUnitMultipleResultFormatter" usefile="${junit.formatter.usefile}" extension="-${jboss-junit-configuration}.xml" />
+
+         <batchtest todir="${build.reports}"
+            haltonerror="${junit.batchtest.haltonerror}"
+            haltonfailure="${junit.batchtest.haltonfailure}"
+            fork="${junit.batchtest.fork}">
+
+            <fileset dir="${build.classes}">
+               <patternset refid="${cluster.includes.refid}"/>
+               <patternset refid="${cluster.excludes.refid}"/>
+            	<patternset refid="badtest.excludes"/>
+            </fileset>
+         </batchtest>
+      </junit>
+   </target>
+ 
+   <!-- Launches a test assuming the AS instances are already running -->  
+   <target name="one-cluster-test-nostart" if="test">
+
+      <property name="jboss.default.jgroups.stack" value="udp"/>
+
+      <echo message="Going to call target tests-clustering-unit for ${test}"/>
+
+      <antcall target="tests-clustering-unit">
+        <param name="cluster.includes.refid" value="one.test.includes"/>
+        <param name="jboss-junit-configuration" value="Default-${jboss.default.jgroups.stack}"/>
+        <param name="jbosstest.cluster.web.cache.config" value="standard-session-cache"/>
+        <param name="jbosstest.cluster.node0.config" value="cluster-${jboss.default.jgroups.stack}-0"/>
+        <param name="jbosstest.cluster.node1.config" value="cluster-${jboss.default.jgroups.stack}-1"/>
+      </antcall>
+      
+   </target>  
+
+   <target name="one-cluster-test-nostart-field" if="test">
+
+      <property name="jboss.default.jgroups.stack" value="udp"/>
+
+      <echo message="Going to call target tests-clustering-unit for ${test}"/>
+
+      <antcall target="tests-clustering-unit">
+        <param name="cluster.includes.refid" value="one.test.includes"/>
+        <param name="jboss-junit-configuration" value="Default-${jboss.default.jgroups.stack}"/>
+        <param name="jbosstest.cluster.web.cache.config" value="field-granularity-session-cache"/>
+        <param name="jbosstest.cluster.web.cache.pojo" value="true"/>
+        <param name="jbosstest.cluster.node0.config" value="cluster-field-${jboss.default.jgroups.stack}-0"/>
+        <param name="jbosstest.cluster.node1.config" value="cluster-field-${jboss.default.jgroups.stack}-1"/>
+      </antcall>
+      
+   </target>
+
+   <target name="one-cluster-test" if="test">
+
+    <property name="jboss.default.jgroups.stack" value="udp"/>
+
+    <antcall target="tests-clustering-configure" inheritRefs="true"/>
+
+    <server:start name="cluster-${jboss.default.jgroups.stack}-0"/>
+    <server:start name="cluster-${jboss.default.jgroups.stack}-1"/>
+
+    <echo message="Going to call target tests-clustering-unit for ${test}"/>
+
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="one.test.includes"/>
+      <param name="jboss-junit-configuration" value="Default-${jboss.default.jgroups.stack}"/>
+      <param name="jbosstest.cluster.web.cache.config" value="standard-session-cache"/>
+      <param name="jbosstest.cluster.node0.config" value="cluster-${jboss.default.jgroups.stack}-0"/>
+      <param name="jbosstest.cluster.node1.config" value="cluster-${jboss.default.jgroups.stack}-1"/>
+    </antcall>
+
+    <server:stop name="cluster-${jboss.default.jgroups.stack}-0"/>
+    <server:stop name="cluster-${jboss.default.jgroups.stack}-1"/>
+   </target>
+
+   <target name="one-cluster-test-field" if="test">
+
+    <property name="jboss.default.jgroups.stack" value="udp"/>
+
+    <antcall target="tests-clustering-field-configure" inheritRefs="true"/>
+
+    <server:start name="cluster-field-${jboss.default.jgroups.stack}-0"/>
+    <server:start name="cluster-field-${jboss.default.jgroups.stack}-1"/>
+
+    <echo message="Going to call target tests-clustering-unit for ${test}"/>
+
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="one.test.includes"/>
+      <param name="jboss-junit-configuration" value="Default-${jboss.default.jgroups.stack}"/>
+      <param name="jbosstest.cluster.web.cache.config" value="field-granularity-session-cache"/>
+      <param name="jbosstest.cluster.web.cache.pojo" value="true"/>
+      <param name="jbosstest.cluster.node0.config" value="cluster-field-${jboss.default.jgroups.stack}-0"/>
+      <param name="jbosstest.cluster.node1.config" value="cluster-field-${jboss.default.jgroups.stack}-1"/>
+    </antcall>
+
+    <server:stop name="cluster-field-${jboss.default.jgroups.stack}-0"/>
+    <server:stop name="cluster-field-${jboss.default.jgroups.stack}-1"/>
+   </target>
+
+   <target name="one-cluster-test-br" if="test">
+
+    <property name="jboss.default.jgroups.stack" value="udp"/>
+
+    <antcall target="tests-clustering-br-configure" inheritRefs="true"/>
+
+    <server:start name="cluster-${jboss.default.jgroups.stack}-BR-0"/>
+    <server:start name="cluster-${jboss.default.jgroups.stack}-BR-1"/>
+
+    <echo message="Going to call target tests-clustering-unit for ${test}"/>
+
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="one.test.includes"/>
+      <param name="jboss-junit-configuration" value="BuddyReplEnabled-${jboss.default.jgroups.stack}"/>
+      <param name="jbosstest.cluster.web.cache.config" value="br-enabled-sync-standard-session-cache"/>
+      <param name="jbosstest.cluster.web.cache.br" value="true"/>
+      <param name="jbosstest.cluster.node0.config" value="cluster-${jboss.default.jgroups.stack}-BR-0"/>
+      <param name="jbosstest.cluster.node1.config" value="cluster-${jboss.default.jgroups.stack}-BR-1"/>
+    </antcall>
+
+    <server:stop name="cluster-${jboss.default.jgroups.stack}-BR-0"/>
+    <server:stop name="cluster-${jboss.default.jgroups.stack}-BR-1"/>
+   </target>
+
+   <target name="one-cluster-test-field-br" if="test">
+
+    <property name="jboss.default.jgroups.stack" value="udp"/>
+
+    <antcall target="tests-clustering-field-br-configure" inheritRefs="true"/>
+
+    <server:start name="cluster-field-${jboss.default.jgroups.stack}-BR-0"/>
+    <server:start name="cluster-field-${jboss.default.jgroups.stack}-BR-1"/>
+
+    <echo message="Going to call target tests-clustering-unit for ${test}"/>
+
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="one.test.includes"/>
+      <param name="jboss-junit-configuration" value="BuddyReplEnabled-${jboss.default.jgroups.stack}"/>
+      <param name="jbosstest.cluster.web.cache.config" value="br-enabled-sync-field-granularity-session-cache"/>
+      <param name="jbosstest.cluster.web.cache.br" value="true"/>
+      <param name="jbosstest.cluster.web.cache.pojo" value="true"/>
+      <param name="jbosstest.cluster.node0.config" value="cluster-field-${jboss.default.jgroups.stack}-BR-0"/>
+      <param name="jbosstest.cluster.node1.config" value="cluster-field-${jboss.default.jgroups.stack}-BR-1"/>
+    </antcall>
+
+    <server:stop name="cluster-field-${jboss.default.jgroups.stack}-BR-0"/>
+    <server:stop name="cluster-field-${jboss.default.jgroups.stack}-BR-1"/>
+   </target>
+
+  <!-- Runs only the non-http tests -->
+  <target name="tests-clustering-non-http">
+
+   <antcall target="tests-clustering-configure" inheritRefs="true"/>
+
+   <server:start name="cluster-${jboss.default.jgroups.stack}-0"/>
+   <server:start name="cluster-${jboss.default.jgroups.stack}-1"/>
+
+   <echo message="Going to call target tests-clustering-unit for ${test}"/>
+
+   <antcall target="tests-clustering-unit">
+     <param name="cluster.includes.refid" value="cluster.defaultcfg.non.http.includes"/>
+     <param name="jboss-junit-configuration" value="Default-${jboss.default.jgroups.stack}"/>
+     <param name="jbosstest.cluster.node0.config" value="cluster-${jboss.default.jgroups.stack}-0"/>
+     <param name="jbosstest.cluster.node1.config" value="cluster-${jboss.default.jgroups.stack}-1"/>
+   </antcall>
+
+   <server:stop name="cluster-${jboss.default.jgroups.stack}-0"/>
+   <server:stop name="cluster-${jboss.default.jgroups.stack}-1"/>
+  </target>
+
+  <!-- Runs only the basic http tests (ASYNC, no BR) -->
+  <target name="tests-clustering-http">
+
+   <antcall target="tests-clustering-configure" inheritRefs="true"/>
+
+   <server:start name="cluster-${jboss.default.jgroups.stack}-0"/>
+   <server:start name="cluster-${jboss.default.jgroups.stack}-1"/>
+
+   <antcall target="tests-clustering-unit">
+     <param name="cluster.includes.refid" value="cluster.defaultcfg.http.includes"/>
+     <param name="jboss-junit-configuration" value="Default-${jboss.default.jgroups.stack}"/>
+     <param name="jbosstest.cluster.web.cache.config" value="standard-session-cache"/>
+     <param name="jbosstest.cluster.node0.config" value="cluster-${jboss.default.jgroups.stack}-0"/>
+     <param name="jbosstest.cluster.node1.config" value="cluster-${jboss.default.jgroups.stack}-1"/>
+   </antcall>
+
+   <server:stop name="cluster-${jboss.default.jgroups.stack}-0"/>
+   <server:stop name="cluster-${jboss.default.jgroups.stack}-1"/>
+  </target>
+
+  <!-- Runs only the basic http tests (ASYNC, with BR) -->
+  <target name="tests-clustering-http-br">
+
+  	<antcall target="tests-clustering-br-configure" inheritRefs="true"/>
+
+   <server:start name="cluster-${jboss.default.jgroups.stack}-BR-0"/>
+   <server:start name="cluster-${jboss.default.jgroups.stack}-BR-1"/>
+
+   <antcall target="tests-clustering-unit">
+     <param name="cluster.includes.refid" value="cluster.defaultcfg.http.includes"/>
+     <param name="jboss-junit-configuration" value="BuddyReplEnabled-${jboss.default.jgroups.stack}"/>
+     <param name="jbosstest.cluster.web.cache.config" value="br-enabled-sync-standard-session-cache"/>
+     <param name="jbosstest.cluster.web.cache.br" value="true"/>
+     <param name="jbosstest.cluster.node0.config" value="cluster-${jboss.default.jgroups.stack}-BR-0"/>
+     <param name="jbosstest.cluster.node1.config" value="cluster-${jboss.default.jgroups.stack}-BR-1"/>
+   </antcall>
+
+   <server:stop name="cluster-${jboss.default.jgroups.stack}-BR-0"/>
+   <server:stop name="cluster-${jboss.default.jgroups.stack}-BR-1"/>
+  </target>
+
+  <!-- Runs only the basic field tests (ASYNC, no BR) -->
+  <target name="tests-clustering-field">
+
+   <antcall target="tests-clustering-field-configure" inheritRefs="true"/>
+
+   <server:start name="cluster-field-${jboss.default.jgroups.stack}-0"/>
+  	<server:start name="cluster-field-${jboss.default.jgroups.stack}-1"/>
+
+  	<antcall target="tests-clustering-unit">
+  	  <param name="cluster.includes.refid" value="cluster.defaultcfg.http.field.includes"/>
+  	  <param name="jboss-junit-configuration" value="Default-${jboss.default.jgroups.stack}"/>
+     <param name="jbosstest.cluster.web.cache.config" value="field-granularity-session-cache"/>
+     <param name="jbosstest.cluster.web.cache.pojo" value="true"/>
+  	  <param name="jbosstest.cluster.node0.config" value="cluster-field-${jboss.default.jgroups.stack}-0"/>
+  	  <param name="jbosstest.cluster.node1.config" value="cluster-field-${jboss.default.jgroups.stack}-1"/>
+  	</antcall>
+
+  	<server:stop name="cluster-field-${jboss.default.jgroups.stack}-0"/>
+  	<server:stop name="cluster-field-${jboss.default.jgroups.stack}-1"/>
+  	
+  </target>
+
+  <!-- Runs only the basic field tests (SYNC, with BR) -->
+  <target name="tests-clustering-field-br">
+
+   <antcall target="tests-clustering-field-br-configure" inheritRefs="true"/>
+
+   <server:start name="cluster-field-${jboss.default.jgroups.stack}-BR-0"/>
+   <server:start name="cluster-field-${jboss.default.jgroups.stack}-BR-1"/>
+
+   <antcall target="tests-clustering-unit">
+     <param name="cluster.includes.refid" value="cluster.defaultcfg.http.field.includes"/>
+     <param name="jboss-junit-configuration" value="BuddyReplEnabled-${jboss.default.jgroups.stack}"/>
+     <param name="jbosstest.cluster.web.cache.config" value="br-enabled-sync-field-granularity-session-cache"/>
+     <param name="jbosstest.cluster.web.cache.br" value="true"/>
+     <param name="jbosstest.cluster.web.cache.pojo" value="true"/>
+     <param name="jbosstest.cluster.node0.config" value="cluster-field-${jboss.default.jgroups.stack}-BR-0"/>
+     <param name="jbosstest.cluster.node1.config" value="cluster-field-${jboss.default.jgroups.stack}-BR-1"/>
+   </antcall>
+
+   <server:stop name="cluster-field-${jboss.default.jgroups.stack}-BR-0"/>
+   <server:stop name="cluster-field-${jboss.default.jgroups.stack}-BR-1"/>
+	   
+  </target>
+
+  <target name="tests-mod_cluster">
+
+    <mkdir dir="${build.reports}"/>
+    <mkdir dir="${build.testlog}"/>
+
+    <create-cluster-node-from-baseconf conf="mod_cluster-ec2-0" baseconf="${baseconf}"/>
+    <create-cluster-node-from-baseconf conf="mod_cluster-ec2-1" baseconf="${baseconf}"/>
+
+    <server:start name="mod_cluster-ec2-0"/>
+    <server:start name="mod_cluster-ec2-1"/>
+
+    <antcall target="tests-clustering-unit">
+      <param name="cluster.includes.refid" value="cluster.mod_cluster.includes"/>
+      <param name="jboss-junit-configuration" value="Default-${jboss.default.jgroups.stack}"/>
+      <param name="jbosstest.cluster.node0.config" value="mod_cluster-ec2-0"/>
+      <param name="jbosstest.cluster.node1.config" value="mod_cluster-ec2-1"/>
+    </antcall>
+
+    <server:stop name="mod_cluster-ec2-0"/>
+    <server:stop name="mod_cluster-ec2-1"/>
+
+  </target> 
+
+</project>

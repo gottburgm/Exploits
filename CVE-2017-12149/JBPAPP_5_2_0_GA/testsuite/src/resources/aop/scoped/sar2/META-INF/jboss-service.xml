@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+   <loader-repository>
+   	aop.loading:loader=scope2
+      <loader-repository-config>java2ParentDelegation=true</loader-repository-config> 
+   </loader-repository>
+	<mbean code="org.jboss.test.aop.scoped.ScopedTester" name="jboss.aop:name=ScopedTester2">
+	   <attribute name="ExpectedInterceptorValue">12</attribute>
+	   <attribute name="ExpectedAspectValue">22</attribute>
+	   <attribute name="MetadataSuffix">2</attribute>
+	</mbean>
+</server>

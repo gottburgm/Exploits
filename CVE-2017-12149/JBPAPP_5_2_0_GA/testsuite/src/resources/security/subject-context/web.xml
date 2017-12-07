@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2006, Your Corporation. All Rights Reserved.
+  -->
+
+<!DOCTYPE web-app PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+   "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+   <description>WebApp Integration Tests</description>
+
+   <servlet>
+      <servlet-name>RunAsServlet</servlet-name>
+      <servlet-class>org.jboss.test.security.servlets.RunAsServlet</servlet-class>
+      <run-as>
+         <role-name>identitySubstitutionCaller</role-name>
+      </run-as>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>RunAsServlet</servlet-name>
+      <url-pattern>/restricted/RunAsServlet</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+      <servlet-name>RunAsServlet</servlet-name>
+      <url-pattern>/unrestricted/RunAsServlet</url-pattern>
+   </servlet-mapping>
+
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Restricted</web-resource-name>
+         <url-pattern>/restricted/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+         <role-name>webUser</role-name>
+      </auth-constraint>
+   </security-constraint>
+
+   <login-config>
+      <auth-method>BASIC</auth-method>
+      <realm-name>JBossTest Servlets</realm-name>
+   </login-config>
+
+   <security-role>
+      <role-name>identitySubstitutionCaller</role-name>
+   </security-role>
+   <security-role>
+      <role-name>webUser</role-name>
+   </security-role>
+   <security-role>
+      <role-name>extraRunAsRole</role-name>
+   </security-role>
+
+</web-app>

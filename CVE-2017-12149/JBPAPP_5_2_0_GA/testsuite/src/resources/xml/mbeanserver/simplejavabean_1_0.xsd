@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A prototype xsd schema for javabeans
+$Id: simplejavabean_1_0.xsd 42135 2006-03-13 16:34:36Z starksm $
+ -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   targetNamespace="urn:jboss:simplejavabean:1.0"
+   xmlns="urn:jboss:simplejavabean:1.0"
+   elementFormDefault="qualified"
+   attributeFormDefault="unqualified"
+   version="1.0"
+>
+   <xsd:annotation>
+      <xsd:documentation>
+         <![CDATA[
+         A schema for constructing javabeans from the element attributes
+         using PropertyEditors.
+
+         <javabean xmlns="urn:jboss:bean-deployer:2.0"
+                   class="com.acme.MyJavaBean"
+                   property1="value1" property2="value2" ... />
+         ...
+         ]]>
+      </xsd:documentation>
+   </xsd:annotation>
+
+   <xsd:element name="javabean" type="javabeanType">
+      <xsd:annotation>
+         <xsd:documentation>
+           <![CDATA[
+           The root of the javabean document
+           ]]>
+         </xsd:documentation>
+      </xsd:annotation>
+   </xsd:element>
+
+   <xsd:complexType name="javabeanType">
+      <xsd:annotation>
+         <xsd:documentation>
+           <![CDATA[
+           The javabean contains a set of properties.
+           
+           e.g.
+           <javabean class="com.acme.SomeJavaBean">
+              <property .../>
+              <property .../>    
+           </javabean>
+           ]]>
+         </xsd:documentation>
+      </xsd:annotation>
+      <xsd:attribute name="class" type="xsd:token" use="required"/>
+      <xsd:anyAttribute />
+   </xsd:complexType>
+
+</xsd:schema>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+   "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+   <distributable/>
+   
+   <!-- Registers an mbean the test driver can use to check the cache state -->
+   <listener>
+  	  <listener-class>org.jboss.test.classloader.leak.web.ClassloaderLeakContextListener</listener-class>
+   </listener>
+
+   <servlet>
+      <servlet-name>SimpleServlet</servlet-name>
+      <servlet-class>org.jboss.test.classloader.leak.web.SimpleServlet</servlet-class>
+   </servlet>
+   
+   <servlet>
+      <servlet-name>EJBServlet</servlet-name>
+      <servlet-class>org.jboss.test.classloader.leak.web.Ejb3Servlet</servlet-class>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>SimpleServlet</servlet-name>
+      <url-pattern>/SimpleServlet</url-pattern>
+   </servlet-mapping>
+
+   <servlet-mapping>
+      <servlet-name>EJBServlet</servlet-name>
+      <url-pattern>/EJBServlet</url-pattern>
+   </servlet-mapping>
+   
+   <!-- FIXME: get ENC bindings working -->
+   <!--   
+   <ejb-ref>
+       <ejb-ref-name>ejb/ClassloaderLeakEJB3SLSB</ejb-ref-name>
+       <ejb-ref-type>Session</ejb-ref-type>
+       <home>org.jboss.test.classloader.leak.ejb3.Ejb3StatelessSession</home>
+       <remote>org.jboss.test.classloader.leak.ejb3.Ejb3StatelessSession</remote>
+       <ejb-link>Ejb3StatelessSessionBean</ejb-link>
+   </ejb-ref>
+      
+   <ejb-ref>
+       <ejb-ref-name>ejb/ClassloaderLeakEJB3SFSB</ejb-ref-name>
+       <ejb-ref-type>Session</ejb-ref-type>
+       <home>org.jboss.test.classloader.leak.ejb3.Ejb3StatefulSession</home>
+       <remote>org.jboss.test.classloader.leak.ejb3.Ejb3StatefulSession</remote>
+       <ejb-link>Ejb3StatefulSessionBean</ejb-link>
+   </ejb-ref>
+   -->
+</web-app>
+

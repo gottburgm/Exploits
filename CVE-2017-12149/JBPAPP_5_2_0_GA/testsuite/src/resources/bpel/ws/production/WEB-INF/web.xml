@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" version="2.4"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+                      http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+  <servlet>
+    <servlet-name>callerServlet</servlet-name>
+    <!-- service implementation bean class -->
+    <servlet-class>org.jboss.test.bpel.ws.production.HelloPT_Impl</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>messagerServlet</servlet-name>
+    <servlet-class>org.jbpm.bpel.service.messager.MessagerServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>callerServlet</servlet-name>
+    <url-pattern>/caller</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>messagerServlet</servlet-name>
+    <url-pattern>/messager</url-pattern>
+  </servlet-mapping>
+  
+  <resource-ref>
+    <res-ref-name>jms/ConnectionFactory</res-ref-name>
+    <res-type>javax.jms.ConnectionFactory</res-type>
+    <res-auth>Container</res-auth>
+    <res-sharing-scope>Shareable</res-sharing-scope>
+  </resource-ref>
+  
+  <message-destination-ref>
+    <message-destination-ref-name>jms/callerQueue</message-destination-ref-name>
+    <message-destination-type>javax.jms.Queue</message-destination-type>
+    <message-destination-usage>ConsumesProduces</message-destination-usage>
+  </message-destination-ref>
+    
+</web-app>

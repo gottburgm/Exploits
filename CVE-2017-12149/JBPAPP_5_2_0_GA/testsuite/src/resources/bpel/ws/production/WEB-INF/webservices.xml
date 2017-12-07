@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<webservices version="1.1" xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+                      http://java.sun.com/xml/ns/j2ee/j2ee_web_services_1_1.xsd">
+
+  <webservice-description>
+
+    <!-- descriptive name for the service -->
+    <webservice-description-name>Hello World Service</webservice-description-name>
+    <!-- WSDL service file -->
+    <wsdl-file>WEB-INF/wsdl/service.wsdl</wsdl-file>
+    <!-- Java<->XML mapping file -->
+    <jaxrpc-mapping-file>WEB-INF/jaxrpc-mapping.xml</jaxrpc-mapping-file>
+
+    <port-component>
+
+      <!-- logical name for the port (unique within the module) -->
+      <port-component-name>callerPort</port-component-name>
+      <!-- WSDL port element (in WSDL implementation file) -->
+      <wsdl-port xmlns:portNS="http://jbpm.org/examples/hello">portNS:callerPort</wsdl-port>
+      <!-- service endpoint interface class (step 4.2) -->
+      <service-endpoint-interface>org.jboss.test.bpel.ws.production.HelloPT</service-endpoint-interface>
+      <!-- associated servlet (in web-app descriptor) -->
+      <service-impl-bean>
+        <servlet-link>callerServlet</servlet-link>
+      </service-impl-bean>
+
+      <handler>
+
+        <!-- logical name for the handler (unique within the module) -->
+        <handler-name>callerHandler</handler-name>
+        <!-- handler class (in BPEL extension library) -->
+        <handler-class>org.jbpm.bpel.service.messager.PortHandler</handler-class>
+        
+        <init-param>
+          <description>name of the associated partner link</description>
+          <param-name>portName</param-name>
+          <param-value>caller</param-value>
+        </init-param>
+
+      </handler>
+
+    </port-component>
+
+  </webservice-description>
+
+</webservices>

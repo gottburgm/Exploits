@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Example for the http session fine-grained replication using TreeCacheAop.
+-->
+<aop>
+  <prepare expr="field(* $instanceof{org.jboss.test.cluster.web.aop.Student}->*)" />
+
+  <prepare expr="field(* $instanceof{org.jboss.test.cluster.web.aop.Address}->*)" />
+
+  <prepare expr="field(* $instanceof{org.jboss.test.cluster.web.aop.Person}->*)" />
+
+   <bind pointcut="set(* org.jboss.test.cluster.web.aop.Student->*)">
+     <interceptor class="org.jboss.aspects.patterns.observable.SubjectInterceptor"/>
+   </bind>
+
+   <bind pointcut="set(* org.jboss.test.cluster.web.aop.Address->*)">
+     <interceptor class="org.jboss.aspects.patterns.observable.SubjectInterceptor"/>
+   </bind>
+
+   <bind pointcut="set(* org.jboss.test.cluster.web.aop.Person->*)">
+     <interceptor class="org.jboss.aspects.patterns.observable.SubjectInterceptor"/>
+   </bind>
+
+   <!-- Make the POJO a Subject/Observerable -->
+   <introduction class="org.jboss.test.cluster.web.aop.Student">
+     <mixin>
+        <interfaces>org.jboss.aspects.patterns.observable.Subject</interfaces>
+        <class>org.jboss.aspects.patterns.observable.SubjectImpl</class>
+        <construction>new org.jboss.aspects.patterns.observable.SubjectImpl(this)</construction>
+     </mixin>
+   </introduction>
+
+   <introduction class="org.jboss.test.cluster.web.aop.Address">
+      <mixin>
+         <interfaces>org.jboss.aspects.patterns.observable.Subject</interfaces>
+         <class>org.jboss.aspects.patterns.observable.SubjectImpl</class>
+         <construction>new org.jboss.aspects.patterns.observable.SubjectImpl(this)</construction>
+      </mixin>
+   </introduction>
+
+   <introduction class="org.jboss.test.cluster.web.aop.Person">
+      <mixin>
+         <interfaces>org.jboss.aspects.patterns.observable.Subject</interfaces>
+         <class>org.jboss.aspects.patterns.observable.SubjectImpl</class>
+         <construction>new org.jboss.aspects.patterns.observable.SubjectImpl(this)</construction>
+      </mixin>
+   </introduction>
+
+</aop>

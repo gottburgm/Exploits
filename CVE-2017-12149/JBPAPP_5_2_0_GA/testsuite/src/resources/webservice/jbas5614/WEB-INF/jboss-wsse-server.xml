@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jboss-ws-security xmlns="http://www.jboss.com/ws-security/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.jboss.com/ws-security/config http://www.jboss.com/ws-security/schema/jboss-ws-security_1_0.xsd">
+  <key-store-file>WEB-INF/wsse.keystore</key-store-file>
+  <key-store-password>jbossws</key-store-password>
+  <trust-store-file>WEB-INF/wsse.truststore</trust-store-file>
+  <trust-store-password>jbossws</trust-store-password>
+  <config>
+    <sign type="x509v3" alias="wsse"/>
+    <requires>
+      <signature/>
+    </requires>
+  </config>
+</jboss-ws-security>

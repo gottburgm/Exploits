@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--DOCTYPE server
+    PUBLIC "-//JBoss//DTD MBean Service 3.2//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-service_3_2.dtd"
+
+This instance goes beyond the jboss-service_3_2.dtd model
+due to its use of the embedded <interceptors> element in the
+ClientInterceptors attribute of the proxy factory configs.
+$Id: pooled-service.xml 79747 2008-10-20 13:44:10Z dimitris@jboss.org $
+-->
+
+<server>
+
+   <!-- Expose the Naming service interface via the PooledInvoker
+   -->
+   <mbean code="org.jboss.invocation.jrmp.server.JRMPProxyFactory"
+      name="jboss.test:service=proxyFactory,type=pooled,target=Naming">
+      <!-- Use the standard PooledInvoker from conf/jboss-service.xxml -->
+      <attribute name="InvokerName">jboss:service=invoker,type=pooled</attribute>
+      <attribute name="TargetName">jboss.test:service=Naming,test=pooled</attribute>
+      <attribute name="JndiName"></attribute>
+      <attribute name="ExportedInterface">org.jnp.interfaces.Naming</attribute>
+      <attribute name="ClientInterceptors">
+          <interceptors>
+             <interceptor>org.jboss.proxy.ClientMethodInterceptor</interceptor>
+             <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+             <interceptor>org.jboss.naming.interceptors.ExceptionInterceptor</interceptor>
+             <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+          </interceptors>
+      </attribute>
+      <depends>jboss:service=invoker,type=jrmp</depends>
+   </mbean>
+
+   <!-- A custom deployment of the JBoss JNDI naming service -->
+   <mbean code="org.jboss.naming.NamingService"
+      name="jboss.test:service=Naming,test=pooled"
+      xmbean-dd="naming-xmbean.xml">
+      <!-- The bootstrap port used to lookup the Naming proxy -->
+      <attribute name="Port">10999</attribute>
+      <!-- Don't override the default naming service -->
+      <attribute name="InstallGlobalService">false</attribute>
+      <!-- The thread pool service used to control the bootstrap lookups -->
+      <depends optional-attribute-name="LookupPool"
+         proxy-type="attribute">jboss.system:service=ThreadPool</depends>
+      <!-- The detached pooled invoker proxy -->
+      <depends optional-attribute-name="InvokerProxyFactory"
+         proxy-type="attribute">jboss.test:service=proxyFactory,type=pooled,target=Naming</depends>
+      <depends optional-attribute-name="Naming"
+         proxy-type="attribute">jboss:service=NamingBeanImpl</depends>           
+   </mbean>
+
+</server>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server>
+<server>
+  <mbean code="org.jboss.test.aop.proxycache.CreateProxyTester" name="jboss.aop:name=GlobalProxyCacheProxyTester"/>
+</server>

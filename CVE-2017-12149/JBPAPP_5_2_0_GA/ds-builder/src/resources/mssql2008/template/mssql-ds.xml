@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<datasources>
+    <local-tx-datasource>
+        <jndi-name>@JNDINAME@</jndi-name>
+        <connection-url>jdbc:sqlserver://@HOSTNAME@:@PORT@;DatabaseName=@DATABASE_NAME@</connection-url>
+        <driver-class>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver-class>
+        <user-name>@USERNAME@</user-name>
+        <password>@PASSWORD@</password>
+        <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+        <min-pool-size>@MINPOOLSIZE@</min-pool-size>
+        <max-pool-size>@MAXPOOLSIZE@</max-pool-size>
+        <metadata>
+            <type-mapping>MS SQLSERVER2000</type-mapping>
+        </metadata>
+    </local-tx-datasource>
+</datasources>

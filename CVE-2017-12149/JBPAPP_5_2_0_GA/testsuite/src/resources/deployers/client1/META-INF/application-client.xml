@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application-client version="1.4" 
+                    xmlns="http://java.sun.com/xml/ns/j2ee" 
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+                                        http://java.sun.com/xml/ns/j2ee/application-client_1_4.xsd"
+>
+   <display-name>Test Deployers Client1</display-name>
+
+   <env-entry>
+      <env-entry-name>dd-file</env-entry-name>
+      <env-entry-type>java.lang.String</env-entry-type>
+      <env-entry-value>application-client.xml</env-entry-value>
+   </env-entry>
+</application-client>

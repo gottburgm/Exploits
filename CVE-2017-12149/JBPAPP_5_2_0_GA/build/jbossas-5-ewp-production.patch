@@ -1,0 +1,116 @@
+--- server/production/deployers/jbossweb.deployer/web.xml.orig	2010-01-07 09:52:41.000000000 -0500
++++ server/production/deployers/jbossweb.deployer/web.xml	2010-01-05 16:08:14.000000000 -0500
+@@ -255,6 +255,11 @@
+          <param-name>xpoweredBy</param-name>
+          <param-value>false</param-value>
+       </init-param>
++      <!-- Do not use Jasper developmment mode in production -->
++      <init-param>
++         <param-name>development</param-name>
++         <param-value>false</param-value>
++      </init-param>
+       <!-- Use jdk1.5 features in jsp pages -->
+       <init-param>
+          <param-name>compilerSourceVM</param-name>
+--- server/production/deploy/cluster/ha-legacy-jboss-beans.xml.orig	2010-01-20 09:26:00.000000000 -0600
++++ server/production/deploy/cluster/ha-legacy-jboss-beans.xml	2010-02-05 11:09:02.409782084 -0600
+@@ -105,20 +105,5 @@
+       
+    </bean>
+ 
+-   <!-- ==================================================================== -->
+-   <!-- Distributed EJB2 entity cache invalidation                           -->
+-   <!-- ==================================================================== -->
+ 
+-   <bean name="JGCacheInvalidationBridge"
+-        class="org.jboss.cache.invalidation.bridges.JGCacheInvalidationBridge">
+-      
+-      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.cache:service=InvalidationBridge,type=JavaGroups", exposedInterface=org.jboss.cache.invalidation.bridges.JGCacheInvalidationBridgeMBean.class, registerDirectly=true)</annotation>
+-      
+-      <!--  Partition used for group RPCs -->
+-      <property name="HAPartition"><inject bean="HAPartition"/></property>
+-      <property name="invalidationManager"><inject bean="jboss.cache:service=InvalidationManager"/></property>
+-      <property name="bridgeName">DefaultJGBridge</property>
+-      
+-   </bean>
+-
+-</deployment>
+\ No newline at end of file
++</deployment>
+--- server/production/conf/bootstrap/profile.xml	2010-01-23 02:05:40.000000000 +0100
++++ server/production//opt/jboss-dist/jboss-ewp-5.0.patched/jboss-as-web/server/production/conf/bootstrap/profile.xml	2010-02-07 17:00:00.758969715 +0100
+@@ -18,18 +18,27 @@
+ 			The uri to jboss-service.xml.
+ 			The uri to the deployers folder.
+ 			A list of uris to deploy folders. -->
+-	<bean name="BootstrapProfileFactory" class="org.jboss.system.server.profileservice.repository.StaticProfileFactory">
++   <bean name="BootstrapProfileFactory" class="org.jboss.system.server.profileservice.StaticClusteredProfileFactory">
+       <property name="bindingsURI">${jboss.server.home.url}conf/bindingservice.beans</property>
+       <property name="bootstrapURI">${jboss.server.home.url}conf/jboss-service.xml</property>
+-		<property name="deployersURI">${jboss.server.home.url}deployers</property>
+-		<property name="applicationURIs">
+-			<list elementClass="java.net.URI">
+-				<value>${jboss.server.home.url}deploy</value>
+-			</list>
+-		</property>
+-		<property name="attachmentStoreRoot">${jboss.server.data.dir}/attachments</property>
+-		<property name="profileFactory"><inject bean="ProfileFactory" /></property>
+-	</bean>
++      <property name="deployersURI">${jboss.server.home.url}deployers</property>
++      <property name="applicationURIs">
++         <list elementClass="java.net.URI">
++            <value>${jboss.server.home.url}deploy</value>
++         </list>
++      </property>
++      <!-- Optional list of URIs that will be kept in sync across the cluster.
++           Requires deploy/cluster/farm-deployment-jboss-beans.xml to be
++           deployed as well.
++      -->
++      <property name="farmURIs">
++         <list elementClass="java.net.URI">
++            <value>${jboss.server.home.url}farm</value>
++         </list>
++      </property>
++      <property name="attachmentStoreRoot">${jboss.server.data.dir}/attachments</property>
++      <property name="profileFactory"><inject bean="ProfileFactory" /></property>
++   </bean>
+ 	
+ 	<!--  The default profile key -->
+ 	<bean name="DefaultProfileKey" class="org.jboss.profileservice.spi.ProfileKey">
+@@ -151,6 +160,36 @@
+ 		<uncallback method="removeComponentMapper" />
+ 	</bean>
+ 
++   <!-- The clustered deployment repository factory -->
++   <bean name="ClusteredDeploymentRepositoryFactory" class="org.jboss.system.server.profileservice.repository.clustered.ClusteredDeploymentRepositoryFactory">
++      <property name="deploymentFilter"><inject bean="DeploymentFilter" /></property>
++      <property name="checker"><inject bean="StructureModificationChecker" /></property>
++      <!-- Accept any RepositoryClusteringHandler -->
++      <incallback method="addRepositoryClusteringHandler" />
++      <uncallback method="removeRepositoryClusteringHandler" />
++      <!-- Accept any LocalContentManagerFactory -->
++      <incallback method="addLocalContentManagerFactory" />
++      <uncallback method="removeLocalContentManagerFactory" />
++   </bean>
++   
++   <!--  Handles persistence of metadata about clustered DeploymentRepository content -->
++   <bean name="ClusteredDeploymentRepositoryMetadataPersister"
++         class="org.jboss.system.server.profileservice.repository.clustered.local.JAXBRepositoryContentMetadataPersister">
++      <constructor>
++         <!-- Here we use the constructor version that takes the Server impl and 
++              uses it to find the data dir. You could alternatively use a version 
++              that takes a URI or a File. -->
++         <parameter class="org.jboss.bootstrap.spi.Server"><inject bean="JBossServer"/></parameter>
++      </constructor>
++   </bean>
++         
++   <!--  Factory for manager of local persistence of clustered DeploymentRepository content -->
++   <bean name="FilesystemLocalContentManagerFactory" 
++         class="org.jboss.system.server.profileservice.repository.clustered.local.file.FilesystemLocalContentManagerFactory">
++      <property name="metadataPersister"><inject bean="ClusteredDeploymentRepositoryMetadataPersister"/></property>
++      <property name="tempDirURI">${jboss.server.home.url}temp${/}cluster-repo</property>
++   </bean>
++
+ 	<!-- A persistence factory for creating the persisted format of ManagedComponents -->
+ 	<bean name="PersistenceFactory" class="org.jboss.system.server.profileservice.persistence.AbstractPersistenceFactory">
+ 		<constructor><parameter><inject bean="ManagedObjectFactory" /></parameter></constructor>

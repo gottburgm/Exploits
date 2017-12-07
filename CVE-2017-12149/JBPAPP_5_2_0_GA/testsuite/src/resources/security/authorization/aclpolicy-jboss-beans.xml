@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <!-- acl application-policy definition -->
+   <application-policy xmlns="urn:jboss:security-beans:1.0" name="acl-domain">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule" flag="optional"/>
+      </authentication>
+      <acl>
+         <acl-module code="org.jboss.security.acl.ACLProviderImpl" flag="optional">
+            <module-option name="persistenceStrategy">org.jboss.security.plugins.acl.PolicyRegistrationStrategy</module-option>
+         </acl-module>
+      </acl>
+   </application-policy>
+
+</deployment>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- An example profile service based bootstrap mc descriptor -->
+<deployment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="urn:jboss:bean-deployer:2.0 bean-deployer_2_0.xsd"
+            xmlns="urn:jboss:bean-deployer">
+   <bean name="TestBean" class="org.jboss.test.server.support.TestBeanImpl">
+      <property name="intProperty">1234</property>
+      <property name="integerProperty">4321</property>
+      <property name="stringProperty">string-x</property>
+   </bean>
+</deployment>

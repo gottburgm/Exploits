@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 3.2//EN" "http://www.jboss.org/j2ee/dtd/jboss_3_2.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <entity>
+         <ejb-name>nextgenEnterpriseEntity</ejb-name>
+         <configuration-name>Standard Pessimistic CMP 2.x EntityBean</configuration-name>
+         <depends>jboss.jca:service=DataSourceBinding,name=DeadlockDS</depends>
+      </entity>
+      <entity>
+         <ejb-name>nextgenEnterpriseEntityReentrant</ejb-name>
+         <configuration-name>Standard Pessimistic CMP 2.x EntityBean</configuration-name>
+      </entity>
+      <entity>
+         <ejb-name>nextgenEnterpriseEntityNotSupported</ejb-name>
+         <configuration-name>Standard Pessimistic CMP 2.x EntityBean</configuration-name>
+      </entity>
+      <entity>
+         <ejb-name>nextgenEnterpriseEntityNotSupportedReentrant</ejb-name>
+         <configuration-name>Standard Pessimistic CMP 2.x EntityBean</configuration-name>
+      </entity>
+   </enterprise-beans>
+</jboss>

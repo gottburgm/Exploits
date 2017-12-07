@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<psf version="2.0">
+	<provider id="org.tigris.subversion.subclipse.core.svnnature">
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/aop,aop"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/aspects,aspects"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/build,build"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/cluster,cluster"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/connector,connector"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/console,console"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/deployment,deployment"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/docbook-support,docbook-support"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/ejb3,ejb3"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/ejb3x,ejb3x"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/hibernate-int,hibernate-int"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/iiop,iiop"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/j2ee,j2ee"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/j2se,j2se"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/jbossas,jbossas"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/jms,jms"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/jmx,jmx"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/jmx-remoting,jmx-remoting"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/management,management"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/mbeans,mbeans"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/messaging,messaging"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/naming,naming"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/security,security"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/server,server"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/spring-int,spring-int"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/system,system"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/test,test"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/testsuite,testsuite"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/tomcat,tomcat"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/tools,tools"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/transaction,transaction"/>
+		<project reference="0.9.3,https://svn.jboss.org/repos/jbossas/trunk/varia,varia"/>		
+	</provider>
+</psf>

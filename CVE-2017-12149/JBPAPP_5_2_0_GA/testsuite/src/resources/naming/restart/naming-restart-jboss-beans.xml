@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+   
+    <!-- Don't inject the real AS thread pool, as it has a classloader
+         leak and we don't want to leak this classloader to it
+    -->
+    <bean name="RestartNamingThreadPool" class="org.jboss.util.threadpool.BasicThreadPool">
+              <constructor>
+                 <parameter>RestartNamingThreadPool</parameter>
+                 <parameter>
+                    <bean name="RestartNamingThreadGroup" class="java.lang.ThreadGroup">
+                       <constructor>
+                          <parameter>RestartNamingThreadGroup</parameter>
+                       </constructor>
+                    </bean>
+                 </parameter>
+              </constructor>
+    </bean>
+   
+   <bean name="RestartNamingBean" class="org.jnp.server.NamingBeanImpl">
+   
+      <!-- IMPORTANT Ensure we use our own NamingServer and don't screw up the
+           static ref to the std one in the server-side NamingContext class -->
+      <property name="useGlobalService">false</property>      
+      <property name="installGlobalService">false</property>
+      
+   </bean>
+
+   <!-- Use our own NamingService subclass that unexports the NamingServer
+        in stopService().  This better simulates a server shutdown. 
+        We don't really want to test a non-shutdown redeploy of the naming
+        service as that is a highly unlikely usage. -->
+   <bean name="RestartNamingService" class="org.jboss.test.naming.restart.RestartNamingService">
+   
+      <property name="callByValue">false</property>
+      <property name="port">19099</property>
+      <property name="bindAddress">${jboss.bind.address}</property>
+      <property name="rmiPort">0</property>
+      <property name="rmiBindAddress">${jboss.bind.address}</property>
+      <property name="lookupPool"><inject bean="RestartNamingThreadPool"/></property>   
+      <property name="naming"><inject bean="RestartNamingBean"/></property>
+   </bean>
+   
+   <!-- Our own HA-JNDI that we can redeploy.  Subclasses std HA-JNDI service
+        to ensure we don't pollute static ref to the std HA-JNDI in the 
+        server-side NamingContext class -->
+   <bean name="RestartHAJNDI" class="org.jboss.test.naming.restart.RestartHANamingService">
+   	
+   	<depends>HAPartition</depends>
+      	       
+      <property name="HAPartition"><inject bean="HAPartition"/></property>
+      
+      <!-- Handler for the replicated tree -->
+      <property name="distributedTreeManager">
+         <bean class="org.jboss.ha.jndi.impl.jbc.JBossCacheDistributedTreeManager">
+            <property name="cacheHandler"><inject bean="HAPartitionCacheHandler"/></property>
+         </bean>
+      </property>
+      
+      <property name="localNamingInstance"><inject bean="RestartNamingBean" property="namingInstance"/></property>
+      
+      <!-- Bind address of bootstrap endpoint -->
+      <property name="bindAddress">${jboss.bind.address}</property>
+      <!-- Port on which the HA-JNDI stub is made available -->
+      <property name="port">19100</property>
+      <!-- Bind address of the HA-JNDI RMI endpoint -->
+      <property name="rmiBindAddress">${jboss.bind.address}</property>
+      <!-- RmiPort to be used by the HA-JNDI service once bound. 0 => auto. -->
+      <property name="rmiPort">0</property>
+      <!-- Accept backlog of the bootstrap socket -->
+      <property name="backlog">50</property>
+      <property name="lookupPool"><inject bean="RestartNamingThreadPool"/></property>
+      
+      <property name="discoveryDisabled">false</property>
+      <property name="autoDiscoveryBindAddress">${jboss.bind.address}</property>
+      <!-- We use a custom Multicast Address and port for auto-discovery -->
+      <property name="autoDiscoveryAddress">230.9.9.9</property>
+      <property name="autoDiscoveryGroup">19102</property>
+      <property name="autoDiscoveryTTL">1</property>
+
+      <!-- The load balancing policy for HA-JNDI -->
+      <property name="loadBalancePolicy">org.jboss.ha.framework.interfaces.RoundRobin</property>
+      
+   </bean>
+   
+   <!-- Binds an object in the above two naming services for remote lookup
+        by the test client -->
+   <bean name="RestartObjectBinder" class="org.jboss.test.naming.restart.ObjectBinder">
+      <property name="namingService"><inject bean="RestartNamingService"/></property>      
+   </bean>
+
+   
+</deployment>

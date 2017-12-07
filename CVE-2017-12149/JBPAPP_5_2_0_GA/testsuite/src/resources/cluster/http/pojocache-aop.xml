@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This is the PojoCache configuration file that specifies:
+      1. Interceptor stack for API
+      2. Annotation binding for POJO (via "prepare" element)
+
+    Basically, this is a variant of jboss-aop.xml. Note that
+    except for the customization of interceptor stack, you should
+    not need to modify this file.
+
+    To run PojoCache, you will need to define a system property:
+    jboss.aop.path that contains the path to this file such that JBoss Aop
+    can locate it.
+-->
+<aop>
+
+   <!--
+   This defines the PojoCache 2.0 interceptor stack. Unless necessary, don't modify the stack here!
+   -->
+
+   <!-- Check id range validity -->
+   <interceptor name="CheckId" class="org.jboss.cache.pojo.interceptors.CheckIdInterceptor"
+                scope="PER_INSTANCE"/>
+
+   <!-- Track Tx undo operation -->
+   <interceptor name="Undo" class="org.jboss.cache.pojo.interceptors.PojoTxUndoInterceptor"
+                scope="PER_INSTANCE"/>
+
+   <!-- Begining of interceptor chain -->
+   <interceptor name="Start" class="org.jboss.cache.pojo.interceptors.PojoBeginInterceptor"
+                scope="PER_INSTANCE">
+      <!-- If set to true, will also replicate final field. -->
+         <attribute name="ReplicateFinalField">true</attribute>
+    </interceptor>
+
+   <!-- Check if we need a local tx for batch processing -->
+   <interceptor name="Tx" class="org.jboss.cache.pojo.interceptors.PojoTxInterceptor"
+                scope="PER_INSTANCE"/>
+
+   <!--
+      Mockup failed tx for testing. You will need to set PojoFailedTxMockupInterceptor.setRollback(true)
+      to activate it.
+    -->
+   <interceptor name="MockupTx" class="org.jboss.cache.pojo.interceptors.PojoFailedTxMockupInterceptor"
+                scope="PER_INSTANCE"/>
+
+   <!-- Perform parent level node locking -->
+   <interceptor name="TxLock" class="org.jboss.cache.pojo.interceptors.PojoTxLockInterceptor"
+                scope="PER_INSTANCE"/>
+
+   <!-- Interceptor to perform Pojo level rollback -->
+   <interceptor name="TxUndo" class="org.jboss.cache.pojo.interceptors.PojoTxUndoSynchronizationInterceptor"
+                scope="PER_INSTANCE"/>
+
+   <!-- Interceptor to used to check recursive field interception. -->
+   <interceptor name="ReentrantToString" class="org.jboss.cache.pojo.interceptors.MethodReentrancyStopperInterceptor"
+                scope="PER_INSTANCE">
+               <attribute name="MethodName">toString</attribute>
+   </interceptor>
+
+   <interceptor name="ReentrantHashCode" class="org.jboss.cache.pojo.interceptors.MethodReentrancyStopperInterceptor"
+                scope="PER_INSTANCE">
+               <attribute name="MethodName">hashCode</attribute>
+   </interceptor>
+
+   <!-- Whether to allow non-serializable pojo. Default is false. -->
+   <interceptor name="MarshallNonSerializable"
+                class="org.jboss.cache.pojo.interceptors.CheckNonSerializableInterceptor"
+                scope="PER_INSTANCE">
+         <attribute name="marshallNonSerializable">false</attribute>
+                </interceptor>
+
+   <!-- This defines the stack macro -->
+   <stack name="Attach">
+      <interceptor-ref name="Start"/>
+      <interceptor-ref name="CheckId"/>
+      <interceptor-ref name="MarshallNonSerializable"/>
+      <interceptor-ref name="Tx"/>
+      <!-- NOTE: You can comment this out during production although leaving it here is OK. -->
+      <interceptor-ref name="MockupTx"/>
+      <interceptor-ref name="TxLock"/>
+      <interceptor-ref name="TxUndo"/>
+   </stack>
+
+   <stack name="Detach">
+      <interceptor-ref name="Start"/>
+      <interceptor-ref name="CheckId"/>
+      <interceptor-ref name="Tx"/>
+      <!-- NOTE: You can comment this out during production although leaving it here is OK. -->
+      <interceptor-ref name="MockupTx"/>
+      <interceptor-ref name="TxLock"/>
+      <interceptor-ref name="TxUndo"/>
+   </stack>
+
+   <stack name="Find">
+      <interceptor-ref name="Start"/>
+      <interceptor-ref name="CheckId"/>
+   </stack>
+
+   <!--
+      The following section should be READ-ONLY!! It defines the annotation binding to the stack.
+   -->
+
+   <!-- This binds the jointpoint to specific in-memory operations. Currently in PojoUtil. -->
+   <bind pointcut="execution(*
+      @org.jboss.cache.pojo.annotation.Reentrant->toString())">
+      <interceptor-ref name="ReentrantToString"/>
+   </bind>
+
+   <bind pointcut="execution(*
+      @org.jboss.cache.pojo.annotation.Reentrant->hashCode())">
+      <interceptor-ref name="ReentrantHashCode"/>
+   </bind>
+
+   <bind pointcut="execution(*
+      org.jboss.cache.pojo.PojoUtil->@org.jboss.cache.pojo.annotation.TxUndo(..))">
+      <interceptor-ref name="Undo"/>
+   </bind>
+
+   <bind pointcut="execution(* org.jboss.cache.pojo.impl.PojoCacheImpl->@org.jboss.cache.pojo.annotation.Attach(..))">
+      <stack-ref name="Attach"/>
+   </bind>
+
+   <bind pointcut="execution(* org.jboss.cache.pojo.impl.PojoCacheImpl->@org.jboss.cache.pojo.annotation.Detach(..))">
+      <stack-ref name="Detach"/>
+   </bind>
+
+   <bind pointcut="execution(* org.jboss.cache.pojo.impl.PojoCacheImpl->@org.jboss.cache.pojo.annotation.Find(..))">
+      <stack-ref name="Find"/>
+   </bind>
+
+
+   <!--
+      Following is declaration for JDK50 annotation. You use the specific annotation on your
+      POJO such that it can be instrumented. Idea is user will then need only to annotate like:
+        @org.jboss.cache.pojo.annotation.PojoCacheable
+      in his POJO. There will be no need of jboss-aop.xml from user's side.
+   -->
+
+   <!-- If a POJO has PojoCachable annotation, it will be asepctized. -->
+   <prepare expr="field(* @org.jboss.cache.pojo.annotation.PojoCacheable->*)" />
+
+   <!--
+   Supports inheritance and polymorphism. It can either be a concrete class
+   or an interface. All sub-classes or interface implementors will be instrumeneted.
+   -->
+   <prepare expr="field(* $instanceof{@org.jboss.cache.pojo.annotation.InstanceOfPojoCacheable}->*)" />
+
+   <!-- Observer and Observable to monitor field modification -->
+   <bind pointcut="
+      set(* $instanceof{@org.jboss.cache.pojo.annotation.InstanceOfPojoCacheable}->*) OR
+      set(* @org.jboss.cache.pojo.annotation.PojoCacheable->*)
+      ">
+         <interceptor class="org.jboss.cache.pojo.observable.SubjectInterceptor"/>
+   </bind>
+
+   <introduction class="$instanceof{@org.jboss.cache.pojo.annotation.InstanceOfPojoCacheable}">
+      <mixin>
+         <interfaces>org.jboss.cache.pojo.observable.Subject</interfaces>
+         <class>org.jboss.cache.pojo.observable.SubjectImpl</class>
+         <construction>new org.jboss.cache.pojo.observable.SubjectImpl(this)</construction>
+      </mixin>
+   </introduction>
+
+   <introduction class="@org.jboss.cache.pojo.annotation.PojoCacheable">
+      <mixin>
+         <interfaces>org.jboss.cache.pojo.observable.Subject</interfaces>
+         <class>org.jboss.cache.pojo.observable.SubjectImpl</class>
+         <construction>new org.jboss.cache.pojo.observable.SubjectImpl(this)</construction>
+      </mixin>
+   </introduction>
+
+</aop>

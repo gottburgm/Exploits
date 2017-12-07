@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <!-- The core configuration -->
+   <bean name="BackupConfiguration" class="org.hornetq.core.config.impl.FileConfiguration">
+      <property name="configurationUrl">${jboss.server.home.url}/deploy/hornetq-backup1/hornetq-configuration.xml</property>
+   </bean>
+
+
+	<!-- The core server -->
+   <bean name="BackupHornetQServer" class="org.hornetq.core.server.impl.HornetQServerImpl">
+      <constructor>
+         <parameter>
+            <inject bean="BackupConfiguration"/>
+         </parameter>
+         <parameter>
+            <inject bean="MBeanServer"/>
+         </parameter>
+         <parameter>
+            <inject bean="HornetQSecurityManager"/>
+         </parameter>        
+      </constructor>
+      <start ignored="true"/>
+      <stop ignored="true"/>          
+   </bean>
+   
+   <!-- The JMS server -->
+   <bean name="BackupJMSServerManager" class="org.hornetq.jms.server.impl.JMSServerManagerImpl">
+      <constructor>         
+         <parameter>
+            <inject bean="BackupHornetQServer"/>
+         </parameter>         
+      </constructor>
+   </bean>
+
+
+
+</deployment>

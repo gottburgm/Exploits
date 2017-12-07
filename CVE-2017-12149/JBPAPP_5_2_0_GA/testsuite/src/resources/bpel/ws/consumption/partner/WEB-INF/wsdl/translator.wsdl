@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://example.com/translator" 
+  xmlns:tns="http://example.com/translator" 
+  xmlns:sns="http://example.com/translator/types"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://schemas.xmlsoap.org/wsdl/ http://schemas.xmlsoap.org/wsdl/
+                      http://www.w3.org/2001/XMLSchema http://www.w3.org/2001/XMLSchema.xsd">
+  
+  <types>
+    <xsd:schema targetNamespace="http://example.com/translator/types">
+
+      <xsd:complexType name="tTextNotTranslatable">
+        <xsd:sequence>
+          <xsd:element name="text" type="xsd:string" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:element name="textNotTranslatable" type="sns:tTextNotTranslatable" />
+      
+      <xsd:complexType name="tDictionaryNotAvailable" />
+      
+      <xsd:element name="dictionaryNotAvailable" type="sns:tDictionaryNotAvailable" />
+      
+      <xsd:complexType name="tDocumentHead">
+        <xsd:attribute name="title" type="xsd:string"/>
+        <xsd:attribute name="language" type="xsd:string"/>
+      </xsd:complexType>
+      
+      <xsd:complexType name="tDocumentBody">
+        <xsd:sequence>
+          <xsd:element name="paragraph" type="xsd:string" maxOccurs="unbounded" />
+        </xsd:sequence>
+      </xsd:complexType>
+      
+      <xsd:simpleType name="tQuoteStatus">
+        <xsd:restriction base="xsd:string" >
+          <xsd:enumeration value="none" />
+          <xsd:enumeration value="received" />
+          <xsd:enumeration value="processing"/>
+          <xsd:enumeration value="completed" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
+      <xsd:complexType name="tDocument">
+        <xsd:sequence>
+          <xsd:element name="head" type="sns:tDocumentHead" />
+          <xsd:element name="body" type="sns:tDocumentBody" />
+        </xsd:sequence>
+      </xsd:complexType>
+
+      <xsd:element name="document" type="sns:tDocument" />
+
+      <xsd:complexType name="tTranslationRequest">
+        <xsd:sequence>
+          <xsd:element ref="sns:document" />
+        </xsd:sequence>
+        <xsd:attribute name="targetLanguage" type="xsd:string" />
+      </xsd:complexType>
+
+      <xsd:element name="translationRequest" type="sns:tTranslationRequest" />
+
+      <xsd:complexType name="tQuotationRequest">
+        <xsd:sequence>
+          <xsd:element ref="sns:document" />
+        </xsd:sequence>
+        <xsd:attribute name="clientName" type="xsd:string" />
+        <xsd:attribute name="targetLanguage" type="xsd:string" />
+      </xsd:complexType>
+
+      <xsd:element name="quotationRequest" type="sns:tQuotationRequest" />
+
+      <xsd:complexType name="tStatusRequest">
+        <xsd:attribute name="clientName" type="xsd:string" />
+      </xsd:complexType>
+
+      <xsd:element name="statusRequest" type="sns:tStatusRequest"/>
+
+      <xsd:complexType name="tStatusResponse">
+        <xsd:attribute name="status" type="sns:tQuoteStatus" />
+      </xsd:complexType>
+
+      <xsd:element name="statusResponse" type="sns:tStatusResponse" />
+
+    </xsd:schema>
+  </types>
+  
+  <message name="translateTextInput">
+    <part name="text" type="xsd:string" />
+    <part name="sourceLanguage" type="xsd:string" />
+    <part name="targetLanguage" type="xsd:string" />
+  </message>
+  
+  <message name="translateTextOutput">
+    <part name="translatedText" type="xsd:string" />
+  </message>
+    
+  <message name="quoteTextInput">
+    <part name="clientName" type="xsd:string" />    
+    <part name="text" type="xsd:string" />
+    <part name="sourceLanguage" type="xsd:string" />
+    <part name="targetLanguage" type="xsd:string" />
+  </message>
+
+  <message name="statusTextInput">
+  	<part name="clientName" type="xsd:string" />
+  </message>
+  
+  <message name="statusTextOutput">
+    <part name="status" type="sns:tQuoteStatus" />
+  </message>
+  
+  <message name="translateDocInput">
+    <part name="translationRequest" element="sns:translationRequest" />
+  </message>
+  
+  <message name="translateDocOutput">
+    <part name="document" element="sns:document" />
+  </message>
+
+  <message name="quoteDocInput">
+    <part name="quotationRequest" element="sns:quotationRequest" />
+  </message>
+  
+  <message name="statusDocInput">
+    <part name="statusRequest" element="sns:statusRequest" />
+  </message>
+  
+  <message name="statusDocOutput">
+    <part name="statusResponse" element="sns:statusResponse" />
+  </message>
+  
+  <message name="textNotTranslatableFault">
+    <part name="detail" element="sns:textNotTranslatable" />
+  </message>
+  
+  <message name="dictionaryNotAvailableFault">
+    <part name="detail" element="sns:dictionaryNotAvailable" />
+  </message>  
+  
+  <portType name="textTranslator">
+    
+    <operation name="translate">
+      <input message="tns:translateTextInput" />
+      <output message="tns:translateTextOutput" />
+      <fault name="textNotTranslatable" message="tns:textNotTranslatableFault" />
+      <fault name="dictionaryNotAvailable" message="tns:dictionaryNotAvailableFault" />
+    </operation>
+    
+    <operation name="quoteTranslation">
+      <input message="tns:quoteTextInput" />
+    </operation>
+    
+    <operation name="getQuotationStatus">
+      <input message="tns:statusTextInput" />
+      <output message="tns:statusTextOutput" />
+    </operation>
+    
+  </portType>
+  
+  <portType name="documentTranslator">
+    
+    <operation name="translate">
+      <input message="tns:translateDocInput" />
+      <output message="tns:translateDocOutput" />
+      <fault name="textNotTranslatable" message="tns:textNotTranslatableFault" />
+      <fault name="dictionaryNotAvailable" message="tns:dictionaryNotAvailableFault" />
+    </operation>
+    
+    <operation name="quoteTranslation">
+      <input message="tns:quoteDocInput" />
+    </operation>
+    
+    <operation name="getQuotationStatus">
+      <input message="tns:statusDocInput" />
+      <output message="tns:statusDocOutput" />
+    </operation>
+    
+  </portType>
+  
+  <binding name="textTranslatorBind" type="tns:textTranslator">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    
+    <operation name="translate">
+      <soap:operation soapAction="http://example.com/translator#translate"/>
+      <input>
+        <soap:body use="literal" namespace="http://example.com/translator"/>
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://example.com/translator"/>
+      </output>
+      <fault name="textNotTranslatable">
+        <soap:fault name="textNotTranslatable" use="literal"/>
+      </fault>
+      <fault name="dictionaryNotAvailable">
+        <soap:fault name="dictionaryNotAvailable" use="literal"/>
+      </fault>
+    </operation>
+    
+    <operation name="quoteTranslation">
+      <soap:operation soapAction="http://example.com/translator#quote"/>
+      <input>
+        <soap:body use="literal" namespace="http://example.com/translator"/>
+      </input>
+    </operation>
+    
+    <operation name="getQuotationStatus">
+      <soap:operation soapAction="http://example.com/translator#status"/>
+      <input>
+        <soap:body use="literal" namespace="http://example.com/translator"/>
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://example.com/translator"/>
+      </output>    
+    </operation>
+    
+  </binding>
+  
+  <binding name="documentTranslatorBind" type="tns:documentTranslator">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    
+    <operation name="translate">
+      <soap:operation soapAction="http://example.com/translator#translate"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="textNotTranslatable">
+        <soap:fault name="textNotTranslatable" use="literal"/>
+      </fault>
+      <fault name="dictionaryNotAvailable">
+        <soap:fault name="dictionaryNotAvailable" use="literal"/>
+      </fault>
+    </operation>
+    
+    <operation name="quoteTranslation">
+      <soap:operation soapAction="http://example.com/translator#quote"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+    </operation>
+    
+    <operation name="getQuotationStatus">
+      <soap:operation soapAction="http://example.com/translator#status"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    
+  </binding>
+  
+  <service name="translatorService">
+    <port name="textTranslatorPort" binding="tns:textTranslatorBind">
+      <soap:address location="REPLACE_WITH_ACTUAL_URI"/>
+    </port>
+    <port name="documentTranslatorPort" binding="tns:documentTranslatorBind">
+      <soap:address location="REPLACE_WITH_ACTUAL_URI"/>
+    </port>
+  </service>
+  
+
+  </definitions>

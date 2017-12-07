@@ -1,0 +1,31 @@
+<project name="tests-lock-jars">
+ <!-- lock test -->
+   <target name="_jars-lock">
+      <mkdir dir="${build.lib}"/>
+
+      <!-- build locktestclient.jar -->
+      <jar destfile="${build.lib}/locktestclient.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/lock/interfaces/**"/>
+            <include name="org/jboss/test/lock/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/lock">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+
+      <!-- build locktest.jar -->
+      <jar destfile="${build.lib}/locktest.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/lock/interfaces/**"/>
+            <include name="org/jboss/test/lock/bean/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/lock">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+   </target> 
+</project>

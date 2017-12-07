@@ -1,0 +1,3 @@
+# [CXF-1252] Provider PAYLOAD endpoint expects SOAP Envelope
+org/jboss/test/ws/jaxws/samples/provider/ProviderJAXBTestCase.*
+org/jboss/test/ws/jaxws/samples/provider/ProviderPayloadTestCase.*

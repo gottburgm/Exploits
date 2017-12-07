@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jbosscmp-jdbc PUBLIC
+   "-//JBoss//DTD JBOSSCMP-JDBC 3.2//EN"
+   "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_2.dtd">
+<jbosscmp-jdbc>
+   <defaults>
+      <remove-table>true</remove-table>
+   </defaults>
+   <enterprise-beans>
+      <entity>
+         <ejb-name>OrderEJB</ejb-name>
+         <table-name>ORDER_DATA</table-name>
+         <query>
+            <query-method>
+               <method-name>ejbSelectSelect</method-name>
+               <method-params>
+                  <method-param>java.lang.String</method-param>
+                  <method-param>java.lang.Object[]</method-param>
+               </method-params>
+            </query-method>
+            <dynamic-ql/>
+         </query>
+      </entity>
+   </enterprise-beans>
+</jbosscmp-jdbc>

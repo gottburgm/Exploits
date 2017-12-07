@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+   <description>Embedded Security Test</description>
+
+   <!-- ### Security -->
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Restricted</web-resource-name>
+         <description>Declarative security tests</description>
+         <url-pattern>/*</url-pattern>
+         <http-method>HEAD</http-method>
+         <http-method>GET</http-method>
+         <http-method>POST</http-method>
+         <http-method>PUT</http-method>
+         <http-method>DELETE</http-method>
+      </web-resource-collection>
+      <auth-constraint>
+         <description>Only authenticated users can access secure content</description>
+         <role-name>tomcat</role-name>
+      </auth-constraint>
+
+      <user-data-constraint>
+         <transport-guarantee>NONE</transport-guarantee>
+      </user-data-constraint>
+   </security-constraint>
+
+   <login-config>
+      <auth-method>BASIC</auth-method>
+      <realm-name>Blah blah</realm-name>
+   </login-config>
+
+   <security-role>
+      <description>A user validated by an X-MyAuthentication</description>
+      <role-name>tomcat</role-name>
+   </security-role>
+
+
+
+</web-app>

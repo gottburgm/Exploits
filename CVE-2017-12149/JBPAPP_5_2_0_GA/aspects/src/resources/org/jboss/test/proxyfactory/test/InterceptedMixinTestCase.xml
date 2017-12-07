@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+   <interceptor class="org.jboss.test.proxyfactory.support.SimpleInterceptor"/>
+   <bind pointcut="execution(* $instanceof{org.jboss.test.proxyfactory.support.Simple}->*(..))">
+      <interceptor-ref name="org.jboss.test.proxyfactory.support.SimpleInterceptor"/>
+   </bind>
+</aop>

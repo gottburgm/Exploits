@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<hibernate-configuration xmlns="urn:jboss:hibernate-deployer:1.0">
+
+   <session-factory name="java:/hib-timers/SessionFactory" bean="jboss.test.har:service=Hibernate,testcase=TimersUnitTestCase">
+      <property name="datasourceName">java:/DefaultDS</property>
+      <property name="dialect">org.hibernate.dialect.HSQLDialect</property>
+      <!-- no such class
+      <property name="sessionFactoryInterceptor">org.jboss.test.hibernate.SimpleInterceptor</property>
+      -->
+      <property name="hbm2ddlAuto">create</property>
+      <depends>jboss:service=Naming</depends>
+      <depends>jboss:service=TransactionManager</depends>
+   </session-factory>
+
+</hibernate-configuration>

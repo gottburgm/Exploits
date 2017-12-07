@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+  <local-tx-datasource>
+    <jndi-name>@JNDINAME@</jndi-name>
+    <connection-url>jdbc:sybase:Tds:@HOSTNAME@:@PORT@/@DATABASE_NAME@</connection-url>
+    <driver-class>com.sybase.jdbc4.jdbc.SybDataSource</driver-class>
+    <user-name>@USERNAME@</user-name>
+    <password>@PASSWORD@</password>
+    <exception-sorter-class-name>org.jboss.resource.adapter.jdbc.vendor.SybaseExceptionSorter</exception-sorter-class-name>
+    <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+    <min-pool-size>@MINPOOLSIZE@</min-pool-size>
+    <max-pool-size>@MAXPOOLSIZE@</max-pool-size>
+    <metadata>
+      <type-mapping>Sybase</type-mapping>
+    </metadata>
+  </local-tx-datasource>
+
+</datasources>

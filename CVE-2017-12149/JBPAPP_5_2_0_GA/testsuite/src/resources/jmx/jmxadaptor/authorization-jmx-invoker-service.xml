@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--$Id: authorization-jmx-invoker-service.xml 85945 2009-03-16 19:45:12Z dimitris@jboss.org $ -->
+<server>
+
+   <!-- Roles are configured on the invoker -->
+   <mbean code="org.jboss.jmx.connector.invoker.InvokerAdaptorService"
+          name="jboss.security.test:type=adaptor,name=Invoker,access=ConfigurableRolesAuthorized"
+      xmbean-dd="">
+      <xmbean>
+         <description>The JMX Detached Invoker Service</description>
+         <class>org.jboss.jmx.connector.invoker.InvokerAdaptorService</class>
+
+         <!-- Attributes -->
+         <attribute access="read-only" getMethod="getName">
+            <description>The class name of the MBean</description>
+            <name>Name</name>
+            <type>java.lang.String</type>
+         </attribute>
+         <attribute access="read-only" getMethod="getState">
+            <description>The status of the MBean</description>
+            <name>State</name>
+            <type>int</type>
+         </attribute>
+         <attribute access="read-only" getMethod="getStateString">
+         <description>The status of the MBean in text form</description>
+            <name>StateString</name>
+            <type>java.lang.String</type>
+         </attribute>
+         <attribute access="read-write" getMethod="getExportedInterfaces" setMethod="setExportedInterfaces">
+            <description>The interfaces the invoker proxy supports</description>
+            <name>ExportedInterfaces</name>
+            <type>[Ljava.lang.Class;</type>
+         </attribute>
+         <attribute access="read-only" getMethod="getMethodMap">
+            <description>Map(Long hash, Method) of the proxy interface methods</description>
+            <name>MethodMap</name>
+            <type>java.util.Map</type>
+         </attribute>
+         <!-- Operations -->
+         <operation>
+            <description>The start lifecycle operation</description>
+            <name>start</name>
+         </operation>
+         <operation>
+            <description>The stop lifecycle operation</description>
+            <name>stop</name>
+         </operation>
+         <operation>
+            <description>The detyped lifecycle operation (for internal use only)</description>
+            <name>jbossInternalLifecycle</name>
+            <parameter>
+               <description>The lifecycle operation</description>
+               <name>method</name>
+               <type>java.lang.String</type>
+            </parameter>
+            <return-type>void</return-type>
+         </operation>
+
+         <operation>
+            <description>The detached invoker entry point</description>
+            <name>invoke</name>
+            <parameter>
+               <description>The method invocation context</description>
+               <name>invocation</name>
+               <type>org.jboss.invocation.Invocation</type>
+            </parameter>
+            <return-type>java.lang.Object</return-type>
+            <descriptors>
+               <interceptors>
+                  <interceptor code="org.jboss.jmx.connector.invoker.AuthenticationInterceptor"
+                     securityDomain="java:/jaas/subject-context"/>
+                  <interceptor code="org.jboss.jmx.connector.invoker.AuthorizationInterceptor"
+                     authorizingClass="org.jboss.jmx.connector.invoker.ExternalizableRolesAuthorization"/>
+               </interceptors>
+            </descriptors>
+         </operation>
+      </xmbean>
+      <attribute name="ExportedInterfaces">org.jboss.jmx.adaptor.rmi.RMIAdaptorExt
+      </attribute>
+   </mbean>
+
+   <mbean code="org.jboss.invocation.jrmp.server.JRMPProxyFactory"
+      name="jboss.security.test:type=adaptor,name=Invoker,protocol=jrmp,service=proxyFactory,access=ConfigurableRolesAuthorized">
+      <!-- Use the standard JRMPInvoker from conf/jboss-service.xxml -->
+      <depends optional-attribute-name="InvokerName">jboss:service=invoker,type=jrmp</depends>
+      <!-- The target MBean is the InvokerAdaptorService configured below -->
+      <depends optional-attribute-name="TargetName">jboss.security.test:type=adaptor,name=Invoker,access=ConfigurableRolesAuthorized</depends>
+      <!-- Where to bind the RMIAdaptor proxy -->
+      <attribute name="JndiName">jmx/invoker/ConfigurableAuthorizedRMIAdaptor</attribute>
+      <!-- The RMI compabitle MBeanServer interface -->
+      <attribute name="ExportedInterfaces">org.jboss.jmx.adaptor.rmi.RMIAdaptorExt
+      </attribute>
+      <attribute name="ClientInterceptors">
+          <interceptors>
+             <interceptor>org.jboss.proxy.ClientMethodInterceptor</interceptor>
+             <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+             <interceptor>org.jboss.jmx.connector.invoker.client.InvokerAdaptorClientInterceptor</interceptor>
+             <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+          </interceptors>
+      </attribute>
+   </mbean>
+
+</server>

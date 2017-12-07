@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="org/jboss/iiop/SunJDK14IsLocalBugFix.java" kind="src" path="src/main"/>
+	<classpathentry exported="true" kind="src" path="/server"/>
+	<classpathentry kind="src" path="output/gen-src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jacorb/lib/jacorb.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-kernel.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-kernel-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jbossts/lib/jbossjts-jacorb.jar"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

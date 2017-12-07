@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="urn:oasis:names:tc:wsrp:v1:bind"
+                  xmlns:bind="urn:oasis:names:tc:wsrp:v1:bind"
+                  xmlns:intf="urn:oasis:names:tc:wsrp:v1:intf"
+                  xmlns="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+
+
+   <import namespace="urn:oasis:names:tc:wsrp:v1:intf"
+           location="wsrp_v1_interfaces.wsdl"/>
+
+  <wsdl:binding name="WSRP_v1_ServiceDescription_Binding_SOAP" type="intf:WSRP_v1_ServiceDescription_PortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+    <wsdl:operation name="getServiceDescription">
+      <soap:operation soapAction="urn:oasis:names:tc:wsrp:v1:getServiceDescription"/>
+      <wsdl:input name="getServiceDescription">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getServiceDescriptionResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+</wsdl:definitions>

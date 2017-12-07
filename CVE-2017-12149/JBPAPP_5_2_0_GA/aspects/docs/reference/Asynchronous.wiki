@@ -1,0 +1,162 @@
+!!!AOP Asynchronous Method Invocation
+''This aspect can run outside of JBoss application server''
+
+
+!!Goal
+
+	The aim of this AOP service is to achieve asynchronous method invocation to plain old JAVA object (POJO).
+
+
+!!Features
+
+* Implemented as a standalone service (can run outside of JBOSS).
+* Ability to define Asynchronous method declaration in XML or using JDK1.5 annotations.
+* Support ONEWAY and REQUEST/REPLY asynchronous method invocation.
+* Support of instance and static asynchronous method invocation.
+* Support of public, protected, private and package method.
+* Support of concurrent invocation on same instance/static method.
+* Ability to define Timeout value for duration of asynchronous method execution.
+* Thread pooling Management (Min/Max threads, keep-alive, abort/wait policy) 
+
+
+!!Example
+
+!''POJO implementation using JDK1.4 or JDK1.5 annotations for Asynchronous method declaration. For JDK 1.4 you need the AnnotationCompiler''
+
+__JDK 1.4__
+{{{
+public class POJO {
+
+/** @@org.jboss.aspects.asynchronous.aspects.jboss.Asynchronous  */
+	public void processBusinessModel(){...}
+
+/** @@org.jboss.aspects.asynchronous.aspects.jboss.Asynchronous (timeout=5000)*/ 
+	public long processBusinessModel(...){}
+ 
+}
+}}}
+
+__JDK 5.0__
+{{{
+import org.jboss.aspects.asynchronous.aspects.jboss.Asynchronous;
+
+public class POJO {
+	public void processBusinessModel(){...}
+
+        @Asynchronous
+	public long processBusinessModel(...){}
+ 
+}
+}}}
+
+
+!''Asynchronous Method Invocation and result process within same thread of execution''
+
+{{{
+POJO pojo = new POJO(...);
+}}}
+__/* Asynchronous Method Invocation */__
+{{{
+long result=pojo.processBusinessModel(...);
+...
+...
+}}}
+__/* non-blocking call */__
+{{{
+if (((AsynchronousFacade)pojo).isDone())
+{
+AsynchronousFacade aF=(AsynchronousFacade)pojo;
+
+}}}
+__/* Test response code returned */__
+{{{
+if (aF.getResponseCode()==OK)
+}}}
+__/* get method response processed asynchronously */__
+{{{
+result = ((Long)aF.getReturnValue()).longValue();
+}}}
+__/* Test if method timed out */__
+{{{
+else if (aF.getResponseCode()==TIMEOUT)
+{...}
+else
+... 
+}
+
+else {
+}}}
+__/* blocking call */__
+{{{
+AsynchronousResponse aR = ((AsynchronousFacade)pojo).waitForResponse();
+If (aR.getResponseCode()==OK)
+}}}
+__/* get method response processed asynchronously */__
+{{{
+result=((Long)aR.getReturnValue()).longValue();
+}}}
+__/* Test if method timed out */__
+{{{
+else if (aR.getReponseCode()==TIMEOUT)
+{...}
+else
+{...}
+}
+}}}
+
+
+
+!!Implementation
+Few pointers regarding the implementation .
+     
+The implementation is broken down in 4 components :
+
+*Asynchronous Engine Definition\\
+  /org/jboss/aspects/asynchronous\\
+  /org/jboss/aspects/asynchronous/common\\
+
+*Asynchronous Engine Implementation with the concurrent package\\
+  /org/jboss/aspects/asynchronous/concurrent\\
+
+*Asynchronous Facade Definition and Implementation (Mixin Class)\\
+  /org/jboss/aspects/asynchronous/aspects\\
+
+*Asynchronous Aspect Implementation with JBOSS-AOP\\
+  /org/jboss/aspects/asynchronus/aspects/jboss\\
+		
+  The Asynchronous Aspect is composed of one Mixin class (AsynchronousFacade.java) 
+and one method interceptor.(AsynchronousAspect.java)
+           
+
+
+!!Configuration
+*[JBOSS-AOP.xml|asynch_xml.html]
+If not running within JBoss you'll need this binding:
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+<aspect class="org.jboss.aspects.asynchronous.aspects.jboss.AsynchronousAspect" scope="PER_VM"/>
+   
+<bind pointcut="execution(* *->@org.jboss.aspects.asynchronous.aspects.jboss.Asynchronous(..))">
+   <advice name="execute" aspect="org.jboss.aspects.asynchronous.aspects.jboss.AsynchronousAspect"/>
+</bind>  
+                                                                           
+<introduction expr="has(* *->@org.jboss.aspects.asynchronous.aspects.jboss.Asynchronous(..)) OR class(@org.jboss.aspects.asynchronous.aspects.jboss.Asynchronous)">
+
+       <mixin>
+          <interfaces>
+            org.jboss.aspects.asynchronous.aspects.AsynchronousFacade
+          </interfaces>
+          <class>org.jboss.aspects.asynchronous.aspects.AsynchronousFacadeImpl</class>
+          <construction>new org.jboss.aspects.asynchronous.aspects.AsynchronousFacadeImpl()</construction>
+       </mixin>
+</introduction>
+
+</aop>
+}}}
+
+*[threadManager.properties|threadManager.html]
+
+!!Author
+*Claude Hussenet (mailto:chussenet@yahoo.com)

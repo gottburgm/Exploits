@@ -1,0 +1,42 @@
+<project name="tests-util-jars">
+   <!-- Utility services tests -->
+   <target name="_jars-util">
+      <!-- The external scheduler.jar -->
+      <jar destfile="${build.lib}/scheduler.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/util/scheduler/*"/>
+         </fileset>
+      </jar>
+      <!-- The scheduler.sar -->
+      <jar destfile="${build.lib}/scheduler.sar">
+         <manifest>
+            <attribute name="Class-Path" value="../../scheduler.jar"/>
+         </manifest>
+         <metainf dir="${build.resources}/util/scheduler">
+            <include name="jboss-service.xml"/>
+         </metainf>
+      </jar>
+      <!-- The scheduler.ear -->
+      <ear destfile="${build.lib}/scheduler.ear"
+         appxml="${build.resources}/util/scheduler/application.xml">
+         <metainf dir="${build.resources}/util/scheduler">
+            <include name="jboss-app.xml"/>
+         </metainf>
+         <fileset dir="${build.lib}">
+            <include name="scheduler.sar"/>
+         </fileset>
+      </ear>
+      <!-- The twiddle-test.sar -->
+      <jar destfile="${build.lib}/twiddle-test.sar">
+         <metainf dir="${build.resources}/util/twiddle">
+            <include name="jboss-service.xml"/>
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/util/mbean/**"/>
+         </fileset>
+      </jar>      
+      <!-- The service -->
+      <copy tofile="${build.lib}/test-default-scheduler-service.xml" file="${build.resources}/util/test-default-scheduler-service.xml"/>
+      <copy tofile="${build.lib}/test-jbas8382-scheduler-service.xml" file="${build.resources}/util/test-jbas8382-scheduler-service.xml"/>
+   </target>
+</project>

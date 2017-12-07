@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main"/>
+	<classpathentry kind="lib" path="src/resources"/>
+	<classpathentry excluding="org/jboss/test/aop/test/AOPTestSetup.java|org/jboss/test/asynch/" kind="src" path="src/test"/>
+	<classpathentry kind="src" path="src/test50"/>
+	<classpathentry exported="true" kind="src" path="/j2se"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/javassist/lib/javassist.jar" sourcepath="/thirdparty/javassist/lib/javassist-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/common-core/lib/jboss-common-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/common-logging-spi/lib/jboss-logging-spi.jar" sourcepath="/thirdparty/jboss/common-logging-spi/lib/jboss-logging-spi-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/integration/lib/jboss-integration.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-cl/lib/jboss-classloader.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-cl/lib/jboss-classloading.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-deployers/lib/jboss-deployers-client-spi.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-deployers/lib/jboss-deployers-spi.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-deployers/lib/jboss-deployers-core-spi.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-deployers/lib/jboss-deployers-structure-spi.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-deployers/lib/jboss-deployers-vfs-spi.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/cluster/lib/jboss-ha-client.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/cluster/lib/jboss-ha-server-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-javaee/lib/jboss-javaee.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-man/lib/jboss-managed.jar" sourcepath="/thirdparty/jboss/jboss-man/lib/jboss-managed-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-mdr/lib/jboss-mdr.jar" sourcepath="/thirdparty/jboss/jboss-mdr/lib/jboss-mdr-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/metadata/lib/jboss-metadata.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/remoting/lib/jboss-remoting.jar" sourcepath="/thirdparty/jboss/remoting/lib/jboss-remoting-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-vfs/lib/jboss-vfs.jar" sourcepath="/thirdparty/jboss/jboss-vfs/lib/jboss-vfs-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/beanshell/lib/bsh.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/oswego-concurrent/lib/concurrent.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/junit/lib/junit.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/test/lib/jboss-test.jar" sourcepath="/thirdparty/jboss/test/lib/jboss-test-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/aop/lib/pluggable-instrumentor.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/aspects/lib/jboss-remoting-aspects.jar" sourcepath="/thirdparty/org/jboss/aspects/lib/jboss-remoting-aspects-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/aspects/lib/jboss-security-aspects.jar" sourcepath="/thirdparty/org/jboss/aspects/lib/jboss-security-aspects-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/aspects/lib/jboss-transaction-aspects.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/sun-jaxb/lib/jaxb-api.jar" sourcepath="/thirdparty/sun-jaxb/lib/jaxb-api-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-aop-mc-int.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-aop-mc-int-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-kernel.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-kernel-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-dependency.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-dependency-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/aop/lib/jboss-aop.jar" sourcepath="/thirdparty/jboss/aop/lib/jboss-aop-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/aop/lib/jboss-aop-asintegration-core.jar" sourcepath="/thirdparty/jboss/aop/lib/jboss-aop-asintegration-core-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/aop/lib/jboss-aop-asintegration-mc.jar" sourcepath="/thirdparty/jboss/aop/lib/jboss-aop-asintegration-mc-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/aop/lib/jboss-aop-aspects.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/aop/lib/jboss-aop-asintegration-jmx.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/web/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-bootstrap/lib/jboss-bootstrap.jar" sourcepath="/thirdparty/jboss/jboss-bootstrap/lib/jboss-bootstrap-sources.jar"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration xmlns="urn:hornetq"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="urn:hornetq /schema/hornetq-jms.xsd">
+
+
+   <topic name="testTopic">
+      <entry name="/topic/testTopic"/>
+   </topic>
+
+   <topic name="securedTopic">
+      <entry name="/topic/securedTopic"/>
+   </topic>
+
+   <topic name="testDurableTopic">
+      <entry name="/topic/testDurableTopic"/>
+   </topic>
+
+   <queue name="testQueue">
+      <entry name="/queue/testQueue"/>
+   </queue>
+
+   <queue name="A">
+      <entry name="/queue/A"/>
+   </queue>
+
+   <queue name="B">
+      <entry name="/queue/B"/>
+   </queue>
+
+   <queue name="C">
+      <entry name="/queue/C"/>
+   </queue>
+
+   <queue name="D">
+      <entry name="/queue/D"/>
+   </queue>
+
+   <queue name="ex">
+      <entry name="/queue/ex"/>
+   </queue>
+
+
+</configuration>

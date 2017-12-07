@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="jbxb"
+            xmlns="jbxb"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified"
+            version="1.0"
+>
+
+   <xsd:annotation>
+      <xsd:documentation>
+         <![CDATA[schema]]>
+      </xsd:documentation>
+   </xsd:annotation>
+
+</xsd:schema>

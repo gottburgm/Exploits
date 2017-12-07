@@ -1,0 +1,291 @@
+<project name="ClusterBenchmarks" default="all" basedir=".">
+
+   <!-- set global properties for this build -->
+
+   <property file="ant.properties"/>
+
+   <property environment="env"/>
+   <property name="jboss.home" value="${env.JBOSS_HOME}"/>
+
+   <property name="src.dir" value="${basedir}/src"/>
+   <property name="dist.dir" value="${basedir}/dist"/>
+   <property name="build.dir" value="${basedir}/build"/>
+   <property name="build.conf" value="${basedir}/conf"/>
+   <property name="node1" value="bench1"/>
+   <property name="node2" value="bench2"/>
+   <property name="test.clients" value="10"/>
+   <property name="test.iterations" value="1000"/>
+   <property name="test.print_time" value="false"/>
+   <property name="jboss.server.dir" value="${jboss.home}/server"/>
+   <property name="jboss.server.all.dir" value="${jboss.server.dir}/all"/>
+   <property name="jboss.deploy1.dir" value="${jboss.server.dir}/${node1}"/>
+   <property name="jboss.deploy2.dir" value="${jboss.server.dir}/${node2}"/>
+   <property name="services.properties" value="${build.conf}/services.properties"/>
+   <property environment="env"/>
+   <path id="thirdparty.classpath">
+      <fileset dir="${jboss.home}/lib">
+         <include name="*.jar"/>
+      </fileset>
+      <fileset dir="${jboss.server.all.dir}/lib">
+         <include name="*.jar"/>
+      </fileset>
+   </path>
+
+   <target name="compile">
+      <mkdir dir="${build.dir}"/>
+      <mkdir dir="${build.dir}/lib"/>
+      <mkdir dir="${dist.dir}"/>
+      <javac srcdir="${src.dir}"
+         destdir="${build.dir}"
+         debug="on"
+         deprecation="on"
+         optimize="off"
+         >
+         <classpath refid="thirdparty.classpath"/>
+         <include name="**/**.java"/>
+      </javac>
+   </target>
+
+   <target name="create_nodes">
+      <echo>Creating build nodes.</echo>
+      <mkdir dir="${jboss.deploy1.dir}"/>
+      <mkdir dir="${jboss.deploy2.dir}"/>
+      <copy todir="${jboss.deploy1.dir}" filtering="no">
+         <fileset dir="${jboss.server.all.dir}">
+            <include name="**"/>
+         </fileset>
+      </copy>
+      <copy todir="${jboss.deploy2.dir}" filtering="no">
+         <fileset dir="${jboss.server.all.dir}">
+            <include name="**"/>
+         </fileset>
+      </copy>
+   </target>
+
+   <target name="copy_configs" depends="create_nodes">
+      <echo>Copying config files to bench nodes</echo>
+      <copy file="${build.conf}/jboss-service-bench1.xml"
+         tofile="${jboss.deploy1.dir}/conf/jboss-service.xml"
+         overwrite="true"/>
+      <copy file="${build.conf}/jboss-service-bench2.xml"
+         tofile="${jboss.deploy2.dir}/conf/jboss-service.xml"
+         overwrite="true"/>
+   </target>
+
+   <target name="config" depends="copy_configs"/>
+
+   <target name="all" depends="clean,config,package-app,deploy"/>
+
+   <target name="package-app" depends="clean,compile">
+      <jar jarfile="${build.dir}/lib/simpleUtil.jar">
+         <fileset dir="${build.dir}">
+            <include name="com/simple/util/**.class"/>
+         </fileset>
+      </jar>
+      <jar jarfile="${build.dir}/simpleClusterSession.jar" manifest="${basedir}/META-INF/MANIFEST.MF">
+         <fileset dir="${build.dir}">
+            <include name="com/cluster/simple/sessionbeans/Simple**Bean.class"/>
+            <include name="com/cluster/simple/util/**.class"/>
+         </fileset>
+         <fileset dir="${basedir}">
+            <include name="META-INF/ejb-jar.xml"/>
+            <include name="META-INF/jboss.xml"/>
+         </fileset>
+      </jar>
+      <jar jarfile="${build.dir}/callerClusterSession.jar" manifest="${basedir}/META-INF/MANIFEST.MF">
+         <fileset dir="${build.dir}">
+            <include name="com/cluster/simple/sessionbeans/Caller**Bean.class"/>
+            <include name="com/cluster/simple/util/**.class"/>
+         </fileset>
+         <fileset dir="${build.conf}">
+            <include name="META-INF/ejb-jar.xml"/>
+            <include name="META-INF/jboss.xml"/>
+         </fileset>
+      </jar>
+      <jar jarfile="${dist.dir}/simpleClusterSessionClient.jar">
+         <fileset dir="${build.dir}">
+            <exclude name="org/jboss/harness/HA*.class"/>
+            <include name="com/cluster/simple/client/TestClient.class"/>
+            <include name="com/cluster/simple/client/EJBTestClient.class"/>
+            <include name="com/cluster/simple/sessionbeans/SimpleSessionHome.class"/>
+            <include name="com/cluster/simple/sessionbeans/SimpleSession.class"/>
+            <include name="com/cluster/simple/sessionbeans/CallerSessionHome.class"/>
+            <include name="com/cluster/simple/sessionbeans/CallerSession.class"/>
+            <include name="org/**"/>
+         </fileset>
+         <fileset dir="${build.conf}">
+            <include name="META-INF/services.properties"/>
+         </fileset>
+      </jar>
+      <jar jarfile="${dist.dir}/bindingClient.jar">
+         <fileset dir="${build.dir}">
+            <include name="org/jboss/harness/HA*.class"/>
+         </fileset>
+         <fileset dir="${build.conf}">
+            <include name="META-INF/services.properties"/>
+         </fileset>
+      </jar>
+      <jar jarfile="${dist.dir}/simpleClusterSessionAdapter.jar">
+         <fileset dir="${build.dir}">
+            <include name="com/cluster/simple/client/SimpleClientAdapter.class"/>
+         </fileset>
+      </jar>
+      <ear earfile="${dist.dir}/simpleClusterSession.ear" appxml="${basedir}/META-INF/application.xml">
+         <fileset dir="${build.dir}">
+            <include name="simpleClusterSession.jar"/>
+            <include name="simpleClusterSession.war"/>
+         </fileset>
+         <metainf dir="${basedir}/META-INF">
+            <include name="jboss-app.xml"/>
+         </metainf>
+      </ear>
+      <ear earfile="${dist.dir}/callerClusterSession.ear" appxml="${build.conf}/META-INF/application.xml">
+         <fileset dir="${build.dir}">
+            <include name="callerClusterSession.jar"/>
+         </fileset>
+         <metainf dir="${build.conf}/META-INF">
+            <include name="jboss-app.xml"/>
+         </metainf>
+      </ear>
+   </target>
+
+   <target name="deploy">
+      <copy todir="${jboss.deploy1.dir}/deploy" filtering="no">
+         <fileset dir="${dist.dir}">
+            <include name="simpleClusterSessionClient.jar"/>
+            <include name="simpleClusterSession.ear"/>
+         </fileset>
+      </copy>
+      <copy todir="${jboss.deploy2.dir}/deploy" filtering="no">
+         <fileset dir="${dist.dir}">
+            <include name="simpleClusterSessionClient.jar"/>
+            <include name="simpleClusterSession.ear"/>
+         </fileset>
+      </copy>
+   </target>
+
+   <target name="clean">
+      <delete dir="${build.dir}"/>
+      <delete dir="${dist.dir}"/>
+   </target>
+
+   <target name="clean_all" depends="clean">
+      <delete dir="${jboss.deploy1.dir}"/>
+      <delete dir="${jboss.deploy2.dir}"/>
+   </target>
+
+   <target name="start_servers">
+      <echo>${jboss.home}/bin/run.bat -c ${node1}</echo>
+      <exec dir="${jboss.home}/bin" executable="run.bat" os="Windows XP" output="${node1}_output.txt">
+         <arg line="-c ${node1}"/>
+      </exec>
+      <exec dir="${jboss.home}/bin" executable="run.bat" os="Windows XP" output="${node2}_output.txt">
+         <arg line="-c ${node2}"/>
+      </exec>
+      <exec dir="${jboss.home}/bin" executable="run.sh" os="Linux" output="${node1}_output.txt">
+         <arg line="-c ${node1}"/>
+      </exec>
+      <exec dir="${jboss.home}/bin" executable="run.sh" os="Linux" output="${node2}_output.txt">
+         <arg line="-c ${node2}"/>
+      </exec>
+   </target>
+   <target name="stop_servers">
+      <exec dir="${jboss.home}/bin" executable="shutdown.bat" os="Windows XP" output="${node1}_output.txt">
+         <arg line="-S ${node1}"/>
+      </exec>
+      <exec dir="${jboss.home}/bin" executable="shutdown.bat" os="Windows XP" output="${node2}_output.txt">
+         <arg line="-S ${node2}"/>
+      </exec>
+      <exec dir="${jboss.home}/bin" executable="shutdown.sh" os="Linux" output="${node1}_output.txt">
+         <arg line="-S ${node1}"/>
+      </exec>
+      <exec dir="${jboss.home}/bin" executable="shutdown.sh" os="Linux" output="${node2}_output.txt">
+         <arg line="-S ${node2}"/>
+      </exec>
+   </target>
+
+   <target name="tests">
+      <antcall target="start_servers"/>
+      <!-- Wait for 1 minutes for servers to come up -->
+      <sleep seconds="60"/>
+      <!-- Start executing tests -->
+      <antcall target="run_jndi_test"/>
+      <!-- Now shutdown servers now that tests done -->
+      <antcall target="stop_servers"/>
+   </target>
+
+   <target name="run_local_ejb_test" depends="deploy">
+      <copy todir="${jboss.deploy1.dir}/deploy" filtering="no" overwrite="true">
+         <fileset dir="${dist.dir}">
+            <include name="callerClusterSession.ear"/>
+         </fileset>
+      </copy>
+      <sleep seconds="10"/>
+      <java classname="org.jboss.harness.EJBTestHarness">
+         <arg value="${test.iterations}"/>
+         <arg value="${test.clients}"/>
+         <arg value="${test.print_time}"/>
+         <classpath>
+            <pathelement location="${dist.dir}/simpleClusterSessionClient.jar"/>
+         </classpath>
+         <classpath refid="thirdparty.classpath"/>
+      </java>
+   </target>
+
+   <target name="run_remote_ejb_test" depends="deploy">
+      <copy todir="${jboss.deploy2.dir}/deploy" filtering="no" overwrite="true">
+         <fileset dir="${dist.dir}">
+            <include name="callerClusterSession.ear"/>
+         </fileset>
+      </copy>
+      <delete file="${jboss.deploy2.dir}/deploy/simpleClusterSession.ear"/>
+      <sleep seconds="10"/>
+      <java classname="org.jboss.harness.EJBTestHarness">
+         <arg value="${test.iterations}"/>
+         <arg value="${test.clients}"/>
+         <arg value="${test.print_time}"/>
+         <arg value="localhost:1099"/>
+         <classpath>
+            <pathelement location="${dist.dir}/simpleClusterSessionClient.jar"/>
+         </classpath>
+         <classpath refid="thirdparty.classpath"/>
+      </java>
+   </target>
+
+   <target name="run_jndi_test">
+      <java classname="org.jboss.harness.JNDITestHarness">
+         <arg value="${test.iterations}"/>
+         <arg value="${test.clients}"/>
+         <arg value="${test.print_time}"/>
+         <classpath>
+            <pathelement location="${dist.dir}/simpleClusterSessionClient.jar"/>
+         </classpath>
+         <classpath refid="thirdparty.classpath"/>
+      </java>
+   </target>
+   
+      <target name="run_habinding_test">
+      <java classname="org.jboss.harness.HAJNDITestHarness">
+         <arg value="${test.iterations}"/>
+         <arg value="${test.clients}"/>
+         <arg value="${test.print_time}"/>
+         <classpath>
+            <pathelement location="${dist.dir}/bindingClient.jar"/>
+         </classpath>
+         <classpath refid="thirdparty.classpath"/>
+      </java>
+   </target>
+
+   <target name="help">
+      <echo>
+         Targets:
+         all - cleans out any deployments and builds bench nodes
+         clean - cleans out any deployments
+         clean_all - removes bench nodes
+         run_jndi_test - runs the jndi lookup test (local or HA depends on service.properties)
+         run_local_ejb_test - runs the local ejb invocation test
+         run_remote_ejb_test - runs the remote ejb invocation test
+      </echo>
+   </target>
+
+</project>

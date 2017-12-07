@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <!--
+      | Statistics collector service
+   -->
+   <mbean
+      code="org.jboss.varia.stats.StatisticsCollector"
+      name="jboss.stats:service=StatisticsCollector">
+   </mbean>
+
+   <!--
+      | DataSource interceptor service
+      |
+      | Use org.jboss.varia.stats.DataSourceInterceptorJDK5 for JDBC3
+      | Use org.jboss.varia.stats.DataSourceInterceptorJDK6 for JDBC4
+   -->
+   <mbean
+      code="org.jboss.varia.stats.DataSourceInterceptorJDK5" 
+      name="jboss.stats:service=DataSourceInterceptor">
+
+      <!-- the service this interceptor reports to -->
+      <depends optional-attribute-name="StatsCollector">jboss.stats:service=StatisticsCollector</depends>
+
+      <!-- JNDI under which the service will be bound. -->
+      <attribute name="BindName">java:/DSInterceptor</attribute>
+
+      <!-- JNDI name of the target DataSource -->
+      <attribute name="TargetName">java:/DefaultDS</attribute>
+      <depends>jboss.jca:service=LocalTxCM,name=DefaultDS</depends>
+
+   </mbean>
+
+   <!--
+      | Report generators
+   -->
+
+   <!-- table statistics report generator -->
+   <mbean
+      code="org.jboss.varia.stats.report.TableReportGenerator" 
+      name="jboss.stats:service=ReportGenerator,name=Table">
+
+      <!-- the service this interceptor reports to -->
+      <depends optional-attribute-name="StatsCollector">jboss.stats:service=StatisticsCollector</depends>
+
+      <!-- generator name -->
+      <attribute name="Name">Table statistics</attribute>
+      <!-- generator description -->
+      <attribute name="Description">
+         Statistics for SELECT, UPDATE, INSERT and DELETE SQL statements per table
+      </attribute>
+   </mbean>
+
+   <!-- general statistics report generator -->
+   <mbean
+      code="org.jboss.varia.stats.report.GeneralReportGenerator" 
+      name="jboss.stats:service=ReportGenerator,name=General">
+
+      <!-- the service this interceptor reports to -->
+      <depends optional-attribute-name="StatsCollector">jboss.stats:service=StatisticsCollector</depends>
+
+      <!-- generator name -->
+      <attribute name="Name">General statistics</attribute>
+      <!-- generator description -->
+      <attribute name="Description">
+         General statistics for method invocations and SQL statements
+      </attribute>
+   </mbean>
+
+   <!-- cmp jdbc2 cache statistics report generator -->
+   <mbean
+      code="org.jboss.varia.stats.report.CacheReportGenerator" 
+      name="jboss.stats:service=ReportGenerator,name=Cache">
+
+      <!-- the service this interceptor reports to -->
+      <depends optional-attribute-name="StatsCollector">jboss.stats:service=StatisticsCollector</depends>
+
+      <!-- generator name -->
+      <attribute name="Name">Cache statistics</attribute>
+      <!-- generator description -->
+      <attribute name="Description">
+         Cache lock contention, hit/miss, eviction
+      </attribute>
+   </mbean>
+</server>

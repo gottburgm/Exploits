@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<!--
+   | Targets that run the jbpapp6523 - Commons Logging Use TCCL tests
+-->
+<project name="jbpapp6523.tests" xmlns:server="http://jboss.org/ns/test/ant/server">
+
+   <patternset id="jbpapp6523-use_tccl-false.includes">
+      <include name="org/jboss/test/commons_logging/jbpapp6523/test/UseTCCLFalseTestCase.class"/>
+   </patternset>
+   <patternset id="jbpapp6523-use_tccl-true.includes">
+      <include name="org/jboss/test/commons_logging/jbpapp6523/test/UseTCCLTrueTestCase.class"/>
+   </patternset>
+   
+   <target name="tests-jbpapp6523" description="Tests JBPAPP-6523 Commons Loggins Use TCCL">
+     
+     <!-- use_tccl = false -->
+      <create-config baseconf="all" newconf="jbpapp6523-use_tccl-false">
+         <patternset>
+            <include name="**/*"/>
+         </patternset>
+      </create-config>
+
+      <server:start name="jbpapp6523-use_tccl-false"/>
+      <run-junit junit.patternset="jbpapp6523-use_tccl-false.includes"
+                 junit.configuration="use_tccl=false"/>
+      <server:stop name="jbpapp6523-use_tccl-false"/>
+      
+      <!-- use_tccl = true -->
+      <create-config baseconf="all" newconf="jbpapp6523-use_tccl-true">
+         <patternset>
+            <include name="**/*"/>
+         </patternset>
+      </create-config>
+
+      <server:start name="jbpapp6523-use_tccl-true"/>
+      <run-junit junit.patternset="jbpapp6523-use_tccl-true.includes"
+                 junit.configuration="use_tccl=true"/>
+      <server:stop name="jbpapp6523-use_tccl-true"/>
+
+   </target>
+</project>

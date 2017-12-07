@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+   <local-tx-datasource>
+      <jndi-name>ProfileServiceTestDataSource1</jndi-name>
+      <connection-url>jdbc:hsqldb:${jboss.server.data.dir}${/}hypersonic${/}localDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <user-name>sa</user-name>
+      <password></password>
+      <min-pool-size>5</min-pool-size>
+      <max-pool-size>20</max-pool-size>
+      <idle-timeout-minutes>0</idle-timeout-minutes>
+      <security-domain>HsqlDbRealm</security-domain>
+      <prepared-statement-cache-size>32</prepared-statement-cache-size>
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+   </local-tx-datasource>
+
+   <local-tx-datasource>
+      <jndi-name>ProfileServiceTestRemoveDataSource</jndi-name>
+      <connection-url>jdbc:hsqldb:${jboss.server.data.dir}${/}hypersonic${/}localDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <user-name>sa</user-name>
+      <password></password>
+      <min-pool-size>5</min-pool-size>
+      <max-pool-size>20</max-pool-size>
+      <idle-timeout-minutes>0</idle-timeout-minutes>
+      <security-domain>HsqlDbRealm</security-domain>
+      <prepared-statement-cache-size>32</prepared-statement-cache-size>
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+   </local-tx-datasource>
+
+   <local-tx-datasource>
+      <jndi-name>ProfileServiceTestDataSource2</jndi-name>
+      <connection-url>jdbc:hsqldb:${jboss.server.data.dir}${/}hypersonic${/}localDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <user-name>sa</user-name>
+      <password></password>
+      <min-pool-size>5</min-pool-size>
+      <max-pool-size>20</max-pool-size>
+      <idle-timeout-minutes>0</idle-timeout-minutes>
+      <security-domain>HsqlDbRealm</security-domain>
+      <prepared-statement-cache-size>32</prepared-statement-cache-size>
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+   </local-tx-datasource>
+   
+    <local-tx-datasource>
+        <jndi-name>OtherLocalRemoveDS</jndi-name>
+        <rar-name>jboss-local-jdbc.rar</rar-name>
+        <use-java-context>true</use-java-context>
+        <connection-definition>javax.sql.DataSource</connection-definition>
+        <jmx-invoker-name>jboss:service=invoker,type=jrmp</jmx-invoker-name>
+        <min-pool-size>0</min-pool-size>
+        <max-pool-size>10</max-pool-size>
+        <blocking-timeout-millis>30000</blocking-timeout-millis>
+        <idle-timeout-minutes>30</idle-timeout-minutes>
+        <prefill>false</prefill>
+        <background-validation>false</background-validation>
+        <background-validation-millis>0</background-validation-millis>
+        <validate-on-match>true</validate-on-match>
+        <statistics-formatter>org.jboss.resource.statistic.pool.JBossDefaultSubPoolStatisticFormatter</statistics-formatter>
+        <isSameRM-override-value>false</isSameRM-override-value>
+        <allocation-retry>0</allocation-retry>
+        <allocation-retry-wait-millis>5000</allocation-retry-wait-millis>
+        <security-domain xsi:type="securityMetaData" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+        <metadata>
+            <type-mapping>Oracle9i</type-mapping>
+        </metadata>
+        <type-mapping>Oracle9i</type-mapping>
+        <local-transaction/>
+        <check-valid-connection-sql>SELECT * FROM DUAL</check-valid-connection-sql>
+        <exception-sorter-class-name>org.jboss.resource.adapter.jdbc.vendor.OracleExceptionSorter</exception-sorter-class-name>
+        <prepared-statement-cache-size>0</prepared-statement-cache-size>
+        <share-prepared-statements>false</share-prepared-statements>
+        <set-tx-query-timeout>false</set-tx-query-timeout>
+        <query-timeout>0</query-timeout>
+        <use-try-lock>60000</use-try-lock>
+        <driver-class>oracle.jdbc.driver.OracleDriver</driver-class>
+        <connection-url>jdbc:oracle:oci:@youroracle-tns-name</connection-url>
+    </local-tx-datasource>
+
+</datasources>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project default="run" name="JBoss/AOP">
+   <target name="prepare">
+      <path id="javassist.classpath">
+         <pathelement path="../../../javassist.jar"/>
+      </path>
+
+      <path id="trove.classpath">
+         <pathelement path="../../../trove.jar"/>
+      </path>
+
+      <path id="concurrent.classpath">
+         <pathelement path="../../../concurrent.jar"/>
+      </path>
+
+      <path id="jboss.common.classpath">
+         <pathelement path="../../../jboss-common.jar"/>
+      </path>
+
+      <path id="jboss.aop.classpath">
+         <pathelement path="../../../jboss-aop.jar"/>
+      </path>
+
+      <path id="jboss.aspects.classpath">
+         <pathelement path="../../../jboss-aspects.jar"/>
+      </path>
+
+      <path id="qdox.classpath">
+         <pathelement path="../../../qdox.jar"/>
+      </path>
+      
+      <path id="junit.classpath">
+         <pathelement path="../../../junit.jar"/>
+      </path>
+      
+      <path id="classpath">
+         <path refid="javassist.classpath"/>
+         <path refid="trove.classpath"/>
+         <path refid="jboss.aop.classpath"/>
+         <path refid="jboss.common.classpath"/>
+         <path refid="concurrent.classpath"/>
+	 <path refid="qdox.classpath"/>
+	 <path refid="jboss.aspects.classpath"/>
+	 <path refid="junit.classpath"/>
+         <pathelement path="."/>
+      </path>
+
+      <taskdef name="annotationc" classname="org.jboss.aop.ant.AnnotationC" classpathref="jboss.aop.classpath"/>
+      <taskdef name="aopc" classname="org.jboss.aop.ant.AopC" classpathref="jboss.aop.classpath"/>
+   </target>
+
+
+   <target name="compile" depends="prepare">
+      <javac srcdir="."
+         destdir="."
+         debug="on"
+         deprecation="on"
+         optimize="off"
+         includes="**">
+         <classpath refid="classpath"/>
+      </javac>
+      <annotationc compilerclasspathref="classpath" classpathref="classpath" bytecode="true">
+         <src path="."/>
+      </annotationc>
+      <aopc compilerclasspathref="classpath" classpathref="classpath" verbose="true">
+         <classpath path="."/>
+         <src path="."/>
+         <aoppath>
+            <pathelement path="jboss-aop.xml"/>
+         </aoppath>
+      </aopc>
+   </target>
+
+ 
+
+<target name="run" depends="compile"> 
+   	<junit fork="yes">
+            <sysproperty key="jboss.aop.path" value="jboss-aop.xml"/>
+            <classpath refid="classpath"/>
+            <formatter type="plain" usefile="false"/>
+        <test name="test.patterns.readwritelock.JUnitTestReadWriteLockAspects" /> 
+    </junit>
+</target>
+
+
+
+
+
+
+
+
+</project>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+   <description>Embedded JBoss</description>
+
+   <context-param>
+      <param-name>jboss.embedded.resources</param-name>
+      <param-value>/WEB-INF/lib/ejb-test.jar</param-value>
+   </context-param>
+
+   <listener>
+      <listener-class>org.jboss.embedded.ServletContextResourceScanner</listener-class>
+   </listener>
+
+</web-app>

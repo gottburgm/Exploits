@@ -1,0 +1,14 @@
+<project name="tests-jbm-jars">
+   
+   <!-- jms tests -->
+   <target name="_jars-jbossmessaging-cluster">
+      <mkdir dir="${build.lib}"/>
+      
+      <jar destfile="${build.lib}/jbm-killservice.sar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jbossmessaging/clustertest/killservice/*"/>
+         </fileset>
+         <zipfileset dir="${build.resources}/jbossmessaging/meta-inf-killserver" prefix="META-INF/"/>
+      </jar>	
+   </target>
+</project>

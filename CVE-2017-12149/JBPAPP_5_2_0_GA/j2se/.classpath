@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main"/>
+	<classpathentry kind="src" path="src/tests"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/common-core/lib/jboss-common-core.jar" sourcepath="/thirdparty/jboss/common-core/lib/jboss-common-core-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/common-logging-spi/lib/jboss-logging-spi.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/common-logging-log4j/lib/jboss-logging-log4j.jar" sourcepath="/thirdparty/jboss/common-logging-log4j/lib/jboss-logging-log4j-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/oswego-concurrent/lib/concurrent.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/dom4j/lib/dom4j.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-reflect/lib/jboss-reflect.jar" sourcepath="/thirdparty/jboss/jboss-reflect/lib/jboss-reflect-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/integration/lib/jboss-integration.jar" sourcepath="/thirdparty/jboss/integration/lib/jboss-integration-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/common-beans/lib/jboss-common-beans.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/junit/lib/junit.jar"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

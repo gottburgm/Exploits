@@ -1,0 +1,51 @@
+<html>
+<body>
+<p>
+<h2>Threadbased Aspect</h2>
+
+This aspect is usable outside of JBoss Application Server
+</p><p>
+What we want to accomplish with this aspect is that when you tag a field (static or member) as <tt>@ThreadBased</tt>, its value will behave as though it were stored in a <tt>java.lang.ThreadLocal</tt>.  Sure, you could use a ThreadLocal variable directly, but the problem with ThreadLocal is that it is untyped and you have to use "verbose" (ok, its not <i>that</i> verbose) <tt>get()</tt> and <tt>set()</tt> methods.  So, what we'll do here is create a typed ThreadLocal field.
+</p><p>
+Using this new <i>type</i> would look like this:
+</p><p>
+<b>JDK 1.4</b>
+<pre>
+import org.jboss.aspects.Threadbased;
+
+public class Foo
+{
+   /**
+    * @@org.jboss.aspects.Threadbased 
+    */
+   private int counter;
+}
+</pre>
+</p><p>
+JDK 1.4 requires our AnnotationCompiler.
+</p><p>
+<b>JDK 5.0</b>
+<pre>
+import org.jboss.aspects.Threadbased;
+
+public class Foo
+{
+   @Threadbased private int counter;
+}
+</pre>
+</p><p>
+</p><p>
+To use outside of the JBoss Application Server you need this binding:
+</p><p>
+<b>jboss-aop.xml</b>
+<pre>
+&lt;aop&gt;
+   &lt;aspect class="org.jboss.aspects.ThreadbasedAspect" scope="PER_JOINPOINT"/&gt;
+   &lt;bind pointcut="field(* *-&gt;@org.jboss.aspects.Threadbased)"&gt;
+      &lt;advice name="access" aspect="org.jboss.aspects.ThreadbasedAspect"/&gt;
+   &lt;/bind&gt;
+&lt;/aop&gt;
+</pre>
+</p>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ejb-jar xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd"
+	 version="2.1">
+   <enterprise-beans>
+      <session>
+         <ejb-name>jbpapp6462</ejb-name>
+         <home>org.jboss.test.iiop.jbpapp6462.ejb.TestEJBHome</home>
+         <remote>org.jboss.test.iiop.jbpapp6462.ejb.TestEJB</remote>
+         <ejb-class>org.jboss.test.iiop.jbpapp6462.ejb.TestEJBBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Bean</transaction-type>
+      </session>
+   </enterprise-beans>
+</ejb-jar>

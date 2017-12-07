@@ -1,0 +1,214 @@
+<!-- $Id: modules.ent 113233 2012-07-17 15:25:27Z jeff.zhang $ -->
+
+<!-- Main -->
+<property name="jboss.main.root" value="${project.root}/main/output"/>
+<property name="jboss.main.lib" value="${jboss.main.root}/lib"/>
+<path id="jboss.main.classpath">
+  <pathelement path="${jboss.main.lib}/jboss-main.jar"/>
+</path>
+
+<!-- Bootstrap -->
+<property name="jboss.bootstrap.root" value="${project.root}/bootstrap/output"/>
+<property name="jboss.bootstrap.lib" value="${jboss.bootstrap.root}/lib"/>
+<path id="jboss.bootstrap.classpath">
+  <pathelement path="${jboss.bootstrap.lib}/jboss-bootstrap.jar"/>
+</path>
+
+<!-- Aspects -->
+<property name="jboss.aspects.root" value="${project.root}/aspects/output"/>
+<property name="jboss.aspects.lib" value="${jboss.aspects.root}/lib"/>
+<path id="jboss.aspects.classpath">
+  <pathelement path="${jboss.aspects.lib}/jboss-aspect-library.jar"/>
+</path>
+
+<!-- tomcat -->
+<property name="jboss.tomcat.root" value="${project.root}/tomcat/output"/>
+  <property name="jboss.tomcat.lib" value="${jboss.tomcat.root}/lib"/>
+<path id="jboss.tomcat.classpath">
+  <pathelement path="${jboss.tomcat.lib}/jbossweb-cluster.aop"/>
+  <pathelement path="${jboss.tomcat.root}/resource"/>
+  <pathelement path="${jboss.tomcat.root}/deploy/jbossweb.sar/jboss-web-service.jar"/>
+  <pathelement path="${jboss.tomcat.root}/deploy/jboss-web.deployer/jboss-web-deployer.jar"/>
+</path>
+
+<!-- Cluster -->
+<property name="jboss.cluster.root" value="${project.root}/cluster/output"/>
+<property name="jboss.cluster.lib" value="${jboss.cluster.root}/lib"/>
+<property name="jboss.cluster.resources" value="${jboss.cluster.root}/resources"/>
+<path id="jboss.cluster.classpath">
+  <pathelement path="${jboss.cluster.lib}/jbossha.jar"/>
+  <pathelement path="${jboss.cluster.lib}/jbossha-httpsession.sar"/>
+  <pathelement path="${jboss.cluster.lib}/jbossha-singleton.jar"/>
+  <pathelement path="${jboss.cluster.resources}"/>
+</path>
+
+
+<!-- Compatibility -->
+<property name="jboss.compatibility.root" value="${project.root}/compatibility/output"/>
+<property name="jboss.compatibility.lib" value="${jboss.compatibility.root}/lib"/>
+<path id="jboss.compatibility.classpath">
+</path>
+
+<!-- Iiop -->
+<property name="jboss.iiop.root" value="${project.root}/iiop/output"/>
+<property name="jboss.iiop.lib" value="${jboss.iiop.root}/lib"/>
+<path id="jboss.iiop.classpath">
+  <pathelement path="${jboss.iiop.lib}/jboss-iiop.jar"/>
+</path>
+
+<!-- J2SE -->
+<property name="jboss.j2se.root" value="${project.root}/j2se/output"/>
+<property name="jboss.j2se.lib" value="${jboss.j2se.root}/lib"/>
+<path id="jboss.j2se.classpath">
+  <pathelement path="${jboss.j2se.lib}/jboss-j2se.jar"/>
+</path>
+<path id="jboss.jmxcompliance.classpath">
+  <pathelement path="${jboss.j2se.lib}/jboss-jmx-compliance.jar"/>
+</path>
+
+<!-- Deployment -->
+<property name="jboss.deployment.root" value="${project.root}/deployment/output"/>
+<property name="jboss.deployment.lib" value="${jboss.deployment.root}/lib"/>
+<path id="jboss.deployment.classpath">
+  <pathelement path="${jboss.deployment.lib}/jboss-deployment.jar"/>
+  <pathelement path="${jboss.deployment.lib}/jboss-jsr88.jar"/>
+</path>
+
+<!-- EJB3 -->
+<property name="jboss.ejb3.root" value="${project.root}/ejb3/output"/>
+<property name="jboss.ejb3.lib" value="${jboss.ejb3.root}/lib"/>
+<path id="jboss.ejb3.classpath">
+  <pathelement path="${jboss.ejb3.lib}/jboss-ejb3.jar"/>
+  <pathelement path="${jboss.ejb3.lib}/jboss-appclient.jar"/>
+</path>
+
+<!-- Embedded -->
+<property name="jboss.embedded.root" value="${project.root}/embedded/output/lib/embedded-jboss"/>
+<property name="jboss.embedded.lib" value="${jboss.embedded.root}/lib"/>
+<path id="jboss.embedded.classpath">
+  <pathelement path="${jboss.embedded.lib}/jboss-embedded-all.jar"/>
+  <pathelement path="${jboss.embedded.lib}/hibernate-all.jar"/>
+  <pathelement path="${jboss.embedded.lib}/thirdparty-all.jar"/>
+  <pathelement path="${jboss.embedded.root}/bootstrap"/>
+</path>
+
+<!-- JCA -->
+<property name="jboss.jca.root" value="${project.root}/connector/output"/>
+<property name="jboss.jca.lib" value="${jboss.jca.root}/lib"/>
+<path id="jboss.jca.classpath">
+  <pathelement path="${jboss.jca.lib}/jboss-jca.jar"/>
+  <pathelement path="${jboss.jca.lib}/jboss-jca-deployer.jar"/>
+  <pathelement path="${jboss.jca.lib}/jboss-local-jdbc.jar"/>
+  <pathelement path="${jboss.jca.lib}/jboss-xa-jdbc.jar"/>
+    <pathelement path="${jboss.jca.lib}/jboss-ha-local-jdbc.jar"/>
+  <pathelement path="${jboss.jca.lib}/jboss-common-jdbc-wrapper.jar"/>
+</path>
+
+<!-- JMX -->
+<property name="jboss.jmx.root" value="${project.root}/jmx/output"/>
+<property name="jboss.jmx.lib" value="${jboss.jmx.root}/lib"/>
+<path id="jboss.jmx.classpath">
+  <pathelement path="${jboss.jmx.lib}/jboss-jmx.jar"/>
+</path>
+
+<!-- JMX Remoting -->
+<property name="jboss.jmx-remoting.root" value="${project.root}/jmx-remoting/output"/>
+<property name="jboss.jmx-remoting.lib" value="${jboss.jmx-remoting.root}/lib"/>
+<path id="jboss.jmx-remoting.classpath">
+  <pathelement path="${jboss.jmx-remoting.lib}/jboss-jmx-remoting.jar"/>
+</path>
+
+<!-- Management -->
+<property name="jboss.management.root" value="${project.root}/management/output"/>
+<property name="jboss.management.lib" value="${jboss.management.root}/lib"/>
+<path id="jboss.management.classpath">
+  <pathelement path="${jboss.management.lib}/jboss-jsr77-client.jar"/>
+  <pathelement path="${jboss.management.lib}/jboss-jsr77.jar"/>
+  <pathelement path="${jboss.management.lib}/jboss-management.jar"/>
+</path>
+
+<!-- MBeans -->
+<property name="jboss.mbeans.root" value="${project.root}/mbeans/output"/>
+<property name="jboss.mbeans.lib" value="${jboss.mbeans.root}/lib"/>
+<path id="jboss.mbeans.classpath">
+  <pathelement path="${jboss.mbeans.lib}/jboss-mbeans.jar"/>
+</path>
+
+<!-- jbossmq -->
+<property name="jboss.mq.root" value="${project.root}/jbossmq/output"/>
+<property name="jboss.mq.lib" value="${jboss.mq.root}/lib"/>
+<path id="jboss.mq.classpath">
+  <pathelement path="${jboss.mq.lib}/jbossmq.jar"/>
+</path>
+
+<!-- ProfileService -->
+<property name="jboss.profileservice.root" value="${project.root}/profileservice/output"/>
+<property name="jboss.profileservice.lib" value="${jboss.profileservice.root}/lib"/>
+<path id="jboss.profileservice.classpath">
+  <pathelement path="${jboss.profileservice.lib}/jboss-profileservice.jar"/>
+</path>
+
+<!-- Security Integration -->
+<property name="jboss.security.int.root" value="${project.root}/security/output"/>
+<property name="jboss.security.int.lib" value="${jboss.security.int.root}/lib"/>
+<path id="jboss.security.int.classpath">
+  <pathelement path="${jboss.security.int.lib}/jbosssx-server.jar"/>
+</path>
+
+<!-- Server -->
+<property name="jboss.server.root" value="${project.root}/server/output"/>
+<property name="jboss.server.lib" value="${jboss.server.root}/lib"/>
+<path id="jboss.server.classpath">
+  <pathelement path="${jboss.server.lib}/jboss.jar"/>
+  <pathelement path="${jboss.server.lib}/jmx-adaptor-plugin.jar"/>
+</path>
+
+<!-- Spring -->
+<property name="jboss.spring.root" value="${project.root}/spring-int/output"/>
+<property name="jboss.spring.lib" value="${jboss.spring.root}/lib"/>
+<path id="jboss.spring.classpath">
+  <pathelement path="${jboss.spring.lib}/jboss-spring.jar"/>
+</path>
+
+<!-- System -->
+<property name="jboss.system.root" value="${project.root}/system/output"/>
+<property name="jboss.system.lib" value="${jboss.system.root}/lib"/>
+<path id="jboss.system.classpath">
+  <pathelement path="${jboss.system.lib}/jboss-system.jar"/>
+  <pathelement path="${jboss.system.lib}/jboss-profileservice-spi.jar"/>
+</path>
+
+<!-- System JMX -->
+<property name="jboss.systemjmx.root" value="${project.root}/system-jmx/output"/>
+<property name="jboss.systemjmx.lib" value="${jboss.systemjmx.root}/lib"/>
+<path id="jboss.systemjmx.classpath">
+  <pathelement path="${jboss.systemjmx.lib}/jboss-system-jmx.jar"/>
+</path>
+
+<!-- Test -->
+<property name="jboss.test.root" value="${project.root}/test/output"/>
+<property name="jboss.test.lib" value="${jboss.test.root}/lib"/>
+<path id="jboss.test.classpath">
+  <pathelement path="${jboss.test.lib}/jboss-test.jar"/>
+</path>
+
+<!-- Varia -->
+<property name="jboss.varia.root" value="${project.root}/varia/output"/>
+<property name="jboss.varia.lib" value="${jboss.varia.root}/lib"/>
+<path id="jboss.varia.classpath">
+  <pathelement path="${jboss.varia.root}/classes"/>
+</path>
+
+<!-- Webservices -->
+<property name="jboss.webservices.root" value="${project.root}/webservices/output"/>
+<property name="jboss.webservices.lib" value="${jboss.webservices.root}/lib"/>
+<path id="jboss.webservices.classpath">
+  <pathelement path="${jboss.webservices.root}/classes"/>
+</path>
+
+<!-- Hibernate2 integration module -->
+<property name="jboss.hibernate.root" value="${project.root}/hibernate-int/output"/>
+<property name="jboss.hibernate.lib" value="${jboss.hibernate.root}/lib"/>
+<path id="jboss.hibernate.classpath">
+  <pathelement path="${jboss.hibernate.lib}/jboss-hibernate.jar"/>
+</path>

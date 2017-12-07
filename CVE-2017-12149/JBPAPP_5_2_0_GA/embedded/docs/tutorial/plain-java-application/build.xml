@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+
+<!-- ======================================================================= -->
+<!-- JBoss build file                                                       -->
+<!-- ======================================================================= -->
+
+<project name="JBoss" default="ejbjar" basedir=".">
+
+   <property environment="env"/>
+   <property name="src.dir" value="${basedir}/src"/>
+   <property name="build.dir" value="${basedir}/build"/>
+   <property name="build.classes.dir" value="${build.dir}/classes"/>
+   <property name="lib.dir" value="../../../lib"/>
+   <property name="jndi.dir" value="../../../bootstrap"/>
+
+   <!-- Build classpath -->
+   <path id="build.classpath">
+      <!-- So that we can get jndi.properties for InitialContext and log4j.xml
+   -->
+      <fileset dir="${lib.dir}">
+         <include name="*.jar"/>
+      </fileset>
+      <pathelement location="${jndi.dir}"/>
+   </path>
+
+   <path id="run.classpath">
+      <pathelement location="${jndi.dir}"/>
+      <fileset dir="${lib.dir}">
+         <include name="*.jar"/>
+      </fileset>
+      <fileset dir="${build.dir}">
+         <include name="tutorial.jar"/>
+      </fileset>
+   </path>
+
+   <!-- =================================================================== -->
+   <!-- Prepares the build directory                                        -->
+   <!-- =================================================================== -->
+   <target name="prepare">
+      <mkdir dir="${build.dir}"/>
+      <mkdir dir="${build.classes.dir}"/>
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- Compiles the source code                                            -->
+   <!-- =================================================================== -->
+   <target name="compile" depends="prepare">
+      <javac srcdir="${src.dir}"
+         destdir="${build.classes.dir}"
+         debug="on"
+         deprecation="on"
+         optimize="off"
+         includes="**">
+         <classpath refid="build.classpath"/>
+      </javac>
+   </target>
+
+   <target name="ejbjar" depends="compile">
+      <jar jarfile="build/tutorial.jar">
+         <fileset dir="${build.classes.dir}">
+            <include name="**/*.class"/>
+         </fileset>
+         <fileset dir="resources">
+            <include name="tutorial-persistence.xml"/>
+            <include name="META-INF/persistence.xml"/>
+         </fileset>
+      </jar>
+   </target>
+
+   <target name="run.classpath.deploy" depends="ejbjar">
+      <java classname="org.jboss.embedded.tutorial.javase.ClasspathDeploy" fork="yes" dir=".">
+         <classpath refid="run.classpath"/>
+      </java>
+   </target>
+
+   <target name="run.jar" depends="ejbjar">
+      <java classname="org.jboss.embedded.tutorial.javase.DeployJarFromResourceBase" fork="yes" dir=".">
+         <classpath refid="run.classpath"/>
+      </java>
+   </target>
+
+   <target name="run.virtual" depends="ejbjar">
+      <java classname="org.jboss.embedded.tutorial.javase.VirtualArchiveDeploy" fork="yes" dir=".">
+         <classpath refid="run.classpath"/>
+      </java>
+   </target>
+
+   <target name="run.virtual2" depends="ejbjar">
+      <java classname="org.jboss.embedded.tutorial.javase.VirtualArchiveDeploy2" fork="yes" dir=".">
+         <classpath refid="run.classpath"/>
+      </java>
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- Cleans up generated stuff                                           -->
+   <!-- =================================================================== -->
+   <target name="clean">
+      <delete dir="${build.dir}"/>
+   </target>
+
+
+</project>
+

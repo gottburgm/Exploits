@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main"/>
+	<classpathentry kind="src" output="output/eclipse-resources" path="src/resources"/>
+	<classpathentry kind="src" output="output/eclipse-test-classes" path="src/tests"/>
+	<classpathentry exported="true" kind="src" path="/aspects"/>
+	<classpathentry exported="true" kind="src" path="/connector"/>
+	<classpathentry exported="true" kind="src" path="/iiop"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/apache-logging/lib/commons-logging.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/cluster/lib/jboss-ha-server-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jgroups/lib/jgroups.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/sun-jsf/lib/jsf-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/sun-jsf/lib/jsf-impl.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/web/lib/el-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/web/lib/jasper-jdt.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/web/lib/jbossweb.jar" sourcepath="/thirdparty/jboss/web/lib/jbossweb-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/web/lib/jsp-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/web/lib/servlet-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/ws/native/lib/jbossws-native-jaxws.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-ejb3-interceptors/lib/jboss-ejb3-interceptors.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-interceptors/lib/jboss-ejb3-interceptors-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-ejb3-core/lib/jboss-ejb3-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/net/jcip/lib/jcip-annotations.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/test/lib/jboss-test.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/junit/lib/junit.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/org/jboss/ws/lib/jbossws-spi.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/cluster"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-jpa-deployers/lib/jboss-jpa-deployers.jar" sourcepath="/thirdparty/jboss/jboss-jpa-deployers/lib/jboss-jpa-deployers-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/aop/lib/jboss-aop.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-kernel.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-kernel-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-dependency.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-dependency-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-bootstrap/lib/jboss-bootstrap.jar"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mbean xmlns="urn:jboss-test:xmbean:2.0">
+
+   <description>An xmbean description with custom interceptors that are handled by the JavaBeanSchemaInitializer
+   </description>
+
+   <descriptors>
+      <interceptors>
+         <custom1:javabean xmlns:custom1="urn:jboss:simplejavabean:1.0"
+            class="org.jboss.test.xml.mbeanserver.interceptors.SomeBeanInterceptor"
+            flag="true"
+            anInt="1234"
+            aLong="123456789"
+            aString="string1"
+            someStrings="string1,string2,string3"
+            address="127.0.0.1"
+            homePage="http://www.jboss.org/"
+            aClass="java.lang.Integer"
+            someProperties="prop1=value1&#10;prop2=value2&#10;prop3=value3"
+            />
+
+         <interceptor code="org.jboss.mx.interceptor.PersistenceInterceptor2" />
+         <interceptor code="org.jboss.mx.interceptor.ModelMBeanInterceptor" />
+         <interceptor code="org.jboss.mx.interceptor.ObjectReferenceInterceptor" />
+      </interceptors>
+   </descriptors>
+
+   <class>org.jboss.naming.JNDIBindingService</class>
+
+   <constructor>
+      <description>The default no-arg constructor</description>
+      <name>JNDIBindingService</name>
+   </constructor>
+
+   <attribute>
+      <description>The root JNDI name of the context the bindings
+      are to be added under</description>
+      <name>RootName</name>
+      <type>java.lang.String</type>
+   </attribute>
+   <attribute>
+      <description>The JNDI bindings to add under the RootName</description>
+      <name>Bindings</name>
+      <type>org.jboss.naming.JNDIBindings</type>
+   </attribute>
+
+   <operation>
+      <description>The start lifecycle operation</description>
+      <name>start</name>
+      <return-type>void</return-type>
+   </operation>
+   <operation>
+      <description>The stop lifecycle operation</description>
+      <name>stop</name>
+      <return-type>void</return-type>
+   </operation>
+
+   <notification>
+      <description>The bind event notification</description>
+      <name>bindEvent</name>
+      <notification-type>org.jboss.naming.JNDIBindingService.bindEvent</notification-type>
+   </notification>
+</mbean>

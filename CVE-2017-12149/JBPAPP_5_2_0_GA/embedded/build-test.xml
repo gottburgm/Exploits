@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+        <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+        <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+        ]>
+
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--  JBoss, the OpenSource J2EE webOS                                      -->
+<!--                                                                        -->
+<!--  Distributable under LGPL license.                                     -->
+<!--  See terms of license at http://www.gnu.org.                           -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<!-- $Id: build-test.xml 85945 2009-03-16 19:45:12Z dimitris@jboss.org $ -->
+
+<project default="main" name="JBoss/EJB3X">
+   <import file="../tools/etc/buildmagic/build-common.xml"/>
+
+   <target name="init">
+
+
+      <!-- =================== -->
+      <!-- Basic Configuration -->
+      <!-- =================== -->
+
+      <!-- ========= -->
+      <!-- Libraries -->
+      <!-- ========= -->
+
+      &libraries;
+
+
+      <!-- The combined library classpath -->
+      <path id="library.classpath">
+         <path refid="junit.junit.classpath"/>
+         <path refid="jboss.test.classpath"/>
+      </path>
+
+      <!-- ======= -->
+      <!-- Modules -->
+      <!-- ======= -->
+
+      &modules;
+
+      <!-- The combined dependent module classpath -->
+      <path id="dependentmodule.classpath">
+         <pathelement location="output/lib/embedded-jboss/bootstrap"/>
+         <fileset dir="output/lib/embedded-jboss/lib">
+            <include name="*.jar"/>
+         </fileset>
+      </path>
+
+      <!-- ===== -->
+      <!-- Tasks -->
+      <!-- ===== -->
+
+      <!-- Where source files live -->
+      <property name="source.java" value="src/test/java"/>
+      <property name="source.stylesheets" value="../testsuite/src/stylesheets"/>
+      <property name="resources" value="src/test/resources"/>
+
+      <!-- Where build generated files will go -->
+      <property name="build.reports" value="output/reports"/>
+      <property name="build.testlog" value="output/log"/>
+      <property name="build.classes" value="output/test-classes"/>
+      <property name="build.lib" value="output/test-lib"/>
+      <property name="build.stylesheets" value="output/stylesheets"/>
+
+
+      <!-- The combined thirdparty classpath -->
+      <path id="thirdparty.classpath">
+         <path refid="library.classpath"/>
+         <path refid="dependentmodule.classpath"/>
+      </path>
+
+      <!-- classpath and local.classpath must have a value using with a path -->
+      <property name="classpath" value=""/>
+      <property name="local.classpath" value=""/>
+
+      <!-- The classpath required to build classes. -->
+      <path id="javac.classpath">
+         <pathelement path="${classpath}"/>
+         <pathelement path="${local.classpath}"/>
+         <path refid="thirdparty.classpath"/>
+      </path>
+
+      <!-- The classpath required to build javadocs. -->
+      <path id="javadoc.classpath">
+         <path refid="javac.classpath"/>
+      </path>
+
+      <!-- Packages to include when generating api documentation -->
+      <property name="javadoc.packages" value="javax.*"/>
+
+      <!-- Override JUnit defaults -->
+      <property name="junit.timeout" value="240000"/>
+      <!-- 4 minutes -->
+      <property name="junit.batchtest.todir" value="${build.reports}"/>
+      <property name="junit.jvm.options" value="-Ddummy"/>
+      <!-- ======================================================== -->
+      <!-- Initialization                                           -->
+      <!-- ======================================================== -->
+      <tstamp>
+         <format property="TIMENOW" pattern="yyyy-MM-dd.HH-mm" timezone="GMT"/>
+      </tstamp>
+   </target>
+
+
+   <!-- ================================================================== -->
+   <!-- Compile                                                            -->
+   <!-- ================================================================== -->
+
+   <!--
+     | Compile everything.
+     |
+     | This target should depend on other compile-* targets for each 
+     | different type of compile that needs to be performed, short of
+     | documentation compiles.
+   -->
+
+   <target name="compile"
+           description="Compile all source files."
+           depends="compile-classes"/>
+
+   <!-- Compile all class files -->
+   <target name="compile-classes" depends="init">
+      <mkdir dir="${build.classes}"/>
+      <javac destdir="${build.classes}"
+             optimize="${javac.optimize}"
+             source="1.5"
+             debug="${javac.debug}"
+             depend="${javac.depend}"
+             verbose="${javac.verbose}"
+             deprecation="${javac.deprecation}"
+             includeAntRuntime="${javac.include.ant.runtime}"
+             includeJavaRuntime="${javac.include.java.runtime}"
+             failonerror="${javac.fail.onerror}">
+         <src path="${source.java}"/>
+         <classpath refid="javac.classpath"/>
+      </javac>
+   </target>
+
+   <target name="compile-stylesheets">
+      <mkdir dir="${build.stylesheets}"/>
+      <copy todir="${build.stylesheets}" filtering="yes">
+         <fileset dir="${source.stylesheets}">
+            <include name="**/*"/>
+         </fileset>
+      </copy>
+   </target>
+
+
+   <target name="jars" depends="compile">
+      <mkdir dir="${build.lib}"/>
+      <jar jarfile="${build.lib}/bootstrap-test.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/embedded/test/bootstrap/**/*.class"/>
+            <include name="org/jboss/embedded/test/jndibootstrap/**/*.class"/>
+         </fileset>
+      </jar>
+      <jar jarfile="${build.lib}/ejb-test.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/embedded/test/ejb/**/*.class"/>
+         </fileset>
+         <fileset dir="${resources}/ejb">
+            <include name="META-INF/persistence.xml"/>
+            <include name="*.properties"/>
+         </fileset>
+      </jar>
+      <jar jarfile="${build.lib}/mdb-test.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/embedded/test/mdb/**/*.class"/>
+         </fileset>
+         <fileset dir="${resources}/mdb">
+            <include name="mdbtest-service.xml"/>
+         </fileset>
+      </jar>
+      <jar jarfile="${build.lib}/remote-test.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/embedded/test/remote/**/*.class"/>
+         </fileset>
+      </jar>
+      <war warfile="${build.lib}/war-scan.war"
+         webxml="${resources}/war-scan/web.xml">
+         <lib dir="${build.lib}">
+            <include name="ejb-test.jar"/>
+         </lib>
+         <fileset dir="${source.java}/org/jboss/embedded/test/ejb/unit">
+            <include name="EjbTestCase.jsp"/>
+         </fileset>
+      </war>
+      <war warfile="${build.lib}/war-resource.war"
+         webxml="${resources}/war-resource/web.xml">
+         <lib dir="${build.lib}">
+            <include name="ejb-test.jar"/>
+         </lib>
+         <fileset dir="${source.java}/org/jboss/embedded/test/ejb/unit">
+            <include name="EjbTestCase.jsp"/>
+         </fileset>
+      </war>
+      <war warfile="${build.lib}/war-security.war"
+         webxml="${resources}/war-security/WEB-INF/web.xml">
+         <fileset dir="${resources}/war-security">
+            <include name="*.html"/>
+            <include name="*.jsp"/>
+         </fileset>
+      </war>
+
+
+   </target>
+
+   <target name="main"
+      description="Executes the default target (most)."
+      depends="jars"/>
+
+
+   <target name="tests" depends="main"
+      description="Execute all tests in the given test directory.">
+      <mkdir dir="${build.reports}"/>
+      <mkdir dir="${build.testlog}"/>
+      <!-- Remove the test.log so each run has a fresh log -->
+      <delete file="${build.testlog}/test.log"/>
+      <path id="test.classpath">
+         <fileset dir="${build.lib}">
+            <include name="*.jar"/>
+         </fileset>
+         <path refid="thirdparty.classpath"/>
+      </path>
+      <junit dir="${module.output}"
+         printsummary="yes"
+         haltonerror="false"
+         haltonfailure="false"
+         fork="true">
+
+         <sysproperty key="jbosstest.deploy.dir" value="test-lib"/>
+         <sysproperty key="build.testlog" value="${build.testlog}"/>
+         <sysproperty key="jbosstest.threadcount" value="${jbosstest.threadcount}"/>
+         <sysproperty key="jbosstest.iterationcount" value="${jbosstest.iterationcount}"/>
+         <sysproperty key="jbosstest.beancount" value="${jbosstest.beancount}"/>
+
+         <classpath>
+            <path refid="test.classpath"/>
+         </classpath>
+
+         <formatter type="plain" usefile="true"/>
+         <formatter type="xml" usefile="true"/>
+
+         <batchtest todir="${build.reports}"
+            haltonerror="false"
+            haltonfailure="false"
+            fork="true">
+
+            <fileset dir="${build.classes}">
+               <include name="**/*TestCase.class"/>
+            </fileset>
+         </batchtest>
+      </junit>
+   </target>
+
+
+   <target name="test" depends="init" if="test"
+      description="Execute all tests in the given test directory.">
+      <mkdir dir="${build.reports}"/>
+      <mkdir dir="${build.testlog}"/>
+      <!-- Remove the test.log so each run has a fresh log -->
+      <delete file="${build.testlog}/test.log"/>
+      <path id="test.classpath">
+         <fileset dir="${build.lib}">
+            <include name="*.jar"/>
+         </fileset>
+         <path refid="thirdparty.classpath"/>
+      </path>
+      <junit dir="${module.output}"
+         printsummary="yes"
+         haltonerror="false"
+         haltonfailure="false"
+         fork="true">
+
+         <sysproperty key="jbosstest.deploy.dir" value="test-lib"/>
+         <sysproperty key="build.testlog" value="${build.testlog}"/>
+         <sysproperty key="jbosstest.threadcount" value="${jbosstest.threadcount}"/>
+         <sysproperty key="jbosstest.iterationcount" value="${jbosstest.iterationcount}"/>
+         <sysproperty key="jbosstest.beancount" value="${jbosstest.beancount}"/>
+
+         <classpath>
+            <path refid="test.classpath"/>
+         </classpath>
+
+         <formatter type="plain" usefile="true"/>
+         <formatter type="xml" usefile="true"/>
+
+         <batchtest todir="${build.reports}"
+            haltonerror="false"
+            haltonfailure="false"
+            fork="true">
+
+            <fileset dir="${build.classes}">
+               <include name="org/jboss/embedded/test/${test}/unit/*TestCase.class"/>
+            </fileset>
+         </batchtest>
+      </junit>
+   </target>
+
+
+
+   <target name="tests-report-html" depends="compile-stylesheets">
+      <mkdir dir="${build.reports}/html"/>
+
+      <junitreport todir="${build.reports}">
+         <fileset dir="${build.reports}">
+            <include name="TEST-*.xml"/>
+         </fileset>
+         <report format="frames"
+            todir="${build.reports}/html"
+            styledir="${build.stylesheets}"
+            />
+      </junitreport>
+   </target>
+
+  <target name="tests-report-text" depends="tests-report-html">
+    <mkdir dir="${build.reports}/text"/>
+
+    <style basedir="${build.reports}"
+      destdir="${build.reports}/text"
+      extension=".txt"
+      style="${build.stylesheets}/summary1b.xsl"
+      includes="TESTS-TestSuites.xml">
+      <param name="thedate" expression="${TIMENOW}"/>
+      <param name="java_version" expression="${java.version}"/>
+      <param name="java_vendor" expression="${java.vendor}"/>
+      <param name="java_vm_specification_version" expression="${java.vm.specification.version}"/>
+      <param name="java_vm_version" expression="${java.vm.version}"/>
+      <param name="java_vm_name" expression="${java.vm.name}"/>
+      <param name="java_vm_info" expression="${java.vm.info}"/>
+      <param name="java_specification_version" expression="${java.specification.version}"/>
+      <param name="java_class_version" expression="${java.class.version}"/>
+      <param name="os_name" expression="${os.name}"/>
+      <param name="os_arch" expression="${os.arch}"/>
+      <param name="os_version" expression="${os.version}"/>
+      <param name="builduid" expression="${TIMENOW}"/>
+      <param name="results_web" expression="${results_web}"/>
+    </style>
+  </target>
+
+
+   <target name="tests-report-clean">
+      <delete dir="${build.reports}"/>
+   </target>
+
+   <target name="clean"
+           description="Cleans up most generated files." depends="init">
+      <delete dir="${build.classes}"/>
+      <delete dir="${build.lib}"/>
+      <delete dir="${build.reports}"/>
+   </target>
+
+</project>

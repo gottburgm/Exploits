@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mbean PUBLIC
+   "-//JBoss//DTD JBOSS XMBEAN 1.2//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_xmbean_1_2.dtd">
+
+<mbean>
+   <description>Test of ServiceUsingCustomAttribute</description>
+   <descriptors>
+      <persistence persistPolicy="OnUpdate"/>
+      <persistence-manager value="org.jboss.mx.persistence.DelegatingPersistenceManager"/>
+   </descriptors>          
+   <class>org.jboss.test.jmx.xmbean.ServiceUsingCustomAttribute</class>
+
+   <!-- Attributes -->
+   <attribute access="read-write" getMethod="getAttr" setMethod="setAttr">
+      <description>A custom attribute</description>
+      <name>Attr</name>
+      <type>org.jboss.test.jmx.xmbean.CustomType</type>
+   </attribute>
+   
+   <!-- Operations -->
+   <operation>
+     <description>Set the custom attribute through the MBeanServer</description>
+     <name>selfTest</name>
+   </operation>
+      
+   <operation>
+     <description>Print out the stored custom attribute</description>
+     <name>show</name>
+     <return-type>java.lang.String</return-type>
+   </operation>
+</mbean>

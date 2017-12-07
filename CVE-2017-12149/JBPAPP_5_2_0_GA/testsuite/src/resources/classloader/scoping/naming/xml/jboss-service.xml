@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server
+    PUBLIC "-//JBoss//DTD MBean Service 3.2//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-service_3_2.dtd">
+
+<server>
+   <loader-repository> 
+      jboss.test:sar=shared-jndi
+      <loader-repository-config> 
+         java2ParentDelegation=false
+      </loader-repository-config> 
+   </loader-repository>
+
+   <!-- The jndi binding service xmbean -->
+   <mbean code="org.jboss.test.classloader.scoping.naming.service.BindingService"
+      name="jboss.test:service=JndiBindingService"
+      xmbean-dd="">
+      <xmbean>
+         <description>The BindingService XMBean Testcase</description>
+
+         <!-- Attributes -->
+         <attribute access="read-write" getMethod="getNames" setMethod="setNames">
+            <description>Names is the list of jndi names to bind under</description>
+            <name>Names</name>
+            <!-- String[] -->
+            <type>[Ljava.lang.String;</type>
+         </attribute>
+
+         <!-- Operations -->
+         <operation>
+            <description>The start lifecycle operation</description>
+            <name>start</name>
+         </operation>
+         <operation>
+            <description>The stop lifecycle operation</description>
+            <name>stop</name>
+         </operation>
+
+      </xmbean>
+      <attribute name="Names">Name1,Name2,Name3,Name4</attribute>
+   </mbean>
+
+</server>

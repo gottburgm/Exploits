@@ -1,0 +1,442 @@
+<project name="tests-jca-jars">
+   
+   <!-- jca test -->
+   <target name="_jars-jca">
+      <mkdir dir="${build.lib}"/>
+      
+   	  <jar destfile="${build.lib}/jdbc-comp-ejb.jar">
+		  <fileset dir="${build.classes}">
+		  	<include name="org/jboss/test/jca/interfaces/JDBCCompliance*.class"/>
+			<include name="org/jboss/test/jca/ejb/JDBCCompliance*.class"/>
+		  </fileset>
+		<metainf dir="${build.resources}/jca/compliance/META-INF">
+			<include name="ejb-jar.xml"/>
+		</metainf>
+   	  </jar>	
+   	   
+   	
+      <!-- build test jdbc driver with config inside sar -->
+      <jar destfile="${build.lib}/jbosstestdriver.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/jdbc/**"/>
+         </fileset>
+      </jar>
+      
+      <jar destfile="${build.lib}/jca-support.sar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/support/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/validation">
+            <include name="META-INF/jboss-service.xml"/>		
+         </fileset>
+         
+      </jar>	
+      
+      <!-- build test adapter -->
+      <jar destfile="${build.lib}/jbosstestadapter.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/adapter/**"/>
+         </fileset>
+      </jar>
+      
+      <jar destfile="${build.lib}/jbosstestadapter.rar">
+         <fileset dir="${build.lib}">
+            <include name="jbosstestadapter.jar"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/adapter">
+            <include name="META-INF/ra.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- -->
+      <jar destfile="${build.lib}/notxfs.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/fs/**"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/notxfs.rar">
+         <fileset dir="${build.lib}">
+            <include name="notxfs.jar"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/fs">
+            <include name="META-INF/ra.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- test adapter config -->
+      <copy todir="${build.lib}" filtering="no">
+         <fileset dir="${build.resources}/jca/adapter">
+            <include name="testadapter-ds.xml"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/jdbc">
+            <include name="testdriver-ds.xml"/>
+         </fileset>
+      </copy>
+      
+      <!-- test ha ds config -->
+      <copy todir="${build.lib}" filtering="no">
+         <fileset dir="${build.resources}/jca/ha">
+            <include name="test-ha-ds.xml"/>
+            <include name="test-ha-xa-ds.xml"/>
+         </fileset>
+      </copy>
+      
+      <!-- build adminobject adapter -->
+      <jar destfile="${build.lib}/testadminobject.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/adminobject/**"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/testadminobject.rar">
+         <fileset dir="${build.lib}">
+            <include name="testadminobject.jar"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/adminobject">
+            <include name="META-INF/ra.xml"/>
+         </fileset>
+      </jar>
+      <copy todir="${build.lib}" filtering="no">
+         <fileset dir="${build.resources}/jca/adminobject">
+            <include name="*.xml"/>
+         </fileset>
+      </copy>
+      
+      <!-- build inflow adapter -->
+      <jar destfile="${build.lib}/jcainflow.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/inflow/**"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/jcainflow.rar">
+         <fileset dir="${build.lib}">
+            <include name="jcainflow.jar"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/inflow">
+            <include name="META-INF/ra.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- build inflow adapter -->
+      <jar destfile="${build.lib}/jcainflowmdb.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/inflowmdb/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/inflowmdb">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- pscache.jar -->
+      <zip destfile="${build.lib}/pscache.jar">
+         <fileset dir="${build.classes}">
+            <include
+               name="org/jboss/test/jca/interfaces/PreparedStatement*"/>
+            <include name="org/jboss/test/jca/ejb/PreparedStatementBean*"/>
+         </fileset>
+         <zipfileset dir="${build.resources}/jca/pscache" prefix="META-INF">
+            <include name="ejb-jar.xml"/>
+            <include name="jboss.xml"/>
+         </zipfileset>
+         <fileset dir="${build.resources}/jca/pscache">
+            <include name="hsqldb-ps-ds.xml"/>
+         </fileset>
+      </zip>
+      
+      <!-- build jcatest.jar -->
+      <jar destfile="${build.lib}/jcatest.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/interfaces/**"/>
+            <include name="org/jboss/test/jca/ejb/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- build jcatest-unshared.jar -->
+      <jar destfile="${build.lib}/jcatest-unshared.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/interfaces/Unshareable**"/>
+            <include name="org/jboss/test/jca/ejb/Unshareable**"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/ejb">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <jar destfile="${build.lib}/jcabanktest.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/bank/interfaces/**"/>
+            <include name="org/jboss/test/jca/bank/ejb/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/bank">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <jar destfile="${build.lib}/jcaxadstest.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/xads/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/xads">
+            <include name="*.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- build mtjcatest.sar -->
+      <jar destfile="${build.lib}/mtjcatest.sar">
+         <metainf dir="${build.resources}/jca/mbean">
+            <include name="jboss-service.xml"/>
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/mbean/**"/>
+         </fileset>
+      </jar>
+      
+      <!-- test adapter config -->
+      <copy todir="${build.lib}" filtering="no">
+         <fileset dir="${build.resources}/jca/mt">
+            <include name="mttestadapter-ds.xml"/>
+         </fileset>
+      </copy>
+      
+      <!--copy the plain *-service.xml files too -->
+      <copy todir="${build.lib}" filtering="no">
+         <fileset dir="${build.resources}/jca/autocommit">
+            <include name="*.xml"/>
+         </fileset>
+      </copy>
+      
+      <jar destfile="${build.lib}/jca-securedejb.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/securedejb/**"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="notxfs.rar"/>
+         </fileset>
+         
+         <fileset dir="${build.resources}/jca/securedejb">
+            <include name="**/*.xml"/>
+         </fileset>
+         
+      </jar>
+      
+      <jar destfile="${build.lib}/jca-txactive-ejb.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/interfaces/TransactionActive*"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/ejb/TransactionActive*"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/txactive">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.resources}/hornetq">
+            <include name="*.xml"/>
+         </fileset>
+      </jar>
+      
+      <jar destfile="${build.lib}/jcaexecutejmsrollback.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/jca/test/ExecuteJMS*"/>
+            <include name="org/jboss/test/jca/jms/*"/>
+            <include name="org/jboss/test/util/ejb/*"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/test">
+            <include name="**/*.*"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/executejmsrollback">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${junit.junit.lib}/junit.jar">
+            <patternset refid="ejbrunner.set"/>
+         </zipfileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar">
+            <patternset refid="jboss.test.set"/>
+         </zipfileset>
+      </jar>
+   	
+        <jar destfile="${build.lib}/jcaexecutejmsrollbackHornetQ.jar">
+           <fileset dir="${build.classes}">
+              <patternset refid="common.test.client.classes"/>
+              <include name="org/jboss/test/jca/test/ExecuteJMS*"/>
+              <include name="org/jboss/test/jca/jms/*"/>
+              <include name="org/jboss/test/util/ejb/*"/>
+           </fileset>
+           <fileset dir="${build.resources}/jca/test">
+              <include name="**/*.*"/>
+           </fileset>
+           <fileset dir="${build.resources}/jca/executejmsrollbackhornetq">
+              <include name="**/*.*"/>
+           </fileset>
+           <zipfileset src="${junit.junit.lib}/junit.jar">
+              <patternset refid="ejbrunner.set"/>
+           </zipfileset>
+           <zipfileset src="${jboss.test.lib}/jboss-test.jar">
+              <patternset refid="jboss.test.set"/>
+           </zipfileset>
+        </jar>
+        
+   	
+      
+      <jar destfile="${build.lib}/jca-tests.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/jca/**"/>
+            <include name="org/jboss/test/util/ejb/*"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/test">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${junit.junit.lib}/junit.jar">
+            <patternset refid="ejbrunner.set"/>
+         </zipfileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar">
+            <patternset refid="jboss.test.set"/>
+         </zipfileset>
+      </jar>
+
+      <!-- test a scoped rar -->
+      <jar destfile="${build.lib}/testscopedrar.ear">
+         
+         <fileset dir="${build.lib}">
+            <include name="jbosstestadapter.rar"/>
+         </fileset>
+         <metainf dir="${build.resources}/jca/scoped/ear/META-INF">
+            <include name="*.xml"/>
+         </metainf>      
+      </jar>   
+      <jar destfile="${build.lib}/testscopedrar.jar">
+         
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/mbean/Scoped*"/>
+         </fileset>
+         <metainf dir="${build.resources}/jca/scoped">
+            <include name="scoped-adapter-ds.xml"/>
+         </metainf>      
+      </jar>   
+
+      <!-- test a scoped rar without a jboss-app.xml -->
+      <jar destfile="${build.lib}/testscopedrar-nojbossapp.ear">
+         
+         <fileset dir="${build.lib}">
+            <include name="jbosstestadapter.rar"/>
+         </fileset>
+         <metainf dir="${build.resources}/jca/scoped-nojbossapp/ear/META-INF">
+            <include name="*.xml"/>
+         </metainf>      
+      </jar>   
+      <jar destfile="${build.lib}/testscopedrar-nojbossapp.jar">
+         
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/mbean/Scoped*"/>
+         </fileset>
+         <metainf dir="${build.resources}/jca/scoped-nojbossapp">
+            <include name="scoped-adapter-ds.xml"/>
+         </metainf>      
+      </jar>   
+   </target>
+   
+   <!-- jca property test -->
+   <target name="_jars-jcaprops">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- Common classes -->
+      <jar destfile="${build.lib}/testjcaprops.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jcaprops/support/**"/>
+         </fileset>
+      </jar>
+      
+      <!-- Good MDB -->
+      <jar destfile="${build.lib}/testjcaprops-good.jar">
+         <fileset dir="${build.resources}/jcaprops/goodmdb">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- Good rar -->
+      <jar destfile="${build.lib}/testjcaprops-good.rar">
+         <fileset dir="${build.resources}/jcaprops/goodrar">
+            <include name="**/*.xml"/>
+            <include name="goodrar-ds.xml"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="testjcaprops.jar"/>
+            <include name="testjcaprops-good.jar"/>
+         </fileset>
+      </jar>
+      
+      <!-- Uppercase Good MDB -->
+      <jar destfile="${build.lib}/testjcaprops-upper-good.jar">
+         <fileset dir="${build.resources}/jcaprops/uppergoodmdb">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- Uppercase Good rar -->
+      <jar destfile="${build.lib}/testjcaprops-upper-good.rar">
+         <fileset dir="${build.resources}/jcaprops/uppergoodrar">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="testjcaprops.jar"/>
+            <include name="testjcaprops-upper-good.jar"/>
+         </fileset>
+      </jar>
+
+      <!-- new jboss-ra.xml -->
+      <jar destfile="${build.lib}/testjcaprops-override.rar">
+         
+         <fileset dir="${build.lib}">
+            <include name="testjcaprops.jar"/>
+         </fileset>
+         <metainf dir="${build.resources}/jcaprops/xmloverride/META-INF">
+            <include name="*.xml"/>
+         </metainf>      
+      </jar>   
+      
+      <!-- Test for dependenceny in rar deployment -->	
+   	  <jar destfile="${build.lib}/sardependsonmbean.sar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/mbean/Ra*"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/depends">
+          	<include name="META-INF/jboss-service.xml"/>		
+   	  	 </fileset>
+   	  </jar>	
+      <jar destfile="${build.lib}/rardependentonmbean.rar">
+         <fileset dir="${build.lib}">
+            <include name="testjcaprops.jar"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/depends">
+            <include name="META-INF/ra.xml"/>
+            <include name="META-INF/jboss-ra.xml"/>
+         </fileset>
+      </jar>
+   	
+      <!-- Primitive properties -->
+      <jar destfile="${build.lib}/jcaprimitive.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jca/primitive/**"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/jcaprimitive.rar">
+         <fileset dir="${build.lib}">
+            <include name="jcaprimitive.jar"/>
+         </fileset>
+         <fileset dir="${build.resources}/jca/primitive">
+            <include name="META-INF/ra.xml"/>
+         </fileset>
+      </jar>
+      <copy todir="${build.lib}" filtering="no">
+         <fileset dir="${build.resources}/jca/primitive">
+            <include name="jcaprimitive-ds.xml"/>
+         </fileset>
+      </copy>
+
+   </target>
+   
+
+</project>

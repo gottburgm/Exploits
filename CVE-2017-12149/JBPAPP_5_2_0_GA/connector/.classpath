@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="org/jboss/resource/adapter/jdbc/jdk5/|org/jboss/resource/adapter/jdbc/jdk6/" kind="src" path="src/main"/>
+	<classpathentry kind="src" path="src/tests"/>
+	<classpathentry exported="true" kind="src" path="/server"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/sun-javamail/lib/mail.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/serialization/lib/jboss-serialization.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/com/sun/xml/bind/lib/jaxb-xjc.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/com/sun/xml/bind/lib/jaxb-impl.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/sun-jaxb/lib/jaxb-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/quartz/lib/quartz.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/junit/lib/junit.jar" sourcepath="/thirdparty/junit/lib/junit-src.zip"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/test/lib/jboss-test.jar" sourcepath="/thirdparty/jboss/test/lib/jboss-test-src.zip"/>
+	<classpathentry kind="lib" path="/thirdparty/stax-api/lib/stax-api.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-man/lib/jboss-managed.jar" sourcepath="/thirdparty/jboss/jboss-man/lib/jboss-managed-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/sun-jaf/lib/activation.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/profileservice-spi/lib/jboss-profileservice-spi.jar" sourcepath="/thirdparty/jboss/profileservice-spi/lib/jboss-profileservice-spi-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-kernel.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-kernel-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-mdr/lib/jboss-mdr.jar" sourcepath="/thirdparty/jboss/jboss-mdr/lib/jboss-mdr-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-dependency.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-dependency-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-bootstrap/lib/jboss-bootstrap.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/common-beans/lib/jboss-common-beans.jar"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

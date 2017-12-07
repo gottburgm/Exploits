@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server>
+<!-- $Id: child-process-service.xml 16662 2003-08-27 04:38:22Z patriot1burke $ -->
+
+<server>
+
+  <!-- ==================================================================== -->
+  <!-- ChildProcess Service                                                 -->
+  <!-- ==================================================================== -->
+
+  <mbean code="org.jboss.varia.process.ChildProcessService"
+	 name="jboss.varia:service=ChildProcess,name=MyChildProcess">
+
+    <!-- 
+       | Set the command line to execute.
+     -->
+    <attribute name="CommandLine">
+      /local/bin/myprocess --special-flag
+    </attribute>
+
+    <!-- 
+       | Set the environment for the child process in properties file style format.
+     -->
+    <attribute name="Environment">
+      MY_VAR=This is my environment variable.
+    </attribute>
+
+    <!-- 
+       | Set the working directory for the child.
+    <attribute name="WorkingDirectory">
+      /tmp
+    </attribute>
+     -->
+
+  </mbean>
+
+</server>

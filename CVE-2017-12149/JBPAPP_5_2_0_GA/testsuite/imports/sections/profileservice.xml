@@ -1,0 +1,102 @@
+<project name="tests-profileservice-jars">
+   <!-- proxy compiler tests -->
+   <target name="_jars-profileservice">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build testMCBeansDeployment.beans -->
+      <jar destfile="${build.lib}/testMCBeansDeployment.beans">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/profileservice/mcbeans/**"/>
+         </fileset>
+         <zipfileset dir="${build.resources}/profileservice/" prefix="META-INF">
+            <include name="testMCBeansDeployment-jboss-beans.xml"/>
+         </zipfileset>
+      </jar>
+   	<!-- build testEjb3xDeployment.jar -->
+      <jar destfile="${build.lib}/testEjb3xDeployment.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/profileservice/ejb3x/**"/>
+         </fileset>
+      </jar>
+      <!-- build testEjb2xDeployment.jar -->
+      <jar destfile="${build.lib}/testEjb2xDeployment.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/profileservice/ejb2x/**"/>
+         </fileset>
+         <zipfileset dir="${build.resources}/profileservice/" fullpath="META-INF/ejb-jar.xml">
+            <include name="testEjb2xDeployment-jar.xml"/>
+         </zipfileset>
+      </jar>
+      <!-- build testEjb3xMetrics.jar -->
+      <jar destfile="${build.lib}/testEjb3xMetrics.jar">
+        <fileset dir="${build.classes}">
+          <include name="org/jboss/test/profileservice/test/ejb3/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/profileservice/">
+           <include name="testEjb3MetricsQueue-service.xml"/>
+         </fileset>
+      </jar>
+      <!-- build testEjb3Metrics.ear -->
+      <ear destfile="${build.lib}/testEjb3xMetrics.ear" 
+        appxml="${build.resources}/profileservice/testEjb3Metrics-application.xml">
+        <fileset dir="${build.lib}">
+          <include name="testEjb3xMetrics.jar"/>
+         </fileset>
+      </ear>
+      <!-- build testSarDeployment.sar -->
+      <jar destfile="${build.lib}/testSarDeployment.sar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/profileservice/sar/**"/>
+         </fileset>
+         <zipfileset dir="${build.resources}/profileservice/" prefix="META-INF">
+            <include name="testSarDeployment-service.xml"/>
+         </zipfileset>
+      </jar>
+      <!-- build testWarDeployment.war -->
+      <jar destfile="${build.lib}/testWarDeployment.war">
+         <zipfileset dir="${build.classes}" prefix="WEB-INF/classes">
+            <include name="org/jboss/test/profileservice/war/**"/>
+         </zipfileset>
+         <zipfileset dir="${build.resources}/profileservice/" fullpath="WEB-INF/web.xml">
+            <include name="testWarDeployment-web.xml"/>
+         </zipfileset>
+      </jar>
+
+      <!-- build testEarDeployment.ear -->
+      <jar destfile="${build.lib}/testEarDeployment.ear">
+         <fileset dir="${build.lib}">
+            <include name="testEjb2xDeployment.jar"/>
+            <include name="testWarDeployment.war"/>
+         </fileset>
+         <zipfileset dir="${build.resources}/profileservice/" fullpath="META-INF/application.xml">
+            <include name="testEarDeployment-application.xml"/>
+         </zipfileset>
+      </jar>
+
+      <copy tofile="${build.lib}/profileservice-remove-ds.xml"
+               file="${build.resources}/profileservice/override/profileservice-remove-ds.xml"/>
+
+      <copy tofile="${build.lib}/profileservice-test-ds.xml"
+         file="${build.resources}/profileservice/override/profileservice-test-ds.xml"/>
+         
+      <copy tofile="${build.lib}/profileservice-testQueue-service.xml"
+         file="${build.resources}/profileservice/override/testQueue-service.xml"/>
+         
+      <copy tofile="${build.lib}/profileservice-testTopic-service.xml"
+         file="${build.resources}/profileservice/override/testTopic-service.xml"/>
+
+      <!-- EAR -->
+      <jar destfile="${build.lib}/profileservice-datasource.ear">
+         <fileset dir="${build.resources}/profileservice/override/profileservice-datasource.ear">
+             <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+         	<include name="testWarDeployment.war"/>
+         </fileset>
+      </jar>
+   	  <jar destfile="${build.lib}/profileservice-test.jar">
+		 <fileset dir="${build.resources}/profileservice/override/profileservice-test.jar" />
+   	  </jar>
+
+   </target>
+</project>

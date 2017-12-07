@@ -1,0 +1,83 @@
+/***************************************
+ *                                     *
+ *  JBoss: The OpenSource J2EE WebOS   *
+ *                                     *
+ *  Distributable under LGPL license.  *
+ *  See terms of license at gnu.org.   *
+ *                                     *
+ ***************************************/
+
+#include <orb.idl>
+#include <CSI.idl>
+            
+/**
+ * This IDL module defines the SASCurrent interface.
+ *
+ * @author  <a href="mailto:reverbel@ime.usp.br">Francisco Reverbel</a>
+ * @version $Revision: 22180 $
+ */
+module org {
+module jboss {
+module iiop {
+module csiv2 {
+
+    local interface SASCurrent : CORBA::Current {
+
+        /**
+         * Returns true if an SAS context arrived with the current IIOP
+	 * request.
+	 */
+        boolean context_received();
+
+        /**
+	 * Returns true if an SAS context containing a client authentication 
+	 * token arrived with the current IIOP request.
+	 */
+        boolean client_authentication_info_received();
+
+        /**
+	 * Returns the username that arrived with the current IIOP request.
+	 */
+        CSI::UTF8String get_incoming_username();
+
+        /**
+	 * Returns the password that arrived with the current IIOP request.
+	 */
+        CSI::UTF8String get_incoming_password();
+
+
+        /**
+	 * Returns the target name that arrived with the current IIOP request.
+	 */
+        CSI::UTF8String get_incoming_target_name();
+
+        /**
+	 * Returns the <code>org.omg.CSI.IdentityToken<code> that arrived with 
+	 * the current IIOP request.
+	 */
+        CSI::IdentityToken get_incoming_identity();
+
+        /**
+	 * Returns the <code>org.omg.CSI.IdentityTokenType<code> that arrived
+	 * with the current IIOP request.
+	 */
+        CSI::IdentityTokenType get_incoming_identity_token_type();
+
+        /**
+	 * Returns the principal name that arrived with the current IIOP 
+	 * request.
+	 */
+        CSI::UTF8String get_incoming_principal_name();
+
+        /**
+	 * Sets the outgoing SAS reply to <code>ContextError</code>, with 
+	 * major status "invalid evidence".
+	 */
+        void reject_incoming_context();
+
+    };
+
+};
+};
+};
+};

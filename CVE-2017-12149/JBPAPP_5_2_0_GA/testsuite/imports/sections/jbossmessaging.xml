@@ -1,0 +1,22 @@
+<project name="tests-jbossmessaging-jars">
+   <!-- jbossmessaging tests -->
+   <target name="_jars-jbossmessaging">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build jbossmessagingtest.jar -->
+      <jar destfile="${build.lib}/jbossmessagingtest.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jbossmessaging/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/jbossmessaging">
+            <include name="provider.properties"/>
+         </fileset>
+      </jar>
+      
+      <!-- copy any required configuration files
+      <copy tofile="${build.lib}/jbossmessaging-recovery-service.xml"
+         file="${build.resources}/jbossmessaging/jbossmessaging-recovery-service.xml"/>
+      -->
+
+   </target>
+</project>

@@ -1,0 +1,2 @@
+# [EJBTHREE-1152] service-ref in ejb-jar.xml is ignored
+org/jboss/test/ws/jaxws/samples/serviceref/ServiceRefEJBTestCase.*

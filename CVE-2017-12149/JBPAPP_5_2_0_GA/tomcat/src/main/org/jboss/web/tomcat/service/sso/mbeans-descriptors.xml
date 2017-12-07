@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<mbeans-descriptors>
+
+   <mbean name="ClusteredSingleSignOn"
+      description="A Valve that supports a 'single signon' user experience"
+      domain="Catalina"
+      group="Valve"
+      type="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn">
+
+      <attribute name="className"
+         description="Fully qualified class name of the managed object"
+         type="java.lang.String"
+         writeable="false"/>
+    
+      <attribute name="cookieDomain"
+               description="Domain to which sso cookies should be scoped"
+               type="java.lang.String"/>
+
+      <attribute name="requireReauthentication"
+         description="Should we attempt to reauthenticate each request against the security Realm?"
+         type="boolean"/>
+
+      <attribute name="maxEmptyLife"
+         description="The maximum number of seconds an SSO with no active sessions will be usable by a request"
+         type="int"/>
+
+      <attribute name="processExpiresInterval"
+         description="The minimum number of seconds between efforts by the valve to find and invalidate SSO's 
+                      that have exceeded their 'maxEmptyLife'. Does not imply effort will be spent on such
+                      cleanup every 'processExpiresInterval'."
+         type="int"/>
+
+      <attribute name="lastProcessExpires"
+         writeable="false"
+         description="The timestamp of the start of the last check for overaged SSO's with no active sessions."
+         type="long"/>
+
+      <attribute name="clusterManager"
+         description="SSOClusterManager to use for cluster support"
+         type="org.jboss.web.tomcat.service.sso.SSOClusterManager"/>
+
+      <attribute name="clusterManagerClass"
+         description="Fully qualified class name of the SSOClusterManager to use for cluster support"
+         type="java.lang.String"/>
+
+      <attribute name="treeCacheName"
+         description="The ObjectName of the TreeCache that this Valve should use for cluster communications.
+                      Only relevant if clusterManagerClass is org.jboss.web.tomcat.service.sso.TreeCacheSSOClusterManager"
+         type="java.lang.String"/>
+
+   </mbean>
+
+</mbeans-descriptors>

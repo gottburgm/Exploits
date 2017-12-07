@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <!-- ejb3 test application-policy definition -->
+   <application-policy xmlns="urn:jboss:security-beans:1.0" name="security-ejb3-test">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule" flag="required">
+            <module-option name="unauthenticatedIdentity">anonymous</module-option>
+            <module-option name="usersProperties">ejb3-test-users.properties</module-option>
+            <module-option name="rolesProperties">ejb3-test-roles.properties</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+
+</deployment>

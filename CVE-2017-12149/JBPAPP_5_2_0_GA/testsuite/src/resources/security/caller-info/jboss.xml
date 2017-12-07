@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE jboss PUBLIC
+   "-//JBoss//DTD JBOSS 4.0//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<!-- The jboss.xml descriptor for the caller info tests -->
+<jboss>
+    <security-domain>java:/jaas/caller-info-test</security-domain>
+
+   <enterprise-beans>
+      <session>
+         <ejb-name>SubjectSessionFacade</ejb-name>
+         <jndi-name>caller-info.SubjectSessionFacade</jndi-name>
+      </session>
+      <session>
+         <ejb-name>StatelessSessionCallee</ejb-name>
+         <jndi-name>caller-info.StatelessSessionCallee</jndi-name>
+      </session>
+      <session>
+         <ejb-name>StatefulSessionCallee</ejb-name>
+         <jndi-name>caller-info.StatefulSessionCallee</jndi-name>
+      </session>
+      <entity>
+         <ejb-name>EntityCallee</ejb-name>
+         <jndi-name>caller-info.EntityCallee</jndi-name>
+      </entity>      
+   </enterprise-beans>
+
+</jboss>

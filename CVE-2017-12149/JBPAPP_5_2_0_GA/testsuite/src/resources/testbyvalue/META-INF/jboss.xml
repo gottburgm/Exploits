@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 4.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+    <enterprise-beans>
+        <session>
+          <ejb-name>RootTestByValue</ejb-name>
+          <jndi-name>RootTestByValue</jndi-name>
+        </session>
+        <session>
+          <ejb-name>TestByValue</ejb-name>
+          <call-by-value>true</call-by-value>
+        </session>
+        <session>
+          <ejb-name>TestByReference</ejb-name>
+          <call-by-value>false</call-by-value>
+        </session>
+        <entity>
+             <ejb-name>TestByValueEntity</ejb-name>
+             <call-by-value>true</call-by-value>
+         </entity>
+        <entity>
+             <ejb-name>TestByReferenceEntity</ejb-name>
+             <call-by-value>false</call-by-value>
+         </entity>
+    </enterprise-beans>
+</jboss>

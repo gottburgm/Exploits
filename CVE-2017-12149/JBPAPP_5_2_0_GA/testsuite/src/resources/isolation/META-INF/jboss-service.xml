@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+
+  <loader-repository>jboss.test:loader=JavaClassIsolation</loader-repository>
+
+  <mbean code="org.jboss.test.isolation.mbean.JavaClassIsolation" 
+         name="jboss.test:test=JavaClassIsolation"/>
+
+</server>

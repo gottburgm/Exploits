@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence">
+	<persistence-unit name="ejb3">
+		<jta-data-source>java:/CrashRecoveryDS</jta-data-source>
+		<properties>
+			<property name="jboss.entity.manager.jndi.name" value="java:/CrashRecoveryManager" />
+			<property name="jboss.entity.manager.factory.jndi.name"
+				value="java:/CrashRecoveryManagerFactory" />
+			<property name="hibernate.hbm2ddl.auto" value="update"/>
+		</properties>
+	</persistence-unit>
+</persistence>

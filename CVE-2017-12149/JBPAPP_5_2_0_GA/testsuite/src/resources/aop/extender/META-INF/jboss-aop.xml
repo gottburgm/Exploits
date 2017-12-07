@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop xmlns="urn:jboss:aop-beans:1.0">
+
+   <interceptor class="org.jboss.test.aop.extender.ExtenderInterceptor"/>
+   <bind pointcut="execution(* org.jboss.test.aop.extender.ChildBase->updateBase())">
+      <interceptor-ref name="org.jboss.test.aop.extender.ExtenderInterceptor"/>
+   </bind>
+
+   <bind pointcut="execution(* org.jboss.test.aop.extender.Base->setBase(..))">
+      <interceptor-ref name="org.jboss.test.aop.extender.ExtenderInterceptor"/>
+   </bind>
+
+   <bind pointcut="execution(* org.jboss.test.aop.extender.ChildExtender->*(..))">
+      <interceptor-ref name="org.jboss.test.aop.extender.ExtenderInterceptor"/>
+   </bind>
+
+   <bind pointcut="execution(* org.jboss.test.aop.extender.InfantBase->*(..))">
+      <interceptor-ref name="org.jboss.test.aop.extender.ExtenderInterceptor"/>
+   </bind>
+
+</aop>

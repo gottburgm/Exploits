@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The Hypersonic embedded database JCA connection factory config
+$Id: compliance-ds.xml 85945 2009-03-16 19:45:12Z dimitris@jboss.org $ -->
+
+<datasources>
+   <local-tx-datasource>
+      <jndi-name>ComplianceDS</jndi-name>
+      <connection-url>jdbc:hsqldb:mem:ComplianceDSDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <application-managed-security />
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+   </local-tx-datasource>
+</datasources>

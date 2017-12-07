@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<connection-factories>
+
+  <loader-repository>jboss.j2ee:service=EARDeployment,url='testscopedrar-nojbossapp.ear',extension=LoaderRepository</loader-repository>
+
+  <tx-connection-factory>
+
+    <jndi-name>ScopedCF</jndi-name>
+
+    <xa-transaction/>
+
+    <rar-name>testscopedrar-nojbossapp.ear#jbosstestadapter.rar</rar-name>
+    <connection-definition>javax.resource.cci.ConnectionFactory</connection-definition>
+
+    <config-property name="IntegerProperty" type="java.lang.Integer">2</config-property>
+    <config-property name="BooleanProperty" type="java.lang.Boolean">false</config-property>
+    <config-property name="DoubleProperty" type="java.lang.Double">5.5</config-property>
+    <config-property name="UrlProperty" type="java.net.URL">http://www.jboss.org</config-property>
+
+  </tx-connection-factory>
+
+  <mbean code="org.jboss.test.jca.mbean.Scoped"
+         name="jboss.test:test=Scoped">
+      <depends>jboss.jca:service=ConnectionFactoryBinding,name=ScopedCF</depends>
+  </mbean>
+
+</connection-factories>

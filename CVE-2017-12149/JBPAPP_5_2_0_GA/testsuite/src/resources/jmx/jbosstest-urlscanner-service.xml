@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+
+   <!-- An mbean for hot deployment/undeployment of archives.
+   -->
+   <mbean code="org.jboss.deployment.scanner.URLDeploymentScanner"
+      name="jboss.test:type=DeploymentScanner,flavor=URL">
+
+      <depends optional-attribute-name="Deployer">jboss.system:service=MainDeployer</depends>
+      <attribute name="URLComparator">org.jboss.deployment.DeploymentSorter</attribute>
+      <attribute name="FilterInstance"
+         attributeClass="org.jboss.deployment.scanner.DeploymentFilter"
+         serialDataType="javaBean">
+         <!-- Files starting with theses strings are ignored -->
+         <property name="prefixes">#,%,\,,.,_$</property>
+         <!-- Files ending with theses strings are ignored -->
+         <property name="suffixes">#,$,%,~,\,v,.BAK,.bak,.old,.orig,.tmp,.rej,.sh</property>
+         <!-- Files matching with theses strings are ignored -->
+         <property name="matches">.make.state,.nse_depinfo,CVS,CVS.admin,RCS,RCSLOG,SCCS,TAGS,core,tags</property>
+      </attribute>
+
+      <!-- Frequency in milliseconds to rescan the URLs for changes -->
+      <attribute name="ScanPeriod">500</attribute>
+      
+      <!-- A flag to disable the scans -->
+      <attribute name="ScanEnabled">true</attribute>
+
+      <attribute name="URLs">
+      </attribute>
+
+      <attribute name="RecursiveSearch">True</attribute>
+
+   </mbean>
+
+</server>

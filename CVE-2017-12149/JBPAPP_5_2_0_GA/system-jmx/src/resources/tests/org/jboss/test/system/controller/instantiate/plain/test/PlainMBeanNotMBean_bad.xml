@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <mbean name="jboss.test:type=test" code="java.lang.Object"/>
+</server>

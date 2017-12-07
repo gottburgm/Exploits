@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+ 
+<aspect class="org.jboss.aspects.patterns.readwritelock.ReadWriteLockAspect" scope="PER_INSTANCE"/>
+ 
+<bind pointcut="execution(* *->@org.jboss.aspects.patterns.readwritelock.readLockOperation(..))">
+    <advice name="readLockMethod" aspect="org.jboss.aspects.patterns.readwritelock.ReadWriteLockAspect"/>
+</bind>
+
+<bind pointcut="execution(* *->@org.jboss.aspects.patterns.readwritelock.writeLockOperation(..))">
+    <advice name="writeLockMethod" aspect="org.jboss.aspects.patterns.readwritelock.ReadWriteLockAspect"/>
+</bind>
+ 
+</aop>

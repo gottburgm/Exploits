@@ -1,0 +1,32 @@
+<project name="tests-idgen-jars">
+   <!-- idgen test -->
+   <target name="_jars-idgen">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build idgentest.jar -->
+      <jar destfile="${build.lib}/idgentest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/idgen/interfaces/**"/>
+            <include name="org/jboss/test/idgen/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/idgen">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build idgen.jar -->
+      <jar destfile="${build.lib}/idgen.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/idgen/interfaces/**"/>
+            <include name="org/jboss/test/idgen/ejb/**"/>
+            <include name="org/jboss/test/idgen/beans/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/idgen">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

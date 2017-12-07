@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+
+   <aspect xmlns="urn:jboss:aop-beans:1.0"
+               name="DependencyAdvice"
+               class="org.jboss.test.aop.mcjmx.InterceptorWithDependency"
+               manager-bean="AspectManager"
+               manager-property="aspectManager">
+      <property name="dependency"><inject bean="Dependency"/></property>
+   </aspect>
+
+   <bind xmlns="urn:jboss:aop-beans:1.0" 
+   		pointcut="execution(* org.jboss.test.aop.mcjmx.BeanWithDependency->someAction(..))"
+   		manager-bean="AspectManager"
+	   	manager-property="aspectManager">
+      <interceptor-ref name="DependencyAdvice"/>
+   </bind>
+
+   <bean name="BeanWithDependency" class="org.jboss.test.aop.mcjmx.BeanWithDependency"/>
+
+</deployment>

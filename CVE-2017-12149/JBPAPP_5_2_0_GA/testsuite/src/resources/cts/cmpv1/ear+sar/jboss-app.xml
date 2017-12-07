@@ -1,0 +1,10 @@
+<!DOCTYPE jboss-app
+    PUBLIC "-//JBoss//DTD J2EE Application 1.4//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-app_4_0.dtd">
+
+<jboss-app>
+   <loader-repository>jboss.test.cts:loader=cts-cmp2v1-sar.ear</loader-repository>
+   <module>
+      <service>cts-v1cmp.sar</service>
+   </module>
+</jboss-app>

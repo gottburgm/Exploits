@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Created-By: @java.vm.version@ (@java.vm.vendor@)
+Specification-Title: @aspects.title@
+Specification-Version: @aspects.version@
+Specification-Vendor: @specification.vendor@
+Implementation-Title: @aspects.title@
+Implementation-URL: @implementation.url@
+Implementation-Version: @aspects.version@
+Implementation-Vendor: @implementation.vendor@
+Implementation-Vendor-Id: @implementation.vendor.id@

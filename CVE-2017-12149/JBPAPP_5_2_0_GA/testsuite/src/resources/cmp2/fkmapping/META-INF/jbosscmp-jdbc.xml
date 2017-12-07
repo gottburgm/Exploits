@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jbosscmp-jdbc PUBLIC "-//JBoss//DTD JBOSSCMP-JDBC 3.2//EN" "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_2.dtd">
+
+<jbosscmp-jdbc>
+   <defaults>
+   </defaults>
+
+   <enterprise-beans>
+
+     <!--
+       To add beans that you have deployment descriptor info for, add
+       a file to your XDoclet merge directory called jbosscmp-jdbc-beans.xml
+       that contains the <entity></entity> markup for those beans.
+     -->
+
+      <entity>
+         <ejb-name>Student</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>STUDENT</table-name>
+
+         <cmp-field>
+            <field-name>departmentCode</field-name>
+            <column-name>DEPT_CODE</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>departmentCode2</field-name>
+            <column-name>DEPT_CODE2</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>lastName</field-name>
+            <column-name>LAST_NAME</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>description</field-name>
+            <column-name>DESCR</column-name>
+
+        </cmp-field>
+
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+      <entity>
+         <ejb-name>Institute</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>INSTITUTE</table-name>
+
+         <cmp-field>
+            <field-name>instituteId</field-name>
+            <column-name>INSTITUTE_ID</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>description</field-name>
+            <column-name>DESCR</column-name>
+
+        </cmp-field>
+
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+      <entity>
+         <ejb-name>ChildUPK</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>CHILD_UPK</table-name>
+
+         <cmp-field>
+            <field-name>firstName</field-name>
+            <column-name>FIRST_NAME</column-name>
+
+        </cmp-field>
+
+	<unknown-pk>
+		<unknown-pk-class>java.lang.String</unknown-pk-class>
+	</unknown-pk>
+	<entity-command name="key-generator">
+	</entity-command>
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+      <entity>
+         <ejb-name>Examenation</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>EXAM</table-name>
+
+         <cmp-field>
+            <field-name>examId</field-name>
+            <column-name>EXAM_ID</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>subject</field-name>
+            <column-name>SUBJECT</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>departmentCode</field-name>
+            <column-name>DEPT_CODE</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>departmentCode2</field-name>
+            <column-name>DEPT_CODE2</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>groupNumber</field-name>
+            <column-name>GROUP_NUM</column-name>
+
+        </cmp-field>
+
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+      <entity>
+         <ejb-name>Child</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>CHILD</table-name>
+
+         <cmp-field>
+            <field-name>id</field-name>
+            <column-name>CHILD_ID</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>firstName</field-name>
+            <column-name>FIRST_NAME</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>motherId</field-name>
+            <column-name>MOTHER_ID</column-name>
+			<not-null/>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>motherName</field-name>
+            <column-name>MOTHER_NAME</column-name>
+			<not-null/>
+
+        </cmp-field>
+
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+      <entity>
+         <ejb-name>Parent</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>PARENT</table-name>
+
+         <cmp-field>
+            <field-name>id</field-name>
+            <column-name>PARENT_ID</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>firstName</field-name>
+            <column-name>FIRST_NAME</column-name>
+
+        </cmp-field>
+
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+      <entity>
+         <ejb-name>Department</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>DEPARTMENT</table-name>
+
+         <cmp-field>
+            <field-name>departmentCode</field-name>
+            <column-name>DEPT_CODE</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>departmentCode2</field-name>
+            <column-name>DEPT_CODE2</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>description</field-name>
+            <column-name>DESCR</column-name>
+
+        </cmp-field>
+
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+      <entity>
+         <ejb-name>Group</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>DEPT_GROUP</table-name>
+
+         <cmp-field>
+            <field-name>departmentCode</field-name>
+            <column-name>DEPT_CODE</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>departmentCode2</field-name>
+            <column-name>DEPT_CODE2</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>groupNumber</field-name>
+            <column-name>GROUP_NUM</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>description</field-name>
+            <column-name>DESCR</column-name>
+
+        </cmp-field>
+
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+   </enterprise-beans>
+
+  <relationships>
+    <ejb-relation>
+      <ejb-relation-name>Institute-Department-StandaloneFK</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Department-has-Institute</ejb-relationship-role-name>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Institute-has-Departments</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>instituteId</field-name>
+               <column-name>INST_ID_FK</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+    <ejb-relation>
+      <ejb-relation-name>Group-Student-PartialFKToPK</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Student-has-Group</ejb-relationship-role-name>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Group-has-Students</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>departmentCode</field-name>
+               <column-name>DEPT_CODE</column-name>
+             </key-field>
+             <key-field>
+               <field-name>departmentCode2</field-name>
+               <column-name>DEPT_CODE2</column-name>
+             </key-field>
+             <key-field>
+               <field-name>groupNumber</field-name>
+               <column-name>GROUP_NUM_FK</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+    <ejb-relation>
+      <ejb-relation-name>Department-Student-CompleteFKToPK</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Student-has-Department</ejb-relationship-role-name>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Department-has-Students</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>departmentCode</field-name>
+               <column-name>DEPT_CODE</column-name>
+             </key-field>
+             <key-field>
+               <field-name>departmentCode2</field-name>
+               <column-name>DEPT_CODE2</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+    <ejb-relation>
+      <ejb-relation-name>Mother-Child</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Child-has-Mother</ejb-relationship-role-name>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Mother-has-Child</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>id</field-name>
+               <column-name>MOTHER_ID</column-name>
+             </key-field>
+             <key-field>
+               <field-name>firstName</field-name>
+               <column-name>MOTHER_NAME</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+    <ejb-relation>
+      <ejb-relation-name>Group-Exam-FKToCMP</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Exam-has-Group</ejb-relationship-role-name>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Group-has-Exams</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>departmentCode</field-name>
+               <column-name>DEPT_CODE</column-name>
+             </key-field>
+             <key-field>
+               <field-name>departmentCode2</field-name>
+               <column-name>DEPT_CODE2</column-name>
+             </key-field>
+             <key-field>
+               <field-name>groupNumber</field-name>
+               <column-name>GROUP_NUM</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+    <ejb-relation>
+      <ejb-relation-name>Department-Group-CompleteFKToPK</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Group-has-Department</ejb-relationship-role-name>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Department-has-Groups</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>departmentCode</field-name>
+               <column-name>DEPT_CODE</column-name>
+             </key-field>
+             <key-field>
+               <field-name>departmentCode2</field-name>
+               <column-name>DEPT_CODE2</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+    <ejb-relation>
+      <ejb-relation-name>Mother-Child-upk</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Child-has-Mother</ejb-relationship-role-name>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Mother-has-Child</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>id</field-name>
+               <column-name>MOTHER_ID</column-name>
+             </key-field>
+             <key-field>
+               <field-name>firstName</field-name>
+               <column-name>MOTHER_NAME</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+    <ejb-relation>
+      <ejb-relation-name>Father-Child-upk</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Child-has-Father</ejb-relationship-role-name>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>Father-has-Child</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>id</field-name>
+               <column-name>FATHER_ID</column-name>
+             </key-field>
+             <key-field>
+               <field-name>firstName</field-name>
+               <column-name>FATHER_NAME</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+  </relationships>
+
+</jbosscmp-jdbc>

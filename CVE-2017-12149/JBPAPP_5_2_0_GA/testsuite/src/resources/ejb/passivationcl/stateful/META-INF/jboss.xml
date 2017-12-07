@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 3.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_3_0.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <session>
+         <ejb-name>StatefulSession</ejb-name>
+         <jndi-name>StatefulSession</jndi-name>
+         <configuration-name>Custom Stateful</configuration-name>
+      </session>
+
+   </enterprise-beans>
+
+   <container-configurations>
+      <container-configuration extends="Standard Stateful SessionBean">
+         <container-name>Custom Stateful</container-name>
+         <container-cache-conf>
+            <cache-policy>org.jboss.ejb.plugins.LRUStatefulContextCachePolicy</cache-policy>
+            <cache-policy-conf>
+               <min-capacity>1</min-capacity>
+               <max-capacity>1</max-capacity>
+               <remover-period>1800</remover-period>
+               <max-bean-life>1800</max-bean-life>
+               <overager-period>1</overager-period>
+               <max-bean-age>1</max-bean-age>
+               <resizer-period>400</resizer-period>
+               <max-cache-miss-period>60</max-cache-miss-period>
+               <min-cache-miss-period>1</min-cache-miss-period>
+               <cache-load-factor>0.75</cache-load-factor>
+            </cache-policy-conf>
+         </container-cache-conf>
+      </container-configuration>
+   </container-configurations>
+</jboss>

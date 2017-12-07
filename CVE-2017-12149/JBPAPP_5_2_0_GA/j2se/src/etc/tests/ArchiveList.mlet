@@ -1,0 +1,6 @@
+
+<MLET CODE="org.jboss.test.jmx.compliance.loading.support.AnotherTrivial"
+      NAME="test:name=AnotherTrivial"
+      ARCHIVE="../../lib/jmxcompliance-MyMBeans.jar,../../lib/jmxcompliance-MoreMBeans.jar"
+>
+</MLET>

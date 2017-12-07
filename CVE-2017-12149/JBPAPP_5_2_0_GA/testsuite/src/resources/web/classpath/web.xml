@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
+   <description>Webapp classpath tests</description>
+   <display-name>ClasspathWebApp</display-name>
+   
+   <servlet>
+      <description>A servlet in WEB-INF/classes</description>
+      <servlet-name>ClassesServlet</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.ClasspathServlet</servlet-class>
+   </servlet>
+   <servlet>
+      <description>A servlet in WEB-INF/lib/jbosstest-web-libservlet.jar</description>
+      <servlet-name>LibServlet</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.lib.SimpleServlet</servlet-class>
+   </servlet>
+   <!-- TODO: the jbossws is choking on this, JBWS-1357
+   <servlet>
+      <description>A jsp file that access various classes in the war classpath</description>
+      <servlet-name>ClasspathJSP</servlet-name>
+      <jsp-file>/classpath.jsp</jsp-file>
+   </servlet>
+   -->
+
+   <servlet-mapping>
+      <servlet-name>ClassesServlet</servlet-name>
+      <url-pattern>/ClassesServlet</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+      <servlet-name>LibServlet</servlet-name>
+      <url-pattern>/LibServlet</url-pattern>
+   </servlet-mapping>
+   <!--
+   <servlet-mapping>
+      <servlet-name>ClasspathJSP</servlet-name>
+      <url-pattern>/ClasspathJSP</url-pattern>
+   </servlet-mapping>
+   -->
+</web-app>

@@ -1,0 +1,72 @@
+<html>
+<body>
+<p>
+<h2>JDK 5.0 Annotated Security</h2>
+
+AOP Security brings J2EE/EJB like security to plain Java classes. Read up on EJB security to get a feel of what we are talking about here. You can apply security either through XML or via annotations.
+</p><p>
+There are 5 annotations that make up annotated security.  These annotations almost identically match EJB3 based annotations.
+</p><p>
+<ul>
+<li> <tt>org.jboss.aspects.security.SecurityDomain</tt></li>
+<li> <tt>org.jboss.aspects.security.Permissions</tt></li>
+<li> <tt>org.jboss.aspects.security.Unchecked</tt></li>
+<li> <tt>org.jboss.aspects.security.Excluded</tt></li>
+<li> <tt>org.jboss.aspects.security.RunAs</tt></li>
+</ul>
+</p><p>
+<pre>
+import org.jboss.aspects.security.*;
+@SecurityDomain("other")
+@RunAs("allowed")
+public class AnnotatedSecuredPOJO
+{
+   @Permissions({"allowed"})
+   public int someField;
+
+   @Exclude
+   public String excludedField;
+
+
+   @Unchecked
+   public long uncheckedField;
+
+   @Permissions({"allowed"})
+   public AnnotatedSecuredPOJO(int field)
+   {
+      someField = field;
+   }
+
+   @Unchecked
+   public void unchecked() {}
+
+   @Permissions({"allowed"})
+   public void someMethod()
+   {
+   }
+}
+</pre>
+</p><p>
+<b><tt>org.jboss.aspects.security.SecurityDomain</tt></b>
+</p><p>
+The <tt>@SecurityDomain</tt> annotation defines the JBoss security domain to use. See JBoss J2EE documentation on what this means. Basically it specifies the repository where usernames, passwords, and user/role associtations are stored.  This annotation is only applicable at the Class level.
+</p><p>
+</p><p>
+<b><tt>org.jboss.aspects.security.SecurityDomain</tt></b>
+</p><p>
+The <tt>@RunAs</tt> annotation works in the same way as the EJB run-as tag.   This annotation is only applicable at the Class level.
+</p><p>
+<b><tt>org.jboss.aspects.security.Permissions</tt></b>
+</p><p>
+The <tt>@Permissions</tt> annotation works in the much in the same way as the EJB method-permissions tag works in XML the difference being it can be applied to any method (static or member), any field (static or member), or any constructor.
+</p><p>
+<b><tt>org.jboss.aspects.security.Exclude</tt></b>
+</p><p>
+The <tt>@Exlude</tt> annotation works in the much in the same way as the EJB exclude-list tag works in XML the difference being it can be applied to any method (static or member), any field (static or member), or any constructor.
+</p><p>
+<b><tt>org.jboss.aspects.security.Unchecked</tt></b>
+</p><p>
+The <tt>@Unchecked</tt> annotation works in the much in the same way as the EJB unchecked tag works in XML the difference being it can be applied to any method (static or member), any field (static or member), or any constructor.
+</p>
+</body>
+</html>

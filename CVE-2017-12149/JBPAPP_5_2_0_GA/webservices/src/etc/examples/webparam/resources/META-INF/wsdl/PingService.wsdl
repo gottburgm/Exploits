@@ -1,0 +1,95 @@
+<definitions name='PingServiceService' targetNamespace='http://www.openuri.org/jsr181/WebParamExample' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://www.openuri.org/jsr181/WebParamExample' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://www.openuri.org/jsr181/WebParamExample' version='1.0' xmlns:tns='http://www.openuri.org/jsr181/WebParamExample' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='SecHeader' nillable='true' type='tns:SecurityHeader'/>
+   <xs:complexType name='PingDocument'>
+    <xs:sequence>
+     <xs:element form='qualified' name='content' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='SecurityHeader'>
+    <xs:sequence>
+     <xs:element form='qualified' name='value' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </types>
+ 
+ <message name='PingService_PingTwoWay'>
+  <part name='Ping' type='tns:PingDocument'/>
+ </message>
+ <message name='PingService_SecurePing'>
+  <part name='Ping' type='tns:PingDocument'/>
+  <part element='tns:SecHeader' name='SecHeader'/>
+ </message>
+ <message name='PingService_PingOneWay'>
+  <part name='Ping' type='tns:PingDocument'/>
+ </message>
+ <message name='PingService_echo'>
+  <part name='arg0' type='tns:PingDocument'/>
+ </message>
+ <message name='PingService_PingTwoWayResponse'>
+  <part name='Ping' type='tns:PingDocument'/>
+ </message>
+ <message name='PingService_echoResponse'>
+  <part name='return' type='tns:PingDocument'/>
+ </message>
+ 
+ <portType name='PingService'>
+  <operation name='PingOneWay'>
+   <input message='tns:PingService_PingOneWay'/>
+  </operation>
+  <operation name='PingTwoWay'>
+   <input message='tns:PingService_PingTwoWay'/>
+   <output message='tns:PingService_PingTwoWayResponse'/>
+  </operation>
+  <operation name='SecurePing'>
+   <input message='tns:PingService_SecurePing'/>
+  </operation>
+  <operation name='echo'>
+   <input message='tns:PingService_echo'/>
+   <output message='tns:PingService_echoResponse'/>
+  </operation>
+ </portType>
+ 
+ <binding name='PingServiceBinding' type='tns:PingService'>
+  <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='PingOneWay'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://www.openuri.org/jsr181/WebParamExample' use='literal'/>
+   </input>
+  </operation>
+  <operation name='PingTwoWay'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://www.openuri.org/jsr181/WebParamExample' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://www.openuri.org/jsr181/WebParamExample' use='literal'/>
+   </output>
+  </operation>
+  <operation name='SecurePing'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://www.openuri.org/jsr181/WebParamExample' parts='Ping' use='literal'/>
+    <soap:header message='tns:PingService_SecurePing' part='SecHeader' use='literal'></soap:header>
+   </input>
+  </operation>
+  <operation name='echo'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://www.openuri.org/jsr181/WebParamExample' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://www.openuri.org/jsr181/WebParamExample' use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ 
+ <service name='PingServiceService'>
+  <port binding='tns:PingServiceBinding' name='PingServicePort'>
+   <soap:address location='http://@jboss.bind.address@:8080/jaxws-samples-webparam'/>
+  </port>
+ </service>
+</definitions>

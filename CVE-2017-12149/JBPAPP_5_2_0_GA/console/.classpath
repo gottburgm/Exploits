@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main"/>
+	<classpathentry exported="true" kind="src" path="/management"/>
+	<classpathentry exported="true" kind="src" path="/varia"/>
+	<classpathentry exported="true" kind="src" path="/messaging"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jfreechart/lib/jfreechart.jar"/>
+   <classpathentry exported="true" kind="lib" path="/thirdparty/jfreechart/lib/jcommon.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/beanshell/lib/bsh.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/aop/lib/jboss-aop.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/web/lib/jsp-api.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/web/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-kernel.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-kernel-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-bootstrap/lib/jboss-bootstrap.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/common-beans/lib/jboss-common-beans.jar"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

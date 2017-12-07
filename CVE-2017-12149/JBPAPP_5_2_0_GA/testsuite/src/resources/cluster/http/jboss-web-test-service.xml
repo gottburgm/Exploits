@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Can be parsed to create a basic configuration for unit tests -->
+
+<server>
+
+    <mbean code="org.jboss.cache.pojo.impl.PojoCacheImpl"
+        name="jboss.cache:service=TomcatClusteringTestCache">
+
+        <attribute name="ClusterName">Tomcat-TestCluster</attribute>
+
+        <!-- make sure to specify BatchModeTransactionManager only! -->
+        <attribute name="TransactionManagerLookupClass">org.jboss.cache.transaction.BatchModeTransactionManagerLookup</attribute>
+
+        <attribute name="NodeLockingScheme">PESSIMISTIC</attribute>
+        
+        <attribute name="IsolationLevel">REPEATABLE_READ</attribute>
+
+        <attribute name="CacheMode">REPL_SYNC</attribute>
+
+        <attribute name="SyncReplTimeout">20000</attribute>
+
+        <attribute name="LockAcquisitionTimeout">15000</attribute>
+
+        <attribute name="UseRegionBasedMarshalling">false</attribute>
+        <attribute name="InactiveOnStartup">false</attribute>
+
+        <attribute name="SerializationExecutorPoolSize">0</attribute>
+        <attribute name="ListenerAsyncPoolSize">0</attribute>
+
+        <attribute name="BuddyReplicationConfig">
+            <config>
+                <buddyReplicationEnabled>true</buddyReplicationEnabled>
+                <buddyLocatorClass>org.jboss.cache.buddyreplication.NextMemberBuddyLocator</buddyLocatorClass>
+                <buddyLocatorProperties>
+                    numBuddies = 1
+                    ignoreColocatedBuddies = true
+                </buddyLocatorProperties>
+
+                <buddyPoolName>default</buddyPoolName>
+                <buddyCommunicationTimeout>2000</buddyCommunicationTimeout>
+
+                <autoDataGravitation>false</autoDataGravitation>
+                <dataGravitationRemoveOnFind>true</dataGravitationRemoveOnFind>
+                <dataGravitationSearchBackupTrees>true</dataGravitationSearchBackupTrees>
+
+            </config>
+        </attribute>
+ 
+        <attribute name="CacheLoaderConfig">
+            <config>
+                <passivation>true</passivation>
+                <shared>false</shared>
+                <cacheloader>
+                    <class>org.jboss.cache.loader.FileCacheLoader</class>
+                    <properties>
+                        location=/tmp
+                    </properties>
+                    <async>false</async>
+                    <fetchPersistentState>true</fetchPersistentState>
+                    <ignoreModifications>false</ignoreModifications>
+                </cacheloader>
+            </config>
+        </attribute>
+         
+    </mbean>
+
+</server>

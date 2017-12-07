@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4"
+   xmlns="http://java.sun.com/xml/ns/j2ee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+ 
+   <description>Custom Security Manager Plugin Tests</description>
+   <!-- ### Servlets -->
+   <servlet>
+      <servlet-name>DeepCopyServlet</servlet-name>
+      <servlet-class>org.jboss.test.security.servlets.DeepCopySubjectServlet</servlet-class>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>DeepCopyServlet</servlet-name>
+      <url-pattern>/DeepCopyServlet/*</url-pattern> 
+   </servlet-mapping>
+
+   <!-- ### Security -->
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Restricted</web-resource-name>
+         <description>Declarative security tests</description>
+         <url-pattern>/*</url-pattern>
+         <http-method>HEAD</http-method>
+         <http-method>GET</http-method>
+         <http-method>POST</http-method>
+         <http-method>PUT</http-method>
+         <http-method>DELETE</http-method>
+      </web-resource-collection>
+      <auth-constraint>
+         <description>Only authenticated users can access secure content</description>
+         <role-name>Echo</role-name>
+      </auth-constraint>
+
+      <user-data-constraint>
+         <transport-guarantee>NONE</transport-guarantee>
+      </user-data-constraint>
+   </security-constraint>
+
+   <login-config>
+      <auth-method>BASIC</auth-method>
+      <realm-name>JBossTest Servlets</realm-name>
+   </login-config>
+
+   <security-role>
+      <description>A user validated by an X-MyAuthentication</description>
+      <role-name>Echo</role-name>
+   </security-role> 
+</web-app>

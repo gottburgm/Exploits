@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 3.2//EN" "http://www.jboss.org/j2ee/dtd/jboss_3_2.dtd">
+
+<jboss>
+
+   <enterprise-beans>
+
+      <entity>
+         <ejb-name>Parent</ejb-name>
+         <jndi-name>ejb/Parent</jndi-name>
+         <local-jndi-name>ParentLocal</local-jndi-name>
+         <configuration-name>custom container</configuration-name>
+
+      </entity>
+      <entity>
+         <ejb-name>Child</ejb-name>
+         <jndi-name>ejb/Child</jndi-name>
+         <local-jndi-name>ChildLocal</local-jndi-name>
+         <configuration-name>custom container</configuration-name>
+
+      </entity>
+      <entity>
+         <ejb-name>Grandchild</ejb-name>
+         <jndi-name>ejb/Grandchild</jndi-name>
+         <local-jndi-name>GrandchildLocal</local-jndi-name>
+         <configuration-name>custom container</configuration-name>
+
+      </entity>
+
+      <session>
+         <ejb-name>EJBTestRunnerEJB</ejb-name>
+         <jndi-name>ejb/EJBTestRunner</jndi-name>
+      </session>
+
+   </enterprise-beans>
+
+   <container-configurations>
+
+    <container-configuration extends="Standard CMP 2.x EntityBean">
+      <container-name>custom container</container-name>
+      <insert-after-ejb-post-create>true</insert-after-ejb-post-create>
+    </container-configuration>
+
+   </container-configurations>
+
+</jboss>

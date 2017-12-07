@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+   <bean id="randomizer" class="org.springframework.jndi.JndiObjectFactoryBean">
+      <property name="jndiName">
+         <value>JBoss-Spring/RandomizerBean/local</value>
+      </property>
+   </bean>
+
+   <bean id="horoscope" class="org.springframework.jndi.JndiObjectFactoryBean">
+      <property name="cache">
+         <value>false</value>
+      </property>
+      <property name="proxyInterface">
+         <value>org.jboss.tutorial.ee.service.Horoscope</value>
+      </property>
+      <property name="jndiName">
+         <value>JBoss-Spring/HoroscopeBean/local</value>
+      </property>
+   </bean>
+
+</beans>

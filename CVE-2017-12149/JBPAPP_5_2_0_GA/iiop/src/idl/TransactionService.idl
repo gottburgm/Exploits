@@ -1,0 +1,100 @@
+/***************************************
+ *                                     *
+ *  JBoss: The OpenSource J2EE WebOS   *
+ *                                     *
+ *  Distributable under LGPL license.  *
+ *  See terms of license at gnu.org.   *
+ *                                     *
+ ***************************************/
+
+#include <CosTransactions.idl>
+
+/**
+ * This IDL module defines additional CORBA interfaces for transaction 
+ * demarcation over IIOP.
+ *
+ * @author  <a href="mailto:reverbel@ime.usp.br">Francisco Reverbel</a>
+ * @version $Revision: 30198 $
+ */
+module org {
+module jboss {
+module tm {
+module iiop {
+
+    /**
+     * A TransactionId is a X/Open Xid (or CosTransactions::otid_t) with 
+     * no branch qualifier. The fields of this IDL struct correspond to 
+     * the format id and global id fields of a Xid.
+     */
+    struct TransactionId {
+        long formatId;              /* Format identifier. 0 is OSI TP */
+        sequence <octet> globalId;  /* Global id part of the Xid      */ 
+    };
+
+    /**
+     * A TransactionDesc bundles together a transaction control and a 
+     * propagation context.
+     */
+    struct TransactionDesc {
+        CosTransactions::Control control;
+        CosTransactions::PropagationContext propagationContext;
+    };
+
+    /**
+     * TransactionFactoryExt extends TransactionFactory with a method 
+     * that allows us to avoid the overhead of three remote invocations 
+     * when creating a transaction and obtaining its propagation context. 
+     * Instead of saying 
+     * <code>
+     *   Control control = txFactory.create(timeout);
+     *   Coordinator coordinator = control.get_coordinator();
+     *   PropagationContext pc = coordinator.get_txcontext();
+     * </code>
+     * we can simply say
+     * <code>
+     *   TransactionDesc td = txFactoryExt.create_transaction(timeout);
+     * </code>
+     * and use the field <code>td.propagationContext</code>.
+     * </code>
+     */
+    interface TransactionFactoryExt : CosTransactions::TransactionFactory {
+      
+        TransactionDesc create_transaction(in unsigned long time_out);
+
+    };
+
+    /**
+     * CoordinatorExt extends Coordinator with a method that returns the
+     * TransactionId of the transaction associated with the target. (To obtain
+     * the same information through the standard Coordinator interface, we 
+     * need to call get_txcontext(), look at the TransIdentity instance in 
+     * the current field of the returned PropagationContext, and look at 
+     * otid_t instance in the otid field of the TransIdentity instance.)
+     */
+    interface CoordinatorExt : CosTransactions::Coordinator {
+      
+        TransactionId get_transaction_id();
+
+    };
+
+    /**
+     * TransactionService is not a "real" interface, but an implementation 
+     * detail: we use it to generate the base class for a default servant 
+     * for all the superinterfaces of TransactionService. This common
+     * servant incarnates CORBA objects that implement some of the
+     * TransactionService superinterfaces, but never incarnates a CORBA
+     * object that implements TransactionService. No CORBA references
+     * of type TransactionService are ever created.
+     */
+    interface TransactionService : TransactionFactoryExt, 
+                                   CosTransactions::Control,
+                                   CoordinatorExt,
+                                   CosTransactions::Terminator,
+                                   CosTransactions::RecoveryCoordinator {
+        // no new methods
+    };
+
+};
+};
+};
+};

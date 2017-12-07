@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?><java-wsdl-mapping version='1.1' xmlns='http://java.sun.com/xml/ns/j2ee' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://java.sun.com/xml/ns/j2ee    http://www.ibm.com/webservices/xsd/j2ee_jaxrpc_mapping_1_1.xsd'>
+ <package-mapping>
+  <package-type>org.jboss.test.webservice.admindevel</package-type>
+  <namespaceURI>http://org.jboss.webservice/example/types</namespaceURI>
+ </package-mapping>
+ <java-xml-type-mapping>
+  <java-type>org.jboss.test.webservice.admindevel.HelloObj</java-type>
+  <root-type-qname xmlns:typeNS='http://org.jboss.webservice/example/types'>typeNS:HelloObj</root-type-qname>
+  <qname-scope>complexType</qname-scope>
+  <variable-mapping>
+   <java-variable-name>msg</java-variable-name>
+   <xml-element-name>msg</xml-element-name>
+  </variable-mapping>
+ </java-xml-type-mapping>
+ <service-interface-mapping>
+  <service-interface>org.jboss.test.webservice.admindevel.HelloService</service-interface>
+  <wsdl-service-name xmlns:serviceNS='http://org.jboss.webservice/example'>serviceNS:HelloService</wsdl-service-name>
+  <port-mapping>
+   <port-name>HelloPort</port-name>
+   <java-port-name>HelloPort</java-port-name>
+  </port-mapping>
+ </service-interface-mapping>
+ <service-endpoint-interface-mapping>
+  <service-endpoint-interface>org.jboss.test.webservice.admindevel.Hello</service-endpoint-interface>
+  <wsdl-port-type xmlns:portTypeNS='http://org.jboss.webservice/example'>portTypeNS:Hello</wsdl-port-type>
+  <wsdl-binding xmlns:bindingNS='http://org.jboss.webservice/example'>bindingNS:HelloBinding</wsdl-binding>
+  <service-endpoint-method-mapping>
+   <java-method-name>helloString</java-method-name>
+   <wsdl-operation>helloString</wsdl-operation>
+   <method-param-parts-mapping>
+    <param-position>0</param-position>
+    <param-type>java.lang.String</param-type>
+    <wsdl-message-mapping>
+     <wsdl-message xmlns:wsdlMsgNS='http://org.jboss.webservice/example'>wsdlMsgNS:Hello_helloString</wsdl-message>
+     <wsdl-message-part-name>String_1</wsdl-message-part-name>
+     <parameter-mode>IN</parameter-mode>
+    </wsdl-message-mapping>
+   </method-param-parts-mapping>
+   <wsdl-return-value-mapping>
+    <method-return-value>java.lang.String</method-return-value>
+    <wsdl-message xmlns:wsdlMsgNS='http://org.jboss.webservice/example'>wsdlMsgNS:Hello_helloStringResponse</wsdl-message>
+    <wsdl-message-part-name>result</wsdl-message-part-name>
+   </wsdl-return-value-mapping>
+  </service-endpoint-method-mapping>
+  <service-endpoint-method-mapping>
+   <java-method-name>helloBean</java-method-name>
+   <wsdl-operation>helloBean</wsdl-operation>
+   <method-param-parts-mapping>
+    <param-position>0</param-position>
+    <param-type>org.jboss.test.webservice.admindevel.HelloObj</param-type>
+    <wsdl-message-mapping>
+     <wsdl-message xmlns:wsdlMsgNS='http://org.jboss.webservice/example'>wsdlMsgNS:Hello_helloBean</wsdl-message>
+     <wsdl-message-part-name>HelloObj_1</wsdl-message-part-name>
+     <parameter-mode>IN</parameter-mode>
+    </wsdl-message-mapping>
+   </method-param-parts-mapping>
+   <wsdl-return-value-mapping>
+    <method-return-value>org.jboss.test.webservice.admindevel.HelloObj</method-return-value>
+    <wsdl-message xmlns:wsdlMsgNS='http://org.jboss.webservice/example'>wsdlMsgNS:Hello_helloBeanResponse</wsdl-message>
+    <wsdl-message-part-name>result</wsdl-message-part-name>
+   </wsdl-return-value-mapping>
+  </service-endpoint-method-mapping>
+  <service-endpoint-method-mapping>
+   <java-method-name>helloArray</java-method-name>
+   <wsdl-operation>helloArray</wsdl-operation>
+   <method-param-parts-mapping>
+    <param-position>0</param-position>
+    <param-type>org.jboss.test.webservice.admindevel.HelloObj[]</param-type>
+    <wsdl-message-mapping>
+     <wsdl-message xmlns:wsdlMsgNS='http://org.jboss.webservice/example'>wsdlMsgNS:Hello_helloArray</wsdl-message>
+     <wsdl-message-part-name>arrayOfHelloObj_1</wsdl-message-part-name>
+     <parameter-mode>IN</parameter-mode>
+    </wsdl-message-mapping>
+   </method-param-parts-mapping>
+   <wsdl-return-value-mapping>
+    <method-return-value>org.jboss.test.webservice.admindevel.HelloObj[]</method-return-value>
+    <wsdl-message xmlns:wsdlMsgNS='http://org.jboss.webservice/example'>wsdlMsgNS:Hello_helloArrayResponse</wsdl-message>
+    <wsdl-message-part-name>result</wsdl-message-part-name>
+   </wsdl-return-value-mapping>
+  </service-endpoint-method-mapping>
+ </service-endpoint-interface-mapping>
+</java-wsdl-mapping>

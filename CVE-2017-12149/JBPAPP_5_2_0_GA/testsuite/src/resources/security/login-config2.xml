@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- A login-config.xml example that uses the extended schema and jbossxb
+to marshall non-trival module-options.
+-->
+<policy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns="http://www.jboss.org/j2ee/schema/jaas"
+   targetNamespace="http://www.jboss.org/j2ee/schema/jaas"
+   >
+
+   <application-policy name="testXMLLoginModule">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.XMLLoginModule" flag="required">
+            <module-option name="userInfo">
+               <lm:users xmlns:lm="http://www.jboss.org/j2ee/schemas/XMLLoginModule">
+                  <lm:user name="jduke" password="theduke">
+                     <lm:role name="Role1"/>
+                     <lm:role name="Role2"/>
+                     <lm:role name="Echo"/>
+                     <lm:role name="callerJduke" group="CallerPrincipal" />
+                  </lm:user>
+                  <lm:user name="scott" password="echoman">
+                     <lm:role name="Echo"/>
+                     <lm:role name="ProjectUser"/>
+                     <lm:role name="callerScott" group="CallerPrincipal" />
+                  </lm:user>
+                  <lm:user name="stark" password="javaman">
+                     <lm:role name="Java"/>
+                     <lm:role name="Coder"/>
+                     <lm:role name="callerStark" group="CallerPrincipal" />
+                  </lm:user>
+                  <lm:user name="jdukeman" password="anotherduke">
+                     <lm:role name="Role2"/>
+                     <lm:role name="Role3"/>
+                     <lm:role name="callerJdukeman" group="CallerPrincipal" />
+                  </lm:user>
+                  <lm:user name="invoker" password="invoker">
+                     <lm:role name="HttpInvoker"/>
+                  </lm:user>
+                  <lm:user name="admin" password="admin">
+                     <lm:role name="JBossAdmin"/>
+                  </lm:user>
+               </lm:users>
+            </module-option>
+            <module-option name="unauthenticatedIdentity">guest</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+
+   <application-policy name="testXMLLoginModule2">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.XMLLoginModule" flag="required">
+            <module-option name="userInfo">
+               <lm:users xmlns:lm="http://www.jboss.org/j2ee/schemas/XMLLoginModule">
+                  <lm:user name="jduke2" password="theduke2">
+                     <lm:role name="Role1"/>
+                     <lm:role name="Role2"/>
+                     <lm:role name="Echo"/>
+                     <lm:role name="callerJduke" group="CallerPrincipal" />
+                  </lm:user>
+                  <lm:user name="scott2" password="echoman2">
+                     <lm:role name="Echo2"/>
+                     <lm:role name="ProjectUser2"/>
+                     <lm:role name="callerScott2" group="CallerPrincipal" />
+                  </lm:user>
+                  <lm:user name="stark2" password="javaman2">
+                     <lm:role name="Java"/>
+                     <lm:role name="Coder"/>
+                     <lm:role name="callerStark" group="CallerPrincipal" />
+                  </lm:user>
+                  <lm:user name="jdukeman2" password="anotherduke2">
+                     <lm:role name="Role2"/>
+                     <lm:role name="Role3"/>
+                     <lm:role name="callerJdukeman" group="CallerPrincipal" />
+                  </lm:user>
+                  <lm:user name="invoker2" password="invoker2">
+                     <lm:role name="HttpInvoker"/>
+                  </lm:user>
+                  <lm:user name="admin2" password="admin2">
+                     <lm:role name="JBossAdmin"/>
+                  </lm:user>
+               </lm:users>
+            </module-option>
+            <module-option name="unauthenticatedIdentity">guest2</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+
+   <application-policy name="testRoleMapping">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.XMLLoginModule" flag="required">
+            <module-option name="userInfo">
+               <lm:users xmlns:lm="http://www.jboss.org/j2ee/schemas/XMLLoginModule">
+                  <lm:user name="jduke2" password="theduke2">
+                     <lm:role name="LDAPGroup1"/>
+                     <lm:role name="LDAPGroup2"/>
+                     <lm:role name="LDAPGroup3"/>
+                     <lm:role name="LDAPGroup4"/>
+                  </lm:user>
+                  <lm:user name="jduke" password="theduke">
+                     <lm:role name="LDAPGroup7"/>
+                     <lm:role name="LDAPGroup8"/>
+                     <lm:role name="LDAPGroup9"/>
+                  </lm:user>
+               </lm:users>
+            </module-option>
+            <module-option name="unauthenticatedIdentity">guest2</module-option>
+         </login-module>
+         <login-module code="org.jboss.test.security.test.auth.RoleMappingLoginModule" flag="required">
+            <module-option name="role.1">
+               Role1=LDAPGroup1,LDAPGroup2,LDAPGroup3,LDAPGroup4
+            </module-option>
+            <module-option name="role.2">
+               Role2=LDAPGroup7,LDAPGroup8
+            </module-option>
+            <module-option name="role.3">
+               Role3=LDAPGroup9
+            </module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+
+   <application-policy name="testNoModuleOptions">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.XMLLoginModule" flag="required">
+         </login-module>
+      </authentication>
+   </application-policy>
+
+</policy>

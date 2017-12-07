@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <!DOCTYPE jboss PUBLIC
+      "-//JBoss//DTD JBOSS 3.2//EN"
+      "http://www.jboss.org/j2ee/dtd/jboss_3_2.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <session>
+         <ejb-name>cif.StatefulSession</ejb-name>
+         <clustered>true</clustered>
+         <cluster-config>
+            <partition-name>${jboss.partition.name:DefaultPartition}</partition-name>
+            <home-load-balance-policy>org.jboss.ha.framework.interfaces.RandomRobin</home-load-balance-policy>
+            <bean-load-balance-policy>org.jboss.ha.framework.interfaces.RoundRobin</bean-load-balance-policy>
+         </cluster-config>
+      </session>
+      <entity>
+         <ejb-name>cif_CachedEntityPK</ejb-name>
+         <configuration-name>Standard CMP 2.x EntityBean with cache invalidation</configuration-name>
+         <cache-invalidation>true</cache-invalidation>
+      </entity>
+   </enterprise-beans>
+</jboss>

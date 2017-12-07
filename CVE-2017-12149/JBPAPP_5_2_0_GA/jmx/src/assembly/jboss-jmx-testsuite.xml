@@ -1,0 +1,26 @@
+<assembly>
+  <id>jboss-jmx-testsuite</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>test/**</include>
+      </includes>
+      <excludes>
+        <exclude>test/implementation/loading/support/*.class</exclude>
+      </excludes>
+    </fileSet>
+    <fileSet>
+      <directory>src/resources/test/log4j</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>log4j.properties</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

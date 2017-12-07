@@ -1,0 +1,25 @@
+<assembly>
+  <id>jboss-web-service</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/net/**</include>
+        <include>org/jboss/web/tomcat/filters/**</include>
+        <include>org/jboss/web/tomcat/servlets/**</include>
+        <include>org/jboss/web/tomcat/service/**</include>
+        <include>org/jboss/web/tomcat/security/**</include>
+        <include>org/jboss/web/tomcat/statistics/**</include>
+      </includes>
+      <excludes>
+        <exclude>org/jboss/web/tomcat/service/session/AopMarker*</exclude>
+        <exclude>org/jboss/web/tomcat/service/session/InstanceOfAopMarker*</exclude>
+      </excludes>
+    </fileSet>
+  </fileSets>
+</assembly>

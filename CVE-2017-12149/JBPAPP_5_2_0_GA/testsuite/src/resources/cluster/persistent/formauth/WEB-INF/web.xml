@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+   "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+   <description>DataSourcePersistentManager FORM auth tests</description>
+
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Restricted</web-resource-name>
+         <description>DataSourcePersistentManager</description>
+         <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+         <description>
+         Use a role in the jmx-console security domain so this test doesn't have
+         to define another one.
+         </description>
+         <role-name>JBossAdmin</role-name>
+      </auth-constraint>
+   </security-constraint>
+
+   <login-config>
+      <auth-method>FORM</auth-method>
+      <form-login-config>
+         <form-login-page>/login.html</form-login-page>
+         <form-error-page>/error.html</form-error-page>
+      </form-login-config>
+   </login-config>
+
+   <security-role>
+      <role-name>JBossAdmin</role-name>
+   </security-role>
+</web-app>
+

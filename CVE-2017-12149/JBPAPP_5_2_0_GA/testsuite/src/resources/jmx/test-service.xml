@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+   | Test *service.xml file, deploying a ConnectionFactoryLoader.
+ -->
+
+<server>
+
+   <mbean code="org.jboss.naming.NamingAlias" name="jboss.test:service=TestService,test=jmx">
+      <attribute name="FromName">java:/XmlDeployTestDS</attribute>
+      <attribute name="ToName">java:/DefaultDS</attribute>
+   </mbean>
+
+</server>

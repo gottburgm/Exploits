@@ -1,0 +1,6 @@
+<server>
+    <mbean code="org.jboss.test.profileservice.sar.BasicBean"
+        name="jboss.test:service=BasicBeanMBean">
+        <attribute name="Attr1">Attr1Value</attribute>
+    </mbean>    
+</server>

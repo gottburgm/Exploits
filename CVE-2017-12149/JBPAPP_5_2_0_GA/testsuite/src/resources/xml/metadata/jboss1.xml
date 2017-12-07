@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jboss>
+    <enterprise-beans>        
+        <session>
+            <ejb-name>DependentBEJB</ejb-name>
+            <jndi-name>test/DependentB</jndi-name>
+            
+            <method-attributes>
+            </method-attributes>
+        </session>
+        <session>
+            <ejb-name>DependentAEJB</ejb-name>
+            <jndi-name>test/DependentA</jndi-name>
+            
+            <method-attributes>
+            </method-attributes>
+        </session>
+        
+    </enterprise-beans>
+    
+    <resource-managers>
+    </resource-managers>
+    
+    <container-configurations>
+        <container-configuration>
+            <container-name>Standard Stateless SessionBean</container-name>
+            <depends>test:name=Test</depends>
+        </container-configuration>
+    </container-configurations>
+    
+</jboss>

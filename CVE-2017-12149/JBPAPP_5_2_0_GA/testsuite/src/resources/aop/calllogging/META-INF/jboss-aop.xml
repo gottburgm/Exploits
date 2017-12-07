@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<aop xmlns="urn:jboss:aop-beans:1.0">
+
+<bind pointcut="all(org.jboss.test.aop.test.CallLoggingUnitTestCase)">
+     <interceptor name="CallLogging" factory="org.jboss.aspects.logging.CallLoggingInterceptorFactory"/>
+</bind>
+
+<class-metadata group="logging" class="org.jboss.test.aop.test.CallLoggingUnitTestCase">
+  <default>
+    <call-logging>true</call-logging>
+  </default>
+</class-metadata>
+
+</aop>

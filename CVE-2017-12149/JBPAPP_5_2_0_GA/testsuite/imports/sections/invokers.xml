@@ -1,0 +1,32 @@
+<project name="tests-invokers-jars">
+   <!-- invokers test -->
+   <target name="_jars-invokers">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build invokers-client.jar -->
+      <jar destfile="${build.lib}/invokers-client.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/invokers/interfaces/**"/>
+         </fileset>
+      </jar>
+      
+      <!-- build invokers-comp.jar -->
+      <jar destfile="${build.lib}/invokers.sar">
+         <metainf dir="${build.resources}/invokers/service-inf"/>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/invokers/ejb/Compression*.class"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/invokers.jar">
+         <metainf dir="${build.resources}/invokers/META-INF"/>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/invokers/interfaces/**"/>
+            <include name="org/jboss/test/invokers/ejb/**"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="invokers.sar"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

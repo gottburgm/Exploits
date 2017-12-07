@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <mbean name="jboss.test:type=test" code="org.jboss.test.system.controller.support.BrokenDynamicMBeanNoAttributeInfoType">
+      <depends optional-attribute-name="Name" proxy-type="attribute">jboss.test:type=depends</depends>
+   </mbean>
+   
+   <mbean name="jboss.test:type=depends" code="org.jboss.test.system.controller.support.Simple"/>
+</server>

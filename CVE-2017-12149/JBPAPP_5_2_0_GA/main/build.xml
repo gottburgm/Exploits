@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+   <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
+   <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+   <!ENTITY targets SYSTEM "../tools/etc/buildmagic/targets.ent">
+]>
+
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--  JBoss, the OpenSource J2EE webOS                                      -->
+<!--                                                                        -->
+<!--  Distributable under LGPL license.                                     -->
+<!--  See terms of license at http://www.gnu.org.                           -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<!-- $Id: build.xml 113347 2012-08-02 06:12:23Z jiwils $ -->
+
+<project default="main" name="JBoss/Main">
+
+  <!-- ================================================================== -->
+  <!-- Setup                                                              -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Include the common Buildmagic elements.
+     |
+     | This defines several different targets, properties and paths.
+     | It also sets up the basic extention tasks amoung other things.
+   -->
+
+  &buildmagic;
+
+  <!--
+     | Include the normal targets.
+   -->
+  &targets;
+
+  <!-- ================================================================== -->
+  <!-- Configuration                                                      -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Configure the build system.
+     |
+     | This target is invoked by the Buildmagic initialization logic and
+     | should contain module specific configuration elements.
+   -->
+
+  <target name="configure" unless="configure.disable">
+
+    <!-- =================== -->
+    <!-- Basic Configuration -->
+    <!-- =================== -->
+
+    <!-- Module name(s) & version -->
+    <property name="module.name" value="main"/>
+    <property name="module.Name" value="JBoss Main"/>
+    <property name="module.version" value="DEV"/>
+
+    <!-- ========= -->
+    <!-- Libraries -->
+    <!-- ========= -->
+
+    &libraries;
+
+    <!-- The combined library classpath -->
+    <path id="library.classpath">
+      <path refid="gnu.getopt.classpath"/>
+    </path>
+
+	<property name="myclasspath" refid="gnu.getopt.classpath"/>
+	<!-- Emit the property to the ant console -->
+	<echo message="Classpath = ${myclasspath}"/>
+
+  	&modules;
+
+    <!-- The combined dependant module classpath -->
+    <path id="dependentmodule.classpath">
+    	<path refid="jboss.jboss.bootstrap.classpath"/>
+    </path>
+
+    <!-- ===== -->
+    <!-- Tasks -->
+    <!-- ===== -->
+
+    <property name="jar.prefix" value="jboss-main"/>
+    <property name="javac.target" value="1.5"/>
+    <property name="javac.source" value="1.5"/>
+
+    <call target="_default:task-init"/>
+
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- Compile                                                            -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Compile everything.
+     |
+     | This target should depend on other compile-* targets for each
+     | different type of compile that needs to be performed, short of
+     | documentation compiles.
+   -->
+
+  <target name="compile"
+	  description="Compile all source files."
+	  depends="_default:compile-classes,
+              _default:compile-resources,
+              _default:compile-etc,
+              _default:compile-bin"/>
+
+  <!-- ================================================================== -->
+  <!-- Archives                                                           -->
+  <!-- ================================================================== -->
+
+  <!--
+     |  Build all jar files.
+    -->
+  <target name="module-jars" >
+
+    <!--
+         | Build log4j-boot.jar This is a minimal subset of the log4j
+         | classes that allow the boot process to use log4j but avoids
+         | loading log4j classes that depend on other features like
+         | JMS, JDBC, JavaMail, etc.
+       -->
+
+     <jar jarfile="${build.lib}/log4j-boot.jar">
+          <zipfileset src="${apache.log4j.lib}/log4j.jar">
+            <include name="org/apache/log4j/*"/>
+            <include name="org/apache/log4j/config/*"/>
+            <include name="org/apache/log4j/helpers/*"/>
+            <include name="org/apache/log4j/or/*"/>
+            <include name="org/apache/log4j/spi/*"/>
+          </zipfileset>
+    </jar>
+
+    <!-- -->
+    <jar jarfile="${build.lib}/jboss-main.jar" manifest="${build.etc}/default.mf">
+      <fileset dir="${build.classes}"/>
+    </jar>
+
+  	<!-- Inflate out contents of the Bootstrap JAR into a Temp Directory -->
+  	<property name="inflated.dir" value="tmp-bootstrap" />
+  	<mkdir dir="${inflated.dir}"/>
+  	<unjar dest="${inflated.dir}">
+  	  <fileset dir="${jboss.jboss.bootstrap.lib}">
+  	    <include name="jboss-bootstrap.jar"/>
+  	  </fileset>
+    </unjar>
+
+    <!-- Build run.jar -->
+    <jar jarfile="${build.lib}/run.jar" manifest="${build.etc}/run.mf">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/**"/>
+        <exclude name="org/jboss/check/**"/>
+      </fileset>
+      <fileset dir="${build.resources}">
+        <include name="*.properties"/>
+        <include name="jdklogger.xml"/>
+        <include name="org/jboss/version.properties"/>
+      </fileset>
+    	<!-- Add some classes from Bootstrap -->
+      <fileset dir="${inflated.dir}">
+         <include name="org/jboss/bootstrap/NoAnnotationURLClassLoader.class"/>
+         <include name="org/jboss/bootstrap/ServerLoader.class"/>
+         <include name="org/jboss/bootstrap/spi/Server.class"/>
+      	 <include name="org/jboss/bootstrap/spi/ServerConfig.class"/>
+      	 <include name="org/jboss/bootstrap/spi/util/ServerConfigUtil.class"/>
+      </fileset>
+
+      <!-- Include getopt -->
+      <zipfileset src="${gnu.getopt.lib}/getopt.jar">
+        <include name="**"/>
+        <exclude name="META-INF/JBOSSCOD.*"/>
+      </zipfileset>
+    </jar>
+
+    <!-- Build jarcheck.jar -->
+    <jar jarfile="${build.lib}/jarcheck.jar">
+        <fileset dir="${build.classes}">
+            <include name="org/jboss/check/**" />
+        </fileset>
+        <manifest>
+            <attribute name="Main-Class"
+                       value="org.jboss.check.JARCheck"/>
+        </manifest>
+    </jar>
+
+  	<!-- Remove the inflated contents of Bootstrap -->
+  	<delete dir="${inflated.dir}" />
+
+  </target>
+
+</project>

@@ -1,0 +1,13 @@
+!!! Using Embedded JBoss with Tomcat 5.5
+
+This project is built using Ant and the build.xml file included in the tomcat directory.  There are a number ways to deploy things to Tomcat.  The examples here show a few different ways:
+
+* ''scan.webinf.lib.war'' Ant target builds an embedded-jboss.war file in the build directory.  This war's [web.xml|resources/scan.webinf.lib.xml] is set up so that every jar in WEB-INF/lib of the war file is scanned for possible JBoss deployments.
+* ''finegrain.war'' Ant target builds the war.  This war's [web.xml|resources/finegrain.web.xml] sets up a Listener that explicitly loads one particular resource from the ServletContext.
+* ''builtin.war'' Ant target just builds a regular war file.  No special things were configured in web.xml.  For this example, you need to turn on default scanning at the Tomcat level.  Here's how.
+
+After deploying the WAR to Tomcat, you can access [EmbeddedJBoss.jsp|http://localhost:8080/embedded-jboss/EmbeddedJBoss.jsp] to test the example.
+
+
+__PLEASE NOTE__: To find out more on how to install and bootstrap Embedded JBoss in Tomcat, please see our [Wiki|http://wiki.jboss.org/wiki/Wiki.jsp?page=EmbeddedJBoss]
+

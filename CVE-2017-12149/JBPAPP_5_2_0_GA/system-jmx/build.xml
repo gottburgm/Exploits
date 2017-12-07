@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+   <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
+   <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+   <!ENTITY targets SYSTEM "../tools/etc/buildmagic/targets.ent">
+]>
+
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--  JBoss, the OpenSource J2EE webOS                                      -->
+<!--                                                                        -->
+<!--  Distributable under LGPL license.                                     -->
+<!--  See terms of license at http://www.gnu.org.                           -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<!-- $Id: build.xml 113110 2012-06-21 16:00:27Z baranowb $ -->
+
+<project default="main" name="JBoss/SystemJMX">
+
+  <!-- ================================================================== -->
+  <!-- Setup                                                              -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Include the common Buildmagic elements.
+     |
+     | This defines several different targets, properties and paths.
+     | It also sets up the basic extention tasks amoung other things.
+   -->
+
+  &buildmagic;
+
+  <!--
+     | Include the normal targets.
+   -->
+  &targets;
+
+  <!-- ================================================================== -->
+  <!-- Configuration                                                      -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Configure the build system.
+     |
+     | This target is invoked by the Buildmagic initialization logic and
+     | should contain module specific configuration elements.
+   -->
+
+  <target name="configure" unless="configure.disable">
+
+    <!-- =================== -->
+    <!-- Basic Configuration -->
+    <!-- =================== -->
+
+    <!-- Module name(s) & version -->
+    <property name="module.name" value="system-jmx"/>
+    <property name="module.Name" value="JBoss SystemJMX"/>
+    <property name="module.version" value="DEV"/>
+
+    <!-- ========= -->
+    <!-- Libraries -->
+    <!-- ========= -->
+
+    &libraries;
+
+    <!-- The combined library classpath -->
+    <path id="library.classpath">
+      <path refid="junit.junit.classpath"/>
+      <path refid="gnu.getopt.classpath"/>
+      <path refid="apache.xerces.classpath"/>
+      <path refid="apache.log4j.classpath"/>
+      <path refid="apache.commons.classpath"/>
+      <path refid="oswego.concurrent.classpath"/>
+      <path refid="dom4j.dom4j.classpath"/>
+      <path refid="jboss.jbossxb.classpath"/>
+      <path refid="sun.jaxb.classpath"/>
+      <path refid="jboss.jboss.cl.classpath"/>
+      <path refid="jboss.jboss.man.classpath"/>
+      <path refid="jboss.jboss.mdr.classpath"/>
+      <path refid="jboss.jboss.deployers.classpath"/>
+      <path refid="jboss.jboss.reflect.classpath"/>
+      <path refid="jboss.microcontainer.classpath"/>
+      <path refid="jboss.integration.classpath"/>
+      <path refid="jboss.jboss.vfs.classpath"/>
+      <path refid="jboss.common.core.classpath"/>
+      <path refid="jboss.common.beans.classpath"/>
+      <path refid="jboss.common.logging.spi.classpath"/>
+      <path refid="jboss.common.logging.log4j.classpath"/>
+      <path refid="jboss.common.logging.jdk.classpath"/>
+    </path>
+
+    <!-- ======= -->
+    <!-- Modules -->
+    <!-- ======= -->
+
+    &modules;
+
+    <!-- The combined dependant module classpath -->
+    <path id="dependentmodule.classpath">
+      <path refid="jboss.j2se.classpath"/>
+      <path refid="jboss.mbeans.classpath"/>
+      <path refid="jboss.jboss.bootstrap.classpath"/>
+      <path refid="jboss.system.classpath"/>
+    </path>
+
+    <!-- ===== -->
+    <!-- Tasks -->
+    <!-- ===== -->
+
+    <property name="jar.prefix" value="jboss-system-jmx"/>
+    <property name="javac.target" value="1.5"/>
+    <property name="javac.source" value="1.5"/>
+    <property name="jar.client.includes" 
+              value="org/jboss/deployment/DeploymentException*,
+                     org/jboss/deployment/IncompleteDeploymentException*,
+                     org/jboss/deployment/Deployer*,
+                     org/jboss/system/Service.class,
+                     org/jboss/system/server/ServerLoader*.class,
+                     org/jboss/system/server/Server.class,
+                     org/jboss/system/server/ServerConfig.class,
+                     **/*MBean.class"
+    />
+
+    <patternset id="compile-resources.filter.pattern">
+       <include name="**/*"/>
+       <exclude name="tests/**"/>
+    </patternset>
+
+    <patternset id="compile-resources.pattern">
+       <include name="tests/**"/>
+    </patternset>
+
+    <call target="_default:task-init"/>
+
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- Compile                                                            -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Compile everything.
+     |
+     | This target should depend on other compile-* targets for each
+     | different type of compile that needs to be performed, short of
+     | documentation compiles.
+   -->
+
+  <target name="compile"
+	  description="Compile all source files."
+	  depends="_default:compile-classes,
+              _default:compile-resources,
+              _default:compile-etc"/>
+
+  <!-- ================================================================== -->
+  <!-- Archives                                                           -->
+  <!-- ================================================================== -->
+
+  <!-- 
+     |  Build all jar files.
+    -->
+  <target name="module-jars" >
+
+    <!-- Server and client jars -->
+    <call target="_default:server-client-jars"/>
+  
+    <!--
+       | JBoss/Testsuite Support
+     -->
+
+    <!-- testsuite-support.jar -->
+    <jar jarfile="${build.lib}/testsuite-support.jar" manifest="${build.etc}/default.mf">
+      <fileset dir="${build.classes}">
+         <include name="org/jboss/deployment/**"/>
+         <include name="org/jboss/system/Service.class"/>
+         <include name="org/jboss/system/ServiceMBean.class"/>
+         <include name="org/jboss/system/*MBeanSupport.class"/>
+         <include name="org/jboss/system/MBeanClassLoader*.class"/>
+         <include name="org/jboss/system/UnifiedClassLoader*.class"/>
+         <include name="org/jboss/system/ServiceLibraries*.class"/>
+         <include name="org/jboss/system/server/*MBean.class"/>
+         <include name="org/jboss/system/server/ServerConfigLocator.class"/>
+         <include name="org/jboss/system/server/ServerConfig.class"/>
+         <include name="org/jboss/system/server/Server.class"/>
+      </fileset>
+    </jar>
+
+  </target>
+
+</project>

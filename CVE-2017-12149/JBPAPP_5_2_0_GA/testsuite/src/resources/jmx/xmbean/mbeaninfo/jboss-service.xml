@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server
+    PUBLIC "-//JBoss//DTD MBean Service 4.0//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-service_4_0.dtd">
+
+<!-- $Id: jboss-service.xml 40361 2006-01-19 12:27:55Z dimitris $ -->
+
+<server>
+
+   <!-- The mbean deployed as standard mbean -->
+   <mbean code="org.jboss.test.jmx.xmbean.Test"
+          name="jboss.test:name=mbeaninfo,type=standard">
+   </mbean>
+
+   <!-- The same mbean deployed as xmbean -->
+   <mbean code="org.jboss.test.jmx.xmbean.Test"
+          name="jboss.test:name=mbeaninfo,type=xmbean"
+          xmbean-dd="META-INF/xmbean.xml">
+   </mbean>
+          
+</server>

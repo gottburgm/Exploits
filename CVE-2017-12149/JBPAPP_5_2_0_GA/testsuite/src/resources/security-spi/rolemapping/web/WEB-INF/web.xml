@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+   xmlns="http://java.sun.com/xml/ns/j2ee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+   version="2.4">
+
+   <description>Security Test for role mapping logic</description>
+
+   <servlet>
+      <servlet-name>SecuredServlet</servlet-name>
+      <jsp-file>/Secured.jsp</jsp-file>
+   </servlet>
+
+   <!-- The servlet and jsp page mappings -->
+   <servlet-mapping>
+      <servlet-name>SecuredServlet</servlet-name>
+      <url-pattern>/SecuredServlet</url-pattern>
+   </servlet-mapping>
+
+   <!-- ### Security -->
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Restricted</web-resource-name>
+         <description>Declarative security tests</description>
+         <url-pattern>/*</url-pattern>
+         <http-method>GET</http-method>
+         <http-method>POST</http-method>
+      </web-resource-collection>
+      <auth-constraint>
+         <description>Only authenticated users can access secure content</description>
+         <role-name>AuthorizedUser</role-name>
+      </auth-constraint>
+
+      <user-data-constraint>
+         <description>no description</description>
+         <transport-guarantee>NONE</transport-guarantee>
+      </user-data-constraint>
+   </security-constraint>
+
+   <login-config>
+      <auth-method>FORM</auth-method>
+
+      <form-login-config>
+         <form-login-page>/login.html</form-login-page>
+         <form-error-page>/error.html</form-error-page>
+      </form-login-config>
+   </login-config>
+
+   <security-role>
+      <description>An AuthorizedUser is one with a valid username and password</description>
+      <role-name>AuthorizedUser</role-name>
+   </security-role>
+
+</web-app>

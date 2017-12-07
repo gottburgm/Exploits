@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application-client version="1.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/application-client_1_4.xsd">
+
+   <description>A sample application client descriptor</description>
+   <display-name>J2EE Client Tests</display-name>
+
+   <env-entry>
+      <env-entry-name>String0</env-entry-name>
+      <env-entry-type>java.lang.String</env-entry-type>
+      <env-entry-value>String0Value</env-entry-value>
+   </env-entry>
+   <env-entry>
+      <env-entry-name>Float0</env-entry-name>
+      <env-entry-type>java.lang.Float</env-entry-type>
+      <env-entry-value>3.14</env-entry-value>
+   </env-entry>
+   <env-entry>
+      <env-entry-name>Long0</env-entry-name>
+      <env-entry-type>java.lang.Long</env-entry-type>
+      <env-entry-value>123456789</env-entry-value>
+   </env-entry>
+
+   <ejb-ref>
+      <ejb-ref-name>ejb/StatelessSessionBean</ejb-ref-name>
+      <ejb-ref-type>Session</ejb-ref-type>
+      <home>org.jboss.test.cts.interfaces.StatelessSessionHome</home>
+      <remote>org.jboss.test.cts.interfaces.StatelessSession</remote>
+   </ejb-ref>
+   <ejb-ref>
+      <ejb-ref-name>ejb/StatelessSessionBean2</ejb-ref-name>
+      <ejb-ref-type>Session</ejb-ref-type>
+      <home>org.jboss.test.cts.interfaces.StatelessSessionHome</home>
+      <remote>org.jboss.test.cts.interfaces.StatelessSession</remote>
+      <ejb-link>StatelessSessionBean</ejb-link>
+   </ejb-ref>
+
+   <!-- URL Connection Factories (java:comp/env/url) -->
+   <resource-ref>
+      <description>The JBoss Web Site HomePage</description>
+      <res-ref-name>url/JBossHome</res-ref-name>
+      <res-type>java.net.URL</res-type>
+      <res-auth>Container</res-auth>
+   </resource-ref>
+   <resource-ref>
+      <description>SomeWebSite HomePage</description>
+      <res-ref-name>url/IndirectURL</res-ref-name>
+      <res-type>java.net.URL</res-type>
+      <res-auth>Container</res-auth>
+   </resource-ref>
+
+   <!-- A JMS destination (java:comp/env/jms) -->
+   <resource-env-ref>
+      <description>A test of the resource-env-ref tag</description>
+      <resource-env-ref-name>jms/aQueue</resource-env-ref-name>
+      <resource-env-ref-type>javax.jms.Queue</resource-env-ref-type>
+   </resource-env-ref>
+
+   <message-destination-ref>
+      <message-destination-ref-name>jms/anotherQueue</message-destination-ref-name>
+      <message-destination-type>javax.jms.Queue</message-destination-type>
+      <message-destination-usage>Consumes</message-destination-usage>
+   </message-destination-ref>
+
+   <message-destination-ref>
+      <message-destination-ref-name>jms/anotherQueue2</message-destination-ref-name>
+      <message-destination-type>javax.jms.Queue</message-destination-type>
+      <message-destination-usage>Consumes</message-destination-usage>
+      <message-destination-link>TheOtherQueue</message-destination-link>
+   </message-destination-ref>
+
+   <callback-handler>org.jboss.test.client.test.SystemPropertyCallbackHandler</callback-handler>
+
+   <message-destination>
+      <message-destination-name>TheOtherQueue</message-destination-name>
+   </message-destination>
+</application-client>

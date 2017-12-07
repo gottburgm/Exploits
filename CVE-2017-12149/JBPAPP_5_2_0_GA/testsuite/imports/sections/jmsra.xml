@@ -1,0 +1,32 @@
+<project name="tests-jmsra-jars">
+   <!-- jmsra test -->
+   <target name="_jars-jmsra">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build jmsratest.jar -->
+      <jar destfile="${build.lib}/jmsratest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/jmsra/interfaces/**"/>
+            <include name="org/jboss/test/jmsra/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/jmsra">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build jmsra.jar -->
+      <jar destfile="${build.lib}/jmsra.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/jmsra/interfaces/**"/>
+            <include name="org/jboss/test/jmsra/ejb/**"/>
+            <include name="org/jboss/test/jmsra/bean/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/jmsra">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

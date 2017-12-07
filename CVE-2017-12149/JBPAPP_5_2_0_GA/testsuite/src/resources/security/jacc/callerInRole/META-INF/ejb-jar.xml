@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE ejb-jar PUBLIC
+      "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN"
+      "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar>
+   <display-name>CallerInRole Tests</display-name>
+   <enterprise-beans>
+      <session>
+         <description>A secured stateless session bean that does not fully describe all the roles via security-role or security-role-ref elements.</description>
+         <ejb-name>UsefulStatelessSessionBean</ejb-name>
+         <home>org.jboss.test.security.interfaces.UsefulStatelessSessionHome</home>
+         <remote>org.jboss.test.security.interfaces.UsefulStatelessSession</remote>
+         <ejb-class>org.jboss.test.security.ejb.UsefulStatelessSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+         <security-role-ref>
+           <role-name>NiceUser</role-name>
+           <role-link>GoodRole</role-link>
+         </security-role-ref>
+      </session>
+   </enterprise-beans>
+
+   <assembly-descriptor>
+      <security-role>
+         <description>Good Role to invoke</description>
+         <role-name>GoodRole</role-name>
+      </security-role>
+      <method-permission>
+         <role-name>GoodRole</role-name>
+         <method>
+            <ejb-name>UsefulStatelessSessionBean</ejb-name>
+            <method-name>*</method-name>
+         </method>
+      </method-permission>
+   </assembly-descriptor>
+</ejb-jar>

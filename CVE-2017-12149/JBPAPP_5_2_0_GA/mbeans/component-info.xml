@@ -1,0 +1,20 @@
+<project name="mbeans-component-info">
+
+   <!-- ============================================================ -->
+   <!-- MBEANS                                                       -->
+   <!-- ============================================================ -->
+
+   <component id="mbeans"
+              module="mbeans"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="jboss-mbeans.jar"/>
+      <artifact id="jboss_xmbean_1_0.dtd" />         
+      <artifact id="jboss_xmbean_1.1.dtd"/>         
+      <artifact id="jboss_xmbean_1.2.dtd"/>       
+      <export>
+         <include input="jboss-mbeans.jar"/>
+      </export>
+   </component>
+
+</project>

@@ -1,0 +1,47 @@
+<definitions name="CCVerificationService" targetNamespace="http://org.jboss.ws/samples/retail/cc" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://org.jboss.ws/samples/retail/cc" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <types>
+      <xs:schema targetNamespace="http://org.jboss.ws/samples/retail/cc" version="1.0" xmlns:tns="http://org.jboss.ws/samples/retail/cc" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+         <xs:element name="verify" nillable="true" type="tns:verificationRequest"/>
+         <xs:element name="verifyResponse" nillable="true" type="tns:verificationResponse"/>
+         <xs:complexType name="verificationRequest">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="creditCardNumber" type="xs:string"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="verificationResponse">
+            <xs:sequence>
+               <xs:element name="verified" type="xs:boolean"/>
+            </xs:sequence>
+         </xs:complexType>
+      </xs:schema>
+   </types>
+   <message name="CCVerification_verify">
+      <part element="tns:verify" name="verify"/>
+   </message>
+   <message name="CCVerification_verifyResponse">
+      <part element="tns:verifyResponse" name="verifyResponse"/>
+   </message>
+   <portType name="CCVerification">
+      <operation name="verify" parameterOrder="verify">
+         <input message="tns:CCVerification_verify"/>
+         <output message="tns:CCVerification_verifyResponse"/>
+      </operation>
+   </portType>
+   <binding name="CCVerificationBinding" type="tns:CCVerification">
+      <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+      <operation name="verify">
+         <soap:operation soapAction=""/>
+         <input>
+            <soap:body use="literal"/>
+         </input>
+         <output>
+            <soap:body use="literal"/>
+         </output>
+      </operation>
+   </binding>
+   <service name="CCVerificationService">
+      <port binding="tns:CCVerificationBinding" name="CCVerificationPort">
+         <soap:address location="http://@jboss.bind.address@:8080/jaxws-samples-retail/CCVerificationBean"/>
+      </port>
+   </service>
+</definitions>

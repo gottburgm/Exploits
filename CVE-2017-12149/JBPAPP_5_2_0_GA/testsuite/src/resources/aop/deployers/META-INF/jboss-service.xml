@@ -1,0 +1,3 @@
+<server>
+   <mbean name="jboss.aop:service=DeployerMonitor" code="org.jboss.test.aop.deployers.DeployersMonitor"/>
+</server>

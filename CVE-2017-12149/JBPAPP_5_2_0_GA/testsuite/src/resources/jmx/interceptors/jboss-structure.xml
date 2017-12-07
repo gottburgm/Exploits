@@ -1,0 +1,13 @@
+<structure>
+	<context>
+		<path name=""/>
+		<metaDataPath>
+         <path name="META-INF"/>
+         <path name="jmx/interceptors"/>
+         <path name="jmx/interceptors/scripts"/>
+      </metaDataPath>
+      <classpath>
+			<path name=""/>
+		</classpath>
+	</context>
+</structure>

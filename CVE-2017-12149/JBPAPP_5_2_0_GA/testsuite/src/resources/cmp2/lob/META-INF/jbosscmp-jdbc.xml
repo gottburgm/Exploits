@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE jbosscmp-jdbc PUBLIC
+   "-//JBoss//DTD JBOSSCMP-JDBC 4.0//EN"
+   "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_4_0.dtd">
+
+<jbosscmp-jdbc>
+   <defaults>
+      <datasource-mapping>HSQLDB-1.8.0.x</datasource-mapping>
+      <!--
+         <datasource>java:/MySqlDS</datasource>
+         <datasource-mapping>mySQL</datasource-mapping>
+         <datasource>java:/OracleDS</datasource>
+         <datasource-mapping>Oracle9i</datasource-mapping>
+         <datasource>java:/PostgresDS</datasource>
+         <datasource-mapping>PostgreSQL 7.2</datasource-mapping>
+      -->
+      <create-table>true</create-table>
+      <remove-table>true</remove-table>
+      <pk-constraint>true</pk-constraint>
+      <read-ahead>
+         <strategy>on-load</strategy>
+         <page-size>4</page-size>
+         <eager-load-group>*</eager-load-group>
+      </read-ahead>
+   </defaults>
+
+   <enterprise-beans>
+      <entity>
+         <ejb-name>LobEJB</ejb-name>
+         <table-name>lob</table-name>
+         <cmp-field>
+            <field-name>bigString</field-name>
+            <column-name>bigstring</column-name>
+            <!--    Oracle   
+            <jdbc-type>CLOB</jdbc-type>
+            <sql-type>CLOB</sql-type>
+            -->
+            <!-- We use getCharacterStream for CLOBs, which is unsupported by mysql -->
+            <!--    MySQL   
+            <jdbc-type>VARCHAR</jdbc-type>
+            <sql-type>MEDIUMTEXT</sql-type>
+            -->
+            <!--    Postgres 7.2  
+            <jdbc-type>CLOB</jdbc-type>
+            <sql-type>text</sql-type>
+            -->
+            <!-- hsqldb doesn't support CLOB jdbc types -->
+            <!--    hsqldb  -->
+            <jdbc-type>VARCHAR</jdbc-type>
+            <sql-type>VARCHAR(4000)</sql-type>
+         </cmp-field>
+         <cmp-field>
+            <field-name>binaryData</field-name>
+            <column-name>binarydata</column-name>
+            <!--    Oracle  
+            <jdbc-type>BLOB</jdbc-type>
+            <sql-type>BLOB</sql-type>
+            -->
+            <!--    MySQL  
+            <jdbc-type>BLOB</jdbc-type>
+            <sql-type>BLOB</sql-type>
+            -->
+            <!--    Postgres 7.2  
+            <jdbc-type>BLOB</jdbc-type>
+            <sql-type>bytea</sql-type>
+            -->
+            <!-- hsqldb doesn't support BLOB jdbc types -->
+            <!--    hsqldb  -->
+            <jdbc-type>BLOB</jdbc-type>
+            <sql-type>OBJECT</sql-type>
+         </cmp-field>
+         <cmp-field>
+            <field-name>objectField</field-name>
+            <column-name>objectField</column-name>
+            <!--    hsqldb  -->
+            <jdbc-type>BLOB</jdbc-type>
+            <sql-type>OBJECT</sql-type>
+         </cmp-field>
+         <cmp-field>
+            <field-name>cleanGetValueHolder</field-name>
+            <check-dirty-after-get>false</check-dirty-after-get>
+         </cmp-field>
+         <cmp-field>
+            <field-name>stateFactoryValueHolder</field-name>
+            <check-dirty-after-get>true</check-dirty-after-get>
+            <state-factory>
+               org.jboss.test.cmp2.lob.ValueHolderStateFactory</state-factory>
+         </cmp-field>
+
+         <!-- needs on-find for JBAS-3717 test -->
+         <query>
+            <query-method>
+               <method-name>findByPrimaryKey</method-name>
+               <method-params>
+                  <method-param>java.lang.Integer</method-param>
+               </method-params>
+            </query-method>
+            <jboss-ql><![CDATA[select object(a) from lob a where a.id=?1]]></jboss-ql>
+            <read-ahead>
+               <strategy>on-find</strategy>
+            </read-ahead>
+         </query>
+         <query>
+            <query-method>
+               <method-name>ejbSelectSelect</method-name>
+               <method-params>
+                  <method-param>java.lang.String</method-param>
+                  <method-param>java.lang.Object[]</method-param>
+               </method-params>
+            </query-method>
+            <dynamic-ql/>
+            <read-ahead>
+               <strategy>on-find</strategy>
+            </read-ahead>
+         </query>
+      </entity>
+   </enterprise-beans>
+
+   <type-mappings>
+      <type-mapping>
+         <name>HSQLDB-1.8.0.x</name>
+         <row-locking-template/>
+         <pk-constraint-template>CONSTRAINT ?1 PRIMARY KEY
+            (?2)</pk-constraint-template>
+         <fk-constraint-template>ALTER TABLE ?1 ADD CONSTRAINT ?2 FOREIGN KEY
+            (?3) REFERENCES ?4 (?5)</fk-constraint-template>
+         <auto-increment-template>?1 IDENTITY</auto-increment-template>
+         <add-column-template>ALTER TABLE ?1 ADD COLUMN ?2
+            ?3</add-column-template>
+         <drop-column-template>ALTER TABLE ?1 DROP COLUMN
+            ?2</drop-column-template>
+         <alias-header-prefix>t</alias-header-prefix>
+         <alias-header-suffix>_</alias-header-suffix>
+         <alias-max-length>32</alias-max-length>
+         <subquery-supported>true</subquery-supported>
+         <true-mapping>(1=1)</true-mapping>
+         <false-mapping>(1=0)</false-mapping>
+
+         <function-mapping>
+            <function-name>concat</function-name>
+            <function-sql>(?1 || ?2)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>substring</function-name>
+            <function-sql>SUBSTRING(?1, ?2, ?3)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>lcase</function-name>
+            <function-sql>lcase(?1)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>length</function-name>
+            <function-sql>LENGTH(?1)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>locate</function-name>
+            <function-sql>LOCATE(?1, ?2, ?3)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>abs</function-name>
+            <function-sql>ABS(?1)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>sqrt</function-name>
+            <function-sql>SQRT(?1)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>ucase</function-name>
+            <function-sql>ucase(?1)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>count</function-name>
+            <function-sql>count(?1)</function-sql>
+         </function-mapping>
+
+         <mapping>
+            <java-type>java.lang.Byte</java-type>
+            <jdbc-type>SMALLINT</jdbc-type>
+            <sql-type>SMALLINT</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.util.Date</java-type>
+            <jdbc-type>TIMESTAMP</jdbc-type>
+            <sql-type>TIMESTAMP</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Boolean</java-type>
+            <jdbc-type>BIT</jdbc-type>
+            <sql-type>BIT</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Integer</java-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <sql-type>INTEGER</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Short</java-type>
+            <jdbc-type>SMALLINT</jdbc-type>
+            <sql-type>SMALLINT</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Character</java-type>
+            <jdbc-type>CHAR</jdbc-type>
+            <sql-type>CHAR</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.String</java-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <sql-type>VARCHAR(256)</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.sql.Date</java-type>
+            <jdbc-type>DATE</jdbc-type>
+            <sql-type>DATE</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.sql.Time</java-type>
+            <jdbc-type>TIME</jdbc-type>
+            <sql-type>TIME</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.sql.Timestamp</java-type>
+            <jdbc-type>TIMESTAMP</jdbc-type>
+            <sql-type>TIMESTAMP</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Float</java-type>
+            <jdbc-type>REAL</jdbc-type>
+            <sql-type>REAL</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Long</java-type>
+            <jdbc-type>BIGINT</jdbc-type>
+            <sql-type>BIGINT</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Double</java-type>
+            <jdbc-type>DOUBLE</jdbc-type>
+            <sql-type>DOUBLE</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.math.BigDecimal</java-type>
+            <jdbc-type>DECIMAL</jdbc-type>
+            <sql-type>DECIMAL</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Object</java-type>
+            <jdbc-type>BLOB</jdbc-type>
+            <sql-type>OBJECT</sql-type>
+            <param-setter>org.jboss.test.cmp2.lob.GetSetObjectParameter</param-setter>
+            <result-reader>org.jboss.test.cmp2.lob.GetSetObjectParameter</result-reader>
+         </mapping>
+      </type-mapping>
+   </type-mappings>
+</jbosscmp-jdbc>

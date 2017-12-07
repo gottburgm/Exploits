@@ -1,0 +1,5 @@
+
+<MLET CODE="org.jboss.test.jmx.compliance.loading.support.Trivial"
+      NAME="test:name=Trivial"
+>
+</MLET>

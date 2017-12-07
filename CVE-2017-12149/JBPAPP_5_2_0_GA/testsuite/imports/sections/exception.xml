@@ -1,0 +1,53 @@
+<project name="tests-exception-jars">
+   <!-- excepiiop test -->
+   <target name="_jars-excepiiop">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build excepiioptest.jar -->
+      <jar destfile="${build.lib}/excepiioptest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/excepiiop/interfaces/**"/>
+            <include name="org/jboss/test/excepiiop/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/excepiiop">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build excepiiop.jar -->
+      <jar destfile="${build.lib}/excepiiop.jar">
+         <metainf dir="${build.resources}/excepiiop/META-INF"/>
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/excepiiop/interfaces/**"/>
+            <include name="org/jboss/test/excepiiop/ejb/**"/>
+         </fileset>
+      </jar>
+   </target>
+   
+   <!-- exception tests -->
+   <target name="_jars-exception">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build exception.jar -->
+      <jar destfile="${build.lib}/exception.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/exception/**"/>
+            <include name="org/jboss/test/util/ejb/*"/>
+         </fileset>
+         <fileset dir="${build.resources}/exception">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${junit.junit.lib}/junit.jar">
+            <patternset refid="ejbrunner.set"/>
+         </zipfileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar">
+            <patternset refid="jboss.test.set"/>
+         </zipfileset>
+      </jar>
+   </target>
+   
+</project>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.jboss.test.hibernate.timers">
+<!--
+ $Id: Timers.hbm.xml 35847 2005-09-10 23:36:12Z starksm $
+-->
+    <class name="Timers"
+           table="JBAS7411_TIMERS" schema="PUBLIC">
+        
+        <cache usage="transactional"/>
+        
+        <composite-id name="id" class="org.jboss.test.hibernate.timers.TimersID">
+            <key-property name="timerID" type="string">
+                <column name="TIMERID" length="80" />
+            </key-property>
+            <key-property name="targetID" type="string">
+                <column name="TARGETID" length="80" />
+            </key-property>
+        </composite-id>
+        <property name="initialDate" type="timestamp">
+            <column name="INITIALDATE" length="6" not-null="true" />
+        </property>
+        <property name="timerInterval" type="long">
+            <column name="TIMERINTERVAL" />
+        </property>
+        <property name="instancePK" type="binary">
+            <column name="INSTANCEPK" />
+        </property>
+        <property name="info" type="binary">
+            <column name="INFO" />
+        </property>
+    </class>
+</hibernate-mapping>

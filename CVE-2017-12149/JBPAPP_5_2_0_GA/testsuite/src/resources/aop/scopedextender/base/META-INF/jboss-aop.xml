@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<aop xmlns="urn:jboss:aop-beans:1.0">
+   <aspect class="org.jboss.test.aop.scopedextender.BaseAspect"/>
+   <interceptor name="class" class="org.jboss.test.aop.scopedextender.BasePerClassInterceptor" scope="PER_CLASS"/>
+   <interceptor name="instance" class="org.jboss.test.aop.scopedextender.BasePerInstanceInterceptor" scope="PER_INSTANCE"/>
+   <interceptor name="joinpoint" class="org.jboss.test.aop.scopedextender.BasePerJoinPointInterceptor" scope="PER_JOINPOINT"/>
+   <interceptor name="classjoinpoint" class="org.jboss.test.aop.scopedextender.BasePerClassJoinPointInterceptor" scope="PER_CLASS_JOINPOINT"/>
+
+   <bind pointcut="execution(* $instanceof{org.jboss.test.aop.scopedextender.Base_Base}->*(..))">
+      <advice aspect="org.jboss.test.aop.scopedextender.BaseAspect" name="invoke"/>
+   </bind>
+   <bind pointcut="field(* $instanceof{org.jboss.test.aop.scopedextender.Base_Base}->*)">
+      <advice aspect="org.jboss.test.aop.scopedextender.BaseAspect" name="invoke"/>
+   </bind>
+   <bind pointcut="execution($instanceof{org.jboss.test.aop.scopedextender.Base_Base}->new(..))">
+      <advice aspect="org.jboss.test.aop.scopedextender.BaseAspect" name="invoke"/>
+   </bind>
+   <bind pointcut="execution(* org.jboss.test.aop.scopedextender.Base_Base->differentScopes())">
+   	<interceptor-ref name="class"/>
+   	<interceptor-ref name="instance"/>
+   	<interceptor-ref name="joinpoint"/>
+   	<interceptor-ref name="classjoinpoint"/>
+   </bind>
+
+</aop>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+   <loader-repository>
+   	aop.loading:loader=scope1
+   </loader-repository>
+	<mbean code="org.jboss.test.aop.scopedattach.ScopedTester" name="jboss.aop:name=ScopedTester1">
+	   <attribute name="ExpectedInterceptorValue">11</attribute>
+	   <attribute name="ExpectedAspectValue">21</attribute>
+	   <attribute name="MetadataSuffix">1</attribute>
+	</mbean>
+</server>

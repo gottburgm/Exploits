@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connector xmlns="http://java.sun.com/xml/ns/j2ee"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+           http://java.sun.com/xml/ns/j2ee/connector_1_5.xsd"
+           version="1.5">
+
+   <description>Test Resource Adapter for new jca 1.5 features</description>
+   <display-name>Admin Object Test Resource Adapter</display-name>
+   <vendor-name>JBoss, Inc</vendor-name>
+   <eis-type>JBoss Testsuite</eis-type>
+   <resourceadapter-version>4.0</resourceadapter-version>
+
+   <license>
+      <description>
+      COPYRIGHT AND PERMISSION NOTICE
+      Copyright (c) 2004 JBoss, Inc
+      This is released under the terms of the LGPL.
+      See gnu.org for details.
+      </description>
+      <license-required>true</license-required>
+   </license>
+
+   <resourceadapter>
+      <resourceadapter-class>org.jboss.test.jca.adminobject.TestResourceAdapter</resourceadapter-class>
+
+      <adminobject>
+         <adminobject-interface>org.jboss.test.jca.adminobject.TestInterface</adminobject-interface>
+         <adminobject-class>org.jboss.test.jca.adminobject.TestImplementation</adminobject-class>
+         <config-property>
+            <config-property-name>StringProperty</config-property-name>
+            <config-property-type>java.lang.String</config-property-type>
+         </config-property>
+         <config-property>
+            <config-property-name>IntegerProperty</config-property-name>
+            <config-property-type>java.lang.Integer</config-property-type>
+         </config-property>
+      </adminobject>
+
+      <adminobject>
+         <adminobject-interface>org.jboss.test.jca.adminobject.TestInterface2</adminobject-interface>
+         <adminobject-class>org.jboss.test.jca.adminobject.TestImplementation2</adminobject-class>
+         <config-property>
+            <config-property-name>stringProperty</config-property-name>
+            <config-property-type>java.lang.Integer</config-property-type>
+         </config-property>
+      </adminobject>
+   </resourceadapter>
+</connector>

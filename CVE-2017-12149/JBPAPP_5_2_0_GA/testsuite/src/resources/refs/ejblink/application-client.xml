@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application-client xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    version="5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application-client_5.xsd">
+    <ejb-ref>
+        <ejb-ref-name>ejb/EjbLink1Bean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <remote>org.jboss.test.refs.common.EjbLinkIF</remote>
+        <ejb-link>one_ejb.jar#EjbLink1Bean</ejb-link>
+    </ejb-ref>
+    <ejb-ref>
+        <ejb-ref-name>ejb/EjbLink2Bean</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <remote>org.jboss.test.refs.common.EjbLinkIF</remote>
+        <ejb-link>two_ejb.jar#EjbLink2Bean</ejb-link>
+    </ejb-ref>
+</application-client>

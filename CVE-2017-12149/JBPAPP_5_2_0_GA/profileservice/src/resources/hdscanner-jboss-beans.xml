@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Hot deployment scanning
+    
+    $Id: hdscanner-jboss-beans.xml 98983 2010-01-04 13:35:41Z emuckenhuber $
+-->
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+    <!-- Hotdeployment of applications -->
+    <bean name="HDScanner" class="org.jboss.system.server.profileservice.hotdeploy.HDScanner">
+        <property name="deployer"><inject bean="ProfileServiceDeployer"/></property>
+        <property name="profileService"><inject bean="ProfileService"/></property>
+        <property name="scanPeriod">5000</property>
+        <property name="scanThreadName">HDScanner</property>
+    </bean>
+
+    <bean name="ToolsDeploymentScanner" class="org.jboss.system.tools.DeploymentScanner">
+      <constructor>
+        <parameter><inject bean="ProfileServiceDeploymentRepositoryAdapter"/></parameter>
+      </constructor>
+      <property name="serverConfig"><inject bean="JBossServer" property="config"/></property>
+    </bean>
+
+    <bean name="ProfileServiceDeploymentRepositoryAdapter" class="org.jboss.system.tools.ProfileServiceDeploymentRepositoryAdapter">
+      <constructor>
+        <parameter><inject bean="HDScanner"/></parameter>
+        <parameter><inject bean="ProfileService"/></parameter>
+        <parameter><inject bean="StructureModificationChecker"/></parameter>
+      </constructor>
+      <property name="profileRepository"><inject bean="ProfileRepositoryFactory" /></property>
+    </bean>
+
+</deployment>

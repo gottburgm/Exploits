@@ -1,0 +1,107 @@
+<project name="tests-mdb-jars">
+ <!-- mdb test -->
+   <target name="_jars-mdb">
+      <mkdir dir="${build.lib}"/>
+
+      <!-- build mdbtest.jar -->
+      <jar destfile="${build.lib}/mdbtest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/mdb/bean/**"/>
+            <include name="org/jboss/test/mdb/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/mdb">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+
+      <!-- build mdb.jar -->
+      <jar destfile="${build.lib}/mdb.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/mdb/bean/**"/>
+         </fileset>
+         <!-- <fileset dir="${build.resources}/mdb">
+            <include name="**/*.xml"/>
+         </fileset> -->
+      </jar>
+   </target>
+
+   <!-- messagedriven test -->
+   <target name="_jars-messagedriven">
+      <mkdir dir="${build.lib}"/>
+
+    <!-- build jmscontainerinvoker.jar -->
+    <jar destfile="${build.lib}/jmscontainerinvoker.jar">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/test/messagedriven/beans/**"/>
+      </fileset>
+      <fileset dir="${build.resources}/messagedriven/jmscontainerinvoker">
+        <include name="**/*.xml"/>
+      </fileset>
+    </jar>
+
+    <jar destfile="${build.lib}/jmscontainerinvoker-hornetq.jar">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/test/messagedriven/beans/**"/>
+      </fileset>
+      <fileset dir="${build.resources}/messagedriven/jmscontainerinvoker-hornetq">
+        <include name="**/*.xml"/>
+      </fileset>
+    </jar>
+
+      <!-- build testmessagedriven.jar -->
+      <jar destfile="${build.lib}/testmessagedriven.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/messagedriven/beans/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/messagedriven/jar">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+
+   	<!-- build testmessagedriven-hornetq.jar -->
+    <jar destfile="${build.lib}/testmessagedriven-hornetq.jar">
+       <fileset dir="${build.classes}">
+          <include name="org/jboss/test/messagedriven/beans/**"/>
+       </fileset>
+       <fileset dir="${build.resources}/messagedriven/jar-hornetq">
+          <include name="**/*.xml"/>
+       </fileset>
+    </jar>
+
+
+      <!-- build testmessagedriven.sar -->
+      <jar destfile="${build.lib}/testmessagedriven.sar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/messagedriven/mbeans/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/messagedriven/sar">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+
+      <!-- build testmessagedriven.jar -->
+      <copy file="${build.resources}/messagedriven/jar/META-INF/jboss.xml"
+         tofile="${build.resources}/messagedriven/jar/META-INF/original-jboss.xml"
+         overwrite="true"/>
+      <copy file="${build.resources}/messagedriven/jar/META-INF/jboss-mdb-client-id.xml"
+         tofile="${build.resources}/messagedriven/jar/META-INF/jboss.xml"
+         overwrite="true"/>
+      <jar destfile="${build.lib}/testmessagedriven-clientid.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/messagedriven/beans/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/messagedriven/jar">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+      <copy file="${build.resources}/messagedriven/jar/META-INF/original-jboss.xml"
+         tofile="${build.resources}/messagedriven/jar/META-INF/jboss.xml"
+         overwrite="true"/>
+      <delete file="${build.resources}/messagedriven/jar/META-INF/original-jboss.xml"/>
+
+
+   </target>
+</project>

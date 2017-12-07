@@ -1,0 +1,32 @@
+<assembly>
+  <id>foe-deployer-3.2-sar</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/varia/deployment/Foe**</include>
+        <include>org/jboss/varia/deployment/convertor/**</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>src/resources/deployment</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>META-INF/**</include>
+        <include>resources/6.1/**</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>src/etc</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>foe-deployer-service.xml</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<mbeans-descriptors>
+
+  <mbean name="SecurityAssociationValve"
+         description="Valve that clears the SecurityAssociation information associated with the request thread"
+         domain="Catalina"
+         group="Valve"
+         type="org.jboss.web.tomcat.security.SecurityAssociationValve">
+
+    <attribute name="className"
+               description="Fully qualified class name of the managed object"
+               type="java.lang.String"
+               writeable="false"/>
+
+    <attribute name="debug"
+               description="The debugging detail level for this component"
+               type="int"/>
+
+    <attribute name="containerName"
+               description="Object name of the container"
+               type="javax.management.ObjectName"/>
+
+  </mbean>
+
+</mbeans-descriptors>

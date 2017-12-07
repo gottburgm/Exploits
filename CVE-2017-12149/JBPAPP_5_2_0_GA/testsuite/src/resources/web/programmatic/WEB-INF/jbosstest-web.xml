@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app version="2.4"
+   xmlns="http://java.sun.com/xml/ns/j2ee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+   <description>Programmatic Web Login Tests</description>
+
+   <!-- ### Servlets -->
+   <servlet>
+      <servlet-name>TestServlet</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.ProgrammaticLoginTestServlet</servlet-class>
+   </servlet>
+
+   <!-- The servlet and jsp page mappings -->
+   <servlet-mapping>
+      <servlet-name>TestServlet</servlet-name>
+      <url-pattern>/TestServlet</url-pattern>
+   </servlet-mapping>
+
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Restricted</web-resource-name>
+         <description>Restricted Area</description>
+         <url-pattern>/restricted/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+         <description>Only authenticated users can access secure content</description>
+         <role-name>AuthorizedUser</role-name>
+      </auth-constraint>
+   </security-constraint>
+
+   <login-config>
+      <auth-method>FORM</auth-method>
+      <form-login-config>
+         <form-login-page>/login.html</form-login-page>
+         <form-error-page>/error.html</form-error-page>
+      </form-login-config>
+   </login-config>
+
+   <security-role>
+      <description>An AuthorizedUser is one with a valid username and password</description>
+      <role-name>AuthorizedUser</role-name>
+   </security-role>
+</web-app>
+

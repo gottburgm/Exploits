@@ -1,0 +1,11 @@
+<project name="hibernate-int-component-info">
+   <component id="hibernate-int"
+              module="hibernate"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="jboss-hibernate.jar"/>
+      <export>
+         <include input="jboss-hibernate.jar"/>
+      </export>
+   </component>
+</project>

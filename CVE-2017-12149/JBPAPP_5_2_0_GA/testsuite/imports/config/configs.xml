@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<!--
+   | Targets that create separate server configurations
+-->
+ 
+<!-- $Id: configs.xml 113477 2012-08-28 12:31:18Z jcacek $ -->
+<project name="main.server.configs" xmlns:server="http://jboss.org/ns/test/ant/server">
+
+<!-- Import all the xml files that define targets that require a separate
+    JBoss Server Configuration -->
+<import file="tests-clustering.xml"/>
+<import file="tests-bootstrap-dependencies.xml"/>
+<import file="tests-jts.xml"/>
+<import file="tests-password-mask.xml"/>
+<import file="tests-crash-recovery.xml"/>
+<import file="tests-secured.xml"/>
+<import file="tests-jbpapp6517.xml"/>
+<import file="tests-jbpapp6469.xml"/>
+<import file="tests-jbpapp6523.xml"/>
+<import file="tests-jbpapp9326.xml"/>
+<import file="tests-jbpapp7794.xml"/>
+</project>

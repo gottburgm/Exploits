@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The Hypersonic embedded database JCA connection factory config-->
+
+<datasources>
+   <local-tx-datasource>
+      <jndi-name>InvalidPreFillDS</jndi-name>
+      <connection-url>jdbc:hsqldb:mem:PreFillDSDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+	  <user-name>invalid</user-name>
+	  <password>xxx</password>
+      <min-pool-size>5</min-pool-size>
+      <max-pool-size>10</max-pool-size>
+      <prefill>true</prefill>
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+   </local-tx-datasource>
+</datasources>

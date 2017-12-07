@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<!--
+   | Targets that run the jbpapp7794 - LogWrongLoginModuleOptionsTest tests
+-->
+
+<project name="jbpapp7794.tests">
+	<!--
+	|  Define the Pattern Sets Here
+	--> 
+	<patternset id="jbpapp7794-includes">
+		<include name="org/jboss/test/security/test/auth/LogWrongLoginModuleOptionsTest.class"/>
+   	</patternset>
+   	
+    <!--
+    | Targets
+    -->
+	<target name="tests-jbpapp7794" description="Tests JBPAPP-7794 LogWrongLoginModuleOptionsTest tests">
+		<run-junit junit.patternset="jbpapp7794-includes"/>
+        	<!--  junit.configuration="deployment-service"/> -->
+	</target>
+
+</project>

@@ -1,0 +1,16 @@
+<assembly>
+  <id>jbossweb-cluster-aop</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>src/resources</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>META-INF/jboss-aop.xml</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

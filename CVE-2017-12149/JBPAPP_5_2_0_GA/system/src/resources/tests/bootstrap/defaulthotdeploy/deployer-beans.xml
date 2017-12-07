@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- A ProfileServiceBootstrap bootstrap descriptor that uses the simple
+VFSDeploymentScanner that goes directly to the MainDeployer rather than the
+ProfileService.
+$Id: deployer-beans.xml 85526 2009-03-06 15:21:50Z emuckenhuber $
+-->
+<deployment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="urn:jboss:bean-deployer:2.0 bean-deployer_2_0.xsd"
+   xmlns="urn:jboss:bean-deployer:2.0">
+   <!-- -->
+   <bean name="ProfileService" class="org.jboss.system.server.profileservice.ProfileServiceImpl">
+      <constructor>
+         <parameter>${jboss.server.name}</parameter>
+      </constructor>
+      <property name="profileRoot">${jbosstest.deploy.dir}</property>
+   </bean>
+   
+   <bean name="ProfileServiceBootstrap" class="org.jboss.system.server.profileservice.ProfileServiceBootstrap">
+      <property name="kernel"><inject bean="jboss.kernel:service=Kernel"/></property>
+   </bean>
+
+   <!-- The MainDeployer -->
+   <bean name="MainDeployer" class="org.jboss.deployers.plugins.deployment.MainDeployerImpl">
+      <property name="structureDeployers">
+         <list>
+            <!-- JAR Structure -->
+            <bean name="JARStructure" class="org.jboss.deployers.plugins.structure.vfs.jar.JARStructure">
+               <property name="candidateStructureVisitorFactory">
+                  <!-- Any file that is not an ordinary directory is a candidate -->
+                  <bean name="JARStructureCandidates" class="org.jboss.deployers.plugins.structure.vfs.jar.JARCandidateStructureVisitorFactory">
+                     <!-- A filter to exclude some obvious non-subdeployments -->
+                     <property name="filter">
+                        <bean name="JARFilter" class="org.jboss.virtual.plugins.vfs.helpers.SuffixesExcludeFilter">
+                           <constructor><parameter>
+                              <list elementClass="java.lang.String">
+                                 <!-- Exclude class files as subdeployments -->
+                                 <value>.class</value>
+                              </list>
+                           </parameter></constructor>
+                        </bean>
+                     </property>
+                  </bean>
+               </property>
+            </bean>
+            <!-- File Structure -->
+            <bean name="FileStructure" class="org.jboss.deployers.plugins.structure.vfs.file.FileStructure"/>
+         </list>
+      </property>
+      <property name="deployers">
+         <list>
+            <!-- POJO Deployment -->
+            <bean name="BeanDeployer" class="org.jboss.deployers.plugins.deployers.kernel.BeanDeployer"/>
+            <bean name="KernelDeploymentDeployer" class="org.jboss.deployers.plugins.deployers.kernel.KernelDeploymentDeployer"/>
+            <bean name="BeanMetaDataDeployer" class="org.jboss.deployers.plugins.deployers.kernel.BeanMetaDataDeployer">
+               <constructor><parameter><inject bean="jboss.kernel:service=Kernel"/></parameter></constructor>
+            </bean>
+         </list>
+      </property>
+   </bean>
+   
+   <!-- Scan for deployments -->
+   <bean name="VFSDeploymentScanner" class="org.jboss.system.server.profileservice.VFSDeploymentScannerImpl">
+      <property name="profileService"><inject bean="ProfileService"/></property>
+      <property name="URIList">
+         <list elementClass="java.net.URI">
+            <!-- Standard hot deployment directory -->
+            <value>${jbosstest.deploy.dir}/deploy/</value>
+         </list>
+      </property>
+   </bean>
+ 
+</deployment>

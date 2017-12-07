@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<datasources>
+   <local-tx-datasource>
+      <jndi-name>TestSuccessBackgroundDS</jndi-name>
+      <use-java-context>false</use-java-context>
+      <connection-url>jdbc:hsqldb:mem:BackgroundDSDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <application-managed-security />
+      <background-validation-millis>5000</background-validation-millis>
+      <valid-connection-checker-class-name>org.jboss.test.jca.support.MockSuccessValidationConnectionChecker</valid-connection-checker-class-name>
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+   </local-tx-datasource>
+</datasources>

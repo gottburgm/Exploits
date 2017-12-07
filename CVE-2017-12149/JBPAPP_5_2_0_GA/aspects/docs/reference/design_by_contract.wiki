@@ -1,0 +1,481 @@
+!!!Design by Contract Aspect
+
+This is an experimental feature, to use it, check out jboss-head from our cvs, and rebuild the aop and aspects projects.
+
+!!Background
+Design by Contract is a design technique that allows you to provide precise specifications of valid arguments to methods, return values from methods, and valid states of objects. It has its origin in the Eiffel language.
+
+In Design by Contract there are three kinds of expressions
+
+*Preconditions
+*Postconditions
+*Invariants
+
+You specify pre-, postconditions, and invariants by simply annotating the method or class. We'll start off by going through a few very simple cases as an introduction to the notation used by the DbC aspect.
+
+
+!!Preconditions 
+Preconditions specify conditions that must be true for a method to execute. In this case for our squareRoot() method it is assumed 
+that the number we want to take the square root of must be positive:
+
+{{{
+/*
+ * @@org.jboss.aspects.dbc.Dbc
+ */
+public class PreCondExample
+{
+   /**
+    * @@org.jboss.aspects.dbc.PreCond ({"$0 > i"})
+    */
+   public void squareRoot(int i)
+   {
+      ..
+   }
+}
+
+}}}
+The value {{$0}} means the first of all the parameters (i.e. 'i').
+
+!!Postconditions
+Postconditions specify conditions that must be true after a method has executed. In this case for our multiply method the return value must be the same as the product of the parameters:
+
+{{{
+/*
+ * @@org.jboss.aspects.dbc.Dbc
+ */
+public class PostCondExample
+{
+   /**
+    * @@org.jboss.aspects.dbc.PostCond ({"$rtn = $0 * $1"})
+    */
+   public int multiply(int i, int j)
+   {
+      ..
+   }
+}
+
+}}}
+
+The value {{$rtn}} is a reserved word, and means the value returned by the method.
+Again, the value {{$0}} means the first of all the parameters (i.e. 'i'), and {{$1}} means the second of all the parameters (i.e. 'j')
+
+You can also refer to the target object in your conditions, by using the {{$tgt}} keyword (note that here we have more than one precondition):
+
+{{{
+/*
+ * @@org.jboss.aspects.dbc.Dbc
+ */
+public class PostCondExample2
+{
+   private String name;
+
+   /**
+    * @@org.jboss.aspects.dbc.PreCond ({"$0 != null", "$0.length() > 0"})
+    * @@org.jboss.aspects.dbc.PostCond ({"$tgt.getName().equals($0)"})
+    */
+   public int setName(String name)
+   {
+      this.name = name;
+   }
+
+   public int getName()
+   {
+      return name;
+   }
+}
+}}}
+
+So before the method setName() executes, the name parameter must not be not null or an empty string, and after setName() checks that the name member on the object is the same as what we set it to.
+
+
+You can also access private variables from the assertions, the getName() method is the same as in the previous example:
+{{{
+/**
+ * @@org.jboss.aspects.dbc.PostCond ({"$tgt.name.equals($rtn)"})
+ */
+public int getName()
+{
+   return name;
+}
+
+}}}
+
+!!Invariants
+Invariants specify conditions that must be true any time a client could invoke an object's methods. In effect this means that the condition must be true before and after execution of any public method. Here's an example:
+
+{{{
+/*
+ * @@org.jboss.aspects.dbc.Dbc
+ * @@org.jboss.aspects.dbc.Invariant ({"$tgt.myString != null || $tgt.myString.length() > 0"})
+ */
+public class InvariantExample
+{
+   String myString;
+
+   public void setMyString(String s)
+   {
+      myString = s;
+   }   
+   
+}
+}}}
+
+So before invoking any of the public methods on this object, the myString member must either be null or it must not be empty.
+
+
+
+!!DbC as an aspect
+As you can see, you specify pre-, postconditions, and invariants by simply annotating the method or class. In itself this is a very powerful technique, as it documents all the interfaces for the developer. It is far more useful though to be able to make the computer perform these checks for you. Since there is an overhead associated with these checks, especially if they are of the more complicated type which we will look at shortly, it should be possible to turn the checks on and off, so that they can be run as part of your test cycle, but not run on a production server. In other words, this is a cross-cutting concern, which lends itself perfectly to implementation as an aspect. The flow of the aspect is as follows:
+
+{{{
+client makes call
+   --- DbC aspect ---
+   check invariants for target object (if invocation is not a constructor)
+   check the preconditions for the method/constructor we want to invoke
+   invoke the target method/constructor
+   check the postconditions for the invoked method/constructor
+   check the invariants for the target object
+   --- DbC aspect - end ---
+client regains control
+}}}
+
+!Inheritance
+You can specify preconditions, postconditions and invariants for an interface or a class. All the assertions are automatically defined for any implementing classes (in the case of interfaces), or any subclasses (in the case of classes). The only thing you need to do for each hierarchy of classes you want to check is to annotate the top-level class or interface with {{org.jboss.aspects.dbc.Dbc}} as follows:
+
+{{{
+/*
+ * @@org.jboss.aspects.dbc.Dbc
+ */
+public interface RootInterface
+{ 
+   /**
+    * @@org.jboss.aspects.dbc.PreCond ({"$0 > 0"})
+    */
+   public void someMethod(int i);
+}
+
+public class MyImpl implements RootInterface
+{
+   public void someMethod(int i)
+   {
+   
+   }
+
+}
+}}}
+
+{{MyImpl.someMethod()}} will now have the precondition "$0 > 0" bound to it.
+
+
+The above will hopefully be a bit clearer when we show how to include the aspect:
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+   <aspect class="org.jboss.aspects.dbc.DesignByContractAspect" scope="PER_JOINPOINT">
+      <attribute name="verbose">false</attribute>
+   </aspect>
+      
+   <bind pointcut="execution(* $instanceof{@org.jboss.aspects.dbc.Dbc}->*(..)) OR execution($instanceof{@org.jboss.aspects.dbc.Dbc}->new(..))">
+      <advice aspect="org.jboss.aspects.dbc.DesignByContractAspect" name="invoke"/>
+   </bind>  
+</aop>
+}}}
+
+
+For the {{RootInterface/MyImpl}} hierarchy just mentioned, now if we define another class:
+{{{
+public class MySubImpl implements RootInterface
+{
+   /**
+    * @@org.jboss.aspects.dbc.PreCond ({"$0 % 2 == 0"})
+    */
+   public void someMethod(int i)
+   {
+   }
+
+}
+}}}
+
+When invoking {{MySubImpl.someMethod()}}, the condition higher up in the hierarchy must still hold, as well as the new one. So {{MySubImpl.someMethod()}} has two preconditions: "$0 > 0" (The parameter must be positive) AND "$0 % 2 == 0" (The parameter must be an even number). The same mechanism applies to invariants and postconditions as well.
+
+
+!Static invariants
+
+Consider the class
+
+{{{
+/*
+ * @@org.jboss.aspects.dbc.Dbc
+ * @@org.jboss.aspects.dbc.Invariant ({"$tgt.myString != null || $tgt.myString.length() > 0"})
+ */
+public class InvariantExample
+{
+   String myString;
+   static String myStaticString;
+
+   public void setMyString(String s)
+   {
+      myString = s;
+   }
+   
+   public static void setMyStaticString(String s)
+   {
+      myStaticString = s;
+   }
+   
+}
+}}}
+
+If we call {{setMyStaticString()}}, which is a static method, the calls to the defined invariant would fail, since we have no access to any non-static methods or member variables. To avoid this, the framework skips evaluation of the invariants when static calls are made. This is not really a problem, since the non-static member values should not have changed as a result of invoking a static method anyway. In order to be able to check static class members you can use the {{@@org.jboss.aspects.dbc.StaticInvariant}} annotation.
+
+{{{
+/*
+ * @@org.jboss.aspects.dbc.Dbc
+ * @@org.jboss.aspects.dbc.Invariant ({"$tgt.myString != null || $tgt.myString.length() > 0"})
+ * @@org.jboss.aspects.dbc.StaticInvariant ({"$tgt.myStaticString != null || $tgt.myStaticString.length() > 0"})
+ */
+public class InvariantExample
+{
+   String myString;
+   static String myStaticString;
+
+   public void setMyString(String s)
+   {
+      myString = s;
+   }
+   
+   public static void setMyStaticString(String s)
+   {
+      myStaticString = s;
+   }
+   
+}
+}}}
+Now we have the same type of checks for the static member as we do for the non-static one. StaticInvariants can NOT access any non-static methods or members, but they will be evaluated when a public method is called regardless of if the method is static or not.
+
+
+!Recursion of checks
+When evaluating a condition that calls methods that themselves have conditions defined on them, all the conditions get checked. That probably sounds quite confusing, so here is an example:
+
+{{{
+public class RecursiveChecks
+{
+   /**
+    * @@org.jboss.aspects.dbc.PreCond ({"$tgt.getAddress() != null"})
+    */
+   public String getName()
+   {
+   }
+   
+   /**
+    * @@org.jboss.aspects.dbc.PreCond ({"$tgt.getName() != null"})
+    */
+   public String getAddress()
+   {
+   }   	
+}
+}}}
+
+*Here, if we call getName(), that causes "$tgt.getAddress() != null" to get evaluated.
+*"$tgt.getAddress() != null" contains a call to getAddress(), which causes "$tgt.getName() != null" to get evaluated.
+*"$tgt.getName() != null" contains a call to getName(), which causes "$tgt.getAddress() != null" to get evaluated.
+*and so on...
+
+There is an algorithm in place to stop infinite recursion of checks from taking place.
+
+
+!!Advanced conditional expressions
+All the examples we have seen so far use simple boolean conditions, but there are a few additional keywords available for use. The examples under aspects/docs/examples/dbc (from jboss-head in our cvs) show the use of these, but we will discuss them briefly here.
+
+!implies
+An implies operator has been provided to allow for cases where "if condA is true, then condB must be true as well". This only works one way, so that if condB is true, condA does not necessarily have to be true. The form is:
+{{{
+<boolean expression A> implies <boolean expression B>
+}}}
+
+Here's an example:
+{{{
+package test.dbc.office;
+
+/**
+ * @@org.jboss.aspects.dbc.Dbc
+ */
+public class Developer
+{
+   ...
+   Computer computer;
+   
+   /**
+    *@@org.jboss.aspects.dbc.PostCond ({"$rtn != null implies ($rtn.getDeveloper() == null) || ($rtn.getDeveloper() == $tgt)"})
+    */
+   public Computer getComputer()
+   {
+      return computer;
+   }
+   
+}
+
+/**
+ * @@org.jboss.aspects.dbc.Dbc
+ */
+public class Computer
+{
+   ...
+   Developer developer;
+   
+   /**
+    *@@org.jboss.aspects.dbc.PostCond ({"$rtn != null implies ($rtn.getComputer() == null) ||($rtn.getComputer() == $tgt)"})
+    */
+   public Developer getDeveloper()
+   {
+      return developer;
+   }
+
+}
+
+}}}
+
+
+
+!forall
+forall means that a condition should be true for all elements in a collection or an array. The form is:
+{{{
+forall <loop variable> in <collection or array> | <condition>
+}}}
+
+
+Here's an example:
+
+{{{
+package test.dbc.office;
+/**
+ * @@org.jboss.aspects.dbc.Dbc
+ * @@org.jboss.aspects.dbc.Invariant ({"forall test.dbc.office.Computer c in $tgt.computers | c != null"})
+ */
+public class OfficeManager
+{
+   ArrayList computers = new ArrayList();
+   ...
+}
+}}}
+
+The typing of the loop variable is optional:
+{{{
+package test.dbc.office;
+/**
+ * @@org.jboss.aspects.dbc.Dbc
+ * @@org.jboss.aspects.dbc.Invariant ({"forall d in $tgt.developers | d != null"})
+ */
+public class OfficeManager
+{
+   ArrayList developers = new ArrayList();
+   ...
+}
+}}}
+
+The examples declare that the computers and developer collections cannot contain null values.
+
+!exists
+Exists is similar to forall, but the condition only needs to hold for at least one of the elements in the collection or array. The form is
+{{{
+exists <loop variable> in <collection or array> | <condition>
+}}}
+
+Here's an example:
+{{{
+package test.dbc.office;
+
+/**
+ * @@org.jboss.aspects.dbc.Dbc
+ */
+public class OfficeManager
+{
+   ArrayList computers = new ArrayList();
+   ArrayList developers = new ArrayList();
+   
+   ...
+   
+   /**
+    * @@org.jboss.aspects.dbc.PreCond ({"exists test.dbc.office.Computer c in $tgt.computers | c.getDeveloper() == null && c == $0"})
+    */
+   public void assignComputer(Computer computer, Developer developer)
+   {
+      ...
+   }
+   
+}
+
+}}}
+
+The precondition states that there has to be a Computer that has not been assigned to a developer, and that the "free" Computer has to be the same as the one passed in as a parameter to the method.
+
+!Combining advanced operators
+You can combine the implies, forall and exists operators to create more powerful expressions
+
+Here's an example:
+{{{
+package test.dbc.office;
+
+/**
+ * @@org.jboss.aspects.dbc.Dbc
+ */
+public class OfficeManager
+{
+   ArrayList computers = new ArrayList();
+   ArrayList developers = new ArrayList();
+   
+   ...
+   
+   /**
+    * @@org.jboss.aspects.dbc.PostCond ({"forall d in $tgt.developers | exists c in $tgt.computers | (c == d.getComputer() && d == c.getDeveloper())"})
+    */
+   public void assignComputer(Computer computer, Developer developer)
+   {
+      ...
+   }
+   
+}
+
+}}}
+
+
+
+!java:
+For when the normal simple booleans, implies, forall and exists aren't enough, you can create your own java expression. Simply prefix it with _java:_ (Note that there must be a space after the ':'). In your Java expression you can use the $rtn, $tgt, $0, $1, etc. variables as outlined above. The only constraints on this java expression are that it must return true if the condition holds, false otherwise. For example, a sort method that must return a sorted arraylist:
+
+{{{
+/**
+ * @@org.jboss.aspects.dbc.Dbc
+ */
+public class Sorter
+{
+   /**
+    * Returns the original array with all the elements sorted incrementally
+    * @@org.jboss.aspects.dbc.PostCond ({"java: for (int i = 0 ; i < $rtn.length ; i++){if (i > 0){if ($rtn[i] < $rtn[i - 1])return false;}}return true;"})
+    */
+   public static int[] sort(int[] unsorted)
+   {
+      ...
+   }
+   
+}
+}}}
+
+If we indent the java expression a bit nicer, it reads:
+{{{
+for (int i = 0 ; i < $rtn.length ; i++)
+{
+   if (i > 0)
+   {
+      if ($rtn[i] < $rtn[i - 1]) 
+         return false;
+   }
+}
+return true;      
+
+}}}
+
+
+---
+Go back to [JBossAOP]

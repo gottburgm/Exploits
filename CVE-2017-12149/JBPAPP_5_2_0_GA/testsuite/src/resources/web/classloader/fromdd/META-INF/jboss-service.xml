@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+
+   <mbean code="org.jboss.test.web.classloader.fromdd.TestFromDD"
+          name="jboss.test:service=LegacyWebClassLoader">
+   </mbean>
+
+</server>

@@ -1,0 +1,12 @@
+<!DOCTYPE jboss-app
+    PUBLIC "-//JBoss//DTD Java EE Application 5.0//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-app_5_0.dtd">
+
+
+<jboss-app>
+   <loader-repository>jboss.test:war=servlet.war</loader-repository>
+
+   <module>
+      <service>servlet-security-service.xml</service>
+   </module>
+</jboss-app>

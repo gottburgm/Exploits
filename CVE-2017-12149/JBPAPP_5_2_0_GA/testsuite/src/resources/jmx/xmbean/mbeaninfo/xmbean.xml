@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mbean PUBLIC
+   "-//JBoss//DTD JBOSS XMBEAN 1.2//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_xmbean_1_2.dtd">
+
+<!-- $Id: xmbean.xml 40361 2006-01-19 12:27:55Z dimitris $ -->
+
+<mbean>
+   <description>A Test MBean</description>
+   <class>org.jboss.test.jmx.xmbean.Test</class>
+
+   <constructor>
+      <name>org.jboss.test.jmx.xmbean.Test</name>
+   </constructor>
+
+   <attribute access='read-write' getMethod='getStringAttr' setMethod='setStringAttr'>
+      <description>A String Attribute</description>
+      <name>StringAttr</name>
+      <type>java.lang.String</type>
+   </attribute>
+
+   <operation>
+      <description>A Test Echo Operation</description>
+      <name>echo</name>
+      <parameter>
+         <description>The String value to echo</description>
+         <name>value</name>
+         <type>java.lang.String</type>
+      </parameter>
+      <return-type>java.lang.String</return-type>
+   </operation>
+
+</mbean>

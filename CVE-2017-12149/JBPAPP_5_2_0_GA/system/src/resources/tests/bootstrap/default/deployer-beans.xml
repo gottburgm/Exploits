@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- An example profile service based server bootstrap mc descriptor. This is
+loaded by the org.jboss.test.profileservice.support.ProfileServiceBootstrap
+during the load of the org.jboss.system.server.profileservice.ServerImpl
+entry point.
+-->
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+   
+   <!-- The profile service -->
+   <bean name="ProfileService" class="org.jboss.system.server.profileservice.ProfileServiceImpl">
+      <constructor>
+         <parameter>${jboss.server.name}</parameter>
+      </constructor>
+      <property name="profileRoot">${jboss.server.home.url}/profile</property>
+   </bean>
+   
+   <bean name="ProfileServiceBootstrap" class="org.jboss.system.server.profileservice.ProfileServiceBootstrap">
+      <property name="kernel"><inject bean="jboss.kernel:service=Kernel"/></property>
+   </bean>
+   
+   <!-- The MainDeployer -->
+   <bean name="MainDeployer" class="org.jboss.deployers.plugins.deployment.MainDeployerImpl">
+      <property name="structureDeployers">
+         <list>
+            <!-- JAR Structure -->
+            <bean name="JARStructure" class="org.jboss.deployers.plugins.structure.vfs.jar.JARStructure"/>
+            <!-- File Structure -->
+            <bean name="FileStructure" class="org.jboss.deployers.plugins.structure.vfs.file.FileStructure"/>
+         </list>
+      </property>
+      <property name="deployers">
+         <list>
+            <!-- POJO Deployment -->
+            <bean name="BeanDeployer" class="org.jboss.deployers.plugins.deployers.kernel.BeanDeployer"/>
+            <bean name="KernelDeploymentDeployer" class="org.jboss.deployers.plugins.deployers.kernel.KernelDeploymentDeployer"/>
+            <bean name="BeanMetaDataDeployer" class="org.jboss.deployers.plugins.deployers.kernel.BeanMetaDataDeployer">
+               <constructor><parameter><inject bean="jboss.kernel:service=Kernel"/></parameter></constructor>
+            </bean>
+         </list>
+      </property>
+   </bean>
+   
+   <!-- Hot deployment service that directly uses the MainDeployer -->
+   <bean name="VFSDeploymentScanner" class="org.jboss.system.server.profileservice.VFSDeploymentScannerImpl">
+      <property name="profileService"><inject bean="ProfileService"/></property>
+      <property name="URIList">
+         <list elementClass="java.net.URI">
+            <!-- Standard hot deployment directory -->
+            <value>${jboss.server.home.url}deploy/</value>
+         </list>
+      </property>
+   </bean>
+   
+</deployment>

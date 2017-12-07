@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <aop:interceptor xmlns:aop="urn:jboss:aop-beans:1.0"
+               name="AnnotationReaderInterceptor"
+               class="org.jboss.test.aop.mcdefaultannotation.AnnotationReaderInterceptor"
+               manager-bean="AspectManager"
+               manager-property="aspectManager">
+   </aop:interceptor>
+
+   <aop:bind xmlns:aop="urn:jboss:aop-beans:1.0" pointcut="execution(* @org.jboss.test.aop.mcdefaultannotation.TestAnnotation->getAnnotationValue())" manager-bean="AspectManager" manager-property="aspectManager">
+      <aop:interceptor-ref name="AnnotationReaderInterceptor"/>
+   </aop:bind>
+
+   <bean name="TestAOPBean" class="org.jboss.test.aop.mcdefaultannotation.MyBean">
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.aop:name=Bean", exposedInterface=org.jboss.test.aop.mcdefaultannotation.BeanInterface.class)</annotation>
+      <annotation>@org.jboss.test.aop.mcdefaultannotation.TestAnnotation</annotation>
+   </bean>
+   <bean name="TestAOPBean2" class="org.jboss.test.aop.mcdefaultannotation.MyBean">
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.aop:name=Bean2", exposedInterface=org.jboss.test.aop.mcdefaultannotation.BeanInterface.class)</annotation>
+      <annotation>@org.jboss.test.aop.mcdefaultannotation.TestAnnotation(property="Overridden")</annotation>
+   </bean>
+</deployment>

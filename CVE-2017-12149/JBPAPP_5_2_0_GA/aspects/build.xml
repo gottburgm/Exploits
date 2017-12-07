@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+   <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
+   <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+]>
+
+<!-- $Id: build.xml 94979 2009-10-15 18:41:01Z fnasser@redhat.com $ -->
+
+<!--+======================================================================+-->
+<!--| JBoss (The OpenSource J2EE WebOS) Build File                         |-->
+<!--|                                                                      |-->
+<!--| Distributable under LGPL license.                                    |-->
+<!--| See terms of license at http://www.gnu.org.                          |-->
+<!--|                                                                      |-->
+<!--| This file has been designed to work with the 'tools' module and      |-->
+<!--| Buildmagic extentions.                                               |-->
+<!--+======================================================================+-->
+
+<project default="main" name="JBoss/Aspects">
+
+   <!--+====================================================================+-->
+   <!--| Setup                                                              |-->
+   <!--|                                                                    |-->
+   <!--| Include the common build elements.                                 |-->
+   <!--|                                                                    |-->
+   <!--| This defines several different targets, properties and paths.      |-->
+   <!--| It also sets up the basic extention tasks amoung other things.     |-->
+   <!--+====================================================================+-->
+
+   &buildmagic;
+
+   <!-- ================================================================== -->
+   <!-- Initialization                                                     -->
+   <!-- ================================================================== -->
+
+   <!--
+      | Initialize the build system.  Must depend on '_buildmagic:init'.
+      | Other targets should depend on 'init' or things will mysteriously fail.
+    -->
+
+   <target name="init" unless="init.disable" depends="_buildmagic:init">
+   </target>
+
+
+   <!--+====================================================================+-->
+   <!--| Configuration                                                      |-->
+   <!--|                                                                    |-->
+   <!--| This target is invoked by the Buildmagic initialization logic      |-->
+   <!--| and should contain module specific configuration elements.         |-->
+   <!--+====================================================================+-->
+
+   <target name="configure" unless="configure.disable">
+      &libraries;
+      &modules;
+
+      <!-- Module name(s) & version -->
+      <property name="aspects.version" value="jboss-aspect-library-1.3"/>
+      <property name="aop.version" value="jboss-aop_1.3"/>
+      <property name="aspects.title" value="JBoss AOP Aspect Library"/>
+
+      <property name="module.name" value="aspects"/>
+      <property name="module.Name" value="JBoss Aspects"/>
+
+      <!-- Configure thirdparty libraries -->
+      <path id="library.classpath">
+         <path refid="qdox.classpath"/>
+         <path refid="javassist.classpath"/>
+         <path refid="trove.classpath"/>
+         <path refid="apache.ant.classpath"/>
+         <path refid="oswego.concurrent.classpath"/>
+         <path refid="junit.junit.classpath"/>
+         <path refid="apache.log4j.classpath"/>
+         <path refid="dom4j.dom4j.classpath"/>
+         <path refid="beanshell.beanshell.classpath"/>
+         <path refid="jboss.remoting.classpath"/>
+         <path refid="apache.xerces.classpath"/>
+         <path refid="jboss.jboss.cl.classpath"/>      
+         <path refid="jboss.jboss.deployers.classpath"/>      
+         <path refid="jboss.jboss.man.classpath"/>      
+         <path refid="jboss.jboss.mdr.classpath"/>
+         <path refid="jboss.jboss.reflect.classpath"/>
+         <path refid="jboss.jbossxb.classpath"/>
+         <path refid="jboss.microcontainer.classpath"/>
+         <path refid="jboss.jboss.vfs.classpath"/>
+         <path refid="jboss.aop.classpath"/>
+         <path refid="org.jboss.cluster.classpath"/>
+         <path refid="jboss.test.classpath"/>
+         <path refid="jboss.integration.classpath"/>
+         <path refid="jboss.common.core.classpath"/>
+         <path refid="jboss.common.logging.spi.classpath"/>
+         <path refid="jboss.common.logging.log4j.classpath"/>
+         <path refid="jboss.common.logging.jdk.classpath"/>
+         <path refid="jboss.jboss.javaee.classpath"/>
+         <path refid="org.jboss.aspects.classpath"/>
+      	 <path refid="sun.jaxb.classpath"/>
+      </path>
+
+      <!-- Configure modules -->
+      <path id="dependentmodule.classpath">
+         <path refid="jboss.j2se.classpath"/>
+         <path refid="jboss.jmx.classpath"/>
+         <path refid="jboss.system.classpath"/>
+         <path refid="jboss.systemjmx.classpath"/>
+         <path refid="jboss.cluster.classpath"/>
+      </path>
+
+      <!-- ===== -->
+      <!-- Tasks -->
+      <!-- ===== -->
+
+      <!-- Where source files live -->
+      <property name="source.java" value="${module.source}/main"/>
+      <property name="source.test" value="${module.source}/test"/>
+      <property name="source.etc" value="${module.source}/etc"/>
+      <property name="source.resources" value="${module.source}/resources"/>
+      <property name="source.bin" value="${module.source}/bin"/>
+
+      <!-- Where build generated files will go -->
+      <property name="build.reports" value="${module.output}/reports"/>
+      <property name="build.gen-src" value="${module.output}/gen-src"/>
+      <property name="build.classes" value="${module.output}/classes"/>
+      <property name="build.resources" value="${module.output}/resources"/>
+      <property name="build.lib" value="${module.output}/lib"/>
+      <property name="build.unpacked" value="${module.output}/unpacked"/>
+      <property name="build.api" value="${module.output}/api"/>
+      <property name="build.etc" value="${module.output}/etc"/>
+      <property name="build.todo" value="${module.output}/todo"/>
+      <property name="build.meta.inf" value="${module.output}/META-INF"/>
+
+      <!-- Install/Release structure -->
+      <property name="install.id" value="${module.name}-${module.version}"/>
+      <property name="release.id" value="${install.id}"/>
+      <property name="install.root" value="${module.output}/${install.id}"/>
+
+      <!-- The combined thirdparty classpath -->
+      <path id="thirdparty.classpath">
+         <path refid="library.classpath"/>
+         <path refid="dependentmodule.classpath"/>
+         <!--path refid="apache.commons.classpath"/-->
+      </path>
+
+      <!-- classpath and local.classpath must have a value using with a path -->
+      <property name="classpath" value=""/>
+      <property name="local.classpath" value=""/>
+
+      <!-- The classpath required to build classes. -->
+      <path id="javac.classpath">
+         <path refid="jboss.aop.classpath"/>
+         <pathelement path="${classpath}"/>
+         <pathelement path="${local.classpath}"/>
+         <path refid="thirdparty.classpath"/>
+      </path>
+
+      <path id="javac15.classpath">
+         <pathelement path="${build.classes}"/>
+         <path refid="javac.classpath"/>
+      </path>
+
+      <!-- xdoclet -->
+      <path id="xdoclet.task.classpath">
+         <path refid="javac.classpath"/>
+         <fileset dir="${xdoclet.xdoclet.lib}">
+            <include name="**/*.jar"/>
+         </fileset>
+      </path>
+      <property name="xdoclet.task.classpath"
+         refid="xdoclet.task.classpath"/>
+
+   </target>
+
+
+   <!--+====================================================================+-->
+   <!--| Compile                                                            |-->
+   <!--|                                                                    |-->
+   <!--| This target should depend on other compile-* targets for each      |-->
+   <!--| different type of compile that needs to be performed, short of     |-->
+   <!--| documentation compiles.                                            |-->
+   <!--+====================================================================+-->
+
+   <target name="compile"
+      description="Compile all source files."
+      depends="_default:compile-etc, _default:compile-resources, compile-classes">
+      <!-- Add module specific elements here. -->
+   </target>
+
+   <!-- Compile all class files -->
+   <target name="compile-classes">
+      <mkdir dir="${build.classes}"/>
+      <javac destdir="${build.classes}"
+         optimize="${javac.optimize}"
+         target="${javac.target}"
+         source="${javac.source}"
+         debug="${javac.debug}"
+         depend="${javac.depend}"
+         verbose="${javac.verbose}"
+         deprecation="${javac.deprecation}"
+         includeAntRuntime="${javac.include.ant.runtime}"
+         includeJavaRuntime="${javac.include.java.runtime}"
+         includes="${javac.includes}"
+         excludes="${javac.excludes}"
+         failonerror="${javac.fail.onerror}">
+         <src path="${source.java}"/>
+         <classpath refid="javac.classpath"/>
+      </javac>
+   </target>
+
+   <!--+====================================================================+-->
+   <!--| Generate Output                                                    |-->
+   <!--|                                                                    |-->
+   <!--| Generates the target output for this module. Target output is      |-->
+   <!--| the output which is ment to be released or used by external        |-->
+   <!--| modules.                                                           |-->
+   <!--+====================================================================+-->
+
+   <target name="output"
+      description="Generate all target output."
+      depends="_buildmagic:build-bypass-check"
+      unless="build-bypass.on">
+
+      <call target="compile"/>
+
+      <mkdir dir="${build.lib}"/>
+
+      <!-- Build jboss-aspect-deployer-jdk50.jar -->
+      <jar destfile="${build.lib}/jboss-aspect-library.jar" manifest="${build.etc}/default.mf"
+         update="${jar.update}" index="${jar.index}">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/aop/junit/**"/>
+            <include name="org/jboss/aspects/**"/>
+         </fileset>
+         <fileset dir="${build.etc}">
+            <include name="org/jboss/**/*.xml"/>
+         </fileset>
+         <!-- include the current invocation aspects in the lib -->
+         <zipfileset src="${org.jboss.aspects.lib}/jboss-current-invocation-aspects.jar">
+           <include name="org/jboss/aspects/currentinvocation/**.class"/>
+         </zipfileset>
+         <!-- include the broken out remoting aspects in the lib -->
+         <zipfileset src="${org.jboss.aspects.lib}/jboss-remoting-aspects.jar">
+           <include name="org/jboss/aspects/remoting/**.class"/>
+         </zipfileset>
+         <!-- include the broken out transaction aspects in the lib -->
+         <zipfileset src="${org.jboss.aspects.lib}/jboss-transaction-aspects.jar">
+           <include name="org/jboss/aspects/tx/**.class"/>
+           <include name="org/jboss/aspects/txlock/**.class"/>
+         </zipfileset>
+         <!-- Don't include the broken out clustering aspects in the lib
+              TODO: do these belong? They are already on the AS classpath 
+         <zipfileset src="${org.jboss.clustert.lib}/jboss-ha-client.jar">
+           <include name="org/jboss/aspects/remoting/**.class"/>
+         </zipfileset>
+         <zipfileset src="${org.jboss.cluster.lib}/jboss-ha-server-api.jar">
+           <include name="org/jboss/aspects/remoting/**.class"/>
+         </zipfileset>
+         -->
+      </jar>
+
+      <!-- Build jboss-aop-embedded.jar -->
+      <jar destfile="${build.lib}/jboss-aop-embedded.jar" manifest="${build.etc}/default.mf"
+         update="${jar.update}" index="${jar.index}">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/aop/asintegration/embedded/**"/>
+         </fileset>
+      </jar>
+
+      <!-- Build client jar containing the minimum needed for ejb3 -->
+      <jar destfile="${build.lib}/jboss-aspect-jdk50-client.jar" manifest="${build.etc}/default.mf"
+         update="${jar.update}" index="${jar.index}">
+         <!-- include the broken out remoting aspects in the client lib -->
+         <zipfileset src="${org.jboss.aspects.lib}/jboss-remoting-aspects.jar">
+            <include name="org/jboss/aspects/remoting/InvokeRemoteInterceptor.class"/>
+            <include name="org/jboss/aspects/remoting/IsLocalInterceptor.class"/>
+            <include name="org/jboss/aspects/remoting/MergeMetaDataInterceptor.class"/>
+            <include name="org/jboss/aspects/remoting/PojiProxy.class"/>
+         </zipfileset>
+         <!-- include the broken out transaction aspects in the client lib -->
+         <zipfileset src="${org.jboss.aspects.lib}/jboss-transaction-aspects.jar">
+            <include name="org/jboss/aspects/tx/ClientTxPropagationInterceptor.class"/>         
+         </zipfileset>  
+         <!-- include the broken out clustering aspects in the lib -->
+         <zipfileset src="${org.jboss.cluster.lib}/jboss-ha-client.jar">
+           <include name="org/jboss/aspects/remoting/**.class"/>
+         </zipfileset>       
+      </jar>
+
+   	<copy file="${project.root}/aspects/src/etc/base-aop.xml" tofile="${build.meta.inf}/base-aspects.xml"/>
+
+      <jar destfile="${build.lib}/jboss-aop-jboss5.deployer" manifest="${build.etc}/default.mf"
+         update="${jar.update}" index="${jar.index}">
+         <fileset file="${build.lib}/jboss-aspect-library.jar"/>
+         <fileset file="${jboss.aop.lib}/jboss-aop-aspects.jar"/>
+         <fileset file="${jboss.aop.lib}/pluggable-instrumentor.jar"/>
+      	 <fileset file="${build.meta.inf}/base-aspects.xml"/>
+         <fileset dir="${build.etc}">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </jar>
+      <delete dir="${build.meta.inf}"/>
+   </target>
+
+
+   <!-- ================================================================== -->
+   <!-- Cleaning                                                           -->
+   <!-- ================================================================== -->
+
+   <!-- Clean up all build output -->
+   <target name="clean"
+      description="Cleans up most generated files."
+      depends="_buildmagic:clean">
+   </target>
+
+   <!-- Clean up all generated files -->
+   <target name="clobber"
+      description="Cleans up all generated files."
+      depends="_buildmagic:clobber, clean">
+   </target>
+
+
+   <!-- ================================================================== -->
+   <!-- Install & Release                                                  -->
+   <!-- ================================================================== -->
+
+   <!-- ================================================================== -->
+   <!-- Misc.                                                              -->
+   <!-- ================================================================== -->
+
+   <target name="main"
+      description="Executes the default target (most)."
+      depends="most"/>
+
+   <target name="all"
+      description="Builds everything."
+      depends="output, docs"/>
+
+   <target name="most"
+      description="Builds almost everything."
+      depends="output"/>
+
+   <target name="help"
+      description="Show this help message."
+      depends="_buildmagic:help:standard"/>
+
+   <target name="run-ioc-example" depends="compile">
+      <taskdef name="aopc" classname="org.jboss.aop.ant.AopC" classpathref="jboss.aop.classpath"/>
+      <aopc compilerclasspathref="javac.classpath">
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+         <src path="${build.classes}"/>
+         <include name="test/ioc/POJO.class"/>
+         <aoppath path="${source.test}/test/ioc/META-INF/jboss-aop.xml"/>
+      </aopc>
+      <java fork="yes" failOnError="true" className="test.ioc.IocTest">
+         <sysproperty key="java.system.class.loader" value="org.jboss.aop.standalone.SystemClassLoader"/>
+         <sysproperty key="jboss.aop.path" value="src/test/test/ioc/META-INF/jboss-aop.xml"/>
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+      </java>
+   </target>
+
+   <target name="run-asynch-aspect" depends="compile">
+      <taskdef name="aopc" classname="org.jboss.aop.ant.AopC" classpathref="jboss.aop.classpath"/>
+      <taskdef name="annotationc" classname="org.jboss.aop.ant.AnnotationC" classpathref="jboss.aop.classpath"/>
+
+      <path id="annotationc.classpath">
+         <path location="${build.classes}"/>
+      </path>
+      <annotationc compilerclasspathref="javac.classpath" classpathref="annotationc.classpath" bytecode="true">
+         <src path="src/test/."/>
+      </annotationc>
+
+      <aopc compilerclasspathref="javac.classpath">
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+         <src path="${build.classes}"/>
+         <aoppath path="${source.test}/test/asynchronous/META-INF/jboss-aop.xml"/>
+      </aopc>
+
+      <junit printsummary="yes" fork="no" haltonfailure="yes">
+
+         <sysproperty key="jboss.aop.path" value="src/test/test/asynchronous/META-INF/jboss-aop.xml"/>
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+         <formatter type="plain"/>
+         <test fork="yes" name="test.asynchronous.JUnitTestAsynchronousAspects"/>
+      </junit>
+
+   </target>
+
+
+   <target name="run-readwritelock-aspect" depends="compile">
+      <taskdef name="aopc" classname="org.jboss.aop.ant.AopC" classpathref="jboss.aop.classpath"/>
+      <taskdef name="annotationc" classname="org.jboss.aop.ant.AnnotationC" classpathref="jboss.aop.classpath"/>
+
+      <path id="annotationc.classpath">
+         <path location="${build.classes}"/>
+      </path>
+      <annotationc compilerclasspathref="javac.classpath" classpathref="annotationc.classpath" bytecode="true">
+         <src path="src/test/."/>
+      </annotationc>
+
+      <aopc compilerclasspathref="javac.classpath">
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+         <src path="${build.classes}"/>
+         <aoppath path="${source.test}/test/patterns/readwritelock/META-INF/jboss-aop.xml"/>
+      </aopc>
+
+      <junit printsummary="yes" fork="no" haltonfailure="yes">
+
+         <sysproperty key="jboss.aop.path" value="src/test/test/patterns/readwritelock/META-INF/jboss-aop.xml"/>
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+         <formatter type="plain"/>
+         <test fork="yes" name="test.patterns.readwritelock.JUnitTestReadWriteLockAspects"/>
+      </junit>
+
+   </target>
+
+   <target name="run-dbc-aspect" depends="compile">
+      <taskdef name="aopc" classname="org.jboss.aop.ant.AopC" classpathref="jboss.aop.classpath"/>
+      <taskdef name="annotationc" classname="org.jboss.aop.ant.AnnotationC" classpathref="jboss.aop.classpath"/>
+
+      <path id="annotationc.classpath">
+         <path location="${build.classes}"/>
+      </path>
+      <annotationc compilerclasspathref="javac.classpath" classpathref="annotationc.classpath" bytecode="true">
+         <src path="src/test/."/>
+      </annotationc>
+
+      <aopc compilerclasspathref="javac.classpath">
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+         <src path="${build.classes}"/>
+         <aoppath path="${source.test}/test/dbc/META-INF/jboss-aop.xml"/>
+      </aopc>
+
+      <junit printsummary="yes" fork="no" haltonfailure="yes">
+
+         <sysproperty key="jboss.aop.path" value="src/test/test/dbc/META-INF/jboss-aop.xml"/>
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+         <formatter type="plain"/>
+         <test fork="yes" name="test.dbc.DbcTest"/>
+      </junit>
+
+   </target>
+
+</project>

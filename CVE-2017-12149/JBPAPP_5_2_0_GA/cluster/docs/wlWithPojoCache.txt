@@ -1,0 +1,21 @@
+WL http session fine-grained replication using JBossCache
+
+Goal:
+ - To use one single pluggable JBoss web clustering module to run JBoss, Tomcat (standalone), and Weblogic http session replication. Right now, both JBoss and Tomcat standalone has used the same module to perform session replication. Currently, we have options of using different replication granularity: SESSION, ATTRIBUTE, and FIELD where FIELD is the fine-grained replication using TreeCacheAop (aka POJO Cache). What is left is Weblogic one. Although Weblogic has itself a replication layer, use of JBossCache is still attractive because no expensive clustering licensing is needed!
+
+Possible steps need to be done:
+
+ - Weblogic has an option of allowing a user to specify a session persistence manager (to file, e.g.). This is where other caching solutions used to hook into WL. We should do the same using JBossCache. However, the exact steps need to be determined.
+
+ - Determine the necessary Manager interface that is needed to unify all 3 solutions. Currently, both in JBoss and Tomcat, we have a notion of Manager and Session interface. Session should be relatively standard. But Manager is Tomcat specific. We will need to investigate on the possibility for extension.
+
+ - Tomcat uses Valve to create the replication trigger. Need to find a way to do that in WL. How about filter?
+
+ - Determine the necessary configuration. Currently in JBoss, we allow to have useJK flag for mod_jk specific failover. Solution in WL should work the same. And so is the session replication granularity.
+
+ - JBossCache startup. Weblogic has a startup class that should allow JBossCache to start up as a singleton and for later lookup. Under JBoss, JBossCache is run as a MBean.
+
+ - Management attributes. Currently, we are developing JBoss Cache JMX attribute management in 1.3. We will also need to add http session replication management layer as well to be used by all 3 solutions.
+
+ - Performance benchmarking. When it is completed, we will need to conduct extensive benchmarking.
+

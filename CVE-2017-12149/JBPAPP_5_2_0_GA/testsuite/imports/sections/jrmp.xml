@@ -1,0 +1,78 @@
+<project name="tests-jrmp-jars">
+   <!-- jrmp test -->
+   <target name="_jars-jrmp">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build jrmp-comp-client.jar -->
+      <jar destfile="${build.lib}/jrmp-comp-client.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jrmp/interfaces/**"/>
+         </fileset>
+      </jar>
+      
+      <!-- build comp-client.jar -->
+      <jar destfile="${build.lib}/comp-client.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jrmp/ejb/Compression*.class"/>
+         </fileset>
+      </jar>
+      
+      <!-- build jrmp-comp.jar -->
+      <jar destfile="${build.lib}/jrmp-comp.sar">
+         <metainf dir="${build.resources}/jrmp/service-inf"/>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jrmp/ejb/Compression*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/test-configs/tomcat-ssl/conf">
+            <include name="localhost.keystore"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/jrmp-comp.jar">
+         <metainf dir="${build.resources}/jrmp/META-INF"/>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jrmp/interfaces/**"/>
+            <include name="org/jboss/test/jrmp/ejb/**"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="jrmp-comp.sar"/>
+         </fileset>
+      </jar>
+      
+      <!-- build jrmp-dl-client.jar -->
+      <jar destfile="${build.lib}/jrmp-dl-client.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/jrmp/interfaces/**"/>
+            <include name="org/jboss/test/jrmp/test/DynLoading*.class"/>
+            <include name="org/jboss/test/JBossTestCase.class"/>
+            <include name="org/jboss/test/JBossTestServices.class"/>
+         </fileset>
+      </jar>
+      
+      <!-- build jrmp-dl.jar -->
+      <jar destfile="${build.lib}/jrmp-dl.jar">
+         <metainf dir="${build.resources}/jrmp/META-INF">
+            <exclude name="jboss.xml"/>
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jrmp/interfaces/**"/>
+            <include name="org/jboss/test/jrmp/ejb/**"/>
+         </fileset>
+      </jar>
+      
+      <!-- build jrmp-dl.sar -->
+      <jar destfile="${build.lib}/jrmp-dl.sar">
+         <metainf dir="${build.resources}/jrmp/sar/META-INF"/>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jrmp/interfaces/IString.class"/>
+            <include name="org/jboss/test/jrmp/ejb/AString.class"/>
+            <include name="org/jboss/test/jrmp/mbean/**"/>
+         </fileset>
+      </jar>
+      <unjar src="${build.lib}/jrmp-dl.sar"
+         dest="${build.lib}/jrmp-dl-unpacked.sar"/>
+   </target>
+</project>

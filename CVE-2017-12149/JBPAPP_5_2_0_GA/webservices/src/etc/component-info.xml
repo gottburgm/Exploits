@@ -1,0 +1,26 @@
+<project name="jboss/jbossws-jboss50">
+  
+  <component id="jboss/jbossws-jboss50"
+    description="JBossWS container integration layer" 
+    version="@repository.id@"
+    licenseType="lgpl">
+    
+    <artifact id="jbossws-jboss50.jar"/>
+    <artifact id="jbossws-jboss50-container.jar"/>
+    <artifact id="jbossws-jboss50-resources.zip"/>
+    <artifact id="jbossws-jboss50-src.zip"/>
+    
+    <import componentref="jboss/jbossws-common">
+      <compatible version="@jbossws-common@"/>
+    </import>
+    <import componentref="jboss/jbossws-spi">
+      <compatible version="@jbossws-spi@"/>
+    </import>
+    
+    <export>
+      <include input="jbossws-jboss50.jar"/>
+    </export>
+    
+  </component>
+  
+</project>

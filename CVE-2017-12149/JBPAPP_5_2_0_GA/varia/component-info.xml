@@ -1,0 +1,70 @@
+<project name="varia-component-info">
+   <!-- ============================================================ -->
+   <!-- Varia                                                        -->
+   <!-- ============================================================ -->
+
+   <component id="varia"
+              module="contrib/varia"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="jboss-varia.jar"/>
+      <artifact id="bsh-deployer.jar"/>
+      <artifact id="mail-plugin.jar"/>
+      <artifact id="scheduler-plugin.jar"/>
+      <artifact id="scheduler-plugin-example.jar"/>
+      <artifact id="jboss-hsqldb.jar" filename="hsqldb.jar"/>
+      <artifact id="jboss-bean-deployer.jar"/>
+      <artifact id="hsqldb-plugin.jar"/>
+      <artifact id="autonumber-plugin.jar"/>
+      <artifact id="properties-plugin.jar"/>
+      <artifact id="bindingservice-plugin.jar"/>
+      <artifact id="jboss-monitoring.jar"/>
+
+      <artifact id="monitoring-service.xml" outputpath="etc"/>
+      <artifact id="mail-service.xml" outputpath="etc"/>
+      <artifact id="schedule-manager-service.xml" outputpath="etc"/>
+      <artifact id="scheduler-service.xml" outputpath="etc"/>
+      <artifact id="properties-service.xml" outputpath="etc"/>
+      <artifact id="web.xml" outputpath="resources/jmx"/>
+      <artifact id="jmx-console-web.xml" outputpath="resources/jmx"/>
+      <artifact id="snmp-adaptor.jar"/>
+      <artifact id="snmp-adaptor.sar" />
+      <artifact id="jmx-console.war"/>
+      <artifact id="juddi-service.sar"/>
+      <artifact id="httpha-invoker.sar" />
+
+      <artifact id="netboot.war"/>
+
+      <artifact id="jbossmq-httpil.sar"/>
+
+      <artifact id="counter-plugin.jar" />
+      <artifact id="deployment-service.jar"/>
+      <artifact id="deployment-service.sar" />
+      <artifact id="derby-plugin.jar" />
+      <artifact id="process-plugin.jar" />
+      <artifact id="foe-deployer-3.2.sar" />
+      <artifact id="statscollector.jar" />
+      <artifact id="persistent-service.sar" />
+      <artifact id="mbean-configurator.sar" />
+      <artifact id="http-invoker.sar" />
+      <artifact id="jbossmq-httpil.war"/>
+      <artifact id="loadbalancer.war"/>
+      <artifact id="loadbalancer.sar"/>
+      <artifact id="juddi-service.jar" />
+      <artifact id="jboss-juddiaxis.jar"/>
+      <artifact id="jbossjmx-ant.jar"/>
+      <artifact id="logging-monitor.jar"/>
+      <artifact id="kerneldir" artifacttype="dir" filename="kernel"/>
+      <artifact id="varia-jboss-service.xml" outputpath="resources/juddi" filename="jboss-service.xml"/>
+      <artifact id="juddi_create_db.ddl" outputpath="resources/juddi"/>
+      <artifact id="juddi_data.ddl" outputpath="resources/juddi"/>
+      <artifact id="juddi_drop_db.ddl" outputpath="resources/juddi"/>      
+      <export>
+         <include input="jboss-monitoring.jar"/>
+         <include input="deployment-service.jar"/>
+         <include input="autonumber-plugin.jar"/>
+         <include input="scheduler-plugin.jar"/>
+         <include input="properties-plugin.jar"/>
+      </export>
+   </component>
+</project>

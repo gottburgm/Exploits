@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+
+   <mbean code="org.jboss.test.util.mbean.SimpleService"
+      name="test:service=SimpleService">
+   </mbean>
+
+</server>

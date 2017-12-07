@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server>
+
+<server>
+
+  <mbean code="org.jboss.mx.server.registry.MbeanInfoDb" 
+         name="user:service=MBeanInfoDB"
+         xmbean-dd="MBeanInfoDB-xmbeandd.xml"/>  
+
+</server>

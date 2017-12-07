@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The Hypersonic embedded database JCA connection factory config
+$Id: calleridentity-ds.xml 69212 2008-01-22 20:39:20Z anil.saldhana@jboss.com $ -->
+
+<datasources>
+   <local-tx-datasource>
+      <jndi-name>CallerIdentityDS</jndi-name>
+      <use-java-context>false</use-java-context>
+      <connection-url>jdbc:hsqldb:mem:CallerIDDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <security-domain-and-application>CallerIdentityDSRealm</security-domain-and-application>
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+      <depends>jboss.security.tests:service=SecuritySpecLoginConfig</depends>
+   </local-tx-datasource>
+
+   <local-tx-datasource>
+      <jndi-name>ConfiguredIdentityDS</jndi-name>
+      <use-java-context>false</use-java-context>
+      <connection-url>jdbc:hsqldb:mem:ConfiguredIdentityDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <security-domain>ConfiguredIdentityDSRealm</security-domain>
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+      <depends>jboss.security.tests:service=SecuritySpecLoginConfig</depends>
+   </local-tx-datasource>
+
+   <local-tx-datasource>
+      <jndi-name>RunAsIdentityDS</jndi-name>
+      <connection-url>jdbc:hsqldb:mem:RunAsIdentityDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <!-- The default login and password used for run-as -->
+      <user-name>sa</user-name>
+      <password></password>
+      <security-domain-and-application>RunAsIdentityDSRealm</security-domain-and-application>
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+      <depends>jboss.security.tests:service=SecuritySpecLoginConfig</depends>
+   </local-tx-datasource>
+
+   <mbean code="org.jboss.security.auth.login.DynamicLoginConfig"
+         name="jboss.security.tests:service=SecuritySpecLoginConfig">
+      <attribute name="AuthConfig">jca-login-config.xml</attribute>
+      <depends optional-attribute-name="LoginConfigService">
+         jboss.security:service=XMLLoginConfig
+      </depends>
+      <depends optional-attribute-name="SecurityManagerService">
+         jboss.security:service=JaasSecurityManager
+      </depends>
+   </mbean>
+</datasources>

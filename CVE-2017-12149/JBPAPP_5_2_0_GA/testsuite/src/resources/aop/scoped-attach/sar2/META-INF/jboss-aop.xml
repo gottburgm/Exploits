@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop xmlns="urn:jboss:aop-beans:1.0">
+	<loader-repository>aop.loading:loader=scope2</loader-repository>
+	
+   <interceptor class="org.jboss.test.aop.scopedattach.ScopedInterceptor" scope="PER_INSTANCE">
+      <attribute name="value">12</attribute>
+   </interceptor>
+   <interceptor class="org.jboss.test.aop.scopedattach.ScopedPJInterceptor" scope="PER_JOINPOINT">
+      <attribute name="value">12</attribute>
+   </interceptor>
+   <interceptor class="org.jboss.test.aop.scopedattach.ScopedPCInterceptor" scope="PER_CLASS">
+      <attribute name="value">12</attribute>
+   </interceptor>
+   <interceptor class="org.jboss.test.aop.scopedattach.ScopedPCJInterceptor" scope="PER_CLASS_JOINPOINT">
+      <attribute name="value">12</attribute>
+   </interceptor>   
+   <aspect class="org.jboss.test.aop.scopedattach.ScopedAspect">
+      <attribute name="value">22</attribute>
+   </aspect>
+   <aspect factory="org.jboss.test.aop.scopedattach.ScopedAspectFactory"/>
+   <stack name="stuff">
+      <advice aspect="org.jboss.test.aop.scopedattach.ScopedAspectFactory" name="test"/>
+      <interceptor-ref name="org.jboss.test.aop.scopedattach.ScopedPJInterceptor"/>
+      <interceptor-ref name="org.jboss.test.aop.scopedattach.ScopedPCInterceptor"/>
+      <interceptor-ref name="org.jboss.test.aop.scopedattach.ScopedPCJInterceptor"/>
+   </stack>
+
+   <bind pointcut="all(org.jboss.test.aop.scopedattach.POJO)">
+      <interceptor-ref name="org.jboss.test.aop.scopedattach.ScopedInterceptor"/>
+      <advice aspect="org.jboss.test.aop.scopedattach.ScopedAspect" name="test"/>
+      <stack-ref name="stuff"/>
+   </bind>
+   
+   <metadata tag="test" class="org.jboss.test.aop.scopedattach.POJO">
+      <constructor expr="POJO()">
+         <data>ctor2</data>
+      </constructor>
+      <method expr="void method(..)">
+         <data>method2</data>
+      </method>
+   </metadata>
+
+   <metadata-loader tag="custom" class="org.jboss.test.aop.scopedattach.ScopedMetadataLoader"/>
+	<metadata tag="custom" class="org.jboss.test.aop.scopedattach.POJO">
+	      <data>custom2</data>
+	</metadata>
+
+   <!-- Make sure we can see global aspects -->
+   <metadata tag="transaction" class="org.jboss.test.aop.scopedattach.POJO">
+      <method name="method">
+         <trans-attribute>Required</trans-attribute>
+      </method>
+   </metadata>
+</aop>

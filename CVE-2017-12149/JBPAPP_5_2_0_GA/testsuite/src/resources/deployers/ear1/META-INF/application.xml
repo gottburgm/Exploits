@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<application version="1.4"
+             xmlns="http://java.sun.com/xml/ns/j2ee" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+                                 http://java.sun.com/xml/ns/j2ee/application_1_4.xsd"
+>
+
+   <display-name>EAR Deployment Test</display-name>
+
+   <module><ejb>testdeployers-bean1ejb.jar</ejb></module>
+   <module><ejb>testdeployers-client1.jar</ejb></module>
+   <module><connector>testdeployers-mcf1.rar</connector></module>
+   <module>
+      <web>
+         <web-uri>testdeployers-web1.war</web-uri>
+        <context-root>/testdeployers-web1</context-root>
+      </web>
+   </module>
+   <module><java>testdeployers-mbean1.sar</java></module>
+
+</application>
+

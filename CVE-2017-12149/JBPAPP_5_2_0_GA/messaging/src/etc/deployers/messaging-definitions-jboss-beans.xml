@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	Mappings for jms destinations to managed objects
+	$Id:$
+-->
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+  <!-- MODefinition for the QueueService class -->
+  <bean name="QueueMODefinition" class="org.jboss.jms.server.destination.QueueMODefinition">
+    <constructor>
+      <parameter><inject bean="ManagedObjectFactory" /></parameter>
+    </constructor>
+  </bean>
+  <!-- MODefinition for the legacy Queue class -->
+  <bean name="LegacyQueueMODefinition" class="org.jboss.jms.server.destination.LegacyQueueMODefinition">
+    <constructor>
+      <parameter><inject bean="ManagedObjectFactory" /></parameter>
+    </constructor>
+  </bean>
+
+  <!-- MODefinition for the TopicService class -->
+  <bean name="TopicMODefinition" class="org.jboss.jms.server.destination.TopicMODefinition">
+    <constructor>
+      <parameter><inject bean="ManagedObjectFactory" /></parameter>
+    </constructor>
+  </bean>
+  <!-- MODefinition for the legacy Topic class -->
+  <bean name="LegacyTopicMODefinition" class="org.jboss.jms.server.destination.LegacyTopicMODefinition">
+    <constructor>
+      <parameter><inject bean="ManagedObjectFactory" /></parameter>
+    </constructor>
+  </bean>  
+
+  <!-- MODefinition for the ServerPeer class -->
+  <bean name="ServerPeerMODefinition" class="org.jboss.jms.server.ServerPeerMODefinition">
+    <constructor>
+      <parameter><inject bean="ManagedObjectFactory" /></parameter>
+    </constructor>
+  </bean>
+</deployment>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mbean PUBLIC "-//JBoss//DTD JBOSS XMBEAN 1.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_xmbean_1_0.dtd">
+
+<mbean>
+
+  <description>A Service for managing the persistence engine for the MBean Registry.</description>
+   
+  <descriptors>
+    <persistence 
+      persistPolicy="OnTimer"
+      persistLocation="..\xmbean-db\mbean-info"
+      persistPeriod="60000"/>
+    <persistence-manager value="org.jboss.mx.persistence.MbeanInfoDbPm"/>
+  </descriptors>
+  
+   <class>org.jboss.mx.server.registry.MbeanInfoDb</class>
+  
+   <!-- management -->
+      
+   <operation impact="ACTION">
+     <description>Adds an MBean to the Database.</description>
+      <name>add</name>
+      <parameter>
+      	<description>
+      	  The Object Name of the MBean to be added.  The 
+      	  MBean should already have been registered.  This operation is primarily for the internal
+      	  use of the server - specifically, the registry.  Please see the documentation for the 
+      	  server's registration mechanism if you are interested in making MBeans with persistent
+      	  MBean Info.
+      	</description>
+      	<name>objectName</name>
+      	<type>javax.management.ObjectName</type>
+      </parameter>
+      <return-type>void</return-type>
+   </operation>
+
+   <operation impact="ACTION">
+     <description>Adds an MBean to the Database.</description>
+      <name>add</name>
+      <parameter>
+      	<description>
+      	  The Object Names of the MBeans to be added.  The 
+      	  MBean should already have been registered.  This operation is primarily for the internal
+      	  use of the server - specifically, the registry.  Please see the documentation for the 
+      	  server's registration mechanism if you are interested in making MBeans with persistent
+      	  MBean Info.
+      	</description>
+      	<name>objectNames</name>
+      	<type>java.util.Vector</type>
+      </parameter>
+      <return-type>void</return-type>
+   </operation>
+
+</mbean>
+
+
+
+
+

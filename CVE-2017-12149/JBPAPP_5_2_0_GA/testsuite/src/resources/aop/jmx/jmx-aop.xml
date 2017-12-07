@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<aop xmlns="urn:jboss:aop-beans:1.0">
+   <introduction class="org.jboss.test.aop.jmx.IntrospectedMBean">
+      <mixin>
+         <interfaces>javax.management.DynamicMBean</interfaces>
+         <class>org.jboss.aspects.jmx.JmxIntrospectingMixin</class>
+         <construction>new org.jboss.aspects.jmx.JmxIntrospectingMixin(this)</construction>
+      </mixin>
+   </introduction>
+</aop>

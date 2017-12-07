@@ -1,0 +1,138 @@
+<project name="tests-naming-jars">
+ <!-- naming test -->
+   <target name="_jars-naming">
+      <mkdir dir="${build.lib}"/>
+      <mkdir dir="${build.lib}/subdir"/>
+
+      <!-- build naming.jar -->
+      <jar destfile="${build.lib}/naming.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/naming/ejb/**"/>
+            <include name="org/jboss/test/naming/interfaces/**"/>
+            <include name="org/jboss/test/util/Debug.class"/>
+            <include name="org/jboss/test/util/ejb/*"/>
+         </fileset>
+         <fileset dir="${build.resources}/naming">
+            <include name="JndiConfig.bsh"/>
+         </fileset>
+         <zipfileset dir="${build.resources}/naming" prefix="security">
+            <include name="*.properties"/>
+         </zipfileset>
+         <zipfileset src="${junit.junit.lib}/junit.jar">
+            <patternset refid="ejbrunner.set"/>
+         </zipfileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar">
+            <patternset refid="jboss.test.set"/>
+         </zipfileset>
+         <fileset dir="${build.resources}/naming/jar">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+         <fileset dir="${build.resources}/naming/services">
+            <include name="jaas-config.xml"/>
+            <include name="login-config-service.xml"/>
+         </fileset>
+      </jar>
+
+      <!-- build remote-naming.jar -->
+      <jar destfile="${build.lib}/remote-naming.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/naming/ejb/**"/>
+            <include name="org/jboss/test/naming/interfaces/**"/>
+            <include name="org/jboss/test/util/Debug.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/remote-naming">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+
+      <!-- build naminga.jar -->
+      <jar destfile="${build.lib}/subdir/naminga.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/naming/ejb/**"/>
+            <include name="org/jboss/test/naming/interfaces/**"/>
+            <include name="org/jboss/test/util/Debug.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/naming/ear/a">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </jar>
+
+      <!-- build namingb.jar -->
+      <jar destfile="${build.lib}/namingb.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/naming/ejb/**"/>
+            <include name="org/jboss/test/naming/interfaces/**"/>
+            <include name="org/jboss/test/util/Debug.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/naming/ear/b">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </jar>
+
+      <!-- build naming.ear -->
+      <jar destfile="${build.lib}/naming.ear">
+         <fileset dir="${build.lib}">
+            <include name="subdir/naminga.jar"/>
+            <include name="namingb.jar"/>
+         </fileset>
+         <fileset dir="${build.resources}/naming/ear">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </jar>
+
+      <jar destfile="${build.lib}/naming-readonly.sar">
+         <metainf dir="${build.resources}/naming/services">
+            <include name="jboss-service.xml"/>
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/naming/interceptors/*"/>
+         </fileset>
+      </jar>
+
+      <!-- A pooled invoker test sar -->
+      <jar destfile="${build.lib}/naming-pooled.sar">
+         <zipfileset dir="${build.resources}/naming/services"
+            fullpath="META-INF/jboss-service.xml">
+            <include name="pooled-service.xml"/>
+         </zipfileset>
+         <fileset dir="${build.resources}/naming/services">
+            <include name="naming-xmbean.xml"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/naming/interceptors/*"/>
+         </fileset>
+      </jar>
+   	
+   	   <!-- ExternalContext sar -->
+   	   <jar destfile="${build.lib}/extcontext.sar">
+   	      <zipfileset dir="${build.resources}/naming/services"
+   	          fullpath="META-INF/jboss-service.xml">
+   	          <include name="externalcontext-service.xml"/>
+   	      </zipfileset>
+   	      <fileset dir="${build.classes}">
+   	         <include name="org/jboss/test/naming/factory/*"/>
+   	      </fileset>
+   	  </jar>     
+    
+      <jar destfile="${build.lib}/naming-restart.sar">
+         <zipfileset dir="${build.resources}/naming/restart"
+            fullpath="META-INF/jboss-beans.xml">
+            <include name="naming-restart-jboss-beans.xml"/>
+         </zipfileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/naming/restart/*"/>
+         </fileset>
+      </jar>
+      <war warfile="${build.lib}/naming-util.war"
+         webxml="${build.resources}/naming/binding-helper/WEB-INF/web.xml">
+         <classes dir="${build.classes}">
+           <include name="org/jboss/test/naming/util/*.class"/>
+         </classes>
+      </war>
+   	
+   </target>
+</project>

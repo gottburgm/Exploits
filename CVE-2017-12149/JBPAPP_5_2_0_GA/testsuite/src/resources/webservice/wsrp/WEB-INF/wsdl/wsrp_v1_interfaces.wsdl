@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="urn:oasis:names:tc:wsrp:v1:intf"
+                  xmlns:types="urn:oasis:names:tc:wsrp:v1:types"
+                  xmlns:intf="urn:oasis:names:tc:wsrp:v1:intf"
+
+                  xmlns="http://schemas.xmlsoap.org/wsdl/"
+
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  >
+
+  <wsdl:types>
+    <schema targetNamespace="urn:oasis:names:tc:wsrp:v1:intf"
+            xmlns="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified">
+
+      <import namespace="urn:oasis:names:tc:wsrp:v1:types" schemaLocation="wsrp_v1_types.xsd"/>
+
+    </schema>
+  </wsdl:types>
+
+<!-- - - - - - - - - - - -->
+<!-- Operations messages -->
+<!-- - - - - - - - - - - -->
+
+  <wsdl:message name="getServiceDescription">
+    <wsdl:part  name="getServiceDescription" element="types:getServiceDescription"/>
+  </wsdl:message>
+  <wsdl:message name="getServiceDescriptionResponse">
+    <wsdl:part  name="getServiceDescriptionResponse" element="types:getServiceDescriptionResponse"/>
+  </wsdl:message>
+
+
+  <wsdl:portType name="WSRP_v1_ServiceDescription_PortType">
+    <wsdl:operation name="getServiceDescription">
+      <wsdl:input  message="intf:getServiceDescription"  name="getServiceDescription"/>
+      <wsdl:output message="intf:getServiceDescriptionResponse" name="getServiceDescriptionResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+</wsdl:definitions>

@@ -1,0 +1,55 @@
+<project name="tests-tx-jars">
+<!-- txiiop test -->
+   <target name="_jars-txiiop">
+      <mkdir dir="${build.lib}"/>
+
+      <!-- build txiioptest.jar -->
+      <jar destfile="${build.lib}/txiioptest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/txiiop/interfaces/**"/>
+            <include name="org/jboss/test/txiiop/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/txiiop">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+
+      <!-- build txiiop.jar -->
+      <jar destfile="${build.lib}/txiiop.jar">
+         <metainf dir="${build.resources}/txiiop/META-INF"/>
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/txiiop/interfaces/**"/>
+            <include name="org/jboss/test/txiiop/ejb/**"/>
+         </fileset>
+      </jar>
+   </target>
+
+   <!-- EJB Tx Timer Service test -->
+   <target name="_jars-txtimer">
+      <!-- build ejb-txtimer.jar -->
+      <jar destfile="${build.lib}/ejb-txtimer.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/txtimer/ejb/**"/>
+           <include name="org/jboss/test/txtimer/interfaces/**"/>
+           <include name="org/jboss/test/txtimer/support/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/txtimer/">
+            <include name="META-INF/**"/>
+         </fileset>
+      </jar>
+      <!-- build ejb-txtimer-scoped.jar -->
+      <jar destfile="${build.lib}/ejb-txtimer-scoped.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/txtimer/ejb/TimerSessionBean.class"/>
+            <include name="org/jboss/test/txtimer/interfaces/TimerSession**"/>
+            <include name="org/jboss/test/txtimer/support/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/txtimer/scoped">
+            <include name="META-INF/**"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

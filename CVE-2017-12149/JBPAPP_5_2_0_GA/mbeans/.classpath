@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main"/>
+	<classpathentry kind="src" output="output/eclipse-test-classes" path="src/tests"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="src" path="/j2se"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/apache-bcel/lib/bcel.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/dom4j/lib/dom4j.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jbossxb/lib/jboss-xml-binding.jar" sourcepath="/thirdparty/jboss/jbossxb/lib/jboss-xml-binding-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/apache-log4j/lib/log4j.jar" sourcepath="/thirdparty/apache-log4j/lib/log4j-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/junit/lib/junit.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/test/lib/jboss-test.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/common-beans/lib/jboss-common-beans.jar"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

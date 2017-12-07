@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- A login-config.xml example that uses the extended schema and jbossxb
+to marshall non-trival module-options.
+-->
+<policy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns="http://www.jboss.org/j2ee/schema/jaas"
+   targetNamespace="http://www.jboss.org/j2ee/schema/jaas"
+   >
+
+   <application-policy name="ConfiguredIdentityDSRealm">
+      <authentication>
+         <login-module code="org.jboss.resource.security.ConfiguredIdentityLoginModule"
+            flag="required">
+            <module-option name="principal">fixedcaller</module-option>
+            <module-option name="userName">sa</module-option>
+            <module-option name="password"></module-option>
+            <module-option name="managedConnectionFactoryName">jboss.jca:service=LocalTxCM,name=ConfiguredIdentityDS</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+
+   <application-policy name="CallerIdentityDSRealm">
+      <authentication>
+         <login-module code="org.jboss.resource.security.CallerIdentityLoginModule" flag="required">
+            <module-option name="userName">sa</module-option>
+            <module-option name="password"></module-option>
+            <module-option name="managedConnectionFactoryName">jboss.jca:service=LocalTxCM,name=CallerIdentityDS</module-option>
+         </login-module>
+
+         <login-module code="org.jboss.security.auth.spi.XMLLoginModule" flag="required">
+            <module-option name="userInfo">
+               <lm:users xmlns:lm="http://www.jboss.org/j2ee/schemas/XMLLoginModule">
+                  <lm:user name="ejbcaller" password="ejbcallerpw">
+                     <lm:role name="UseCallerForAuth"/>
+                     <lm:role name="UseConfiguredForAuth"/>
+                     <lm:role name="CallerIdentityUser"/>
+                  </lm:user>
+                  <lm:user name="scott" password="echoman">
+                     <lm:role name="Echo"/>
+                     <lm:role name="ProjectUser"/>
+                     <lm:role name="callerScott" group="CallerPrincipal"/>
+                  </lm:user>
+                  <lm:user name="invoker" password="invoker">
+                     <lm:role name="HttpInvoker"/>
+                  </lm:user>
+               </lm:users>
+            </module-option>
+            <module-option name="unauthenticatedIdentity">guest</module-option>
+         </login-module>
+
+      </authentication>
+   </application-policy>
+
+   <application-policy name="RunAsIdentityDSRealm">
+      <authentication>
+         <login-module code="org.jboss.resource.security.ConfiguredIdentityLoginModule"
+            flag="required">
+            <module-option name="principal">runascaller</module-option>
+            <module-option name="userName">sa</module-option>
+            <module-option name="password"></module-option>
+            <module-option name="managedConnectionFactoryName">jboss.jca:service=LocalTxCM,name=RunAsIdentityDS</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+
+   <application-policy name="RunAsIdentityFSRealm">
+      <authentication>
+         <login-module code="org.jboss.resource.security.CallerIdentityLoginModule" flag="required">
+            <module-option name="userName">sa</module-option>
+            <module-option name="password"></module-option>
+            <module-option name="addRunAsRoles">true</module-option>
+            <module-option name="managedConnectionFactoryName">jboss.jca:service=NoTxCM,name=RunAsIdentityFS</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+</policy>

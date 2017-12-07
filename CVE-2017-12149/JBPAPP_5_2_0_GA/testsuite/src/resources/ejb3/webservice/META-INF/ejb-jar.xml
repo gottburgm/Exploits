@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns="http://java.sun.com/xml/ns/javaee" 
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+   version="3.0" 
+   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd">
+   <enterprise-beans>
+      <session>
+         <ejb-name>EchoServiceRefBean</ejb-name>
+         <service-ref>
+            <service-ref-name>endpoint</service-ref-name>
+            <service-interface>javax.xml.ws.Service</service-interface>
+            <wsdl-file>META-INF/wsdl/WebServiceContextEndpointBean.wsdl</wsdl-file>
+            <injection-target>
+               <injection-target-class>org.jboss.test.ejb3.webservice.EchoServiceRefBean</injection-target-class>
+               <injection-target-name>endpoint</injection-target-name>
+            </injection-target>
+         </service-ref>
+      </session>
+   </enterprise-beans>
+</ejb-jar>

@@ -1,0 +1,16 @@
+<aop xmlns="urn:jboss:aop-beans:1.0">
+	<interceptor class="org.jboss.test.aop.deployers.xml.SomeInterceptor"/>
+	<interceptor name="someinterceptor" class="org.jboss.test.aop.deployers.xml.SomeInterceptor"/>
+	<aspect class="org.jboss.test.aop.deployers.xml.SomeAspect"/>
+	<interceptor name="someaspect" class="org.jboss.test.aop.deployers.xml.SomeAspect"/>
+	
+	<bind pointcut="execution(* org.jboss.test.aop.deployers.xml.POJO->someMethod())">
+	   <advice aspect="org.jboss.test.aop.deployers.xml.SomeAspect" name="invoke"/>
+	   <interceptor-ref name="org.jboss.test.aop.deployers.xml.SomeInterceptor"/>
+	</bind>
+	
+	<bind pointcut="execution(void org.jboss.test.aop.deployers.xml.POJO->someMethod())">
+	   <advice aspect="someaspect" name="invoke"/>
+	   <interceptor-ref name="someinterceptor"/>
+	</bind>
+</aop>

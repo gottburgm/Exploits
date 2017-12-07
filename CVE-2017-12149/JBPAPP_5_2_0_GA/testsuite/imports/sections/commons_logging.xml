@@ -1,0 +1,27 @@
+<project name="tests-commons_logging-jars">
+   <property name="jbpapp6523" value="org/jboss/test/commons_logging/jbpapp6523"/>
+
+   <target name="_jars-commons_logging">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- dummy-logger.jar -->
+      <jar destfile="${build.lib}/dummy-log.jar">
+         <fileset dir="${build.classes}">
+	    <include name="${jbpapp6523}/war/DummyLog.class"/>
+         </fileset>
+      </jar>
+      
+      <!-- jbpapp6523.war -->
+      <war warfile="${build.lib}/jbpapp6523.war"
+	   webxml="${build.resources}/${jbpapp6523}/war/WEB-INF/web.xml">
+	 <classes dir="${build.resources}/${jbpapp6523}/war/WEB-INF/classes"/>
+	 <lib dir="${build.resources}/${jbpapp6523}/war/WEB-INF/lib"/>
+         <lib dir="${build.lib}">
+            <include name="dummy-log.jar"/>
+         </lib>
+	 <fileset dir="${build.resources}/${jbpapp6523}/war">
+	   <include name="index.jsp"/>
+	 </fileset>
+      </war>      
+   </target>
+</project>

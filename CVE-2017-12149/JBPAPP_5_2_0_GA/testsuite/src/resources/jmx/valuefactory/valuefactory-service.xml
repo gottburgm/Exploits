@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+
+	<mbean code="org.jboss.test.jmx.valuefactory.MBean1" 
+	       name="jboss.test:service=ValueFactoryInjectionTestSource"/>
+
+	<mbean code="org.jboss.test.jmx.valuefactory.MBean2" 
+	       name="jboss.test:service=ValueFactoryInjectionTestTarget">
+	       
+	   <attribute name="FromPojo">
+	      <value-factory bean="ValueFactoryInjectionTestSource" method="add">
+	         <parameter>1</parameter>
+	         <parameter>2</parameter>
+	      </value-factory>
+	   </attribute>
+	       
+	   <attribute name="FromMBean">
+	      <value-factory bean="jboss.test:service=ValueFactoryInjectionTestSource" method="add">
+	         <parameter class="int">3</parameter>
+	         <parameter class="java.lang.Integer">4</parameter>
+	      </value-factory>
+	   </attribute>
+	       
+	   <attribute name="FromDefault">
+	      <value-factory bean="ValueFactoryInjectionTestSource" method="noReturn" default="5"/>
+	   </attribute>
+	   
+	</mbean>
+	
+</server>

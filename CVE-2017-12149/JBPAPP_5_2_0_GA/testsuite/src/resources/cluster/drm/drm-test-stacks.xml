@@ -1,0 +1,69 @@
+<!--
+  JGroups protocol stacks definitions used by DRMTestCase.
+  Author: Brian Stansberry
+-->
+<protocol_stacks>        
+    
+    <stack name="tunnel1"
+           description="Used with a GossipRouter">
+        <config>
+            <TUNNEL singleton_name="tunnel1" router_port="12001" router_host="127.0.0.1"/>
+            <PING timeout="2000"
+                  num_initial_members="3"
+                  gossip_refresh="10000"
+                  gossip_host="127.0.0.1"
+                  gossip_port="12001"/>
+            <MERGE2 max_interval="20000" min_interval="5000"/>
+            <FD_SOCK/>
+            <FD timeout="2000" max_tries="3" shun="true"/>
+            <VERIFY_SUSPECT timeout="1500"/>
+            <pbcast.NAKACK use_mcast_xmit="false" gc_lag="0"
+                           retransmit_timeout="300,600,1200,2400,4800"
+                           discard_delivered_msgs="true"/>
+            <UNICAST timeout="300,600,1200,2400,3600"/>
+            <pbcast.STABLE stability_delay="1000" desired_avg_gossip="5000"
+                           max_bytes="400000"/>
+            <pbcast.GMS print_local_addr="true" join_timeout="3000"
+                        shun="false"
+                        view_bundling="true"
+                        view_ack_collection_timeout="5000"/>
+            <FC max_credits="2000000" min_threshold="0.10"/>
+            <FRAG2 frag_size="60000"/>
+            <pbcast.STATE_TRANSFER/>
+            <pbcast.FLUSH timeout="0"/>
+        </config>
+    </stack>        
+    
+    <stack name="tunnel2"
+           description="Used with a GossipRouter">
+        <config>
+            <TUNNEL singleton_name="tunnel2" router_port="12001" router_host="127.0.0.1"/>
+            <PING timeout="2000"
+                  num_initial_members="3"
+                  gossip_refresh="10000"
+                  gossip_host="127.0.0.1"
+                  gossip_port="12001"/>
+            <MERGE2 max_interval="20000" min_interval="5000"/>
+            <FD_SOCK/>
+            <FD timeout="2000" max_tries="3" shun="true"/>
+            <VERIFY_SUSPECT timeout="1500"/>
+            <pbcast.NAKACK use_mcast_xmit="false" gc_lag="0"
+                           retransmit_timeout="300,600,1200,2400,4800"
+                           discard_delivered_msgs="true"/>
+            <UNICAST timeout="300,600,1200,2400,3600"/>
+            <pbcast.STABLE stability_delay="1000" desired_avg_gossip="5000"
+                           max_bytes="400000"/>
+            <pbcast.GMS print_local_addr="true" join_timeout="3000"
+                        shun="false"
+                        view_bundling="true"
+                        view_ack_collection_timeout="5000"/>
+            <FC max_credits="2000000" min_threshold="0.10"/>
+            <FRAG2 frag_size="60000"/>
+            <pbcast.STATE_TRANSFER/>
+            <pbcast.FLUSH timeout="0"/>
+        </config>
+    </stack>
+
+</protocol_stacks>
+
+

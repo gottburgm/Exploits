@@ -1,0 +1,19 @@
+<datasources>   
+   <tx-connection-factory>
+      <jndi-name>XAWithTrackConnectionByTx</jndi-name>		
+      <xa-transaction/>
+      <track-connection-by-tx/>
+   </tx-connection-factory>	
+   <tx-connection-factory>
+      <jndi-name>DefaultXA</jndi-name>		
+      <xa-transaction/>
+   </tx-connection-factory>
+   <tx-connection-factory>
+      <jndi-name>XAWithInterleaving</jndi-name>		
+      <xa-transaction/>
+      <interleaving/>
+   </tx-connection-factory>
+   <tx-connection-factory>
+      <jndi-name>Local</jndi-name>		
+   </tx-connection-factory>	
+</datasources>

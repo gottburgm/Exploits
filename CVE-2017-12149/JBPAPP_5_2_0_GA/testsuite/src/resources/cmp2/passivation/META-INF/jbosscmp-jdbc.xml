@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jbosscmp-jdbc PUBLIC "-//JBoss//DTD JBOSSCMP-JDBC 3.2//EN" "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_2.dtd">
+
+<jbosscmp-jdbc>
+   <defaults>
+   </defaults>
+
+   <enterprise-beans>
+
+     <!--
+       To add beans that you have deployment descriptor info for, add
+       a file to your XDoclet merge directory called jbosscmp-jdbc-beans.xml
+       that contains the <entity></entity> markup for those beans.
+     -->
+
+      <entity>
+         <ejb-name>RapidlyPassivatedEntity</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+
+         <cmp-field>
+            <field-name>data</field-name>
+
+        </cmp-field>
+
+	<unknown-pk>
+		<unknown-pk-class>java.lang.String</unknown-pk-class>
+	</unknown-pk>
+	<entity-command name="key-generator">
+	</entity-command>
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+   </enterprise-beans>
+
+</jbosscmp-jdbc>

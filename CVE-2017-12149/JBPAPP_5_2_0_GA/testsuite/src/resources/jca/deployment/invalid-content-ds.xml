@@ -1,0 +1,14 @@
+<datasources>
+   <local-tx-datasource>
+      <use-java-context>false</use-java-context>
+      <connection-url>jdbc:hsqldb:mem:RemoteDSDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <application-managed-security />
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+   	  <track-connection-by-tx/>
+   	  <no-tx-separate-pools/>
+   	  <use-strict-min/>   		
+   </local-tx-datasource>
+</datasources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mbean PUBLIC
+   "-//JBoss//DTD JBOSS XMBEAN 1.1//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_xmbean_1_1.dtd"
+[ 
+   <!ENTITY operations SYSTEM "operations.ent"> 
+]>
+<!-- $Id: xmbean.xml 38441 2005-11-23 11:06:59Z dimitris $ -->
+<mbean>
+   <description>
+      JNDIView Service. List deployed application java:comp namespaces, 
+      the java: namespace as well as the global InitialContext JNDI namespace.
+   </description>
+   <class>org.jboss.naming.JNDIView</class>
+   &defaultAttributes;
+   &operations;
+   &defaultOperations;   			
+</mbean>

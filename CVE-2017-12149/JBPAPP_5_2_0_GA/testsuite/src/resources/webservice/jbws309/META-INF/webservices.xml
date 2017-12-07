@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<webservices xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:impl="http://org.jboss.test.webservice/jbws309"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://www.ibm.com/webservices/xsd/j2ee_web_services_1_1.xsd"
+  version="1.1">
+
+  <webservice-description>
+    <webservice-description-name>OrganizationService</webservice-description-name>
+    <wsdl-file>META-INF/wsdl/OrganizationService.wsdl</wsdl-file>
+    <jaxrpc-mapping-file>META-INF/jaxrpc-mapping.xml</jaxrpc-mapping-file>
+    <port-component>
+      <port-component-name>RoleSecured</port-component-name>
+      <wsdl-port>impl:RoleSecuredPort</wsdl-port>
+      <service-endpoint-interface>org.jboss.test.webservice.jbws309.Organization</service-endpoint-interface>
+      <service-impl-bean>
+        <ejb-link>RoleSecuredSLSB</ejb-link>
+      </service-impl-bean>
+    </port-component>
+    <port-component>
+      <port-component-name>BasicSecured</port-component-name>
+      <wsdl-port>impl:BasicSecuredPort</wsdl-port>
+      <service-endpoint-interface>org.jboss.test.webservice.jbws309.Organization</service-endpoint-interface>
+      <service-impl-bean>
+        <ejb-link>BasicSecuredSLSB</ejb-link>
+      </service-impl-bean>
+    </port-component>
+  </webservice-description>
+</webservices>

@@ -1,0 +1,6 @@
+output
+build.log
+.settings
+run.tstamp
+junit191723717.properties
+junit*.properties

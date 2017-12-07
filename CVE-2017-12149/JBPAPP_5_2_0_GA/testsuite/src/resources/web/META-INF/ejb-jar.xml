@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN"
+   "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar>
+   <description>WebApp Integration Tests</description>
+
+   <enterprise-beans>
+      <session>
+         <description>Referenced Bean0</description>
+         <ejb-name>ENCBean0</ejb-name>
+         <home>org.jboss.test.web.interfaces.StatelessSessionHome</home>
+         <remote>org.jboss.test.web.interfaces.StatelessSession</remote>
+         <local-home>org.jboss.test.web.interfaces.StatelessSessionLocalHome</local-home>
+         <local>org.jboss.test.web.interfaces.StatelessSessionLocal</local>
+         <ejb-class>org.jboss.test.web.ejb.StatelessSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      <session>
+         <description>Referenced Bean1</description>
+         <ejb-name>ENCBean1</ejb-name>
+         <home>org.jboss.test.web.interfaces.StatelessSessionHome</home>
+         <remote>org.jboss.test.web.interfaces.StatelessSession</remote>
+         <local-home>org.jboss.test.web.interfaces.StatelessSessionLocalHome</local-home>
+         <local>org.jboss.test.web.interfaces.StatelessSessionLocal</local>
+         <ejb-class>org.jboss.test.web.ejb.StatelessSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      <session>
+         <description>A secured EJB</description>
+         <ejb-name>SecuredEJB</ejb-name>
+         <home>org.jboss.test.web.interfaces.StatelessSessionHome</home>
+         <remote>org.jboss.test.web.interfaces.StatelessSession</remote>
+         <local-home>org.jboss.test.web.interfaces.StatelessSessionLocalHome</local-home>
+         <local>org.jboss.test.web.interfaces.StatelessSessionLocal</local>
+         <ejb-class>org.jboss.test.web.ejb.StatelessSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+
+      <session>
+         <description>A secured EJB used to test run-as behavior</description>
+         <ejb-name>UnsecureRunAsServletWithPrincipalNameTarget</ejb-name>
+         <local-home>org.jboss.test.web.interfaces.RunAsTargetLocalHome</local-home>
+         <local>org.jboss.test.web.interfaces.RunAsTargetLocal</local>
+         <ejb-class>org.jboss.test.web.ejb.RunAsTargetBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+         <env-entry>
+            <description>The expected run-as principl name</description>
+            <env-entry-name>runAsName</env-entry-name>
+            <env-entry-type>java.lang.String</env-entry-type>
+            <env-entry-value>UnsecureRunAsServletWithPrincipalNamePrincipal</env-entry-value>
+         </env-entry>
+         <env-entry>
+            <description>The expected run-as principl roles</description>
+            <env-entry-name>runAsRoles</env-entry-name>
+            <env-entry-type>java.lang.String</env-entry-type>
+            <env-entry-value>InternalUser</env-entry-value>
+         </env-entry>
+      </session>
+      <session>
+         <description>A secured EJB used to test run-as behavior</description>
+         <ejb-name>UnsecureRunAsServletWithPrincipalNameAndRolesTarget</ejb-name>
+         <local-home>org.jboss.test.web.interfaces.RunAsTargetLocalHome</local-home>
+         <local>org.jboss.test.web.interfaces.RunAsTargetLocal</local>
+         <ejb-class>org.jboss.test.web.ejb.RunAsTargetBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+         <env-entry>
+            <description>The expected run-as principl name</description>
+            <env-entry-name>runAsName</env-entry-name>
+            <env-entry-type>java.lang.String</env-entry-type>
+            <env-entry-value>UnsecureRunAsServletWithPrincipalNameAndRolesPrincipal</env-entry-value>
+         </env-entry>
+         <env-entry>
+            <description>The expected run-as principl roles</description>
+            <env-entry-name>runAsRoles</env-entry-name>
+            <env-entry-type>java.lang.String</env-entry-type>
+            <env-entry-value>InternalUser,ExtraRole1,ExtraRole2</env-entry-value>
+         </env-entry>
+      </session>
+
+      <session>
+         <description>A unsecured EJB</description>
+         <ejb-name>UnsecuredEJB</ejb-name>
+         <home>org.jboss.test.web.interfaces.StatelessSessionHome</home>
+         <remote>org.jboss.test.web.interfaces.StatelessSession</remote>
+         <ejb-class>org.jboss.test.web.ejb.StatelessSessionBean2</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+         <ejb-ref>
+            <ejb-ref-name>ejb/Session</ejb-ref-name>
+            <ejb-ref-type>Session</ejb-ref-type>
+            <home>org.jboss.test.web.interfaces.StatelessSessionHome</home>
+            <remote>org.jboss.test.web.interfaces.StatelessSession</remote>
+            <ejb-link>SecuredEJB</ejb-link>
+         </ejb-ref>
+      </session>
+      <session>
+         <description>An EJB for testing in vm call optimization</description>
+         <ejb-name>OptimizedEJB</ejb-name>
+         <home>org.jboss.test.web.interfaces.StatelessSessionHome</home>
+         <remote>org.jboss.test.web.interfaces.StatelessSession</remote>
+         <local-home>org.jboss.test.web.interfaces.StatelessSessionLocalHome</local-home>
+         <local>org.jboss.test.web.interfaces.StatelessSessionLocal</local>
+         <ejb-class>org.jboss.test.web.ejb.StatelessSessionBean2</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      <session>
+         <description>An EJB for testing in vm call not optimizated</description>
+         <ejb-name>NotOptimizedEJB</ejb-name>
+         <home>org.jboss.test.web.interfaces.StatelessSessionHome</home>
+         <remote>org.jboss.test.web.interfaces.StatelessSession</remote>
+         <local-home>org.jboss.test.web.interfaces.StatelessSessionLocalHome</local-home>
+         <local>org.jboss.test.web.interfaces.StatelessSessionLocal</local>
+         <ejb-class>org.jboss.test.web.ejb.StatelessSessionBean2</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      <session>
+         <description>An EJB for testing stateful persistence</description>
+         <ejb-name>StatefulEJB</ejb-name>
+         <home>org.jboss.test.web.interfaces.StatelessSessionHome</home>
+         <remote>org.jboss.test.web.interfaces.StatelessSession</remote>
+         <ejb-class>org.jboss.test.web.ejb.StatelessSessionBean2</ejb-class>
+         <session-type>Stateful</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+
+      <entity>
+         <ejb-name>Entity</ejb-name>
+         <home>org.jboss.test.web.interfaces.EntityHome</home>
+         <remote>org.jboss.test.web.interfaces.Entity</remote>
+         <ejb-class>org.jboss.test.web.ejb.EntityBean</ejb-class>
+         <persistence-type>Container</persistence-type>
+         <prim-key-class>org.jboss.test.web.interfaces.EntityPK</prim-key-class>
+         <reentrant>False</reentrant>
+         <cmp-version>1.x</cmp-version>
+         <cmp-field>
+            <field-name>the_key</field-name>
+         </cmp-field>
+         <cmp-field>
+            <field-name>the_value</field-name>
+         </cmp-field>
+      </entity>
+
+      <session>
+         <description>A session facade for InternalEntity</description>
+         <ejb-name>EntityFacade</ejb-name>
+         <home>org.jboss.test.web.interfaces.EntityFacadeHome</home>
+         <remote>org.jboss.test.web.interfaces.EntityFacade</remote>
+         <ejb-class>org.jboss.test.web.ejb.EntityFacadeBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+         <ejb-local-ref>
+            <ejb-ref-name>ejb/InternalEntity</ejb-ref-name>
+            <ejb-ref-type>Entity</ejb-ref-type>
+            <local-home>org.jboss.test.web.interfaces.InternalEntityHome</local-home>
+            <local>org.jboss.test.web.interfaces.InternalEntity</local>
+            <ejb-link>InternalEntity</ejb-link>
+         </ejb-local-ref>
+         <security-identity>
+            <run-as>
+               <role-name>InternalUser</role-name>
+            </run-as>
+         </security-identity>
+      </session>
+      <entity>
+         <ejb-name>InternalEntity</ejb-name>
+         <local-home>org.jboss.test.web.interfaces.InternalEntityHome</local-home>
+         <local>org.jboss.test.web.interfaces.InternalEntity</local>
+         <ejb-class>org.jboss.test.web.ejb.InternalEntityBean</ejb-class>
+         <persistence-type>Container</persistence-type>
+         <prim-key-class>java.lang.Integer</prim-key-class>
+         <reentrant>False</reentrant>
+         <cmp-version>2.x</cmp-version>
+         <abstract-schema-name>InternalEntity</abstract-schema-name>
+         <cmp-field>
+            <field-name>id</field-name>
+         </cmp-field>
+         <cmp-field>
+            <field-name>value</field-name>
+         </cmp-field>
+         <primkey-field>id</primkey-field>
+         <security-identity>
+            <run-as>
+               <role-name>InternalUser</role-name>
+            </run-as>
+         </security-identity>
+      </entity>
+   </enterprise-beans>
+
+   <assembly-descriptor>
+      <!-- Security constraints for the SecuredEJB -->
+      <security-role>
+         <description>An anonymous unauthenticated user</description>
+         <role-name>Anonymous</role-name>
+      </security-role>
+      <security-role>
+         <description>An authenticated user</description>
+         <role-name>AuthorizedUser</role-name>
+      </security-role>
+      <security-role>
+         <description>A role that no user should have</description>
+         <role-name>InternalUser</role-name>
+      </security-role>
+
+      <!-- The methods an Anonymous user can access -->
+      <method-permission>
+         <role-name>Anonymous</role-name>
+         <method>
+            <ejb-name>SecuredEJB</ejb-name>
+            <method-name>create</method-name>
+         </method>
+         <method>
+            <ejb-name>SecuredEJB</ejb-name>
+            <method-name>echo</method-name>
+         </method>
+      </method-permission>
+
+      <!-- The methods an AuthorizedUser user can access -->
+      <method-permission>
+         <role-name>AuthorizedUser</role-name>
+         <method>
+            <ejb-name>SecuredEJB</ejb-name>
+            <method-intf>Home</method-intf>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>SecuredEJB</ejb-name>
+            <method-intf>LocalHome</method-intf>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>SecuredEJB</ejb-name>
+            <method-name>echo</method-name>
+            <method-params>
+               <method-param>java.lang.String</method-param>
+            </method-params>
+         </method>
+
+         <method>
+            <ejb-name>SecuredEJB</ejb-name>
+            <method-name>noop</method-name>
+            <method-params>
+               <method-param>org.jboss.test.web.interfaces.ReferenceTest</method-param>
+               <method-param>boolean</method-param>
+            </method-params>
+         </method>
+
+         <method>
+            <ejb-name>SecuredEJB</ejb-name>
+            <method-name>forward</method-name>
+            <method-params>
+               <method-param>java.lang.String</method-param>
+            </method-params>
+         </method>
+
+         <method>
+            <ejb-name>SecuredEJB</ejb-name>
+            <method-intf>Local</method-intf>
+            <method-name>unchecked</method-name>
+         </method>
+
+         <method>
+            <ejb-name>SecuredEJB</ejb-name>
+            <method-intf>Remote</method-intf>
+            <method-name>getData</method-name>
+         </method>
+
+         <method>
+            <ejb-name>EntityFacade</ejb-name>
+            <method-name>*</method-name>
+         </method>
+      </method-permission>
+
+      <!-- The methods an InternalUser user can access -->
+      <method-permission>
+         <role-name>InternalUser</role-name>
+         <method>
+            <ejb-name>SecuredEJB</ejb-name>
+            <method-intf>LocalHome</method-intf>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>SecuredEJB</ejb-name>
+            <method-name>checkRunAs</method-name>
+         </method>
+         <method>
+            <ejb-name>UnsecureRunAsServletWithPrincipalNameTarget</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>UnsecureRunAsServletWithPrincipalNameAndRolesTarget</ejb-name>
+            <method-name>*</method-name>
+         </method>
+
+         <method>
+            <ejb-name>EntityFacade</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>InternalEntity</ejb-name>
+            <method-name>*</method-name>
+         </method>
+      </method-permission>
+
+      <!-- The methods a user without any permission may access -->
+      <method-permission>
+         <unchecked/>
+         <method>
+            <ejb-name>SecuredEJB</ejb-name>
+            <method-intf>LocalHome</method-intf>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>SecuredEJB</ejb-name>
+            <method-name>unchecked</method-name>
+         </method>
+      </method-permission>
+   </assembly-descriptor>
+</ejb-jar>

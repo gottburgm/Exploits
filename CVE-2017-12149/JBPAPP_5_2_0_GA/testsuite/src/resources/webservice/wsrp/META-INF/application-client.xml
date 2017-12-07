@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application-client xmlns="http://java.sun.com/xml/ns/j2ee"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/application-client_1_4.xsd"
+                    version="1.4">
+
+   <display-name>webservice client</display-name>
+
+   <service-ref>
+      <service-ref-name>service/ServiceDescriptionService</service-ref-name>
+      <service-interface>javax.xml.rpc.Service</service-interface>
+      <wsdl-file>META-INF/wsdl/wsrp_services.wsdl</wsdl-file>
+      <jaxrpc-mapping-file>META-INF/jaxrpc-mapping.xml</jaxrpc-mapping-file>
+      <port-component-ref>
+         <service-endpoint-interface>org.jboss.test.webservice.wsrp.WSRP_v1_ServiceDescription_PortType</service-endpoint-interface>
+      </port-component-ref>
+   </service-ref>
+
+   <service-ref>
+      <service-ref-name>service/MarkupService</service-ref-name>
+      <service-interface>javax.xml.rpc.Service</service-interface>
+      <wsdl-file>META-INF/wsdl/wsrp_services.wsdl</wsdl-file>
+      <jaxrpc-mapping-file>META-INF/jaxrpc-mapping.xml</jaxrpc-mapping-file>
+      <port-component-ref>
+         <service-endpoint-interface>org.jboss.test.webservice.wsrp.WSRP_v1_Markup_PortType</service-endpoint-interface>
+      </port-component-ref>
+   </service-ref>
+</application-client>

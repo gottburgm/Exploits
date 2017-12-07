@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+
+   <mbean code="org.jboss.test.deployers.jbas2904.sar.mbean2.MBean2"
+          name="jboss.jbas2904.test.deployers:service=MBean2">
+   </mbean>
+
+</server>

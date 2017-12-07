@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is used by org.jboss.test.jbossmessaging.clustertest.ClusteredTestCase -->
+
+<!DOCTYPE server
+    PUBLIC "-//JBoss//DTD MBean Service 4.0//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-service_4_0.dtd">
+
+<server>
+
+   <mbean code="org.jboss.test.jbossmessaging.clustertest.killservice.KillService"
+      name="test:name=JBMKillService">
+   </mbean>
+
+</server>

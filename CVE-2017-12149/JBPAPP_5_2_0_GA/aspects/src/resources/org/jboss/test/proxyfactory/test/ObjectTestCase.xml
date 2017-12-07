@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<aop>
+   <interceptor class="org.jboss.test.proxyfactory.support.ReturningInterceptor"/>
+   <!-- Avoid infinite recursion when running with weaving enabled -->
+   <typedef name="objectInstance" expr="class($instanceof{java.lang.Object}) AND !class(org.jboss.test.proxyfactory.support.ReturningInterceptor)"/>
+   <bind pointcut="execution(* $typedef{objectInstance}->*(..))">
+      <interceptor-ref name="org.jboss.test.proxyfactory.support.ReturningInterceptor"/>
+   </bind>
+</aop>

@@ -1,0 +1,44 @@
+<project name="tests-support-jars" default="jars">
+
+   <property name="build.test" value="output/classes-tests-support" />
+   <property name="build.test.lib" value="src/resources/org/jboss/test/classloading" />
+
+    <target name="jars" description="Build the tests-support tree jars"
+        depends="jar1, jar2CPjar1, jar2, jar3" />
+
+    <macrodef name="build-test-jar" description="build a jar from a name patter">
+        <attribute name="name" description="Basename for jar/package" />
+        <attribute name="package" default="@{name" description="Basename for package" />
+        <attribute name="classpath" default="" description="Class-Path manifest value" />
+        <sequential>
+            <mkdir dir="${build.test.lib}" />
+        	   <mkdir dir="${build.test.resources}/@{name}" />
+            <jar destfile="${build.test.lib}/@{name}.jar">
+                <manifest>
+                  <attribute name="Class-Path" value="@{classpath}" />
+                </manifest>
+            	<!-- Include all content under org/jboss/test/support/@{package} -->
+               <fileset dir="${build.test}">
+                   <include name="org/jboss/test/support/@{package}/**"/>
+               </fileset>
+            	<!-- Include all resources under output/resources/tests-resources/@{name} -->
+               <zipfileset dir="${build.test.resources}/@{name}">
+                   <include name="**" />
+               </zipfileset>
+            </jar>
+        </sequential>
+    </macrodef>
+
+    <target name="jar1">
+        <build-test-jar name="jar1" />
+    </target>
+    <target name="jar2CPjar1">
+        <build-test-jar name="jar2CPjar1" package="jar2" classpath="jar1.jar" />
+    </target>
+    <target name="jar2">
+        <build-test-jar name="jar2" />
+    </target>
+    <target name="jar3">
+        <build-test-jar name="jar3" />
+    </target>
+</project>

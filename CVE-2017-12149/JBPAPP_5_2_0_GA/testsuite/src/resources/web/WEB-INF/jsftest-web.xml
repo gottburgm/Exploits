@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/j2ee/web-app_2_5.xsd"
+	 version="2.5">
+   
+   <context-param>
+      <param-name>com.sun.faces.displayConfiguration</param-name>
+      <param-value>true</param-value>
+   </context-param>
+
+    <!-- The JavaServer Faces Servlet -->
+   <servlet>
+      <servlet-name>javax.faces.FacesServlet</servlet-name>
+      <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>             
+
+      <load-on-startup>6</load-on-startup>
+   </servlet>   
+   
+   <!-- Mappings for JavaServer Faces Servlet -->
+   <servlet-mapping>
+      <servlet-name>javax.faces.FacesServlet</servlet-name>
+      <url-pattern>*.jsf</url-pattern>
+   </servlet-mapping>  
+</web-app>

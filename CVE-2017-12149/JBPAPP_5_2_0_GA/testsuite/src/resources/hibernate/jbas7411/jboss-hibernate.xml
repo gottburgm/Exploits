@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<hibernate-configuration xmlns="urn:jboss:hibernate-deployer:1.0">
+
+   <session-factory name="java:/hib-timers/SessionFactory" bean="jboss.test.har:service=Hibernate,testcase=HarWithStandardPropertiesUnitTestCase">
+      <property name="hibernate.connection.datasource">java:/DefaultDS</property>
+      <property name="hibernate.dialect">org.hibernate.dialect.HSQLDialect</property>
+      <!-- no such class
+      <property name="sessionFactoryInterceptor">org.jboss.test.hibernate.SimpleInterceptor</property>
+      -->
+      <property name="hibernate.hbm2ddl.auto">create</property>
+      
+      <!-- The test doesn't actually cache anything, but let's set some properties to check
+           that they work -->
+      <property name="hibernate.cache.use_second_level_cache">true</property>
+      <property name="hibernate.cache.region_prefix">HarWithStandardProperties</property>
+      <property name="hibernate.cache.region.factory_class">org.hibernate.cache.jbc2.JndiMultiplexedJBossCacheRegionFactory</property>
+      <property name="hibernate.cache.region.jbc2.cachefactory">java:/CacheManager</property>
+      <property name="hibernate.cache.region.jbc2.cfg.entity">mvcc-shared</property>
+      
+      <depends>jboss:service=Naming</depends>
+      <depends>jboss:service=TransactionManager</depends>
+   </session-factory>
+
+</hibernate-configuration>

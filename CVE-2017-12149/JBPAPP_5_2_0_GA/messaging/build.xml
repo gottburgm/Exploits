@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+   <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
+   <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+   <!ENTITY targets SYSTEM "../tools/etc/buildmagic/targets.ent">
+]>
+
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--  JBoss, the OpenSource J2EE webOS                                      -->
+<!--                                                                        -->
+<!--  Distributable under LGPL license.                                     -->
+<!--  See terms of license at http://www.gnu.org.                           -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<!-- $Id: build.xml 81998 2008-12-03 06:46:29Z scott.stark@jboss.org $ -->
+
+<project default="main" name="JBoss/Messaging Integration">
+
+  <!-- ================================================================== -->
+  <!-- Setup                                                              -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Include the common Buildmagic elements.
+     |
+     | This defines several different targets, properties and paths.
+     | It also sets up the basic extention tasks amoung other things.
+   -->
+
+    <property name="javac.target" value="1.5"/>
+    <property name="javac.source" value="1.5"/>
+
+	&buildmagic;
+
+  <!--
+     | Include the normal targets.
+   -->
+  &targets;
+
+  <!-- ================================================================== -->
+  <!-- Configuration                                                      -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Configure the build system.  
+     |
+     | This target is invoked by the Buildmagic initialization logic and 
+     | should contain module specific configuration elements.
+   -->
+
+  <target name="configure" unless="configure.disable">
+
+    <!-- =================== -->
+    <!-- Basic Configuration -->
+    <!-- =================== -->
+
+    <!-- Module name(s) & version -->
+    <property name="module.name" value="messaging"/>
+    <property name="module.Name" value="JBoss Messaging Integration"/>
+
+    <!-- ========= -->
+    <!-- Libraries -->
+    <!-- ========= -->
+    &libraries;
+    <!-- The combined library classpath -->
+    <path id="library.classpath">
+      <path refid="apache.log4j.classpath"/>
+      <path refid="oswego.concurrent.classpath"/>
+      <path refid="junit.junit.classpath"/>
+    </path>
+
+    <!-- ======= -->
+    <!-- Modules -->
+    <!-- ======= -->
+    &modules;
+    <!-- The combined depedant module classpath -->
+    <path id="dependentmodule.classpath">
+      <path refid="jboss.jboss.javaee.classpath"/>
+      <path refid="jboss.common.core.classpath"/>
+      <path refid="jboss.common.logging.spi.classpath"/>
+      <path refid="jboss.jboss.deployers.classpath"/>
+      <path refid="jboss.j2se.classpath"/>
+      <path refid="jboss.messaging.classpath"/>      
+      <path refid="jboss.metadata.classpath"/>
+      <path refid="jboss.server.classpath"/>      
+      <path refid="jboss.systemjmx.classpath"/>      
+      <path refid="jboss.jboss.man.classpath"/>      
+      <path refid="jboss.jboss.mdr.classpath"/>
+      <path refid="jboss.microcontainer.classpath"/>      
+      <path refid="jboss.jbosssx.classpath"/>      
+      <path refid="jboss.jboss.jaspi.api.classpath"/>      
+      <path refid="jboss.jboss.security.spi.classpath"/>      
+      <path refid="sun.jaxb.classpath"/>
+      <path refid="jboss.jbossxb.classpath"/>
+    </path>
+
+    <!-- ===== -->
+    <!-- Tasks -->
+    <!-- ===== -->
+
+    <property name="jar.prefix" value="jboss-messaging-int"/>
+
+    <call target="_default:task-init"/>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- Compile                                                            -->
+  <!-- ================================================================== -->
+
+  <!-- 
+     |  Compile everything.
+     |
+     |  This target should depend on other compile-* targets for each 
+     |  different type of compile that needs to be performed, short of
+     |  documentation compiles.
+    -->
+  <target name="compile" 
+	  depends="_default:compile-classes, _default:compile-etc"
+	  description="Compile all source files."/>
+
+  <!-- ================================================================== -->
+  <!-- Archives                                                           -->
+  <!-- ================================================================== -->
+
+  <!-- 
+     |  Build all jar files.
+    -->
+  <target name="module-jars">
+
+    <!-- Server and client jars -->
+    <call target="_default:server-client-jars"/>
+    <call target="sar" />
+  </target>
+
+  <target name="sar">
+  </target>
+</project>

@@ -1,0 +1,21 @@
+<project name="jmx-component-info">
+
+   <!-- ============================================================ -->
+   <!-- JMX                                                          -->
+   <!-- ============================================================ -->
+
+   <component id="jmx"
+              module="jmx"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="jboss-jmx.jar"/>
+      <artifact id="jboss-jmx-core.jar"/>
+      <artifact id="jboss-jmx-testsuite.jar"/>
+      <artifact id="jmx-client.jar"/>      
+      <export>
+         <include input="jboss-jmx.jar"/>
+         <include input="jboss-jmx-core.jar"/>
+      </export>
+   </component>
+
+</project>

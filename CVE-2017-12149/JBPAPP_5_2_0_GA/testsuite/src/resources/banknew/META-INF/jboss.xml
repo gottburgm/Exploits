@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 3.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_3_0.dtd">
+
+<jboss>
+
+   <enterprise-beans>
+
+     <!--
+       To add beans that you have deployment descriptor info for, add
+       a file to your XDoclet merge directory called jboss-beans.xml that contains
+       the <session></session>, <entity></entity> and <message-driven></message-driven>
+       markup for those beans.
+     -->
+
+      <entity>
+         <ejb-name>bank/Bank</ejb-name>
+         <jndi-name>ejb/bank/Bank</jndi-name>
+
+      </entity>
+      <entity>
+         <ejb-name>bank/Account</ejb-name>
+         <jndi-name>ejb/bank/Account</jndi-name>
+
+      </entity>
+      <entity>
+         <ejb-name>bank/Customer</ejb-name>
+         <jndi-name>ejb/bank/Customer</jndi-name>
+
+      </entity>
+      <entity>
+         <ejb-name>bank/Transaction</ejb-name>
+         <jndi-name>ejb/bank/Transaction</jndi-name>
+
+      </entity>
+
+      <session>
+         <ejb-name>bank/TellerSession</ejb-name>
+         <jndi-name>ejb/bank/TellerSession</jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>bank/BankSession</ejb-name>
+         <jndi-name>ejb/bank/BankSession</jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>bank/AccountSession</ejb-name>
+         <jndi-name>ejb/bank/AccountSession</jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>bank/CustomerSession</ejb-name>
+         <jndi-name>ejb/bank/CustomerSession</jndi-name>
+
+      </session>
+
+   </enterprise-beans>
+
+   <resource-managers>
+   </resource-managers>
+
+</jboss>

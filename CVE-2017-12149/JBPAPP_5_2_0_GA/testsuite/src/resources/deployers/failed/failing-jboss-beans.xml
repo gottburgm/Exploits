@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+	<bean name="FailingBean" class="org.jboss.test.no.such.class.NoSuchClassTest" />
+	
+</deployment>

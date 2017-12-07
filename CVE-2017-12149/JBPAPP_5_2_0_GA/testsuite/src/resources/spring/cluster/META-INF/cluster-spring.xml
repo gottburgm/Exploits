@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+
+  <!-- JBoss Pojo Cache Config + Spring-Cache integration -->
+
+  <bean id="CacheConfig" class="org.jboss.cache.config.Configuration">
+      <property name="transactionManagerLookupClass"><value>org.jboss.cache.transaction.GenericTransactionManagerLookup</value></property>
+      <!--
+              Node locking level : SERIALIZABLE
+                                   REPEATABLE_READ (default)
+                                   READ_COMMITTED
+                                   READ_UNCOMMITTED
+                                   NONE
+      -->
+      <property name="isolationLevel"><value>READ_COMMITTED</value></property>
+      <!--     Valid modes are LOCAL
+                               REPL_ASYNC
+                               REPL_SYNC
+      -->
+      <property name="cacheMode"><value>LOCAL</value></property>
+      <!--  Max number of milliseconds to wait for a lock acquisition -->
+      <property name="lockAcquisitionTimeout"><value>15000</value></property>
+      <!--  Specific eviction policy configurations. This is LRU -->
+      <property name="evictionConfig">
+         <bean id="ExampleEvictionConfig" class="org.jboss.cache.config.EvictionConfig">
+            <property name="defaultEvictionPolicyClass"><value>org.jboss.cache.eviction.LRUPolicy</value></property>
+            <property name="wakeupIntervalSeconds"><value>5</value></property>
+            <property name="evictionRegionConfigs">
+               <list>
+                  <bean name="ExampleDefaultEvictionRegionConfig" class="org.jboss.cache.config.EvictionRegionConfig">
+                     <property name="regionName"><value>/_default_</value></property>
+                     <property name="evictionPolicyConfig">
+                        <bean id="ExampleDefaultLRUConfig" class="org.jboss.cache.eviction.LRUConfiguration">
+                           <property name="maxNodes"><value>5000</value></property>
+                           <property name="timeToLiveSeconds"><value>1000</value></property>
+                        </bean>
+                     </property>
+                  </bean>
+               </list>
+            </property>
+         </bean>
+      </property>
+  </bean>
+
+  <bean id="pojoCache" class="org.jboss.cache.pojo.PojoCacheFactory" factory-method="createCache">
+    <constructor-arg><ref local="CacheConfig"/></constructor-arg>
+    <constructor-arg><value>true</value></constructor-arg>
+  </bean>
+
+  <bean id="cachePostProcessor" class="org.jboss.spring.cluster.CachePostProcessor">
+     <constructor-arg><ref local="pojoCache"/></constructor-arg>
+  </bean>
+
+  <!-- app specific stuff -->
+
+  <bean id="plainPojo" class="org.jboss.test.spring.cluster.SimplePojo" scope="cache">
+     <property name="port">
+        <value>123</value>
+     </property>
+     <property name="host">
+        <value>PojoCache1</value>
+     </property>
+     <property name="value">
+       <value type="java.util.Locale">sl</value>
+     </property>
+  </bean>
+
+  <bean id="annotatedPojo" class="org.jboss.test.spring.cluster.AnnotatedPojo">
+    <property name="port">
+       <value>321</value>
+    </property>
+    <property name="host">
+       <value>PojoCache2</value>
+    </property>
+    <property name="value">
+       <value type="java.util.Locale">en</value>
+    </property>
+  </bean>
+
+</beans>

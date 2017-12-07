@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app version="2.4"
+   xmlns="http://java.sun.com/xml/ns/j2ee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+   <description>Tests Authenticators</description>
+  
+   <!-- ### Security -->
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Restricted</web-resource-name>
+         <description>All content is secured</description>
+         <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+         <description>Only authenticated users can access secure content</description>
+         <role-name>AuthorizedUser</role-name>
+      </auth-constraint>
+      <user-data-constraint>
+         <description>no description</description>
+         <transport-guarantee>NONE</transport-guarantee>
+      </user-data-constraint>
+   </security-constraint>
+
+   <login-config>
+      <auth-method>HEADER</auth-method>
+      <realm-name>UserInRoleRealm</realm-name>
+   </login-config>
+
+   <security-role>
+      <role-name>AuthorizedUser</role-name>
+   </security-role> 
+</web-app>
+

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app version="2.4"
+   xmlns="http://java.sun.com/xml/ns/j2ee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+   <description>Tests of the servlet enc config via xml</description>
+
+   <!-- ### Servlets -->
+   <servlet>
+      <servlet-name>ENCServlet</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.StandaloneENCServlet</servlet-class>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>ENCServlet</servlet-name>
+      <url-pattern>/ENCServlet</url-pattern>
+   </servlet-mapping>
+
+   <!-- The Welcome File List -->
+   <welcome-file-list>
+      <welcome-file>index.html</welcome-file>
+   </welcome-file-list>
+
+   <!-- ### Resources -->
+   <!-- JDBC DataSources (java:comp/env/jdbc) -->
+   <resource-ref>
+      <description>The default DS</description>
+      <res-ref-name>jdbc/DefaultDS</res-ref-name>
+      <res-type>javax.sql.DataSource</res-type>
+      <res-auth>Container</res-auth>
+   </resource-ref>
+   <!-- JavaMail Connection Factories (java:comp/env/mail) -->
+   <resource-ref>
+      <description>Default Mail</description>
+      <res-ref-name>mail/DefaultMail</res-ref-name>
+      <res-type>javax.mail.Session</res-type>
+      <res-auth>Container</res-auth>
+   </resource-ref>
+   <!-- JMS Connection Factories (java:comp/env/jms) -->
+   <resource-ref>
+      <description>Default QueueFactory</description>
+      <res-ref-name>jms/QueFactory</res-ref-name>
+      <res-type>javax.jms.QueueConnectionFactory</res-type>
+      <res-auth>Container</res-auth>
+   </resource-ref>
+   <!-- URL Connection Factories (java:comp/env/url) -->
+   <resource-ref>
+      <description>JBoss Home Page</description>
+      <res-ref-name>url/JBossHome</res-ref-name>
+      <res-type>java.net.URL</res-type>
+      <res-auth>Container</res-auth>
+   </resource-ref>
+   <resource-ref>
+      <description>SomeWebSite HomePage</description>
+      <res-ref-name>url/IndirectURL</res-ref-name>
+      <res-type>java.net.URL</res-type>
+      <res-auth>Container</res-auth>
+   </resource-ref>
+   
+   <!-- ### Environment (java:comp/env/ejb) -->
+   <env-entry>
+      <description>Integer0</description>
+      <env-entry-name>Ints/i0</env-entry-name>
+      <env-entry-type>java.lang.Integer</env-entry-type>
+      <env-entry-value>0</env-entry-value>
+   </env-entry>
+   <env-entry>
+      <description>Integer1</description>
+      <env-entry-name>Ints/i1</env-entry-name>
+      <env-entry-type>java.lang.Integer</env-entry-type>
+      <env-entry-value>1</env-entry-value>
+   </env-entry>
+   <env-entry>
+      <description>Float0</description>
+      <env-entry-name>Floats/f0</env-entry-name>
+      <env-entry-type>java.lang.Float</env-entry-type>
+      <env-entry-value>0.0</env-entry-value>
+   </env-entry>
+   <env-entry>
+      <description>Float1</description>
+      <env-entry-name>Floats/f1</env-entry-name>
+      <env-entry-type>java.lang.Float</env-entry-type>
+      <env-entry-value>1.1</env-entry-value>
+   </env-entry>
+   <env-entry>
+      <description>String0</description>
+      <env-entry-name>Strings/s0</env-entry-name>
+      <env-entry-type>java.lang.String</env-entry-type>
+      <env-entry-value>String0</env-entry-value>
+   </env-entry>
+   <env-entry>
+      <description>String1</description>
+      <env-entry-name>Strings/s1</env-entry-name>
+      <env-entry-type>java.lang.String</env-entry-type>
+      <env-entry-value>String1</env-entry-value>
+   </env-entry>
+   <env-entry>
+      <env-entry-name>ejb/catalog/CatalogDAOClass</env-entry-name>
+      <env-entry-type>java.lang.String</env-entry-type>
+      <env-entry-value>com.sun.model.dao.CatalogDAOImpl</env-entry-value>
+   </env-entry>
+
+   <!-- ### EJB References (java:comp/env/ejb) -->
+   <!-- ejb-ref that needs jboss-web.xml                            -->
+   <ejb-ref>
+      <ejb-ref-name>ejb/bean3</ejb-ref-name>
+      <ejb-ref-type>Session</ejb-ref-type>
+      <home>org.jboss.test.web.mock.StatelessSessionHome</home>
+      <remote>org.jboss.test.web.mock.StatelessSession</remote>
+   </ejb-ref>
+   <ejb-ref>
+      <ejb-ref-name>ejb/CtsBmp</ejb-ref-name>
+      <ejb-ref-type>Entity</ejb-ref-type>
+      <home>org.jboss.test.web.mock.EntityHome</home>
+      <remote>org.jboss.test.web.mock.Entity</remote>
+   </ejb-ref>
+
+   <!-- ejb-local-ref that needs jboss-web.xml                            -->
+   <ejb-local-ref>
+      <ejb-ref-name>ejb/local/bean3</ejb-ref-name>
+      <ejb-ref-type>Session</ejb-ref-type>
+      <local-home>org.jboss.test.web.mock.StatelessSessionLocalHome</local-home>
+      <local>org.jboss.test.web.mock.StatelessSessionLocal</local>
+   </ejb-local-ref>
+
+   <message-destination-ref>
+      <description>consumes using a link</description>
+      <message-destination-ref-name>mdr/ConsumesLink</message-destination-ref-name>
+      <message-destination-type>javax.jms.Queue</message-destination-type>
+      <message-destination-usage>Consumes</message-destination-usage>
+      <message-destination-link>TestQueue</message-destination-link>
+   </message-destination-ref>
+   <message-destination-ref>
+      <description>produces using a link</description>
+      <message-destination-ref-name>mdr/ProducesLink</message-destination-ref-name>
+      <message-destination-type>javax.jms.Topic</message-destination-type>
+      <message-destination-usage>Produces</message-destination-usage>
+      <message-destination-link>TestTopic</message-destination-link>
+   </message-destination-ref>
+   <message-destination-ref>
+      <description>consumesproduces using a jndi name</description>
+      <message-destination-ref-name>mdr/ConsumesProducesJNDIName</message-destination-ref-name>
+      <message-destination-type>javax.jms.Queue</message-destination-type>
+      <message-destination-usage>ConsumesProduces</message-destination-usage>
+   </message-destination-ref>
+
+   <message-destination>
+      <message-destination-name>TestQueue</message-destination-name>
+   </message-destination>
+   <message-destination>
+      <message-destination-name>TestTopic</message-destination-name>
+   </message-destination>
+</web-app>

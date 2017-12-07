@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<!-- $Id: test-log4j.xml 85526 2009-03-06 15:21:50Z emuckenhuber $ -->
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+  <!-- ================================= -->
+  <!-- Preserve messages in a local file -->
+  <!-- ================================= -->
+
+  <!-- A time/date based rolling appender -->
+  <appender name="FILE" class="org.jboss.logging.appender.DailyRollingFileAppender">
+    <param name="File" value="${build.testlog}/test.log"/>
+    <param name="Append" value="true"/>
+
+    <!-- Rollover at midnight each day -->
+    <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+
+    <!-- Rollover at the top of each hour
+    <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>
+    -->
+
+    <layout class="org.apache.log4j.PatternLayout">
+      <!-- The default pattern: Date Priority [Category] Message\n -->
+      <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+
+      <!-- The full pattern: Date MS Priority [Category] (Thread:NDC) Message\n
+      <param name="ConversionPattern" value="%d %-5r %-5p [%c] (%t:%x) %m%n"/>
+       -->
+    </layout>	    
+  </appender>
+
+  <category name="org.jboss.serial">
+    <priority value="INFO"/>
+  </category>
+
+  <!--
+  <category name="org.jboss.system">
+    <priority value="TRACE" class="org.jboss.logging.XLevel"/>
+  </category>
+  -->
+
+  <!-- ======================= -->
+  <!-- Setup the Root category -->
+  <!-- ======================= -->
+
+  <root>
+    <appender-ref ref="FILE"/>
+  </root>
+  
+</log4j:configuration>

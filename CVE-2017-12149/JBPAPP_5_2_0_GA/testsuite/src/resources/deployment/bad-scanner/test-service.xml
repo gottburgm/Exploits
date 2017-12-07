@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: test-service.xml 33276 2005-07-07 10:08:24Z dimitris $ -->
+
+<server>
+  <!-- A NotificationListener that subscribes to itself! -->
+  <mbean code="org.jboss.monitor.services.NotificationListener"
+         name="jboss.test:service=NotificationListener">
+    
+    <attribute name="DynamicSubscriptions">true</attribute>
+    <attribute name="NotificationListener"></attribute>
+    <attribute name="SubscriptionList">
+      <subscription-list>
+        <mbean name="jboss.test:service=NotificationListener"/>
+      </subscription-list>
+    </attribute>
+    
+  </mbean>
+</server>

@@ -1,0 +1,16 @@
+<assembly>
+  <id>web-console</id>
+  <formats>
+    <format>war</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>src/resources/webconsole.war</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>**</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

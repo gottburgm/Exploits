@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <mbean name="jboss.test:type=test" code="org.jboss.test.system.controller.support.Simple">
+      <attribute name="JavaBean" serialDataType="jbxb">
+         <javabean xmlns="urn:jboss:javabean:1.0" 
+                   class="org.jboss.test.system.controller.support.JavaBean">
+            <property>property1</property>
+            <property name="property2">10</property>
+         </javabean>
+      </attribute>
+   </mbean>
+</server>

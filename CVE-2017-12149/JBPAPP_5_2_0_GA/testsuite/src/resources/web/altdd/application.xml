@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns="http://java.sun.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+   http://java.sun.com/xml/ns/javaee/application_5.xsd"
+	version="5">
+	<description>Tests of the alt-dd behavior</description>
+
+    <module>
+       <web>
+           <web-uri>altdd.war</web-uri>
+           <context-root>/altdd-test</context-root>
+       </web>
+       <!-- Specify the ear relative path -->
+       <alt-dd>alt/altdd-web.xml</alt-dd>
+    </module>
+
+</application>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="urn:oasis:names:tc:wsrp:v1:types"
+        xmlns:types="urn:oasis:names:tc:wsrp:v1:types"
+
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+
+        elementFormDefault="qualified">
+
+   <import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+
+   <!-- - - - - - - - - - - - - - - - - -->
+   <!--  General types used throughout  -->
+   <!-- - - - - - - - - - - - - - - - - -->
+
+  <complexType name="LocalizedString">
+    <sequence>
+      <element name="value" type="xsd:string"/>
+    </sequence>
+    <attribute ref="xml:lang" use="required"/>
+    <attribute name="resourceName" type="xsd:string"/>
+  </complexType>
+
+
+   <!-- - - - - - - - - -->
+   <!--  Producer types -->
+   <!-- - - - - - - - - -->
+
+  <complexType name="ServiceDescription">
+    <sequence>
+      <element name="offeredPortlets" type="types:PortletDescription" minOccurs="0" maxOccurs="unbounded"/>
+    </sequence>
+  </complexType>
+  <element name="ServiceDescription" type="types:ServiceDescription"/>
+
+
+   <!-- - - - - - - - - - - - - - - - - - - -->
+   <!-- Portlet types (metadata and runtime) -->
+   <!-- - - - - - - - - - - - - - - - - - - -->
+
+
+  <complexType name="PortletDescription">
+    <sequence>
+      <element name="description" type="types:LocalizedString" minOccurs="0"/>
+    </sequence>
+  </complexType>
+
+  <complexType name="PortletDescriptionResponse">
+    <sequence>
+      <element name="portletDescription" type="types:PortletDescription"/>
+    </sequence>
+  </complexType>
+
+
+   <!-- - - - - - - - - - - - - -->
+   <!-- operation message types -->
+   <!-- - - - - - - - - - - - - -->
+
+  <element name="getServiceDescription">
+    <complexType>
+      <sequence>
+        <element name="desiredLocales" type="xsd:string" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+      </sequence>
+    </complexType>
+  </element>
+  <element name="getServiceDescriptionResponse" type="types:ServiceDescription"/>
+
+</schema>

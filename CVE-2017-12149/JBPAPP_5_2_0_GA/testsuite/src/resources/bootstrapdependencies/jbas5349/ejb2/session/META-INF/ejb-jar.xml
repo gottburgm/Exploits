@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE ejb-jar PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN"
+   "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar>
+   <enterprise-beans>
+      <session>
+         <ejb-name>DummyStatelessEJB</ejb-name>
+         <home>org.jboss.test.bootstrapdependencies.jbas5349.ejb2.DummyStatelessHome</home>
+         <remote>org.jboss.test.bootstrapdependencies.jbas5349.ejb2.DummyStateless</remote>
+         <ejb-class>org.jboss.test.bootstrapdependencies.jbas5349.ejb2.DummyStatelessBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      <session>
+         <ejb-name>DummyStatefulEJB</ejb-name>
+         <home>org.jboss.test.bootstrapdependencies.jbas5349.ejb2.DummyStatefulHome</home>
+         <remote>org.jboss.test.bootstrapdependencies.jbas5349.ejb2.DummyStateful</remote>
+         <ejb-class>org.jboss.test.bootstrapdependencies.jbas5349.ejb2.DummyStatefulBean</ejb-class>
+         <session-type>Stateful</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+   </enterprise-beans>
+
+   <assembly-descriptor>
+      <container-transaction>
+         <method>
+            <ejb-name>DummyStatelessEJB</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <trans-attribute>Supports</trans-attribute>
+      </container-transaction>
+      <container-transaction>
+         <method>
+            <ejb-name>DummyStatefulEJB</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <trans-attribute>Supports</trans-attribute>
+      </container-transaction>
+   </assembly-descriptor>
+</ejb-jar>

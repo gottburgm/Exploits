@@ -1,0 +1,24 @@
+<assembly>
+  <id>jboss-ha-legacy-client</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/ha/framework/interfaces/**</include>
+        <include>org/jboss/ha/hasessionstate/interfaces/**</include>
+        <include>org/jboss/invocation/jrmp/interfaces/**</include>
+        <include>org/jboss/invocation/http/interfaces/**</include>
+        <include>org/jboss/invocation/unified/interfaces/**</include>
+        <include>org/jboss/invocation/InvokerProxyHA**</include>
+        <include>org/jboss/ha/**/*Stub.class</include>
+        <include>org/jboss/proxy/*</include>
+        <include>org/jboss/ha/framework/test/ExplicitFailoverClientInterceptor.class</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

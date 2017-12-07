@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main"/>
+	<classpathentry kind="src" output="output/eclipse-test-classes" path="src/test/resources"/>
+	<classpathentry kind="src" output="output/eclipse-test-classes" path="src/test/main"/>
+	<classpathentry exported="true" kind="src" path="/aspects"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/profileservice-spi/lib/jboss-profileservice-spi.jar" sourcepath="/thirdparty/jboss/profileservice-spi/lib/jboss-profileservice-spi-sources.jar"/>
+	<classpathentry exported="true" kind="src" path="/system-jmx"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/sun-jaxb/lib/jaxb-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-man/lib/jboss-metatype.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/stax-api/lib/stax-api.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/org/jboss/aspects/lib/jboss-security-aspects.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-deployers/lib/jboss-deployers-client.jar" sourcepath="/thirdparty/jboss/jboss-deployers/lib/jboss-deployers-client-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/test/lib/jboss-test.jar" sourcepath="/thirdparty/jboss/test/lib/jboss-test-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/junit/lib/junit.jar" sourcepath="/thirdparty/junit/lib/junit-src.zip"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/aop/lib/jboss-aop.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-security-spi/lib/jboss-security-spi.jar" sourcepath="/thirdparty/jboss/jboss-security-spi/lib/jboss-security-spi-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-kernel.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-kernel-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-dependency.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-dependency-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-ejb3-ext-api/lib/jboss-ejb3-ext-api.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-ext-api/lib/jboss-ejb3-ext-api-sources.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/system"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/web/lib/servlet-api.jar"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

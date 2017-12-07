@@ -1,0 +1,152 @@
+<project name="tests-refs-jars">
+	<target name="_jars-refs">
+		<mkdir dir="${build.lib}" />
+
+		<jar destfile="${build.lib}/refs-client.jar">
+			<manifest>
+				<attribute name="Main-Class" value="org.jboss.test.refs.client.Client" />
+			</manifest>
+			<!--
+  		 <metainf dir="${build.resources}/refs">
+         <include name="jboss-client.xml"/>
+  		 </metainf>
+  		 -->
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/refs/client/**" />
+			</fileset>
+		</jar>
+      <jar destfile="${build.lib}/refs-clientorb.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.jboss.test.refs.clientorb.Client" />
+         </manifest>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/refs/clientorb/**" />
+         </fileset>
+      </jar>
+
+		<!-- A collection of ejb3 beans -->
+		<jar destfile="${build.lib}/refs-ejb.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/refs/ejbs/**" />
+			</fileset>
+		</jar>
+		<!-- A collection of ejb3 beans referencing refs-ejb.jar beans -->
+		<jar destfile="${build.lib}/refs-ejb2.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/refs/ejbs2/**" />
+			</fileset>
+		</jar>
+		<!-- A collection of ejb2.1 beans with inter-jar refs -->
+		<jar destfile="${build.lib}/refs-ejb2x.jar">
+			<metainf dir="${build.resources}/refs/ejb2x">
+				<include name="*.xml" />
+			</metainf>
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/refs/ejbs2x/**" />
+			</fileset>
+		</jar>
+		<jar destfile="${build.lib}/refs-test-debug.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/util/Debug*.class" />
+			</fileset>
+		</jar>
+      <!-- A collection of ejb3 beans validating all resource types -->
+      <jar destfile="${build.lib}/refs-resources-ejb.jar">
+         <metainf dir="${build.resources}/refs/resources">
+            <include name="*.xml" />
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/refs/resources/**" />
+         </fileset>
+      </jar>
+
+		<jar destfile="${build.lib}/refs.ear">
+			<fileset dir="${build.lib}">
+				<include name="refs-client.jar" />
+				<include name="refs-ejb.jar" />
+				<include name="refs-ejb2.jar" />
+            <include name="refs-ejb2x.jar" />
+			</fileset>
+			<zipfileset file="${build.lib}/refs-test-debug.jar"
+				fullpath="lib/refs-test-debug.jar" />
+		</jar>
+
+      <jar destfile="${build.lib}/refs-resources.ear">
+         <fileset dir="${build.lib}">
+            <include name="refs-clientorb.jar" />
+            <include name="refs-resources-ejb.jar" />
+         </fileset>
+         <zipfileset file="${build.lib}/refs-test-debug.jar"
+            fullpath="lib/refs-test-debug.jar" />
+      </jar>
+
+		<!-- refs-one-ejb.jar -->
+		<jar destfile="${build.lib}/refs-one-ejb.jar">
+			<metainf dir="${build.resources}/refs/ejblink/one">
+				<include name="*.xml" />
+			</metainf>
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/refs/common/**" />
+				<include name="org/jboss/test/refs/ejblink/EjbLink1Bean*" />
+			</fileset>
+		</jar>
+		<!-- refs-two-ejb.jar -->
+		<jar destfile="${build.lib}/refs-two-ejb.jar">
+			<metainf dir="${build.resources}/refs/ejblink/two">
+				<include name="*.xml" />
+			</metainf>
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/refs/common/**" />
+				<include name="org/jboss/test/refs/ejblink/EjbLink2Bean*" />
+				<include name="org/jboss/test/refs/ejblink/EjbLink3Bean*" />
+			</fileset>
+		</jar>
+		<!-- refs-ejb3-ejblink.ear -->
+		<jar destfile="${build.lib}/refs-ejb3-ejblink.ear">
+			<fileset dir="${build.lib}">
+				<include name="refs-one-ejb.jar" />
+				<include name="refs-two-ejb.jar" />
+				<include name="refs-ejblink-client.jar" />
+			</fileset>
+		</jar>
+		
+      <!-- refspath-client.jar -->
+      <jar destfile="${build.lib}/refspath-client.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.jboss.test.refs.clientpath.Client" />
+         </manifest>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/refs/clientpath/*" />
+            <include name="org/jboss/test/refs/clientpath/ejbs/Iface*" />
+         </fileset>
+      </jar>
+      <!-- refspath-ejb1.jar -->
+      <jar destfile="${build.lib}/refspath-ejb1.jar">
+         <metainf dir="${build.resources}/refs/clientpath/ejb1">
+            <include name="*.xml" />
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/refs/clientpath/ejbs/EjbLink1Bean*" />
+            <include name="org/jboss/test/refs/clientpath/ejbs/Iface1*" />
+         </fileset>
+      </jar>
+      <!-- refspath-ejb2.jar -->
+      <jar destfile="${build.lib}/refspath-ejb2.jar">
+         <metainf dir="${build.resources}/refs/clientpath/ejb2">
+            <include name="*.xml" />
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/refs/clientpath/ejbs/EjbLink2Bean*" />
+            <include name="org/jboss/test/refs/clientpath/ejbs/Iface2*" />
+         </fileset>
+      </jar>
+		<!-- refspath.ear -->
+      <jar destfile="${build.lib}/refspath.ear">
+         <fileset dir="${build.lib}">
+            <include name="refspath-client.jar" />
+            <include name="refspath-ejb1.jar" />
+            <include name="refspath-ejb2.jar" />
+         </fileset>
+      </jar>
+	</target>
+</project>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xslt><![CDATA[
+<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='1.0'>
+
+     <xsl:output method="xml" />
+     
+     <xsl:param name="host"/>
+     <xsl:param name="port"/>
+     <xsl:param name="other"/>
+
+     <xsl:template match="/">
+       <xsl:apply-templates/>       
+     </xsl:template>
+
+     <xsl:template match="attribute[@name='host']">
+        <attribute type="java.lang.String" name="host"><xsl:value-of select='$host'/></attribute>
+     </xsl:template>
+
+     <xsl:template match="attribute[@name='port']">
+         <attribute type="java.lang.String" name="port"><xsl:value-of select='$port'/></attribute>
+     </xsl:template>
+
+     <xsl:template match="attribute[@name='other']">
+         <attribute type="java.lang.String" name="other"><xsl:value-of select='$other'/></attribute>
+     </xsl:template>
+
+     <xsl:template match="*|@*">
+       <xsl:copy>
+         <xsl:apply-templates select="@*|node()"/>
+       </xsl:copy>
+     </xsl:template>
+     
+</xsl:stylesheet>
+   ]]>
+</xslt>

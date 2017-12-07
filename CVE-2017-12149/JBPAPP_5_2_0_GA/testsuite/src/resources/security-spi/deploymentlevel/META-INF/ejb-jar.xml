@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+         http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd"
+         version="2.1">
+   <enterprise-beans>
+      <!-- Session Beans -->
+      <session >
+         <description>Deployment level role mapping test</description>
+         <ejb-name>DeploymentLevelRoleMappingBean</ejb-name>
+         <home>org.jboss.test.security.interfaces.StatelessSessionHome</home>
+         <remote>org.jboss.test.security.interfaces.StatelessSession</remote>
+         <ejb-class>org.jboss.test.security.ejb.UncheckedSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+   </enterprise-beans>
+
+   <!-- Assembly Descriptor -->
+   <assembly-descriptor >
+      <security-role>
+         <description>The role required to invoke the echo method</description>
+         <role-name>GoodUser</role-name>
+      </security-role>
+      <!-- The methods the Echo role can access -->
+      <method-permission>
+         <role-name>GoodUser</role-name> 
+         <method>
+            <ejb-name>DeploymentLevelRoleMappingBean</ejb-name>
+            <method-name>*</method-name>
+         </method> 
+      </method-permission>
+   </assembly-descriptor>
+</ejb-jar>

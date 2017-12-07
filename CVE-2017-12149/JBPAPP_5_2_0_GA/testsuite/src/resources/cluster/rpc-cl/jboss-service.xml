@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+
+  <loader-repository>rpctestcase:loader=rpc-cl-tests.sar</loader-repository>
+  
+  <mbean code="org.jboss.test.cluster.hapartition.rpc.RPCUser" name="jboss.test:service=RPCClassLoaderTestCase">
+    <attribute name="HAPartition"><inject bean="HAPartition"/></attribute>
+  </mbean>
+  
+  <mbean code="org.jboss.test.cluster.hapartition.rpc.RPCUser" name="jboss.test:service=RPCOneNodeClassLoaderTestCase">
+    <attribute name="HAPartition"><inject bean="HAPartition"/></attribute>
+  </mbean>
+  
+</server>

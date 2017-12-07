@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<!--
+   | Targets that run the Secured Mask tests
+-->
+ 
+<project name="jbpapp9326.tests" xmlns:server="http://jboss.org/ns/test/ant/server">
+
+  <!--
+  |  Define the Pattern Sets Here
+  --> 
+  <patternset id="jbpapp9326.includes-1">
+    <include name="org/jboss/test/jmx/test/JVMShutdownShutdownTestCase.class"/>
+  </patternset>
+
+  <patternset id="jbpapp9326.includes-2">
+    <include name="org/jboss/test/jmx/test/JVMShutdownExitTestCase.class"/>
+  </patternset>
+
+  <patternset id="jbpapp9326.includes-3">
+    <include name="org/jboss/test/jmx/test/JVMShutdownHaltTestCase.class"/>
+  </patternset>
+
+  <!--
+    | Targets
+  -->
+   <target name="tests-jbpapp9326" description="Runs JBPAPP-9326 JVMShutdown tests">
+
+      <delete dir="${jboss.dist}/server/jbpapp9326" />
+			<create-config baseconf="default" newconf="jbpapp9326">
+				<patternset>
+					<include name="**/*"/>
+				</patternset>
+			</create-config>
+
+			<copy file="${source.resources}/jbpapp9326/jmx-console-users.properties" overwrite="true" todir="${jboss.dist}/server/jbpapp9326/conf/props/" />
+
+     <server:start name="jbpapp9326"/>
+     <run-junit junit.patternset="jbpapp9326.includes-1"/>
+     <sleep seconds="5" />
+
+     <server:start name="jbpapp9326"/>
+     <run-junit junit.patternset="jbpapp9326.includes-2"/>
+     <sleep seconds="5" />
+
+     <server:start name="jbpapp9326"/>
+     <run-junit junit.patternset="jbpapp9326.includes-3"/>
+     <sleep seconds="5" />
+
+  </target>
+</project>
+

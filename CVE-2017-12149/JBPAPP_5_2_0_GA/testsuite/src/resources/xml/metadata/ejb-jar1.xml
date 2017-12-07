@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ejb-jar >
+    
+    <enterprise-beans>
+        <session >
+            <description><![CDATA[DependentB SessionBean]]></description>
+            <display-name>DependentB SessionBean</display-name>
+            
+            <ejb-name>DependentBEJB</ejb-name>
+            
+            <home>org.jboss.test.jmx.eardepends.dependent.interfaces.DependentBEJBHome</home>
+            <remote>org.jboss.test.jmx.eardepends.dependent.interfaces.DependentBEJB</remote>
+            <ejb-class>org.jboss.test.jmx.eardepends.dependent.ejb.DependentBBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+            
+        </session>
+        
+        <session >
+            <description><![CDATA[DependentA SessionBean]]></description>
+            <display-name>DependentA SessionBean</display-name>
+            
+            <ejb-name>DependentAEJB</ejb-name>
+            
+            <home>org.jboss.test.jmx.eardepends.dependent.interfaces.DependentAEJBHome</home>
+            <remote>org.jboss.test.jmx.eardepends.dependent.interfaces.DependentAEJB</remote>
+            <ejb-class>org.jboss.test.jmx.eardepends.dependent.ejb.DependentABean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+            
+        </session>
+        
+    </enterprise-beans>
+    
+</ejb-jar>

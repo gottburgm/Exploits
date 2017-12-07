@@ -1,0 +1,16 @@
+<assembly>
+  <id>jboss-local-jdbc</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/resource/adapter/jdbc/local/Local*.class</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

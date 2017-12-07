@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 5.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_5_0.dtd">
+
+<jboss>
+  
+  <!-- [JBWS-1339] @Security domain vs. <security-domain> -->
+  <security-domain>java:/jaas/JBossWS</security-domain>
+  
+  <enterprise-beans>
+    <session>
+      <ejb-name>EJB3Client</ejb-name>
+      
+      <!-- 
+      @WebServiceRef(name = "service1", value = EndpointService.class, wsdlLocation = "META-INF/wsdl/Endpoint.wsdl")
+      <service-ref>
+        <service-ref-name>service1</service-ref-name>
+        <wsdl-override>META-INF/wsdl/Endpoint.wsdl</wsdl-override>
+      </service-ref>
+      -->
+      
+      <!-- 
+      @WebServiceRef(name = "service2", value = EndpointService.class)
+      -->
+      <service-ref>
+        <service-ref-name>service2</service-ref-name>
+        <service-qname>{http://org.jboss.ws/wsref}EndpointService</service-qname>
+        <wsdl-override>META-INF/wsdl/Endpoint.wsdl</wsdl-override>
+      </service-ref>
+      
+      <!-- 
+      @WebServiceRef(name = "EndpointService3")
+      -->
+      <service-ref>
+        <service-ref-name>EndpointService3</service-ref-name>
+        <service-qname>{http://org.jboss.ws/wsref}EndpointService</service-qname>
+        <wsdl-override>META-INF/wsdl/Endpoint.wsdl</wsdl-override>
+      </service-ref>
+      
+      <!-- 
+      @WebServiceRef
+      -->
+      <service-ref>
+        <service-ref-name>org.jboss.test.ws.jaxws.samples.webserviceref.EJB3Client/service4</service-ref-name>
+        <service-qname>{http://org.jboss.ws/wsref}EndpointService</service-qname>
+        <wsdl-override>META-INF/wsdl/Endpoint.wsdl</wsdl-override>
+      </service-ref>
+      
+      <!-- 
+      @WebServiceRef(name = "EndpointService5")
+      -->
+      <service-ref>
+        <service-ref-name>EndpointService5</service-ref-name>
+        <service-qname>{http://org.jboss.ws/wsref}EndpointService</service-qname>
+        <wsdl-override>META-INF/wsdl/Endpoint.wsdl</wsdl-override>
+      </service-ref>
+      
+      <!-- 
+      @WebServiceRef
+      -->
+      <service-ref>
+        <service-ref-name>org.jboss.test.ws.jaxws.samples.webserviceref.EJB3Client/service6</service-ref-name>
+        <service-qname>{http://org.jboss.ws/wsref}EndpointService</service-qname>
+        <wsdl-override>META-INF/wsdl/Endpoint.wsdl</wsdl-override>
+      </service-ref>
+      
+      <!-- 
+      @WebServiceRef(name = "port1", value = EndpointService.class, type = Endpoint.class)
+      -->
+      <service-ref>
+        <service-ref-name>port1</service-ref-name>
+        <service-qname>{http://org.jboss.ws/wsref}EndpointService</service-qname>
+        <wsdl-override>META-INF/wsdl/Endpoint.wsdl</wsdl-override>
+      </service-ref>
+      
+      <!-- 
+      @WebServiceRef(name = "Port2", value = EndpointService.class)
+      -->
+      <service-ref>
+        <service-ref-name>Port2</service-ref-name>
+        <service-qname>{http://org.jboss.ws/wsref}EndpointService</service-qname>
+        <wsdl-override>META-INF/wsdl/Endpoint.wsdl</wsdl-override>
+      </service-ref>
+      
+      <!-- 
+      @WebServiceRef(value = EndpointService.class)
+      -->
+      <service-ref>
+        <service-ref-name>org.jboss.test.ws.jaxws.samples.webserviceref.EJB3Client/port3</service-ref-name>
+        <service-qname>{http://org.jboss.ws/wsref}EndpointService</service-qname>
+        <wsdl-override>META-INF/wsdl/Endpoint.wsdl</wsdl-override>
+      </service-ref>
+    </session>
+  </enterprise-beans>
+  
+</jboss>

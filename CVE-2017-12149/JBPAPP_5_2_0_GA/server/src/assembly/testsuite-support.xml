@@ -1,0 +1,24 @@
+<assembly>
+  <id>testsuite-support</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/jmx/service/RemoteDeployer*.class</include>
+        <include>org/jboss/jmx/connector/RemoteMBeanServer**</include>
+        <include>org/jboss/jmx/connector/notification/RMI**</include>
+        <include>org/jboss/jmx/connector/rmi/RMIConnector.class</include>
+        <include>org/jboss/jmx/connector/rmi/RMINotificationListener.class</include>
+        <include>org/jboss/jmx/connector/rmi/RMIClientConnectorImpl*.class</include>
+        <include>org/jboss/jmx/connector/rmi/RMIConnectorImpl_Stub.class</include>
+        <include>org/jboss/jmx/connector/ConnectorFactory*.class</include>
+        <include>org/jboss/ejb/CacheKey.class</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

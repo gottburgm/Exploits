@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+   <mbean code="org.jboss.test.bootstrap.property.properties.PropertyAware"
+      name="test:type=property,name=properties">
+      <attribute name="Properties">x=${user.home}</attribute>
+   </mbean>
+</server>

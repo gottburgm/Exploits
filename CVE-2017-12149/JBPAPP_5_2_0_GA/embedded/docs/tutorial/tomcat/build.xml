@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+
+<!-- ======================================================================= -->
+<!-- JBoss build file                                                       -->
+<!-- ======================================================================= -->
+
+<project name="JBoss" default="ejbjar" basedir=".">
+
+   <property environment="env"/>
+   <property name="src.dir" value="${basedir}/src"/>
+   <property name="build.dir" value="${basedir}/build"/>
+   <property name="build.classes.dir" value="${build.dir}/classes"/>
+   <property name="lib.dir" value="../../../lib"/>
+   <property name="conf.dir" value="../../../bootstrap"/>
+
+   <!-- Build classpath -->
+   <path id="build.classpath">
+      <fileset dir="${lib.dir}">
+         <include name="*.jar"/>
+      </fileset>
+      <pathelement location="${conf.dir}"/>
+   </path>
+
+   <!-- =================================================================== -->
+   <!-- Prepares the build directory                                        -->
+   <!-- =================================================================== -->
+   <target name="prepare">
+      <mkdir dir="${build.dir}"/>
+      <mkdir dir="${build.classes.dir}"/>
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- Compiles the source code                                            -->
+   <!-- =================================================================== -->
+   <target name="compile" depends="prepare">
+      <javac srcdir="${src.dir}"
+         destdir="${build.classes.dir}"
+         debug="on"
+         deprecation="on"
+         optimize="off"
+         includes="**">
+         <classpath refid="build.classpath"/>
+      </javac>
+   </target>
+
+   <target name="ejbjar" depends="compile">
+      <jar jarfile="${build.dir}/tutorial.jar">
+         <fileset dir="${build.classes.dir}">
+            <include name="**/*.class"/>
+         </fileset>
+         <fileset dir="resources">
+            <include name="META-INF/persistence.xml"/>
+         </fileset>
+      </jar>
+   </target>
+   <target name="scan.webinf.lib.war" depends="ejbjar">
+      <delete file="${build.dir}/embedded-jboss.war"/>
+      <war warfile="${build.dir}/embedded-jboss.war"
+         webxml="resources/scan.webinf.lib.xml">
+         <lib dir="${build.dir}">
+            <include name="tutorial.jar"/>
+         </lib>
+         <fileset dir="${src.dir}">
+            <include name="EmbeddedJBoss.jsp"/>
+         </fileset>
+      </war>
+   </target>
+   <target name="finegrain.war" depends="ejbjar">
+      <delete file="${build.dir}/embedded-jboss.war"/>
+      <war warfile="${build.dir}/embedded-jboss.war"
+         webxml="resources/finegrain.web.xml">
+         <lib dir="${build.dir}">
+            <include name="tutorial.jar"/>
+         </lib>
+         <fileset dir="${src.dir}">
+            <include name="EmbeddedJBoss.jsp"/>
+         </fileset>
+      </war>
+   </target>
+   <target name="builtin.war" depends="ejbjar">
+      <delete file="${build.dir}/embedded-jboss.war"/>
+      <war warfile="${build.dir}/embedded-jboss.war"
+         webxml="resources/builtin.web.xml">
+         <lib dir="${build.dir}">
+            <include name="tutorial.jar"/>
+         </lib>
+         <fileset dir="${src.dir}">
+            <include name="EmbeddedJBoss.jsp"/>
+         </fileset>
+      </war>
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- Cleans up generated stuff                                           -->
+   <!-- =================================================================== -->
+   <target name="clean">
+      <delete dir="${build.dir}"/>
+   </target>
+
+
+</project>
+

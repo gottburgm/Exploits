@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+   <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
+   <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+]>
+
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--  JBoss, the OpenSource J2EE webOS                                      -->
+<!--                                                                        -->
+<!--  Distributable under LGPL license.                                     -->
+<!--  See terms of license at http://www.gnu.org.                           -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<!-- $Id: build.xml 113471 2012-08-22 07:39:05Z soul2zimate $ -->
+
+<project default="main" name="JBossWeb">
+
+  <!--
+     | Include the common Buildmagic elements.
+     |
+     | This defines several different targets, properties and paths.
+     | It also sets up the basic extention tasks amoung other things.
+   -->
+  &buildmagic;
+
+  <!--
+     | Initialize the build system.  Must depend on '_buildmagic:init'.
+     | Other targets should depend on 'init' or things will mysteriously fail.
+   -->
+  <target name="init" unless="init.disable" depends="_buildmagic:init">
+  </target>
+
+  <!--
+     | Configure the build system.
+     |
+     | This target is invoked by the Buildmagic initialization logic and
+     | should contain module specific configuration elements.
+   -->
+  <target name="configure" unless="configure.disable">
+
+    <!-- Module name(s) & version -->
+    <property name="module.name" value="tomcat"/>
+    <property name="module.Name" value="JBossWeb Plugin"/>
+    <property file="module.version"/>
+
+    &libraries;
+    <!-- The combined library classpath -->
+    <path id="library.classpath">
+      <path refid="jboss.web.classpath"/>
+      <path refid="sun.jaxb.classpath"/>
+      <path refid="sun.jsf.classpath"/>
+      <path refid="apache.commons.classpath"/>
+      <path refid="apache.log4j.classpath"/>
+      <path refid="junit.junit.classpath"/>
+      <path refid="dom4j.dom4j.classpath"/>
+      <path refid="oswego.concurrent.classpath"/>
+      <path refid="jgroups.jgroups.classpath"/>
+      <path refid="jboss.common.core.classpath"/>
+      <path refid="jboss.common.logging.spi.classpath"/>
+      <path refid="org.jboss.ws.native.classpath"/>
+      <path refid="org.jboss.spec.javax.xml.rpc.classpath"/>
+      <path refid="saaj.api.classpath"/>
+      <path refid="org.jboss.ws.classpath"/>
+      <path refid="jboss.jbossxb.classpath"/>
+      <path refid="jboss.serialization.classpath"/>
+      <path refid="jboss.metadata.classpath"/>      
+      <path refid="jboss.jboss.cl.classpath"/>      
+      <path refid="jboss.jboss.deployers.classpath"/>      
+      <path refid="jboss.jboss.man.classpath"/>           
+      <path refid="jboss.jboss.mdr.classpath"/>      
+      <path refid="jboss.microcontainer.classpath"/>
+      <path refid="jboss.jboss.vfs.classpath"/>
+      <path refid="jboss.integration.classpath"/>
+      <path refid="jboss.jboss.ejb3.core.classpath" />
+      <path refid="jboss.jboss.ejb3.interceptors.classpath" />
+      <path refid="jboss.jboss.ejb3.vfs.spi.classpath" />
+      <path refid="jboss.jboss.ejb3.vfs.impl.vfs2.classpath" />
+      <path refid="org.jboss.cluster.classpath"/>
+      <path refid="jboss.jboss.jpa.deployers.classpath" />
+      <path refid="jboss.jboss.reflect.classpath" />
+      <path refid="net.jcip.classpath" />
+    </path>
+
+    <!-- ======= -->
+    <!-- Modules -->
+    <!-- ======= -->
+
+    <!-- The combined dependent module classpath -->
+    &modules;
+    <path id="dependentmodule.classpath">
+      <path refid="hibernate.entitymanager.classpath"/>
+      <path refid="jboss.jboss.javaee.classpath"/>
+      <path refid="jboss.jboss.jaspi.api.classpath"/>
+      <path refid="jboss.jboss.bootstrap.classpath"/>
+      <path refid="jboss.system.classpath"/>
+      <path refid="jboss.systemjmx.classpath"/>
+      <path refid="jboss.jboss.security.spi.classpath"/>
+      <path refid="jboss.jbosssx.classpath"/>
+      <path refid="jboss.security.int.classpath"/>
+      <path refid="jboss.server.classpath"/>
+      <path refid="jboss.j2se.classpath"/>
+      <path refid="jboss.aop.classpath"/>
+      <path refid="jboss.aspects.classpath"/>
+      <path refid="jboss.jca.classpath"/>
+      <path refid="jboss.test.classpath" />
+      <path refid="jboss.iiop.classpath"/>
+      <path refid="jboss.cluster.classpath"/>
+    </path>
+
+    <!-- The combined thirdparty classpath -->
+    <path id="thirdparty.classpath">
+      <path refid="library.classpath"/>
+      <path refid="dependentmodule.classpath"/>
+    </path>
+
+    <!-- Where source files live -->
+    <property name="source.java" value="${module.source}/main"/>
+    <property name="source.tests" value="${module.source}/tests"/>
+    <property name="source.etc" value="${module.source}/etc"/>
+    <property name="source.resources" value="${module.source}/resources"/>
+    <property name="source.webapps" value="${module.source}/webapps"/>
+
+    <!-- Where build generated files will go -->
+    <property name="build.classes" value="${module.output}/classes"/>
+    <property name="build.deploy" value="${module.output}/deploy"/>
+    <property name="build.lib" value="${module.output}/lib"/>
+    <property name="build.api" value="${module.output}/api"/>
+    <property name="build.etc" value="${module.output}/etc"/>
+    <property name="build.ejb" value="${module.output}/ejb"/>
+    <property name="build.metadata" value="${module.output}/META-INF"/>
+    <property name="build.reports" value="${module.output}/reports"/>
+    <property name="build.resources" value="${module.output}/resources"/>
+    <property name="build.todo" value="${module.output}/todo"/>
+
+    <!-- classpath and local.classpath must have a value using with a path -->
+    <property name="classpath" value=""/>
+    <property name="local.classpath" value=""/>
+
+    <!-- The classpath required to build classes. -->
+    <path id="javac.tomcat.classpath">
+      <pathelement path="${classpath}"/>
+      <pathelement path="${local.classpath}"/>
+      <path refid="jboss.web.classpath"/>
+      <path refid="thirdparty.classpath"/>
+    </path>
+
+    <!-- The classpath required to build classes. -->
+    <path id="javac.classpath">
+      <path refid="javac.tomcat.classpath"/>
+    </path>
+
+    <!-- The classpath required to build javadocs. -->
+    <path id="javadoc.classpath">
+      <path refid="javac.tomcat.classpath"/>
+    </path>
+
+    <!-- Packages to include when generating api documentation -->
+    <property name="javadoc.packages" value="org.jboss.*"/>
+
+  </target>
+
+  <!--
+     |  Compile everything.
+     |
+     |  This target should depend on other compile-* targets for each
+     |  different type of compile that needs to be performed, short of
+     |  documentation compiles.
+    -->
+  <target name="compile"
+    depends="compile-classes, compile-resources, compile-etc"
+    description="Compile all source files."/>
+
+  <!-- Compile all class files -->
+  <target name="compile-classes" depends="init">
+    <mkdir dir="${build.classes}"/>
+    <javac destdir="${build.classes}"
+      optimize="${javac.optimize}"
+      target="1.5"
+      source="1.5"
+      debug="${javac.debug}"
+      depend="${javac.depend}"
+      verbose="${javac.verbose}"
+      deprecation="false"
+      includeAntRuntime="${javac.include.ant.runtime}"
+      includeJavaRuntime="${javac.include.java.runtime}"
+      failonerror="${javac.fail.onerror}">
+      <src path="${source.java}"/>
+      <src path="${source.tests}"/>
+      <classpath refid="javac.tomcat.classpath"/>
+    </javac>
+    <copy todir="${build.classes}">
+      <fileset dir="${source.java}">
+        <exclude name="**/*.java"/>
+        <exclude name="**/*.ser"/>
+      </fileset>
+    </copy>
+
+  </target>
+
+  <!-- Compile resource files -->
+  <target name="compile-resources" depends="init">
+    <mkdir dir="${build.resources}"/>
+    <copy todir="${build.resources}" filtering="yes">
+      <fileset dir="${source.resources}">
+        <include name="**/*"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <!-- Compile manifests -->
+  <target name="compile-etc" depends="init">
+    <mkdir dir="${build.etc}"/>
+    <copy todir="${build.etc}" filtering="yes">
+       <fileset dir="${source.etc}">
+         <include name="**"/>
+       </fileset>
+    </copy>
+    <copy todir="${build.deploy}">
+      <fileset dir="${source.webapps}">
+        <include name="**"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <!--
+     | Build all jar files.
+   -->
+  <target name="jars"
+    description="Build the Service Archive"
+    depends="_buildmagic:build-bypass-check"
+    unless="build-bypass.on">
+
+    <call target="compile"/>
+
+    <mkdir dir="${build.lib}"/>
+    <mkdir dir="${build.deploy}/jboss-web.deployer/META-INF"/>
+
+    <!-- Build the jboss-web.deployer -->
+    <copy file="${build.resources}/web.xml"
+        tofile="${build.deploy}/jboss-web.deployer/web.xml"/>
+    <copy todir="${build.deploy}/jboss-web.deployer/META-INF">
+       <fileset dir="${build.resources}">
+          <include name="jboss-structure.xml" />
+          <include name="war-deployers-jboss-beans.xml" />
+          <include name="webserver-xmbean.xml" />
+       </fileset>
+    </copy>	
+    <jar jarfile="${build.deploy}/jboss-web.deployer/jboss-web-deployer.jar"
+      manifest="${build.etc}/default.mf">
+      <!-- The service classes -->
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/web/tomcat/service/deployers/ClusteringDefaultsDeployer.class"/>
+        <include name="org/jboss/web/tomcat/service/deployers/ClusteringDependencyDeployer.class"/>
+        <include name="org/jboss/web/tomcat/service/deployers/DeployerConfig.class"/>
+        <include name="org/jboss/web/tomcat/service/deployers/TomcatDeployer.class"/>
+        <include name="org/jboss/web/tomcat/service/deployers/TomcatDeployer$ENCLoader.class"/>
+        <include name="org/jboss/web/tomcat/service/deployers/TomcatDeployerMBean.class"/>
+        <include name="org/jboss/web/tomcat/service/deployers/WarClassLoaderDeployer.class"/>
+      </fileset>
+    </jar>
+
+    <!-- SAR for the webserver runtime -->
+  	<mkdir dir="${build.deploy}/jbossweb.sar/META-INF"/>
+    <copy tofile="${build.deploy}/jbossweb.sar/META-INF/jboss-beans.xml"
+          file="${build.resources}/jboss-beans.xml"/>
+    <copy tofile="${build.deploy}/jbossweb.sar/META-INF/jboss-structure.xml"
+          file="${build.resources}/jboss-structure-sar.xml"/>
+        
+    <copy file="${build.resources}/context.xml"
+      todir="${build.deploy}/jbossweb.sar"/>
+    <copy file="${build.resources}/server.xml"
+      tofile="${build.deploy}/jbossweb.sar/server.xml"/>
+    <copy todir="${build.deploy}/jbossweb.sar">
+      <fileset dir="${jboss.web.lib}">
+        <include name="*.jar"/>
+        <exclude name="el-api.jar"/>
+        <exclude name="jsp-api.jar"/>
+        <exclude name="servlet-api.jar"/>
+        <exclude name="jbossweb-sources.jar"/>
+      </fileset>
+      <fileset dir="${jboss.jboss.jaspi.api.lib}">
+	<include name="jboss-jaspi-api-1.0_spec.jar"/>
+      </fileset>
+    </copy>
+    <copy todir="${build.deploy}/jbossweb.sar"
+       file="${sun.jstl.lib}/jstl.jar" />        
+    <mkdir dir="${build.deploy}/jbossweb.sar/jsf-libs"/>
+   <copy todir="${build.deploy}/jbossweb.sar/jsf-libs">        
+       <fileset dir="${sun.jsf.lib}">           
+          <include name="*.jar"/>
+          <exclude name="*-sources.jar"/>
+       </fileset>
+    </copy>
+    <!-- jar for jsf integration classes -->
+    <jar jarfile="${build.deploy}/jbossweb.sar/jsf-libs/jboss-faces.jar">
+      <fileset dir="${build.classes}">
+         <include name="org/jboss/web/jsf/integration/**"/>
+      </fileset>
+    </jar>
+
+    <jar jarfile="${build.deploy}/jbossweb.sar/jboss-web-service.jar"
+      manifest="${build.etc}/default.mf">
+      <!-- The service classes -->
+      <fileset dir="${build.classes}">
+        <exclude name="org/jboss/web/tomcat/service/deployers/ClusteringDefaultsDeployer.class"/>
+        <exclude name="org/jboss/web/tomcat/service/deployers/ClusteringDependencyDeployer.class"/>
+        <exclude name="org/jboss/web/tomcat/service/deployers/DeployerConfig.class"/>
+        <exclude name="org/jboss/web/tomcat/service/deployers/TomcatDeployer.class"/>
+        <exclude name="org/jboss/web/tomcat/service/deployers/TomcatDeployer$ENCLoader.class"/>
+        <exclude name="org/jboss/web/tomcat/service/deployers/TomcatDeployerMBean.class"/>
+        <exclude name="org/jboss/web/tomcat/service/deployers/WarClassLoaderDeployer.class"/>
+        <exclude name="org/jboss/**/*.properties"/>
+        <exclude name="org/jboss/web/tomcat/service/session/AopMarker*"/>
+        <exclude name="org/jboss/web/tomcat/service/session/InstanceOfAopMarker*"/>
+        <include name="org/jboss/net/**"/>
+        <include name="org/jboss/web/tomcat/filters/**"/>
+        <include name="org/jboss/web/tomcat/metadata/**"/>
+        <include name="org/jboss/web/tomcat/servlets/**"/>
+        <include name="org/jboss/web/tomcat/service/**"/>
+        <include name="org/jboss/web/tomcat/security/**"/>
+        <include name="org/jboss/web/tomcat/statistics/**"/>
+      </fileset>
+      <!-- Get the property-files -->
+      <fileset dir="${source.java}">
+        <include name="org/jboss/**/*.properties"/>
+      </fileset>
+    </jar>
+
+     <!-- jar for fine grained aop -->
+     <!-- package in .aop. This is used for fine-grained replication -->
+     <jar destfile="${build.lib}/jbossweb-cluster.aop">
+        <fileset dir="${build.resources}">
+           <include name="META-INF/jboss-aop.xml"/>
+        </fileset>
+     </jar>
+     
+   <!-- Cluster caches and aop descriptor used for fine-grained replication -->
+   <mkdir dir="${build.deploy}/cluster"/>
+   <copy todir="${build.deploy}/cluster"
+         file="${build.lib}/jbossweb-cluster.aop"/>
+
+    <!-- Update the build marker to allow bypassing -->
+    <touch file="${build-bypass.marker}"/>
+
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- Cleaning                                                           -->
+  <!-- ================================================================== -->
+
+  <!-- Clean up all build output -->
+  <target name="clean"
+    description="Cleans up most generated files."
+    depends="_buildmagic:clean">
+  </target>
+
+  <!-- Clean up all generated files -->
+  <target name="clobber"
+    description="Cleans up all generated files."
+    depends="_buildmagic:clobber, clean">
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- Misc.                                                              -->
+  <!-- ================================================================== -->
+
+  <target name="main" depends="most"
+    description="Executes the default target (most)."/>
+
+  <target name="most"
+    description="Executes the default target (jars)."
+    depends="jars"/>
+
+  <target name="all"
+    description="Builds everything."
+    depends="jars, docs"/>
+
+  <target name="help"
+    description="Show this help message."
+    depends="_buildmagic:help:standard"/>
+
+</project>

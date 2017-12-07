@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   The JBossXMBean XB schema.
+   @version $Id: jboss_xmbean_2_0.xsd 42804 2006-03-27 17:42:16Z starksm $ 
+   @author Scott.Stark@jboss.org
+   @author Dimitris Andreadis
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   elementFormDefault="qualified"
+   attributeFormDefault="unqualified"
+   targetNamespace="urn:jboss-test:xmbean:2.0"
+   xmlns:xmbean="urn:jboss-test:xmbean:2.0"
+   xmlns:jbxb="http://www.jboss.org/xml/ns/jbxb"
+   >
+   <xs:annotation>
+      <xs:documentation>The global jbossxb binding information</xs:documentation>
+      <xs:appinfo>
+      <jbxb:schemaBindings>
+         <jbxb:package>org.jboss.mx.metadata.xb</jbxb:package>
+         <jbxb:ignoreUnresolvedFieldOrClass>false</jbxb:ignoreUnresolvedFieldOrClass>
+         <jbxb:replacePropertyRefs>true</jbxb:replacePropertyRefs>
+      </jbxb:schemaBindings>
+   </xs:appinfo>
+   </xs:annotation>
+
+   <xs:element name="mbean">
+       <xs:annotation>
+          <xs:documentation>
+             <![CDATA[
+             The mbean element is the root element of the XMBean container descriptor.
+	    <xmbean:mbean xmlns:xmbean="urn:jboss-test:xmbean:2.0">
+	      ...
+	    </xmbean:mbean>
+         ]]>
+          </xs:documentation>
+          <xs:appinfo>
+             <jbxb:class impl="org.jboss.mx.metadata.xb.ModelMBeanInfoSupportWrapper"/>
+          </xs:appinfo>
+       </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+               <xs:element name="description" minOccurs="0" type="xs:string" />
+               <xs:element name="descriptors" minOccurs="0" type="xmbean:descriptorsType"/>
+                <xs:element name="class" minOccurs="0" type="xs:string">
+                   <xs:annotation>
+                      <xs:documentation>
+                         The class element specifies the fully qualifed name of the model MBean
+                         implementation class. This class will be exposed as a ModelMBean by the
+                         JMX implementation.
+                      </xs:documentation>
+                      <xs:appinfo>
+                         <jbxb:property name="className"/>
+                      </xs:appinfo>
+                   </xs:annotation>
+                </xs:element>
+                <xs:element name="constructor" minOccurs="0" maxOccurs="unbounded" type="xmbean:constructorType"/>
+                <xs:element name="attribute" minOccurs="0" maxOccurs="unbounded" type="xmbean:attributeType"/>
+                <xs:element name="operation" minOccurs="0" maxOccurs="unbounded" type="xmbean:operationType"/>
+                <xs:element name="notification" minOccurs="0" maxOccurs="unbounded" type="xmbean:notificationType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+   <xs:complexType name="constructorType">
+       <xs:annotation>
+          <xs:documentation>
+             The constructor element describes the constructors of an MBean
+             that are exposed to the management application. The optional
+             description element can be used to to describe the use of the
+             constructor.  
+          </xs:documentation>
+             <xs:appinfo>
+                <jbxb:class
+                   impl="org.jboss.mx.metadata.xb.ModelMBeanConstructorInfoContainer"/>
+                <jbxb:addMethod name="addConstructor" valueType="javax.management.modelmbean.ModelMBeanConstructorInfo"/>
+             </xs:appinfo> 
+       </xs:annotation>
+            <xs:sequence>
+                <xs:element name="description" minOccurs="0" type="xs:string"/>
+                <xs:element name="name" type="xs:string" />
+                <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="xmbean:parameterType"/>
+                <xs:element name="descriptors" minOccurs="0" type="xmbean:descriptorsType"/>
+            </xs:sequence>
+   </xs:complexType>
+
+   <xs:complexType name="attributeType">
+       <xs:annotation>
+          <xs:documentation>
+             The attribute element describes the management attributes of an
+             MBean. The name element contains the attribute's name and the type
+             element contains a fully qualified class name of the attribute's
+             type.
+          </xs:documentation>
+          <xs:appinfo>
+             <jbxb:class
+                impl="org.jboss.mx.metadata.xb.ModelMBeanAttributeInfoContainer"/>
+             <jbxb:addMethod name="addAttribute" valueType="javax.management.modelmbean.ModelMBeanAttributeInfo"/>
+          </xs:appinfo> 
+       </xs:annotation>
+            <xs:sequence>
+                <xs:element name="description" minOccurs="0" type="xs:string"/>
+                <xs:element name="name" type="xs:string" />
+                <xs:element name="type" type="xs:string"/>
+                <xs:element name="descriptors" minOccurs="0" type="xmbean:descriptorsType"/>
+            </xs:sequence>
+      <xs:attribute name="access" default="read-write">
+         <xs:annotation>
+            <xs:documentation>The access attribute defines the  read/write access modes of an attribute</xs:documentation>
+         </xs:annotation>
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:enumeration value="read-only"/>
+               <xs:enumeration value="write-only"/>
+               <xs:enumeration value="read-write"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="getMethod">
+         <xs:annotation>
+            <xs:documentation>
+               The getMethod attribute defines the name of the method which reads
+               the named attribute. This must be specified if the managed attribute should
+               be obtained from the mbean instance.
+            </xs:documentation>
+         </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="setMethod">
+         <xs:annotation>
+            <xs:documentation>
+               The setMethod attribute defines the name of the method which writes
+               the named attribute. This must be specified if the managed attribute should
+               be obtained from the mbean instance.
+            </xs:documentation>
+         </xs:annotation>
+      </xs:attribute>
+   </xs:complexType>
+
+   <xs:complexType name="operationType">
+      <xs:annotation>
+         <xs:documentation>
+            The operation element describes a management operation of an MBean.
+            The name element contains the operation's name and the parameter
+            elements describe the operation's signature. The return-type element
+            must contain a fully qualified class name of the return type from
+            this operation.
+            
+            If return-type is not specified, void is assumed.            
+         </xs:documentation>
+         <xs:appinfo>
+            <jbxb:class
+               impl="org.jboss.mx.metadata.xb.ModelMBeanOperationInfoContainer"/>
+            <jbxb:addMethod name="addOperation" valueType="javax.management.modelmbean.ModelMBeanOperationInfo"/>
+         </xs:appinfo> 
+      </xs:annotation>
+            <xs:sequence>
+                <xs:element name="description" minOccurs="0" type="xs:string"/>
+                <xs:element name="name" type="xs:string" />
+                <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="xmbean:parameterType"/>
+                <xs:element name="return-type" minOccurs="0" type="xmbean:return-typeType"/>
+                <xs:element name="descriptors" minOccurs="0" type="xmbean:descriptorsType"/>
+            </xs:sequence>
+      <xs:attribute name="impact" default="ACTION_INFO">
+         <xs:annotation>
+            <xs:documentation>The impact attribute defines the impact of executing the operation and must be one of:
+               ACTION, The operation changes the state of the MBean component (write operation).
+               INFO, The operation should not alter the  state of the MBean component (read operation).
+               ACTION_INFO, The operation behaves like a  read/write operation.</xs:documentation>
+         </xs:annotation>
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="ACTION"/>
+               <xs:enumeration value="INFO"/>
+               <xs:enumeration value="ACTION_INFO"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+   </xs:complexType>
+        
+   <xs:complexType name="descriptorsType">
+       <xs:annotation>
+          <xs:documentation>
+             The descriptors element contains all the descriptors for a containing element, as subelements.
+             The descriptors suggested in the jmx spec have predefined elements, whereas custom descriptors have
+             a generic element.
+          </xs:documentation>
+          <xs:appinfo>
+             <jbxb:class impl="org.jboss.mx.metadata.xb.DescriptorSupportContainer"/>
+          </xs:appinfo>          
+       </xs:annotation>
+            <xs:sequence>
+                <xs:element name="interceptors" minOccurs="0" type="xmbean:interceptorsType">
+                </xs:element>
+                <xs:element name="persistence" minOccurs="0" type="xmbean:persistenceType">
+                </xs:element>
+               <xs:element name="currencyTimeLimit" minOccurs="0" type="xmbean:currencyTimeLimitType"/>
+                <xs:element name="display-name" minOccurs="0" type="xs:string" />
+                <xs:element name="default" minOccurs="0" type="xmbean:defaultType"/>
+                <xs:element name="value" minOccurs="0" type="xmbean:valueType"/>
+               <xs:element name="persistence-manager" minOccurs="0" type="xmbean:persistence-managerType"/>
+                <xs:element name="descriptor" minOccurs="0" maxOccurs="unbounded" type="xmbean:descriptorType" />
+                <xs:element name="injection" minOccurs="0" maxOccurs="unbounded" type="xmbean:injectionType"/>
+            </xs:sequence>
+        </xs:complexType>
+
+   <xs:complexType name="interceptorsType">
+       <xs:annotation>
+          <xs:documentation>
+             <![CDATA[
+            The interceptors element specifies a customized stack of interceptors
+            that will be used in place of the default stack. Currently this is only
+            used when specified at the mbean level, but it could define a custom attribute
+            or operation level interceptor stack in the future. Any stack should include the following
+            interceptors as the last interceptors:
+           
+         <interceptors>
+            <interceptor code="org.jboss.test.jmx.interceptors.JNDISecurity"
+               securityDomain="java:/jaas/secure-jndi"/>
+            <interceptor code="org.jboss.naming.interceptors.ProxyFactoryInterceptor"
+               proxyName="jboss:service=proxyFactory,type=jrmp,target=Naming"/>
+            <interceptor code="org.jboss.mx.interceptor.PersistenceInterceptor2" />
+            <interceptor code="org.jboss.mx.interceptor.ModelMBeanInterceptor" />
+            <interceptor code="org.jboss.mx.interceptor.ObjectReferenceInterceptor" />
+         </interceptors>
+           ]]>
+          </xs:documentation>
+          <xs:appinfo>
+             <jbxb:class impl="org.jboss.mx.metadata.xb.InterceptorsHolder"/>             
+          </xs:appinfo>
+       </xs:annotation>
+       
+       <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="interceptor" type="xmbean:interceptorType" />                
+          <xs:any namespace="##other" processContents="strict">
+             <xs:annotation>
+                <xs:appinfo>
+                   <jbxb:addMethod name="addInterceptor"
+                      valueType="org.jboss.mx.interceptor.Interceptor"/>
+                </xs:appinfo>
+             </xs:annotation>
+          </xs:any>
+       </xs:choice>
+    </xs:complexType>
+
+   <xs:complexType name="interceptorType">
+      <xs:annotation>
+         <xs:documentation>
+            The interceptor element specifies a custom interceptor instance.
+            
+            Each interceptor must implement the org.jboss.mx.interceptor.Interceptor
+            interface, and must have either a no-arg constructor, or a constructor
+            that accepts a javax.management.modelmbean.ModelMBeanInfo.
+         </xs:documentation>
+         <xs:appinfo>
+            <jbxb:class impl="org.jboss.mx.metadata.xb.InterceptorHolder"/>             
+            <jbxb:addMethod name="addInterceptor"
+               valueType="org.jboss.mx.interceptor.Interceptor"/>
+         </xs:appinfo>
+      </xs:annotation>
+      <xs:attribute name="code" />
+      <xs:anyAttribute />
+   </xs:complexType>
+
+   <xs:complexType name="persistenceType">
+        <xs:annotation>
+           <xs:documentation>
+              The persistence element contains descriptors for the persistPolicy,
+              persistPeriod, persistLocation, and persistName properties suggested by the spec.
+           </xs:documentation>
+        </xs:annotation>
+              <xs:attribute name="persistPolicy">
+                 <xs:annotation>
+                    <xs:documentation>
+                       The persistPolicy defines how attributes should be persisted and must be one of:
+                       Never, attribute values are transient values that are never persisted
+                       OnUpdate, attribute values are persisted whenever they are updated
+                       OnTimer, attribute values are persisted based on the time given by the persistPeriod.
+                       NoMoreOftenThan, attribute values are persisted when updated unless but no more
+                       oten than the persistPeriod.
+                    </xs:documentation>
+                 </xs:annotation>
+                 <xs:simpleType>
+                    <xs:restriction base="xs:token">
+                       <xs:enumeration value="Never"/>
+                       <xs:enumeration value="OnUpdate"/>
+                       <xs:enumeration value="NoMoreOftenThan"/>
+                       <xs:enumeration value="OnTimer"/>
+                    </xs:restriction>
+                 </xs:simpleType>
+              </xs:attribute>
+              <xs:attribute name="persistPeriod">
+                 <xs:annotation>
+                    <xs:documentation>The persistPeriod attribute gives the update frequency in milliseconds if
+                       the perisitPolicy attribute is NoMoreOftenThan or OnTimer.</xs:documentation>
+                 </xs:annotation>
+              </xs:attribute>
+              <xs:attribute name="persistLocation">
+                 <xs:annotation>
+                    <xs:documentation>The persistLocation attribute specifies the location of the persistence
+                       store. Its form depends on the JMX implementation. Currently this should refer
+                       to a directory into which the attributes will be serialized.</xs:documentation>
+                 </xs:annotation>
+              </xs:attribute>
+              <xs:attribute name="persistName">
+                 <xs:annotation>
+                    <xs:documentation>The  persistName attribute can be used in conjunction with the
+                       persistLocation attribute to further qualify the persistent store location. For
+                       a directory persistLocation the persistName specifies the file to which the
+                       attributes are stored within the directory.</xs:documentation>
+                 </xs:annotation>
+              </xs:attribute>
+     </xs:complexType>
+
+   <xs:complexType name="currencyTimeLimitType">
+       <xs:annotation>
+          <xs:documentation>The currencyTimeLimit element specifies the time in seconds that a cached
+             value of an attribute remains valid.</xs:documentation>
+       </xs:annotation>
+               <xs:attribute name="value">
+                  <xs:annotation>
+                     <xs:documentation>The value attribute gives the  currencyTimeLimit in seconds. A 0 value
+                        indicates that an attribute value should always be retrieved from the mbean and
+                        never cached. A -1 value indicates that a cache value is always valid.</xs:documentation>
+                  </xs:annotation>
+               </xs:attribute>
+        </xs:complexType>
+
+   <xs:complexType name="persistence-managerType">
+      <xs:annotation>
+         <xs:documentation>The persistence-manager element give the name of a class to use as the
+            persistence manager.</xs:documentation>
+      </xs:annotation>
+      <xs:attribute name="value">
+         <xs:annotation>
+            <xs:documentation>The value attribute specifies the class name that supplies the
+               org.jboss.mx.persistence.PersistenceManager interface implementation.</xs:documentation>
+         </xs:annotation>
+      </xs:attribute>
+   </xs:complexType>
+
+   <xs:complexType name="defaultType">
+      <xs:annotation>
+         <xs:documentation>The default element specifes a default value to use when a field has not
+            been set. Typically the value of the element is the string representation of the
+            attribute, but it can be an arbitrary xml fragment.</xs:documentation>
+      </xs:annotation>
+      <xs:complexContent>
+                <xs:extension base="xmbean:any">
+                   <xs:attribute name="value">
+                      <xs:annotation>
+                         <xs:documentation>The value  attribute  gives the default value representation.
+                            Alternatively a sub-element may be used, in which case 'trim' and
+                            'replace' apply also.</xs:documentation>
+                      </xs:annotation>
+                   </xs:attribute>
+                   <xs:attribute name="replace" default="true">
+                      <xs:annotation>
+                         <xs:documentation>The optional replace attribute indicates whether references of the form ${x}
+                            in the element content should be replaced with the corresponding System.getProperty(x) value.</xs:documentation>
+                      </xs:annotation>
+                      <xs:simpleType>
+                         <xs:restriction base="xs:token">
+                            <xs:enumeration value="true"/>
+                            <xs:enumeration value="false"/>
+                         </xs:restriction>
+                      </xs:simpleType>
+                   </xs:attribute>
+                   <xs:attribute name="trim" default="true">
+                      <xs:simpleType>
+                         <xs:restriction base="xs:token">
+                            <xs:enumeration value="true"/>
+                            <xs:enumeration value="false"/>
+                         </xs:restriction>
+                      </xs:simpleType>
+                   </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+   </xs:complexType>
+
+   <xs:complexType name="valueType">
+      <xs:annotation>
+         <xs:documentation>The  value  (initial) value for attribute. Alternatively a sub-element may be used,
+            in which case 'trim' and 'replace' apply also.</xs:documentation>
+      </xs:annotation>
+            <xs:complexContent>
+                <xs:extension base="xmbean:any">
+                   <xs:attribute name="value"/>
+                   <xs:attribute name="replace" default="true">
+                      <xs:simpleType>
+                         <xs:restriction base="xs:token">
+                            <xs:enumeration value="true"/>
+                            <xs:enumeration value="false"/>
+                         </xs:restriction>
+                      </xs:simpleType>
+                   </xs:attribute>
+                   <xs:attribute name="trim" default="true">
+                      <xs:simpleType>
+                         <xs:restriction base="xs:token">
+                            <xs:enumeration value="true"/>
+                            <xs:enumeration value="false"/>
+                         </xs:restriction>
+                      </xs:simpleType>
+                   </xs:attribute>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+ 
+   <xs:complexType name="descriptorType">
+      <xs:annotation>
+         <xs:documentation>The  descriptor element type is a custom mbean descriptor</xs:documentation>
+      </xs:annotation>
+      <xs:attribute name="name" use="required">
+         <xs:annotation>
+            <xs:documentation>The name attribute specifies the type of the descriptor.</xs:documentation>
+         </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="value" use="required">
+         <xs:annotation>
+            <xs:documentation>The value attribute specifies the descriptor value.</xs:documentation>
+         </xs:annotation>
+      </xs:attribute>
+   </xs:complexType>
+
+   <xs:complexType name="notificationType">
+      <xs:annotation>
+         <xs:documentation>
+            The notification element describes a management notification. The name
+            element contains the fully qualified name of the notification class and
+            the notification-type element contains the dot-separated notification
+            type string.
+         </xs:documentation>
+         <xs:appinfo>
+            <jbxb:class impl="org.jboss.mx.metadata.xb.ModelMBeanNotificationInfoContainer"/>
+            <jbxb:addMethod name="addNotification"
+               valueType="javax.management.modelmbean.ModelMBeanNotificationInfo" />
+         </xs:appinfo>
+      </xs:annotation>
+            <xs:sequence>
+                <xs:element name="description" minOccurs="0" type="xs:string"/>
+                <xs:element name="name" type="xs:string" />
+                <xs:element name="notification-type" maxOccurs="unbounded" type="xs:string">
+                   <xs:annotation>
+                      <xs:documentation>The notification-type element speicifies
+                         the types of notifications that may be sent. These are
+                         the value that will be seen as the the
+                         javax.management.Notification.type attribute.</xs:documentation>
+                      <xs:appinfo>
+                         <jbxb:addMethod name="addType" valueType="java.lang.String"/>
+                      </xs:appinfo>
+                   </xs:annotation>                   
+                </xs:element>
+                <xs:element name="descriptors" minOccurs="0" type="xmbean:descriptorsType"/>
+            </xs:sequence>
+   </xs:complexType>
+
+    <xs:complexType name="parameterType">
+      <xs:annotation>
+         <xs:documentation>
+            The parameter element specifies an operation/constructor parameter
+         </xs:documentation>
+         <xs:appinfo>
+            <jbxb:class impl="javax.management.MBeanParameterInfo"/>             
+            <jbxb:addMethod name="addParameter"
+               valueType="javax.management.MBeanParameterInfo"/>
+         </xs:appinfo>
+      </xs:annotation>
+       <xs:attribute name="name" type="xs:string" use="required"/>
+       <xs:attribute name="type" type="xs:string" use="required"/>
+       <xs:attribute name="description" type="xs:string" use="optional" default="param description"/>
+    </xs:complexType>
+
+   <xs:simpleType name="return-typeType" >
+      <xs:annotation>
+         <xs:documentation>The return-type element specifies the return type of an operation. If not given or empty
+            it is assumed to be the void type.</xs:documentation>
+      </xs:annotation>
+      <xs:restriction base="xs:string">
+      </xs:restriction>
+   </xs:simpleType>
+
+    <xs:complexType name="injectionType">
+      <xs:annotation>
+         <xs:documentation>The injection element describes an injection point for receiving information
+            from the jmx microkernel. Each injection point specifies the type and
+            the resource setter method to use to inject the information into the
+            resource.</xs:documentation>
+      </xs:annotation>
+      <xs:attribute name="id" use="required">
+         <xs:annotation>
+            <xs:documentation>
+               The injection id attribute specifies the injection point type. The current
+               injection point types are:
+               
+               MBeanServerType - the MBeanServer the XMBean is registered with. This requires
+               a setter with an x(javax.management.MBeanServer) signature.
+               MBeanInfoType - the XMBean ModelMBeanInfo metadata. This requires
+               a setter with an x(javax.management.MBeanInfo) signature.
+               ObjectNameType - the ObjectName the XMBean is registered under. This requires
+               a setter with an x(javax.management.ObjectName) signature.
+            </xs:documentation>
+         </xs:annotation>
+         <xs:simpleType>
+            <xs:restriction base="xs:token">
+               <xs:enumeration value="MBeanServerType"/>
+               <xs:enumeration value="MBeanInfoType"/>
+               <xs:enumeration value="ObjectNameType"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="setMethod">
+         <xs:annotation>
+            <xs:documentation>
+               The injection setMethod attribute gives the name of the method used to set
+               the injection value on the resource.
+            </xs:documentation>
+         </xs:annotation>
+      </xs:attribute>
+   </xs:complexType>
+
+    <xs:complexType name="any" mixed="true">
+        <xs:sequence>
+            <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

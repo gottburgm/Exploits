@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 4.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <session>
+         <ejb-name>CounterSession</ejb-name>
+      </session>   
+      
+      <session>
+         <ejb-name>CountedSession</ejb-name>
+         <configuration-name>CustomConfig</configuration-name>
+      </session>
+      
+      <session>
+         <ejb-name>CountedSession2</ejb-name>
+         <configuration-name>CustomConfig2</configuration-name>
+      </session>
+   </enterprise-beans>
+
+   <container-configurations>
+      <container-configuration extends="Standard Stateless SessionBean">
+         <container-name>CustomConfig</container-name>
+         <container-pool-conf>
+            <MaximumSize>0</MaximumSize>
+         </container-pool-conf>
+      </container-configuration>
+      
+      <container-configuration extends="Standard Stateless SessionBean">
+         <container-name>CustomConfig2</container-name>
+         <container-pool-conf>
+            <MaximumSize>5</MaximumSize>
+         </container-pool-conf>
+      </container-configuration>      
+   </container-configurations>
+   
+</jboss>

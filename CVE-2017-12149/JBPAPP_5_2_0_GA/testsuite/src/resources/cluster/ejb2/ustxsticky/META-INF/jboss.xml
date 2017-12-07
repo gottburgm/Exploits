@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 4.0//EN"
+        "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+<jboss>
+    <enterprise-beans>
+       <session>
+          <ejb-name>UserTransactionStickyEjb</ejb-name>
+          <jndi-name>ejb/UserTransactionStickyEjb</jndi-name>
+          <configuration-name>User Transaction Sticky Clustered Stateless SessionBean</configuration-name>
+          <clustered>true</clustered>
+          <cluster-config>
+             <partition-name>${jboss.partition.name:DefaultPartition}</partition-name>          
+             <home-load-balance-policy>org.jboss.ha.framework.interfaces.TransactionStickyRoundRobin</home-load-balance-policy> 
+             <bean-load-balance-policy>org.jboss.ha.framework.interfaces.TransactionStickyRoundRobin</bean-load-balance-policy>
+          </cluster-config>
+       </session>
+    </enterprise-beans>
+    
+    <invoker-proxy-bindings>
+       <invoker-proxy-binding>
+         <name>ustxsticky-clustered-stateless-unified-invoker</name>
+         <invoker-mbean>jboss:service=invoker,type=unifiedha</invoker-mbean>
+         <proxy-factory>org.jboss.proxy.ejb.ProxyFactoryHA</proxy-factory>
+         <proxy-factory-config>
+           <client-interceptors>
+             <home>
+               <interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>
+               <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+               <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+               <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+               <interceptor>org.jboss.proxy.ejb.SingleRetryInterceptor</interceptor>
+               <interceptor>org.jboss.proxy.TransactionStickyInterceptor</interceptor>
+               <interceptor call-by-value="false">org.jboss.invocation.InvokerInterceptor</interceptor>
+               <interceptor call-by-value="true">org.jboss.invocation.MarshallingInvokerInterceptor</interceptor>
+             </home>
+             <bean>
+               <interceptor>org.jboss.proxy.ejb.StatelessSessionInterceptor</interceptor>
+               <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+               <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+               <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+               <interceptor>org.jboss.proxy.ejb.SingleRetryInterceptor</interceptor>
+               <interceptor>org.jboss.proxy.TransactionStickyInterceptor</interceptor>               
+               <interceptor call-by-value="false">org.jboss.invocation.InvokerInterceptor</interceptor>
+               <interceptor call-by-value="true">org.jboss.invocation.MarshallingInvokerInterceptor</interceptor>
+             </bean>
+           </client-interceptors>
+         </proxy-factory-config>
+       </invoker-proxy-binding>    
+    </invoker-proxy-bindings>
+    
+    <container-configurations>
+      <container-configuration extends="Clustered Stateless SessionBean">
+         <container-name>User Transaction Sticky Clustered Stateless SessionBean</container-name>
+         <invoker-proxy-binding-name>ustxsticky-clustered-stateless-unified-invoker</invoker-proxy-binding-name>         
+         <container-interceptors>
+           <interceptor>org.jboss.test.cluster.ejb2.ustxsticky.UserTransactionStickinessVerifierInterceptor</interceptor>
+           <interceptor>org.jboss.ejb.plugins.ProxyFactoryFinderInterceptor</interceptor>
+           <interceptor>org.jboss.ejb.plugins.CleanShutdownInterceptor</interceptor>
+           <interceptor>org.jboss.ejb.plugins.LogInterceptor</interceptor>
+           <interceptor>org.jboss.ejb.plugins.SecurityInterceptor</interceptor>
+           <!-- CMT -->
+           <interceptor transaction="Container">org.jboss.ejb.plugins.TxInterceptorCMT</interceptor>
+           <interceptor transaction="Container">org.jboss.ejb.plugins.CallValidationInterceptor</interceptor>
+           <interceptor transaction="Container">org.jboss.ejb.plugins.StatelessSessionInstanceInterceptor</interceptor>
+           <!-- BMT -->
+           <interceptor transaction="Bean">org.jboss.ejb.plugins.StatelessSessionInstanceInterceptor</interceptor>
+           <interceptor transaction="Bean">org.jboss.ejb.plugins.TxInterceptorBMT</interceptor>
+           <interceptor transaction="Bean">org.jboss.ejb.plugins.CallValidationInterceptor</interceptor>
+           <interceptor>org.jboss.resource.connectionmanager.CachedConnectionInterceptor</interceptor>
+         </container-interceptors>         
+      </container-configuration>
+    </container-configurations>
+</jboss>

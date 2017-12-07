@@ -1,0 +1,43 @@
+<?xml version='1.0'?>
+<definitions name='ProviderService' targetNamespace='http://org.jboss.ws/provider' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://org.jboss.ws/provider' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://org.jboss.ws/provider' xmlns:tns='http://org.jboss.ws/provider' version='1.0' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='user' type='tns:UserType'/>
+   <xs:complexType name='UserType'>
+    <xs:sequence>
+     <xs:element name='string' type='xs:string'/>
+     <xs:element name='qname' type='xs:QName'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </types>
+ <message name='echo'>
+  <part element='tns:user' name='user'/>
+ </message>
+ <message name='echoResponse'>
+  <part element='tns:user' name='user'/>
+ </message>
+ <portType name='Provider'>
+  <operation name='echo'>
+   <input message='tns:echo'/>
+   <output message='tns:echoResponse'/>
+  </operation>
+ </portType>
+ <binding name='ProviderBinding' type='tns:Provider'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='echo'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='ProviderService'>
+  <port binding='tns:ProviderBinding' name='ProviderPort'>
+   <soap:address location='REPLACE_WITH_ACTUAL_URL'/>
+  </port>
+ </service>
+</definitions>

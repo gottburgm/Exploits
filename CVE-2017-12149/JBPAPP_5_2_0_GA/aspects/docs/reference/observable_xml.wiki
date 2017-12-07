@@ -1,0 +1,33 @@
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+
+<aop>
+
+    <!-- Instrument the classes for AOP -->
+   <prepare expr="all(org.jboss.test.aop.bean.Temperature)"/>
+   <prepare expr="all(org.jboss.test.aop.bean.LogUtil)"/>
+   <prepare expr="all(org.jboss.test.aop.bean.ObservableTester)"/>
+
+   <!-- Make the Temperature POJO a Subject/Observerable -->
+   <bind pointcut="set(* org.jboss.test.aop.bean.Temperature->*)">
+      <interceptor class="org.jboss.aop.patterns.observable.SubjectInterceptor"/>
+   </bind>
+   <introduction class="org.jboss.test.aop.bean.Temperature">
+      <mixin>
+         <interfaces>org.jboss.aop.patterns.observable.Subject</interfaces>
+         <class>org.jboss.aop.patterns.observable.SubjectImpl</class>
+         <construction>new org.jboss.aop.patterns.observable.SubjectImpl(this)</construction>
+      </mixin>
+   </introduction>
+   
+   <!-- Make the LogUtil an Observer -->
+   <introduction class="org.jboss.test.aop.bean.LogUtil">
+      <mixin>
+         <interfaces>org.jboss.aop.patterns.observable.Observer</interfaces>
+         <class>org.jboss.test.aop.bean.LogUtilObserver</class>
+         <construction>new org.jboss.test.aop.bean.LogUtilObserver(this)</construction>
+      </mixin>
+   </introduction>
+
+</aop>
+}}}

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE server
+    PUBLIC "-//JBoss//DTD MBean Service 3.2//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-service_3_2.dtd"
+>
+
+<server>
+
+   <!-- Expose the Naming service interface via JRMP with a readonly context
+   filter.
+   -->
+   <mbean code="org.jboss.invocation.jrmp.server.JRMPProxyFactory"
+      name="jboss.test:service=proxyFactory,type=jrmp,target=Naming">
+      <!-- Use the standard JRMPInvoker from conf/jboss-service.xxml -->
+      <attribute name="InvokerName">jboss:service=invoker,type=jrmp</attribute>
+      <attribute name="TargetName">jboss.test:service=Naming,test=readonly</attribute>
+      <attribute name="JndiName">naming/Naming</attribute>
+      <attribute name="ExportedInterface">org.jnp.interfaces.Naming</attribute>
+      <attribute name="ClientInterceptors">
+         <interceptors>
+            <interceptor>org.jboss.proxy.ClientMethodInterceptor</interceptor>
+            <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+            <interceptor>org.jboss.naming.interceptors.ExceptionInterceptor</interceptor>
+            <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+         </interceptors>
+      </attribute>
+      <depends>jboss:service=invoker,type=jrmp</depends>
+   </mbean>
+
+   <!-- Expose the Naming service interface via HTTP with a readonly context
+   filter.
+   -->
+   <mbean code="org.jboss.invocation.http.server.HttpProxyFactory"
+      name="jboss:test=invoker,type=http,target=Naming,readonly=true">
+      <attribute name="InvokerName">jboss.test:service=Naming,test=readonly</attribute>
+      <attribute name="InvokerURLPrefix">http://</attribute>
+      <attribute name="InvokerURLSuffix">:8080/invoker/readonly/JMXInvokerServlet</attribute>
+      <attribute name="UseHostName">true</attribute>
+      <attribute name="ExportedInterface">org.jnp.interfaces.Naming</attribute>
+      <attribute name="JndiName">naming/ReadOnlyNaming</attribute>
+      <attribute name="ClientInterceptors">
+         <interceptors>
+            <interceptor>org.jboss.proxy.ClientMethodInterceptor</interceptor>
+            <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+            <interceptor>org.jboss.naming.interceptors.ExceptionInterceptor</interceptor>
+            <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+         </interceptors>
+      </attribute>
+   </mbean>
+
+   <!-- A custom deployment of the JBoss JNDI naming service -->
+   <mbean code="org.jboss.naming.NamingService"
+      name="jboss.test:service=Naming,test=readonly"
+      xmbean-dd="">
+      <xmbean>
+         <description>The standard JBoss JNDI naming server with a ProxyFactoryInterceptor
+            to replace NamingContext objects with the correct transport proxy.
+         </description>
+
+         <descriptors>
+            <interceptors>
+               <interceptor code="org.jboss.test.naming.interceptors.ProxyFactoryInterceptor"
+                  proxyName="naming/ReadOnlyNaming"/>
+               <interceptor code="org.jboss.mx.interceptor.PersistenceInterceptor2"/>
+               <interceptor code="org.jboss.mx.interceptor.ModelMBeanInterceptor"/>
+               <interceptor code="org.jboss.mx.interceptor.ObjectReferenceInterceptor"/>
+            </interceptors>
+         </descriptors>
+
+         <constructor>
+            <description>The default constructor</description>
+            <name>NamingService</name>
+         </constructor>
+
+         <attribute access="read-only" getMethod="getMethodMap">
+            <name>MethodMap</name>
+            <type>java.util.Map</type>
+         </attribute>
+         <attribute access="read-write" getMethod="getNaming" setMethod="setNaming">
+            <description>Underlying Naming bean instance</description>
+            <name>Naming</name>
+            <type>org.jnp.server.NamingBean</type>
+         </attribute>
+         <attribute access="read-only" getMethod="getNamingInstance">
+            <description>Underlying Naming bean instance</description>
+            <name>NamingInstance</name>
+            <type>org.jnp.interfaces.Naming</type>
+         </attribute>         
+         <attribute access="read-write" getMethod="getCallByValue" setMethod="setCallByValue">
+            <description>The call by value mode. true if all lookups are unmarshalled using
+            the caller's TCL, false if in VM lookups return the value by reference.</description>
+            <name>CallByValue</name>
+            <type>boolean</type>
+         </attribute>
+         <attribute access="read-write" getMethod="getBindAddress" setMethod="setBindAddress">
+            <description>The bind address of the bootstrap lookup socket.</description>
+            <name>BindAddress</name>
+            <type>java.lang.String</type>
+         </attribute>
+         <attribute access="read-write" getMethod="getPort" setMethod="setPort">
+            <description>The listening port for the bootstrap JNP service. Set this to -1
+              to run the NamingService without the JNP invoker listening port.</description>
+            <name>Port</name>
+            <type>int</type>
+         </attribute>
+         <attribute access="read-write" getMethod="getBacklog" setMethod="setBacklog">
+            <description>The bootstrap socket backlog count.</description>
+            <name>Backlog</name>
+            <type>int</type>
+         </attribute>
+         <attribute access="read-write" getMethod="getJNPServerSocketFactory"
+            setMethod="setJNPServerSocketFactory">
+            <description>The bootstrap socket javax.net.ServerSocketFactory</description>
+            <name>JNPServerSocketFactory</name>
+            <type>java.lang.String</type>
+         </attribute>
+
+         <attribute access="read-write" getMethod="getRmiPort" setMethod="setRmiPort">
+            <description>The port of the RMI naming service, 0 == anonymous. This
+            is only used if an explicit InvokerProxyFactory has not been set.</description>
+            <name>RmiPort</name>
+            <type>int</type>
+         </attribute>
+         <attribute access="read-write" getMethod="getRmiBindAddress" setMethod="setRmiBindAddress">
+            <description>The RMI service bind address. Empty == all addresses</description>
+            <name>RmiBindAddress</name>
+            <type>java.lang.String</type>
+         </attribute>
+         <attribute access="read-write" getMethod="getClientSocketFactory" setMethod="setClientSocketFactory">
+            <description>The RMI service java.rmi.server.RMIClientSocketFactory</description>
+            <name>ClientSocketFactory</name>
+            <type>java.lang.String</type>
+         </attribute>
+         <attribute access="read-write" getMethod="getServerSocketFactory" setMethod="setServerSocketFactory">
+            <description>The RMI service java.rmi.server.RMIServerSocketFactory</description>
+            <name>ServerSocketFactory</name>
+            <type>java.lang.String</type>
+         </attribute>
+
+         <attribute access="read-write" getMethod="getInstallGlobalService"
+            setMethod="setInstallGlobalService">
+            <name>InstallGlobalService</name>
+            <type>boolean</type>
+         </attribute>
+         <attribute access="write-only" setMethod="setLookupPool">
+            <description>The thread pool service used to control the bootstrap lookups</description>
+            <name>LookupPool</name>
+            <type>org.jboss.util.threadpool.BasicThreadPoolMBean</type>
+         </attribute>
+         <attribute access="write-only" setMethod="setInvokerProxyFactory">
+            <description>The detached invoker proxy factory to use for the naming
+            service transport.</description>
+            <name>InvokerProxyFactory</name>
+            <type>org.jboss.invocation.jrmp.server.JRMPProxyFactoryMBean</type>
+         </attribute>
+
+         <!-- Operations -->
+         <operation>
+            <description>The generic invocation operation used by detached invokers
+               to route requests to the service
+            </description>
+            <name>invoke</name>
+            <parameter>
+               <description>The Naming interface method invocation encapsulation
+               </description>
+               <name>invocation</name>
+               <type>org.jboss.invocation.Invocation</type>
+            </parameter>
+            <return-type>java.lang.Object</return-type>
+         </operation>
+
+         <operation>
+            <description>Standard MBean lifecycle method</description>
+            <name>create</name>
+         </operation>
+         <operation>
+            <description>The start lifecycle operation</description>
+            <name>start</name>
+         </operation>
+         <operation>
+            <description>The stop lifecycle operation</description>
+            <name>stop</name>
+         </operation>
+         <operation>
+            <description>The destroy lifecycle operation</description>
+            <name>destroy</name>
+         </operation>
+         <operation>
+            <description>The detyped lifecycle operation (for internal use only)</description>
+            <name>jbossInternalLifecycle</name>
+            <parameter>
+               <description>The lifecycle operation</description>
+               <name>method</name>
+               <type>java.lang.String</type>
+            </parameter>
+            <return-type>void</return-type>
+         </operation>
+
+      </xmbean>
+      <!-- We do not need to expose the naming bootstrap port -->
+      <attribute name="Port">-1</attribute>
+      <!-- Don't override the default naming service -->
+      <attribute name="InstallGlobalService">false</attribute>
+      <depends optional-attribute-name="Naming"
+         proxy-type="attribute">jboss:service=NamingBeanImpl</depends>
+   </mbean>
+
+</server>

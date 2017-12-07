@@ -1,0 +1,18 @@
+<assembly>
+  <id>jmx-invoker-adaptor-client</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/jmx/adaptor/rmi/RMIAdaptor*</include>
+        <include>org/jboss/jmx/adaptor/rmi/RMINotificationListener*</include>
+        <include>org/jboss/jmx/connector/invoker/client/**</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

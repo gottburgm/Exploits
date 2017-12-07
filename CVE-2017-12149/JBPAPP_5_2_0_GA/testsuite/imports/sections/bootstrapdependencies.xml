@@ -1,0 +1,67 @@
+<project name="tests-bootstrapdependencies-jars">
+   <!-- deployers test -->
+   <target name="_jars-bootstrapdependencies" depends="jbas5349"/>
+   
+   <target name="jbas5349" depends="compile">
+      <delete dir="${build.resources}/test-configs/bootstrap-dependencies/deploy/Aaabootstrapdependencies-jbas5349.sar"/>
+      <mkdir dir="${build.resources}/test-configs/bootstrap-dependencies/deploy/Aaabootstrapdependencies-jbas5349.sar"/>
+      <copy todir="${build.resources}/test-configs/bootstrap-dependencies/deploy/Aaabootstrapdependencies-jbas5349.sar/">
+          <fileset dir="${build.resources}/bootstrapdependencies/jbas5349/sar">
+             <include name="**/*"/>
+        </fileset>
+          <fileset dir="${build.classes}">
+             <include name="org/jboss/test/bootstrapdependencies/jbas5349/sar/BootstrapDependenciesTest*.class"/>
+          </fileset>
+      </copy>
+        <copy file="${build.resources}/bootstrapdependencies/jbas5349/bootstrapdependencies-hsqldb-ds.xml" todir="${build.lib}"/>
+      <jar destfile="${build.lib}/bootstrapdependencies-ejb3-sessionbean.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/bootstrapdependencies/jbas5349/ejb3/DummyStateless*.class"/>
+            <include name="org/jboss/test/bootstrapdependencies/jbas5349/ejb3/DummyStateful*.class"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/bootstrapdependencies-ejb3-entitybean.jar">
+         <fileset dir="${build.resources}/bootstrapdependencies/jbas5349/ejb3/entity">
+            <include name="**/*"/>
+         </fileset>
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/bootstrapdependencies/jbas5349/ejb3/SimpleEntity.class"/>
+        </fileset>
+      </jar>
+      <jar destfile="${build.lib}/bootstrapdependencies-ejb3-messagebean.jar">
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/bootstrapdependencies/jbas5349/ejb3/DummyMessageBean.class"/>
+        </fileset>
+      </jar>
+      <jar destfile="${build.lib}/bootstrapdependencies-ejb2-sessionbean.jar">
+         <fileset dir="${build.resources}/bootstrapdependencies/jbas5349/ejb2/session">
+            <include name="META-INF/*"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/bootstrapdependencies/jbas5349/ejb2/DummyStateless*.class"/>
+            <include name="org/jboss/test/bootstrapdependencies/jbas5349/ejb2/DummyStateful*.class"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/bootstrapdependencies-ejb2-entitycmpbean.jar">
+         <fileset dir="${build.resources}/bootstrapdependencies/jbas5349/ejb2/cmp">
+            <include name="META-INF/*"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/bootstrapdependencies/jbas5349/ejb2/SimpleEntity*.class"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/bootstrapdependencies-ejb2-messagebean.jar">
+        <fileset dir="${build.resources}/bootstrapdependencies/jbas5349/ejb2/mdb">
+           <include name="**/*"/>
+        </fileset>
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/bootstrapdependencies/jbas5349/ejb2/DummyMessageBean.class"/>
+        </fileset>
+      </jar>
+      <war destfile="${build.lib}/bootstrapdependencies-web.war" webxml="${build.resources}/bootstrapdependencies/jbas5349/dummywar/WEB-INF/web.xml">
+        <classes dir="${build.classes}">
+           <include name="org/jboss/test/bootstrapdependencies/jbas5349/servlet/DummyServlet.class"/>
+        </classes>
+      </war>
+   </target>
+</project>

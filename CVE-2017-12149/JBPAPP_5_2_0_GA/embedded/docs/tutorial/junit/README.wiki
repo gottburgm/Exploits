@@ -1,0 +1,77 @@
+!!! Junit testing with Embedded JBoss
+
+This tutorial project can be built and run in three different ways:
+
+* Within Intellij IDEA 6.0.x.  Double click on the example.ipr file.  Right click to run any of the example tests.
+* Within Eclipse 3.2.2.  We couldn't find a good of packaging this (probably due to Eclipse ignorance), but import the .project file that is in the root of the Embedded JBoss distribution.  This will set up this example.
+* As a standalone Ant script, build.xml within the root directory.  There are a few ant tasks that you can run:
+** ''tests'' will run every junit test under src/test/org/jboss/embedded/tutorial/junit.  It will create a text and XML report in build/reports for each test case
+** ''all-tests'' will run the single junit test src/test/org/jboss/embedded/tutorial/AllTests.java.  It will create a text and XML report in build/reports.  Compare the run times between the ''tests'' target and the ''all-tests'' target.
+** ''tests-report-html'' creates a nice HTML view of the test generated reports that you can find under build/reports/html/index.html
+
+Each unit test shows a different way of doing things and use different pieces of the Bootstrap and AssembledDirectory APIs.
+
+!!! Learning about junit testing
+
+There are certain issues with Embedded JBoss that you have to worry about when doing unit testing.
+
+!!Bootstrap.bootstrap() and shutdown() can only be called once per JVM
+
+This is perhaps the biggest problem when using Embedded JBoss in unit testing.  There are various situations where you run unit tests:
+
+# Running one test method in a particular class
+# Running all tests in a particular class
+# Running all test classes in your IDE that are within a directory structure
+
+How do you write your junit classes so that they can run in each of these scenarios?  Solving #1 is easy.  Just call bootstrap() and shutdown() in overriden setup() and tearDown() methods of your test class.  The problem with this approach is that you will no longer be able to run in situations #2 and #3 because junit instantiates, by default, an instance of each test class per test method.  In scenario #3, it becomes even worse because many IDE's will run all unit tests within the same JVM, thus you'll have the same exact problem.
+
+The solution is a simple one.  Call bootstrap() only once, and never call shutdown().  Here's how you might do it:
+
+{{{
+
+public class MyTestCase extends TestCase
+{
+
+
+   @Override
+   protected void setUp() throws Exception
+   {
+      if (!Bootstrap.getInstance().isStarted()) Bootstrap.getInstance().bootstrap();
+   }
+
+...
+
+}
+
+}}}
+
+!!How do I deploy something only once per test run?
+
+At first thought, deploying your embedded archives in the setUp() method and undeploying in tearDown() of your TestCases sounds like a good idea.
+But what if you only want to deploy these archives once per test class?  Maybe deployment of any one of these archives takes a long time,
+or maybe you want to retain state between test method invocations.
+To do this, you need to wrap your test class in a TestSetup, yet you want to write your test class so that in can run in scenarios #1-3 shown above.
+One way of doing this is shown in [org.jboss.embedded.tutorial.junit.EjbTestCase|src/test/java/org/jboss/embedded/tutorial/junit/EjbTestCase.java]
+
+The suite() method creates a TestSuite using a TestSetup that does Bootstrap().bootstrap() in its setUp() method as well as calls the static deploy() method.
+This deploy method deploys the archive you are interested in deploying.
+The overriden setUp() and tearDown() methods determine whether or not initialize happened within the suite() method, or
+whether an individual test method was run from your IDE.  If the test class had not been initialized, it calls Bootstrap.bootstrap() and the deploy() method.
+
+Looking at EjbTestCase, that's a lot of code to write.  Embedded JBoss provides a base test class to make it easier for you:  org.jboss.embedded.junit.BaseTestCase.
+[org.jboss.embedded.tutorial.junit.EasierEjbTestCase|src/test/java/org/jboss/embedded/tutorial/junit/EasierEjbTestCase.java] shows how you could rewrite EjbTestCase
+using BaseTestCase.
+
+BaseTestCase creates the same template internally that we showed explicitly previously.  It looks to see if the test class has implemented a static deploy and/or undeploy method and calls those methods via reflection at the appropriate times.
+
+
+!! Bootstrap.bootstrap() takes 5-6 seconds.  (measured on a 2.4 ghz Core 2 platform)
+
+5-6 seconds isn't that long in the grand scheme of things, but starts to add up.  A common thing to do is to automate junit test runs by creating an Ant
+batchtest target within your build.xml file.  The problem with this scenario is that each test will bootstrap Embedded JBoss and
+your entire suite will run very slowly.  In this scenario, it is best to create a suite class that runs all the tests.
+[org.jboss.embedded.tutorial.AllTests|src/test/java/org/jboss/embedded/tutorial/AllTests.java]  exemplifies this.
+
+
+
+

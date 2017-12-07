@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
+   <description>The overriden webapplication</description>
+   
+   <servlet>
+      <description>A servlet in WEB-INF/classes</description>
+      <servlet-name>RequestInfoServlet</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.RequestInfoServlet</servlet-class>
+   </servlet>
+   <servlet>
+      <description>A servlet in WEB-INF/classes</description>
+      <servlet-name>RequestInfoServlet2</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.RequestInfoServlet</servlet-class>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>RequestInfoServlet</servlet-name>
+      <url-pattern>/AltRequestInfoServlet</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+      <servlet-name>RequestInfoServlet2</servlet-name>
+      <url-pattern>/AltRequestInfoServlet2</url-pattern>
+   </servlet-mapping>
+   
+</web-app>

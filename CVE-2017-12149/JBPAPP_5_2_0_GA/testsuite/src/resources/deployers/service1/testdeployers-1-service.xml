@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+
+   <mbean code="org.jboss.naming.NamingAlias"
+          name="jboss.test.deployers:service=1">
+      <attribute name="FromName">testDeployers/FromName</attribute>
+      <attribute name="ToName">testDeployers/ToName</attribute>
+   </mbean>
+
+</server>

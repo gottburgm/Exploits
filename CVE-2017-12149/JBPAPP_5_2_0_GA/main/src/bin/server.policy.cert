@@ -1,0 +1,92 @@
+// The Java2 security policy for EAP5 with signed jars
+// Install with -Djava.security.policy==server.policy.cert
+// -Djboss.home.dir=path_to_jboss_distribution
+// -Djboss.server.home.dir= path to the server distro (default, production etc)
+
+
+//********************************************************
+// Keystore should be where you have imported the Red Hat
+// Code Signing Public Key
+//********************************************************
+keystore "file:${java.home}/lib/security/cacerts";
+
+
+// ***************************************
+// Trusted core Java code
+//***************************************
+grant codeBase "file:${java.home}/lib/ext/-" {
+   permission java.security.AllPermission;
+};
+grant codeBase "file:${java.home}/lib/*" {
+   permission java.security.AllPermission;
+};
+// For java.home pointing to the JDK jre directory
+grant codeBase "file:${java.home}/../lib/*" {
+   permission java.security.AllPermission;
+};
+
+
+// ***************************************
+// Trusted core JBoss code
+//***************************************
+grant codeBase "file:${jboss.home.dir}/bin/run.jar" {
+  permission java.security.AllPermission;
+};
+
+grant signedBy "jboss" {
+   permission java.security.AllPermission;
+};
+
+//**************************************************************************************************
+// Permissions to selected set of jars that are not signed
+//**************************************************************************************************
+
+grant codeBase "file:${jboss.server.home.dir}/deploy/quartz-ra.rar/-" {
+ permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jboss.server.home.dir}/tmp/embjopr/-"{
+ permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jboss.server.home.dir}/deploy/admin-console.war/-" {
+ permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jboss.server.home.dir}/deploy/jmx-console.war/-" {
+ permission java.security.AllPermission;
+};
+
+grant codeBase "jar:file:${jboss.server.home.dir}/deploy/quartz-ra.rar!/quartz-ra.jar" {
+ permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jboss.server.home.dir}/deploy/uuid-key-generator.sar/-" {
+   permission javax.management.MBeanTrustPermission "register";
+   permission javax.management.MBeanPermission "*", "getAttribute";
+   permission org.jboss.naming.JndiPermission "<<ALL BINDINGS>>","lookup,rebind,unbind";
+   permission java.lang.RuntimePermission "getClassLoader";
+};
+
+grant codeBase "file:${jboss.server.home.dir}/deploy/http-invoker.sar/invoker.war/-" {
+   permission javax.management.MBeanPermission "*", "addNotificationListener,getAttribute";
+   permission javax.management.MBeanServerPermission "findMBeanServer";
+   permission java.lang.RuntimePermission "getClassLoader";
+};
+
+
+
+//****************************************************************
+//  Default block of permissions
+// Minimal permissions are allowed to everyone else
+//****************************************************************
+grant {
+   permission java.io.FilePermission "${jboss.server.home.dir}/tmp/-", "read";
+   permission java.io.FilePermission "${jboss.home.dir}/common/lib/quartz.jar/org/quartz/quartz.properties", "read";
+   permission java.io.FilePermission "${jboss.home.dir}/common/lib/quartz.jar", "read";
+   permission java.io.FilePermission "${jboss.home.dir}/common/lib", "read";
+   permission org.jboss.naming.JndiPermission "<<ALL BINDINGS>>","lookup";
+   permission java.io.FilePermission "quartz.properties", "read";
+   permission java.util.PropertyPermission "*", "read";
+   permission java.lang.RuntimePermission "queuePrintJob";
+};

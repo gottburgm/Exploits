@@ -1,0 +1,61 @@
+!!! Observable
+
+Defines a one to many relationship between the Subject (the object being observed) and the Observers
+where the Observers are notified of changed state in the Subject.
+
+!! The problem
+
+We have a Temperature object and we want to log the changes to the temperature.\\
+Using OOPS we would have to modify the Temperature class.\\
+Using AOP we can Introduce new behaviour without touching the original class.
+
+We already have a logging utility class and we don't need to change that either.\\
+There is no need for it to know about the Temperature class.\\
+Again we can Introduce new behaviour.
+
+!! Implementation
+
+The jboss implementation of the pattern
+
+* [Observer|Observer.html] - the interface "implemented" by the Observer
+* [Subject|Subject.html] - the interface "implemented" by the Subject
+* [SubjectImpl|SubjectImpl.html] - we use an Introduction to make Objects into Subjects
+* [SubjectInterceptor|SubjectInterceptor.html] - this advice tracks the state of the Subject and  fires the changes to the Observers
+
+!! Existing Code
+
+The exisiting application that knows nothing about the Observable pattern
+
+* [Temperature|Temperature.html] - simple POJO holding a temperature value in its state
+* [LogUtil|LogUtil.html] - simple POJO that logs to System.out
+
+!! Integration Code
+
+To integrate the two classes we write an Introduction for {{LogUtil}} that tells it log the changes in Subjects.
+* [LogUtilObserver|LogUtilObserver.html] - makes {{LogUtil}} into a generic Observer without changing the original code
+
+!! Configuration
+
+Now we use AOP to tie it all together
+* [jboss-aop.xml|observable_xml.html] - the JBossAOP deployment description
+
+!! The test class
+* [ObserverableTest|GOFObserverableTest.html] - A simple test
+
+!! The output
+It doesn't look very exciting but ...
+{{{
+Received Notification: Temperature=10
+}}}
+
+!! Conclusion
+* We have taken two existing [POJO]s that know nothing about the Observable pattern and integrated them using AOP.
+* The only code we had to write was how to handle the change notification: [LogUtilObserver|LogUtilObserver.html] which is exactly what you want to write when you are the integerator
+* JBoss has already implemented the Observable pattern, we don't have to write this boiler plate code.
+
+* __AOP is a very powerful tool for integrating reusable components without touching the original code__.
+
+* __You no longer have to repeat boiler plate code__ in all classes just in case somebody might want a particular feature - __a boring task that is prone to error__ and difficult to change when it is spread across many classes
+
+!! Things to try
+* Use [AOPRemoting|remoting.html] to make this pattern distributed

@@ -1,0 +1,13 @@
+<project name="tests-byvalue-jars"> 
+  <target name="_jars-byvalue">
+      <mkdir dir="${build.lib}"/>
+
+      <jar destfile="${build.lib}/jar-byvalue.jar">
+         <metainf dir="${build.resources}/testbyvalue/META-INF"/>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/testbyvalue/bean/**"/>
+            <include name="org/jboss/test/testbyvalue/interfaces/**"/>
+         </fileset>
+      </jar> 
+  </target> 
+</project>

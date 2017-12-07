@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <bean name="ScopedDependency" class="org.jboss.test.aop.scopeddependency.ScopedDependency"/>
+
+   <interceptor xmlns="urn:jboss:aop-beans:1.0"
+               name="ScopedInterceptor"
+               class="org.jboss.test.aop.scopeddependency.ScopedInterceptor">
+      <property name="globalDependency"><inject bean="GlobalDependency"/></property>
+      <property name="scopedDependency"><inject bean="ScopedDependency"/></property>
+   </interceptor>
+
+   <bind xmlns="urn:jboss:aop-beans:1.0" 
+         pointcut="execution(* org.jboss.test.aop.scopeddependency.ScopedTester->*(..))">
+      <interceptor-ref name="ScopedInterceptor"/>
+   </bind>
+
+   <bean name="ScopedTester" class="org.jboss.test.aop.scopeddependency.ScopedTester"/>
+
+</deployment>

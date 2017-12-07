@@ -1,0 +1,44 @@
+<assembly>
+  <id>client</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/crypto/JBossSXProvider.class</include>
+        <include>org/jboss/crypto/digest/*</include>
+        <include>org/jboss/security/*</include>
+        <include>org/jboss/security/auth/callback/*</include>
+        <include>org/jboss/security/auth/login/*</include>
+        <include>org/jboss/security/jndi/*</include>
+        <include>org/jboss/security/plugins/PBEUtils.class</include>
+        <include>org/jboss/security/srp/PkgCategory.class</include>
+        <include>org/jboss/security/srp/TracePriority.class</include>
+        <include>org/jboss/security/srp/SRPClientSession.class</include>
+        <include>org/jboss/security/srp/SRPServerInterface*.class</include>
+        <include>org/jboss/security/srp/SRPServerProxy.class</include>
+        <include>org/jboss/security/srp/SRPParameters.class</include>
+        <include>org/jboss/security/srp/SRPPermission.class</include>
+        <include>org/jboss/security/srp/SRPConf*.class</include>
+        <include>org/jboss/security/srp/SRPRemoteServer_Stub.class</include>
+        <include>org/jboss/security/srp/SRPRemoteServerInterface.class</include>
+        <include>org/jboss/security/srp/SRPVerifierStore.class</include>
+        <include>org/jboss/security/srp/SRPVerifierStore$*.class</include>
+        <include>org/jboss/security/srp/jaas/SRPLoginModule.class</include>
+        <include>org/jboss/security/srp/jaas/SRPPrincipal.class</include>
+        <include>org/jboss/security/ssl/ClientSocketFactory.class</include>
+        <include>org/jboss/security/ssl/RMISSLClientSocketFactory.class</include>
+        <include>org/jboss/security/integration/password/*.class</include>
+      </includes>
+      <excludes>
+        <exclude>META-INF/MANIFEST.MF</exclude> <!-- HACK -->
+        <exclude>org/jboss/security/auth/login/XMLLoginConfig.class</exclude>
+        <exclude>org/jboss/security/auth/login/XMLLoginConfigMBean.class</exclude>
+      </excludes>
+    </fileSet>
+  </fileSets>
+</assembly>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+   <loader-repository>
+      aop.loading:loader=scopeddependency
+      <loader-repository-config>java2ParentDelegation=true</loader-repository-config> 
+   </loader-repository>
+   <mbean code="org.jboss.test.aop.scopeddependency.ScopedIgnoredTester" name="jboss.aop:name=Ignored">
+   </mbean>
+</server>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <mbean name="jboss.test:type=test" code="org.jboss.test.system.controller.support.Simple">
+      <constructor>
+         <arg type="int" value="5"/>
+         <arg type="float" value="3.14"/>
+      </constructor>
+   </mbean>
+</server>

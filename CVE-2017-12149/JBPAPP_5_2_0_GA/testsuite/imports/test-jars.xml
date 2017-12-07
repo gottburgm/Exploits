@@ -1,0 +1,242 @@
+<!-- Ant project fragment for the unit tests deployment jars
+$Id: test-jars.xml 113110 2012-06-21 16:00:27Z baranowb $
+-->
+<project name="test-jars">
+
+   <!--
+       | Import the sections the jar targets.
+       | Refer to http://jira.jboss.com/jira/browse/JBQA-263
+       -->
+   <import file="sections/dummy.xml"/>
+   <import file="sections/aop.xml"/>
+   <import file="sections/bank.xml"/>
+   <import file="sections/bench.xml"/>
+   <import file="sections/bmp.xml"/>
+   <import file="sections/bootstrapdependencies.xml"/>
+   <import file="sections/classloader.xml"/>
+   <import file="sections/client.xml"/>
+   <import file="sections/cluster.xml"/>
+   <import file="sections/cmp.xml"/>
+   <import file="sections/commons_logging.xml"/>
+   <import file="sections/cookie.xml"/>
+   <import file="sections/cts.xml"/>
+   <import file="sections/dbtest.xml"/>
+   <import file="sections/deadlock.xml"/>
+   <import file="sections/deployers.xml"/>
+   <import file="sections/ee5client.xml"/>
+   <import file="sections/ejb3.xml"/>
+   <import file="sections/ejbconf.xml"/>
+   <import file="sections/ejb.xml"/>   
+   <import file="sections/entity.xml"/>
+   <import file="sections/exception.xml"/>
+   <import file="sections/hello.xml"/>
+   <import file="sections/hibernate.xml"/>
+   <import file="sections/httpsessionreplication.xml"/>
+   <import file="sections/idgen.xml"/>
+   <import file="sections/iiop.xml"/>
+   <import file="sections/invokers.xml"/>
+   <import file="sections/isolation.xml"/>
+   <import file="sections/jbossmessaging-cluster.xml"/>
+   <import file="sections/jbossmessaging.xml"/>
+   <import file="sections/jbossmx.xml"/>
+   <import file="sections/jbossts.xml"/>
+   <import file="sections/jbpm.xml"/>
+   <import file="sections/jca.xml"/>
+   <import file="sections/jms.xml"/>
+   <import file="sections/jmsra.xml"/>
+   <import file="sections/jmx.xml"/>
+   <import file="sections/jpa.xml"/>
+   <import file="sections/jrmp.xml"/>
+   <import file="sections/jsf.xml"/>
+   <import file="sections/jsr77.xml"/>
+   <import file="sections/kernel.xml"/>
+   <import file="sections/load.xml"/>
+   <import file="sections/lock.xml"/>
+   <import file="sections/marathon.xml"/>
+   <import file="sections/marshal.xml"/>
+   <import file="sections/marshaliiop.xml"/>
+   <import file="sections/mdb.xml"/>
+   <import file="sections/mdbsessionpoolclear.xml"/>
+   <import file="sections/naming.xml"/>
+   <import file="sections/perf.xml"/>
+   <import file="sections/pooled.xml"/>
+   <import file="sections/profileservice.xml"/>
+   <import file="sections/proxycompiler.xml"/>
+   <import file="sections/readahead.xml"/>
+   <import file="sections/refs.xml"/>
+   <import file="sections/retry.xml"/>
+   <import file="sections/scoped.xml"/>
+   <import file="sections/scripts.xml"/>
+   <import file="sections/seam.xml"/>
+   <import file="sections/security.xml"/>
+   <import file="sections/securitymgr.xml"/>
+   <import file="sections/securityspi.xml"/>
+   <import file="sections/session.xml"/>
+   <import file="sections/spring.xml"/>
+   <import file="sections/testbean.xml"/>
+   <import file="sections/threading.xml"/>
+   <import file="sections/timer.xml"/>
+   <import file="sections/tm.xml"/>
+   <import file="sections/tx.xml"/>
+   <import file="sections/util.xml"/>
+   <import file="sections/web.xml"/>
+   <import file="sections/webservice.xml"/>
+   <import file="sections/ws.xml"/>
+   <import file="sections/xa.xml"/>
+   <import file="sections/xslt.xml"/>
+	<import file="sections/byvalue.xml"/>
+	<import file="sections/property.xml"/>
+	
+
+   <!--
+     | Build all jar files.
+   -->
+   <target name="jars" description="Builds all jar files."
+           depends="compile,
+        _jars-dummy,
+        _jars-aop,
+        _jars-bank,
+        _jars-bank-new,
+        _jars-bankiiop,
+        _jars-bench,
+        _jars-bmp,
+        _jars-bootstrapdependencies,
+        _jars-cache,
+        _jars-classloader,
+        _jars-client,
+        _jars-cluster,
+        _jars-cmp2,
+	_jars-commons_logging,
+        _jars-cookie,
+        _jars-cts,
+        _jars-dbtest,
+        _jars-deadlock,
+        _jars-deployers,
+        _jars-deployment,
+        _jars-ee5client,
+        _jars-ejb3,
+        _jars-ejbconf,
+        _jars-ejbproxy,        
+        _jars-entity,
+        _jars-entitydepends,
+        _jars-passivationcl,
+        _jars-entityexc,
+        _jars-excepiiop,
+        _jars-exception,
+        _jars-hello,
+        _jars-helloiiop,
+        _jars-hellojrmpiiop,
+        _jars-hibernate,
+        _jars-httpsessionreplication,
+        _jars-idgen,
+        _jars-iiop,
+	_jars-iioptccl,
+        _jars-iiopperf,
+        _jars-invokers,
+        _jars-isolation,
+        _jars-jbossmessaging,
+	_jars-jbossmessaging-cluster,
+        _jars-jbossmx,
+        _jars-jbossts,
+        _jars-jbpm,
+        _jars-jca,
+        _jars-jcaprops,
+        _jars-jms,
+        _jars-jmsra,
+        _jars-jmx,
+        _jars-jpa,
+        _jars-jrmp,
+        _jars-jsf,
+        _jars-jsr77,
+        _jars-kernel,
+        _jars-load,
+        _jars-lock,
+        _jars-marathon,
+        _jars-marshal,
+        _jars-marshaliiop,
+        _jars-mdb,
+        _jars-mdbsessionpoolclear,
+        _jars-messagedriven,
+        _jars-naming,
+        _jars-perf,
+        _jars-pooled,
+   	  _jars-profileservice,
+        _jars-proxycompiler,
+        _jars-readahead,
+        _jars-refs,
+        _jars-retry,
+        _jars-scoped,
+        _jars-scripts,
+        _jars-seam,
+        _jars-security,
+        _jars-securitymgr,
+        _jars-security-spi,
+        _jars-session,
+        _jars-spring,
+        _jars-testbean,
+        _jars-testbeancluster,
+        _jars-threading,
+        _jars-timer,
+        _jars-tm,
+        _jars-txiiop,
+        _jars-txtimer,
+        _jars-util,
+        _jars-web,
+        _jars-webservice,
+        _jars-ws,
+        _jars-xa,
+        _jars-xslt,
+        _jars-byvalue,
+   	    _jars-properties
+        ">
+   </target>
+
+   <!--
+     | Sign test jar, ear, whatever if jboss.test.sign.jars is set to true.
+     | This is need in case we are running tests using Common Criteria policy (using Java Security Manager).
+     | We are not able to set proper permissions to vfsmemory:// deployed files.  
+   -->
+   <target name="sign-file" if="jboss.test.sign.jars">
+   	  <signjar 
+         	keystore="${basedir}/src/resources/test-configs/cc/cc.keystore"
+         	storetype="jks"
+         	alias="testsuite"
+         	storepass="jbosseap">
+   	    <fileset dir="${build.lib}">
+   	       <include name="${file}" />
+   	    </fileset> 
+   	  </signjar>
+   </target>
+   
+   
+   <!--
+     | Build Seam example files.
+   -->
+   <target name="seam" description="Builds Seam examples files." depends="compile, _jars-seam"/>
+
+   <patternset id="common.test.client.classes">
+      <include name="org/jboss/test/util/**"/>
+   </patternset>
+
+   <patternset id="jboss.test.util.ejb.set">
+      <include name="org/jboss/test/util/ejb/**"/>
+   </patternset>
+
+	<!-- These two sets are classes required for use of the
+	org.jboss.test.util.ejb.EJBTestCase
+	-->
+	<patternset id="ejbrunner.set">
+		<include name="junit/framework/*"/>
+		<include name="junit/runner/*"/>
+   	<include name="org/jboss/test/**"/>
+	</patternset>
+	<patternset id="jboss.test.set">
+	<include name="org/jboss/test/JBossTestCase.class"/>
+	<include name="org/jboss/test/JBossTestServices.class"/>
+	<include name="org/jboss/test/AbstractTestDelegate.class"/>
+	<include name="org/jboss/test/logging/**"/>
+	<include name="org/jboss/test/security/**"/>
+	<include name="org/jboss/test/util/AppCallbackHandler.class"/>
+	</patternset>
+</project>
+

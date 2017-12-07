@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+
+<!-- ======================================================================= -->
+<!-- JBoss build file                                                       -->
+<!-- ======================================================================= -->
+
+<project name="JBoss" default="tests" basedir=".">
+   <property name="src.dir" value="${basedir}/src/main/java"/>
+   <property name="test.src.dir" value="${basedir}/src/test/java"/>
+   <property name="build.dir" value="${basedir}/build"/>
+   <property name="build.reports" value="${basedir}/build/reports"/>
+   <property name="build.stylesheets" value="${basedir}/build/stylesheets"/>
+   <property name="src.stylesheets" value="${basedir}/stylesheets"/>
+   <property name="build.classes.dir" value="${build.dir}/classes"/>
+   <property name="build.test.classes.dir" value="${build.dir}/test-classes"/>
+   <property name="lib.dir" value="../../../lib"/>
+   <property name="optional.lib.dir" value="../../../optional-lib"/>
+   <property name="conf.dir" value="../../../bootstrap"/>
+
+   <!-- =================================================================== -->
+   <!-- Prepares the build directory                                        -->
+   <!-- =================================================================== -->
+   <target name="prepare">
+      <mkdir dir="${build.dir}"/>
+      <mkdir dir="${build.classes.dir}"/>
+      <mkdir dir="${build.test.classes.dir}"/>
+      <!-- Build classpath -->
+      <path id="build.classpath">
+         <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+         </fileset>
+         <fileset dir="${optional.lib.dir}">
+            <include name="*.jar"/>
+         </fileset>
+         <pathelement location="${build.classes.dir}"/>
+      </path>
+
+      <path id="junit.classpath">
+         <pathelement location="${conf.dir}"/>
+         <pathelement location="${build.test.classes.dir}"/>
+         <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+         </fileset>
+         <fileset dir="${optional.lib.dir}">
+            <include name="*.jar"/>
+         </fileset>
+         <fileset dir="${build.dir}">
+            <include name="tutorial.jar"/>
+         </fileset>
+      </path>
+
+   </target>
+
+   <!-- =================================================================== -->
+   <!-- Compiles the source code                                            -->
+   <!-- =================================================================== -->
+   <target name="compile" depends="prepare">
+      <javac srcdir="${src.dir}"
+             destdir="${build.classes.dir}"
+             debug="on"
+             deprecation="on"
+             optimize="off"
+             includes="**">
+         <classpath refid="build.classpath"/>
+      </javac>
+      <javac srcdir="${test.src.dir}"
+             destdir="${build.test.classes.dir}"
+             debug="on"
+             deprecation="on"
+             optimize="off"
+             includes="**">
+         <classpath refid="build.classpath"/>
+      </javac>
+   </target>
+
+   <target name="ejbjar" depends="compile">
+      <jar jarfile="build/tutorial.jar">
+         <fileset dir="${build.classes.dir}">
+            <include name="**/beans/*.class"/>
+         </fileset>
+         <fileset dir="src/main/resources">
+            <include name="*.xml"/>
+            <include name="META-INF/persistence.xml"/>
+         </fileset>
+      </jar>
+   </target>
+
+   <target name="tests" depends="ejbjar">
+
+      <mkdir dir="${build.reports}"/>
+      <junit printsummary="yes"
+             haltonerror="false"
+             haltonfailure="false"
+             fork="true">
+
+         <!-- clean shutdown so we don't keep any file locks -->
+         <sysproperty key="shutdown.embedded.jboss" value="true"/>
+
+         <classpath>
+            <path refid="junit.classpath"/>
+         </classpath>
+
+         <formatter type="plain" usefile="true"/>
+         <formatter type="xml" usefile="true"/>
+
+         <batchtest todir="${build.reports}"
+                    haltonerror="false"
+                    haltonfailure="false"
+                    fork="true">
+
+            <fileset dir="${build.test.classes.dir}">
+               <include name="**/*TestCase.class"/>
+            </fileset>
+         </batchtest>
+      </junit>
+   </target>
+
+   <target name="all-tests" depends="ejbjar">
+
+      <mkdir dir="${build.reports}"/>
+      <junit printsummary="yes"
+             haltonerror="false"
+             haltonfailure="false"
+             fork="true">
+
+         <classpath>
+            <path refid="junit.classpath"/>
+         </classpath>
+
+         <formatter type="plain" usefile="true"/>
+         <formatter type="xml" usefile="true"/>
+
+         <test
+                 name="org.jboss.embedded.tutorial.AllTests"
+                 todir="${build.reports}"
+                 haltonerror="false"
+                 haltonfailure="false"
+                 fork="true"/>
+      </junit>
+   </target>
+
+
+   <target name="compile-stylesheets">
+      <mkdir dir="${build.stylesheets}"/>
+      <copy todir="${build.stylesheets}" filtering="yes">
+         <fileset dir="${src.stylesheets}">
+            <include name="**/*"/>
+         </fileset>
+      </copy>
+   </target>
+
+   <target name="tests-report-html" depends="compile-stylesheets">
+      <mkdir dir="${build.reports}/html"/>
+
+      <junitreport todir="${build.reports}">
+         <fileset dir="${build.reports}">
+            <include name="TEST-*.xml"/>
+         </fileset>
+         <report format="frames"
+                 todir="${build.reports}/html"
+                 styledir="${build.stylesheets}"
+                 />
+      </junitreport>
+   </target>
+
+   <target name="tests-report-clean">
+      <delete dir="${build.reports}"/>
+   </target>
+
+
+   <!-- =================================================================== -->
+   <!-- Cleans up generated stuff                                           -->
+   <!-- =================================================================== -->
+   <target name="clean">
+      <delete dir="${build.dir}"/>
+   </target>
+
+
+</project>
+

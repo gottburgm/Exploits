@@ -1,0 +1,65 @@
+<definitions name="OrderMgmtService" targetNamespace="http://org.jboss.ws/samples/retail" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://org.jboss.ws/samples/retail" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <types>
+      <xs:schema targetNamespace="http://org.jboss.ws/samples/retail" version="1.0" xmlns:tns="http://org.jboss.ws/samples/retail" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+         <xs:element name="prepareOrder" nillable="true" type="tns:order"/>
+         <xs:element name="prepareOrderResponse" nillable="true" type="tns:orderStatus"/>
+         <xs:complexType name="order">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="customer" type="tns:customer"/>
+               <xs:element name="orderNum" type="xs:long"/>
+               <xs:element minOccurs="0" name="state" type="tns:orderState"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="customer">
+            <xs:sequence>
+               <xs:element minOccurs="0" name="creditCardDetails" type="xs:string"/>
+               <xs:element minOccurs="0" name="firstName" type="xs:string"/>
+               <xs:element minOccurs="0" name="lastName" type="xs:string"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:complexType name="orderStatus">
+            <xs:sequence>
+               <xs:element name="orderNum" type="xs:long"/>
+               <xs:element minOccurs="0" name="status" type="xs:string"/>
+            </xs:sequence>
+         </xs:complexType>
+         <xs:simpleType name="orderState">
+            <xs:restriction base="xs:string">
+               <xs:enumeration value="PROCESSED"/>
+               <xs:enumeration value="VERIFIED"/>
+               <xs:enumeration value="PREPARED"/>
+               <xs:enumeration value="TRANSIENT"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:schema>
+   </types>
+   <message name="OrderMgmt_prepareOrderResponse">
+      <part element="tns:prepareOrderResponse" name="prepareOrderResponse"/>
+   </message>
+   <message name="OrderMgmt_prepareOrder">
+      <part element="tns:prepareOrder" name="prepareOrder"/>
+   </message>
+   <portType name="OrderMgmt">
+      <operation name="prepareOrder" parameterOrder="prepareOrder">
+         <input message="tns:OrderMgmt_prepareOrder"/>
+         <output message="tns:OrderMgmt_prepareOrderResponse"/>
+      </operation>
+   </portType>
+   <binding name="OrderMgmtBinding" type="tns:OrderMgmt">
+      <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+      <operation name="prepareOrder">
+         <soap:operation soapAction=""/>
+         <input>
+            <soap:body use="literal"/>
+         </input>
+         <output>
+            <soap:body use="literal"/>
+         </output>
+      </operation>
+   </binding>
+   <service name="OrderMgmtService">
+      <port binding="tns:OrderMgmtBinding" name="OrderMgmtPort">
+         <soap:address location="http://@jboss.bind.address@:8080/jaxws-samples-retail/OrderMgmtBean"/>
+      </port>
+   </service>
+</definitions>

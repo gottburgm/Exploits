@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connector version="1.5" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/connector_1_5.xsd">
+  <display-name>whitebox-tx.rar</display-name>
+  <vendor-name>Java Software</vendor-name>
+  <eis-type>TS EIS</eis-type>
+  <resourceadapter-version>1.0</resourceadapter-version>
+  <license>
+    <license-required>false</license-required>
+  </license>
+  <resourceadapter>
+    <resourceadapter-class>com.sun.ts.tests.common.connector.whitebox.LocalTxResourceAdapterImpl</resourceadapter-class>
+    <config-property>
+      <config-property-name>RAName</config-property-name>
+      <config-property-type>java.lang.String</config-property-type>
+      <config-property-value>LocalTxResourceAdapter</config-property-value>
+    </config-property>
+    <outbound-resourceadapter>
+      <connection-definition>
+        <managedconnectionfactory-class>com.sun.ts.tests.common.connector.whitebox.LocalTxManagedConnectionFactory</managedconnectionfactory-class>
+        <connectionfactory-interface>com.sun.ts.tests.common.connector.whitebox.TSConnectionFactory</connectionfactory-interface>
+        <connectionfactory-impl-class>com.sun.ts.tests.common.connector.whitebox.TSEISDataSource</connectionfactory-impl-class>
+        <connection-interface>com.sun.ts.tests.common.connector.whitebox.TSConnection</connection-interface>
+        <connection-impl-class>com.sun.ts.tests.common.connector.whitebox.TSEISConnection</connection-impl-class>
+      </connection-definition>
+      <transaction-support>LocalTransaction</transaction-support>
+      <authentication-mechanism>
+        <authentication-mechanism-type>BasicPassword</authentication-mechanism-type>
+        <credential-interface>javax.resource.spi.security.PasswordCredential</credential-interface>
+      </authentication-mechanism>
+      <reauthentication-support>false</reauthentication-support>
+    </outbound-resourceadapter>
+    <inbound-resourceadapter>
+      <messageadapter>
+        <messagelistener>
+          <messagelistener-type>com.sun.ts.tests.common.connector.util.TSMessageListenerInterface</messagelistener-type>
+          <activationspec>
+            <activationspec-class>com.sun.ts.tests.common.connector.whitebox.LocalTxActivationSpec</activationspec-class>
+          </activationspec>
+        </messagelistener>
+      </messageadapter>
+    </inbound-resourceadapter>
+  </resourceadapter>
+</connector>

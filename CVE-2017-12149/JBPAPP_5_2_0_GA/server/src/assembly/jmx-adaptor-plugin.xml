@@ -1,0 +1,16 @@
+<assembly>
+  <id>jmx-adaptor-plugin</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/jmx/**</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

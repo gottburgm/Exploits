@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!DOCTYPE ejb-jar PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN"
+   "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar>
+   <enterprise-beans>
+      <session>
+         <description>JUnit Session Bean Test Runner</description>
+         <ejb-name>EJBTestRunnerEJB</ejb-name>
+         <home>org.jboss.test.util.ejb.EJBTestRunnerHome</home>
+         <remote>org.jboss.test.util.ejb.EJBTestRunner</remote>
+         <ejb-class>org.jboss.test.util.ejb.EJBTestRunnerBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Bean</transaction-type>
+      </session>
+      <session>
+         <ejb-name>FacadeEJB</ejb-name>
+         <home>org.jboss.test.cmp2.jbas979.FacadeHome</home>
+         <remote>org.jboss.test.cmp2.jbas979.Facade</remote>
+         <ejb-class>org.jboss.test.cmp2.jbas979.FacadeSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      <entity>
+         <ejb-name>AStoreNotFlushedTrueEJB</ejb-name>
+         <local-home>org.jboss.test.cmp2.jbas979.ALocalHome</local-home>
+         <local>org.jboss.test.cmp2.jbas979.ALocal</local>
+         <ejb-class>org.jboss.test.cmp2.jbas979.ABean</ejb-class>
+         <persistence-type>Container</persistence-type>
+         <prim-key-class>java.lang.Integer</prim-key-class>
+         <reentrant>False</reentrant>
+         <cmp-version>2.x</cmp-version>
+         <abstract-schema-name>AStoreNotFlushedTrue</abstract-schema-name>
+         <cmp-field><field-name>id</field-name></cmp-field>
+         <cmp-field><field-name>name</field-name></cmp-field>
+         <primkey-field>id</primkey-field>
+         <query>
+            <query-method>
+               <method-name>findAll</method-name>
+               <method-params/>
+            </query-method>
+            <ejb-ql>SELECT OBJECT(o) FROM AStoreNotFlushedTrue o</ejb-ql>
+         </query>
+      </entity>
+      <entity>
+         <ejb-name>AStoreNotFlushedFalseEJB</ejb-name>
+         <local-home>org.jboss.test.cmp2.jbas979.ALocalHome</local-home>
+         <local>org.jboss.test.cmp2.jbas979.ALocal</local>
+         <ejb-class>org.jboss.test.cmp2.jbas979.ABean</ejb-class>
+         <persistence-type>Container</persistence-type>
+         <prim-key-class>java.lang.Integer</prim-key-class>
+         <reentrant>False</reentrant>
+         <cmp-version>2.x</cmp-version>
+         <abstract-schema-name>AStoreNotFlushedFalse</abstract-schema-name>
+         <cmp-field><field-name>id</field-name></cmp-field>
+         <cmp-field><field-name>name</field-name></cmp-field>
+         <primkey-field>id</primkey-field>
+         <query>
+            <query-method>
+               <method-name>findAll</method-name>
+               <method-params/>
+            </query-method>
+            <ejb-ql>SELECT OBJECT(o) FROM AStoreNotFlushedFalse o</ejb-ql>
+         </query>
+      </entity>
+   </enterprise-beans>
+
+   <assembly-descriptor >
+      <container-transaction >
+         <method >
+            <ejb-name>FacadeEJB</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <trans-attribute>RequiresNew</trans-attribute>
+      </container-transaction>
+   </assembly-descriptor>
+</ejb-jar>

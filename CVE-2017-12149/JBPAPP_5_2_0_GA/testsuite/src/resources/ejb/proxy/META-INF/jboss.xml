@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 4.0//EN"
+        "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">        
+<jboss>
+    <enterprise-beans>
+        <session>
+          <ejb-name>StatefulCounterEjb</ejb-name>
+          <jndi-name>ejb/StatefulCounterEjb</jndi-name>
+          <configuration-name>Mock Standard Stateful SessionBean</configuration-name>
+        </session>
+    </enterprise-beans>
+    
+    <invoker-proxy-bindings>
+       <invoker-proxy-binding>
+         <name>mock-stateful-unified-invoker</name>
+         <invoker-mbean>jboss:service=invoker,type=unified</invoker-mbean>
+         <proxy-factory>org.jboss.proxy.ejb.ProxyFactory</proxy-factory>
+         <proxy-factory-config>
+           <client-interceptors>
+             <home>
+               <interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>
+               <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+               <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+               <interceptor call-by-value="false">org.jboss.invocation.InvokerInterceptor</interceptor>
+               <interceptor call-by-value="true">org.jboss.invocation.MarshallingInvokerInterceptor</interceptor>
+             </home>
+             <bean>
+               <interceptor>org.jboss.test.ejb.proxy.beans.HandleRetrievalStatefulSessionInterceptor</interceptor>
+               <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+               <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+               <interceptor call-by-value="false">org.jboss.invocation.InvokerInterceptor</interceptor>
+               <interceptor call-by-value="true">org.jboss.invocation.MarshallingInvokerInterceptor</interceptor>
+             </bean>
+           </client-interceptors>
+         </proxy-factory-config>
+       </invoker-proxy-binding>    
+    </invoker-proxy-bindings>
+    
+    <container-configurations>
+       <container-configuration extends="Standard Stateful SessionBean">
+          <container-name>Mock Standard Stateful SessionBean</container-name>
+          <invoker-proxy-binding-name>mock-stateful-unified-invoker</invoker-proxy-binding-name>
+       </container-configuration>
+    </container-configurations>
+</jboss>    

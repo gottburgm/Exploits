@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<!--
+   | Targets that run the Secured Mask tests
+-->
+ 
+<project name="main.server.config.secured" xmlns:server="http://jboss.org/ns/test/ant/server">
+
+  <!--
+  |  Define the Pattern Sets Here
+  --> 
+  <patternset id="secured.mask.includes">
+    <include name="org/jboss/test/security/test/authorization/secured/*TestCase.class"/>
+  </patternset>
+
+  <!--
+    | Targets
+  -->
+   <target name="tests-secured" 
+           description="Run tests on secured profiles">
+
+     <server:start name="production"/>
+       <run-junit junit.patternset="secured.mask.includes"/>
+     <server:stop name="production"/>
+
+  </target>
+</project>
+

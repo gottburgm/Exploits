@@ -1,0 +1,27 @@
+  <!DOCTYPE jboss-web PUBLIC
+    "-//JBoss//DTD Web Application 5.0//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-web_5_0.dtd">
+
+<jboss-web>
+<!--
+   <class-loading>
+   <loader-repository>jboss.web:loader=testHA</loader-repository>
+   </class-loading>
+-->
+   <!-- To avoid a custom config, use the jmx-console security domain -->
+   <security-domain>java:/jaas/jmx-console</security-domain>
+   
+   <context-root>/clustered-clleak</context-root>
+   
+   <replication-config>
+      <replication-granularity>FIELD</replication-granularity>
+      <replication-field-batch-mode>TRUE</replication-field-batch-mode>
+   </replication-config>
+   <max-active-sessions>20</max-active-sessions>
+   <passivation-config>
+      <use-session-passivation>true</use-session-passivation>
+      <passivation-min-idle-time>5</passivation-min-idle-time>
+      <passivation-max-idle-time>10</passivation-max-idle-time>
+   </passivation-config>
+   
+</jboss-web>

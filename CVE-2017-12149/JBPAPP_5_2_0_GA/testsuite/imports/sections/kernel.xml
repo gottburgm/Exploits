@@ -1,0 +1,73 @@
+<project name="tests-kernel-jars">
+   <!-- kernel test -->
+   <target name="_jars-kernel">
+      <mkdir dir="${build.lib}"/>
+      
+      <jar destfile="${build.lib}/testkernel-simplepojo.beans">
+         <fileset dir="${build.resources}/kernel/deployment/simplepojo">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include
+               name="org/jboss/test/kernel/deployment/jboss/beans/*.class"/>
+            <include
+               name="org/jboss/test/kernel/deployment/jboss/beans/simplepojo/**"/>
+         </fileset>
+      </jar>
+      
+      <jar destfile="${build.lib}/testkernel-configpojo.beans">
+         <fileset dir="${build.resources}/kernel/deployment/configpojo">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include
+               name="org/jboss/test/kernel/deployment/jboss/beans/*.class"/>
+            <include
+               name="org/jboss/test/kernel/deployment/jboss/beans/configpojo/**"/>
+         </fileset>
+      </jar>
+      
+      <jar destfile="${build.lib}/testkernel-configproperties.beans">
+         <fileset dir="${build.resources}/kernel/deployment/configproperties">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/kernel/deployment/jboss/beans/**"/>
+         </fileset>
+      </jar>
+      
+      <jar destfile="${build.lib}/testkernel-servicepojo.beans">
+         <fileset dir="${build.resources}/kernel/deployment/servicepojo">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include
+               name="org/jboss/test/kernel/deployment/jboss/beans/*.class"/>
+            <include
+               name="org/jboss/test/kernel/deployment/jboss/beans/servicepojo/**"/>
+         </fileset>
+      </jar>
+      
+      <jar destfile="${build.lib}/testkernel-dependspojo.beans">
+         <fileset dir="${build.resources}/kernel/deployment/dependspojo">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include
+               name="org/jboss/test/kernel/deployment/jboss/beans/*.class"/>
+            <include
+               name="org/jboss/test/kernel/deployment/jboss/beans/dependspojo/**"/>
+         </fileset>
+      </jar>
+      
+      <jar destfile="${build.lib}/testkernel-dependspojo.ear">
+         <fileset dir="${build.resources}/kernel/deployment/dependspojoear">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="testkernel-dependspojo.beans"/>
+            <include name="tests-dummy.jar"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

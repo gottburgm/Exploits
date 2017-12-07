@@ -1,0 +1,50 @@
+Before attempting to build EAP, you must install the gnu "patch" program.  Issuing "yum install patch" should install it (if you don't have it already).
+
+By default, all jbossas/server/* profiles are secured with 'jbossas-5-enableauth.patch'.
+
+To build an unsecured jbossas, specify the -Dbuild.unsecure option:
+
+   ./build.sh -Dbuild.unsecure=
+
+Visually, you will see this message in the output:
+  skipped_auth_patch:
+     [echo]  "The 'build.unsecure' property was specified (it doesn't matter what value was given), skipping the secure patch"
+
+
+You can also run the 'jbossas-5-disableauth.patch' patch on an already built jbossas to unsecure.
+   cd jbossas
+   patch -p0 -i ./jbossas-5-disableauth.patch 
+
+You can also run the 'smallmemory.patch', to lower the reserved Java memory size.
+   cd jbossas
+   patch -p0 -i ./smallmemory.patch
+
+The patch files can be updated manually as needed or generated with these commands (assuming two AS trees representing desired targets).  
+Be sure to delete any noise in the output.  
+
+If you manually update the patch files, make sure that you only patch each file once (don't accumulate separate patches to the same file).  
+Violating this rule, will cause problems when trying to apply the jbossas-5-disableauth.patch.
+
+The best approach is to issue the following commands after creating a secured installation (auth folder) and an unsecured installation (noauth folder).
+You can use the result from "./build.sh -Dbuild.unsecure=" for generating the "noauth" folder (you need to rename the output AS root folder to noauth).
+You can use the result from "./build.sh" for generating the "auth" folder (plus any manual changes to the server configuration folders).
+
+ diff -Naur noauth/server auth/server > /work/as/JBPAPP_5_0/JBPAPP_5_0/build/jbossas-5-enableauth.patch
+ sed -i 's/noauth\//.\//g' /work/as/JBPAPP_5_0/JBPAPP_5_0/build/jbossas-5-enableauth.patch
+ sed -i 's/auth\//.\//g' /work/as/JBPAPP_5_0/JBPAPP_5_0/build/jbossas-5-enableauth.patch
+
+ diff -Naur auth/server noauth/server > /work/as/JBPAPP_5_0/JBPAPP_5_0/build/jbossas-5-disableauth.patch
+ sed -i 's/noauth\//.\//g' /work/as/JBPAPP_5_0/JBPAPP_5_0/build/jbossas-5-disableauth.patch
+ sed -i 's/auth\//.\//g' /work/as/JBPAPP_5_0/JBPAPP_5_0/build/jbossas-5-disableauth.patch 
+
+
+In the EAP source tree, the following checked-in configuration files are specific to the "production" server profile:
+
+./connector/src/resources/jca-sar/jca-jboss-beans-production.xml
+./profileservice/src/resources/hdscanner-jboss-beans-production.xml
+./server/src/resources/uuid-key-generator/META-INF/jboss-service-production.xml
+./server/src/etc/conf/all/jboss-log4j-production.xml
+./server/src/etc/conf/all/jboss-service-production.xml
+
+If you want to change the jboss-log4j.xml settings for the production profile, you need to change ./server/src/etc/conf/all/jboss-log4j-production.xml.
+

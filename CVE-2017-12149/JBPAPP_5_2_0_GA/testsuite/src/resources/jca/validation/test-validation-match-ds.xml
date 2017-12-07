@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<datasources>
+   <local-tx-datasource>
+      <jndi-name>TestValidationMatchDS</jndi-name>
+      <use-java-context>false</use-java-context>
+      <connection-url>jdbc:hsqldb:mem:BackgroundDSDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <application-managed-security />
+	  <min-pool-size>5</min-pool-size>
+	  <max-pool-size>10</max-pool-size>
+	  <validate-on-match>true</validate-on-match>		
+	  <valid-connection-checker-class-name>org.jboss.test.jca.support.MockSuccessValidationConnectionChecker</valid-connection-checker-class-name>
+	  <exception-sorter-class-name>org.jboss.test.jca.support.MockExceptionSorter</exception-sorter-class-name>
+	  <idle-timeout-minutes>5</idle-timeout-minutes>
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+   </local-tx-datasource>
+
+
+</datasources>

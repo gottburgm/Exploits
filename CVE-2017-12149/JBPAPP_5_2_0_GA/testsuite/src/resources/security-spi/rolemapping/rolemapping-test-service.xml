@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+   <mbean code="org.jboss.security.auth.login.DynamicLoginConfig"
+         name="jboss.security.tests:service=DynamicLoginConfig,test=rolemapping">
+    <attribute name="PolicyConfig" serialDataType="jbxb">
+         <jbsx:policy xsi:schemaLocation="urn:jboss:security-config:5.0 resource:security-config_5_0.xsd" xmlns:jbsx="urn:jboss:security-config:5.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <jbsx:application-policy name="jbossweb-role-map">
+               <jbsx:authentication>
+                 <jbsx:login-module
+                        code="org.jboss.security.auth.spi.IdentityLoginModule"
+                        flag="required">
+                        <jbsx:module-option name="principal">SpecialUser</jbsx:module-option>
+                        <jbsx:module-option name="roles">testRole</jbsx:module-option>
+                 </jbsx:login-module> 
+               </jbsx:authentication>
+               <jbsx:rolemapping>
+                  <jbsx:mapping-module code="org.jboss.security.mapping.providers.OptionsRoleMappingProvider">
+                      <jbsx:module-option name="rolesMap" 
+                           serialDataType="jbxb">
+                           <java:properties xmlns:java="urn:jboss:java-properties"
+                                 xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+                                 xs:schemaLocation="urn:jboss:java-properties resource:java-properties_1_0.xsd">
+                                 <java:property>
+                                    <java:key>testRole</java:key>
+                                    <java:value>AuthorizedUser,InternalUser</java:value>
+                                 </java:property> 
+                           </java:properties>
+                      </jbsx:module-option> 
+                      <jbsx:module-option name="replaceRoles">false</jbsx:module-option>  
+                   </jbsx:mapping-module>
+               </jbsx:rolemapping>
+            </jbsx:application-policy>
+         </jbsx:policy>         
+      </attribute>
+      <depends optional-attribute-name="LoginConfigService">
+         jboss.security:service=XMLLoginConfig
+      </depends>
+      <depends optional-attribute-name="SecurityManagerService">
+         jboss.security:service=JaasSecurityManager
+      </depends>
+   </mbean>
+</server>

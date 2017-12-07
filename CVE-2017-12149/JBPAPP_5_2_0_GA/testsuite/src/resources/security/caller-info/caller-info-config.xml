@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns="urn:jbosstest:caller-info"
+   targetNamespace="urn:jbosstest:caller-info"
+   >
+
+   <application-policy name="caller-info-test">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.XMLLoginModule" flag="required">
+            <module-option name="userInfo">
+               <lm:users xmlns:lm="http://www.jboss.org/j2ee/schemas/XMLLoginModule">
+                  <lm:user name="jduke" password="theduke">
+                     <lm:role name="CallerInfoFacadeRole"/>
+                     <lm:role name="CallerInfoStatelessRole"/>
+                     <lm:role name="CallerInfoStatefulRole"/>
+                     <lm:role name="CallerInfoEntityRole"/>
+                     <lm:role name="callerJduke" group="CallerPrincipal" />
+                  </lm:user>
+                  <lm:user name="jdukeman" password="anotherduke">
+                     <lm:role name="Role2"/>
+                     <lm:role name="Role3"/>
+                     <lm:role name="callerJdukeman" group="CallerPrincipal" />
+                  </lm:user>
+               </lm:users>
+            </module-option>
+            <module-option name="unauthenticatedIdentity">guest</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+
+</policy>

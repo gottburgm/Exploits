@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+
+<!--
+   | Targets that run the JCA and TM tests on JTS configuration
+-->
+ 
+<!-- $Id: tests-jts.xml 92841 2009-08-26 19:08:18Z jesper.pedersen $ -->
+<project name="main.server.config.jts" xmlns:server="http://jboss.org/ns/test/ant/server">
+
+  <!--
+  |  Define the Pattern Sets Here
+  --> 
+  <patternset id="jts.includes">
+    <include name="org/jboss/test/jca/**/*TestCase.class"/>
+    <include name="org/jboss/test/tm/**/*TestCase.class"/>
+    <exclude name="org/jboss/test/jca/test/BackgroundValidationUnitTestCase.class"/>
+    <exclude name="org/jboss/test/jca/test/BaseConnectionManagerUnitTestCase.class"/>
+    <exclude name="org/jboss/test/jca/test/PreFillPoolingUnitTestCase.class"/>
+    <exclude name="org/jboss/test/jca/test/SecurityContextUnitTestCase.class"/>
+    <exclude name="org/jboss/test/jca/test/StatisticsReporterUnitTestCase.class"/>
+    <exclude name="org/jboss/test/jca/test/TxConnectionManagerUnitTestCase.class"/>
+    <exclude name="org/jboss/test/jca/test/*StressTestCase.class"/>
+  </patternset>
+  <patternset id="jts.security.includes">
+    <include name="org/jboss/test/jca/test/SecurityContextUnitTestCase.class"/>
+  </patternset>
+
+  <!--
+    | Targets
+  -->
+
+   <!-- JBAS-6492 -->
+   <target name="tests-jts" unless="without.jts.smoke.tests"
+   	description="Runs the JCA and TM tests on JTS configuration">
+      
+      <delete dir="${jboss.dist}/server/jts" />
+      <create-config baseconf="all" newconf="jts">
+         <patternset>
+            <include name="conf/**"/>
+            <include name="deploy/**"/>
+            <include name="deploy-hasingleton/**"/>
+            <include name="deployers/**"/>
+            <include name="lib/**"/>
+         </patternset>
+      </create-config>
+
+      <!-- install JTS transactions -->
+      <ant dir="${jboss.dist}/docs/examples/transactions" target="jts">
+         <property name="target.server.dir" location="${jboss.dist}/server/jts"/>
+      </ant>
+
+
+      <server:start name="jts"/>
+
+      <run-junit junit.patternset="jts.includes"
+         junit.configuration="jts" />
+      
+      <property name="jbosstest.secure" value="true"/>
+      <property name="java.security.auth.login.config"
+        value="${build.resources}/security/auth.conf"/>
+      <propertyset id="jts-security-tests-props">
+         <propertyref prefix="java.security.auth"/>
+      </propertyset>
+      <run-junit junit.patternset="jts.security.includes"
+         junit.syspropertyset="jts-security-tests-props"
+         junit.configuration="jts" />
+
+      <server:stop name="jts"/>
+
+   </target>
+	
+</project>

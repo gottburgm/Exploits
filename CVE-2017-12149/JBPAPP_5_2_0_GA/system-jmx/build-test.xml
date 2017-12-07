@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+   <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
+   <!ENTITY libraries  SYSTEM "../thirdparty/libraries.ent">
+   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+   <!ENTITY targets SYSTEM "../tools/etc/buildmagic/targets.ent">
+]>
+
+<!-- $Id: build-test.xml 113487 2012-08-30 08:18:01Z wolfc $ -->
+
+<project default="main" name="JBoss/System Tests">
+
+   <!-- ================================================================== -->
+   <!-- Setup                                                              -->
+   <!-- ================================================================== -->
+
+   <!--
+     | Include the common Buildmagic elements.
+     |
+     | This defines several different targets, properties and paths.
+     | It also sets up the basic extention tasks amoung other things.
+   -->
+
+  &buildmagic;
+
+  <!--
+     | Include the normal targets.
+   -->
+  &targets;
+
+  <!-- ================================================================== -->
+   <!-- Configuration                                                      -->
+   <!-- ================================================================== -->
+
+   <!--
+     | Configure the build system.
+     |
+     | This target is invoked by the Buildmagic initialization logic and
+     | should contain module specific configuration elements.
+   -->
+   <property name="javac.deprecation" value="false" />
+   <property name="javac.target" value="5" />
+   <property name="javac.source" value="5" />
+   
+   <target name="configure" unless="configure.disable">
+
+      <!-- =================== -->
+      <!-- Basic Configuration -->
+      <!-- =================== -->
+
+      <!-- Module name(s) & version -->
+      <property name="module.name" value="system" />
+      <property name="source.java" value="${module.source}/tests" />
+      <property name="source.test" value="${module.source}/tests-support"
+         description="A source tree not included in the test classpath by default used to test class loading." />
+      <property name="build.classes" value="${module.output}/classes-tests" />
+      <property name="build.test" value="${module.output}/classes-tests-support"
+         description="source.test classes"/>
+      <property name="build.test.lib" value="${module.output}/test-lib"
+         description="Separate lib directory for source.test classes"/>
+      <property name="build.test.resources" value="${module.output}/resources/tests-support"
+         description="Root of the tests-support resources"/>
+      <property name="build.testlog" value="${module.output}/log" />
+      <property name="build-bypass.disabled" value="true" />
+      <property name="build.gen.test" value="${module.output}/gen-test"/>
+
+      <!-- ========= -->
+      <!-- Libraries -->
+      <!-- ========= -->
+
+    &libraries;
+
+    <!-- The combined library classpath -->
+      <path id="library.classpath">
+         <path refid="gnu.getopt.classpath"/>
+         <path refid="apache.xerces.classpath"/>
+         <path refid="apache.log4j.classpath"/>
+         <path refid="apache.commons.classpath"/>
+         <path refid="oswego.concurrent.classpath"/>
+         <path refid="dom4j.dom4j.classpath"/>
+         <path refid="jboss.jbossxb.classpath"/>
+         <path refid="sun.jaxb.classpath"/>
+         <path refid="jboss.jboss.cl.classpath"/>
+         <path refid="jboss.jboss.man.classpath"/>
+         <path refid="jboss.jboss.mdr.classpath"/>
+         <path refid="jboss.jboss.deployers.classpath"/>
+         <path refid="jboss.jboss.reflect.classpath"/>
+         <path refid="jboss.microcontainer.classpath"/>
+         <path refid="jboss.integration.classpath"/>
+         <path refid="jboss.jboss.vfs.classpath"/>
+         <path refid="jboss.common.core.classpath"/>
+         <path refid="jboss.common.logging.spi.classpath"/>
+         <path refid="jboss.common.logging.log4j.classpath"/>
+         <path refid="jboss.common.logging.jdk.classpath"/>
+         <path refid="jboss.aop.classpath" />
+         <path refid="trove.trove.classpath" />
+         <path refid="javassist.javassist.classpath" />
+         <path refid="jboss.test.classpath" />
+         <path refid="junit.junit.classpath"/>
+      </path>
+
+      <!-- ======= -->
+      <!-- Modules -->
+      <!-- ======= -->
+
+    &modules;
+	<!-- this -->
+      <property name="jboss.this.root" value="${module.root}/output" />
+      <property name="jboss.this.lib" value="${jboss.this.root}/lib" />
+      <path id="jboss.this.classpath">
+         <fileset dir="${jboss.this.lib}">
+            <include name="*.jar" />
+            <exclude name="run.jar" />
+         </fileset>
+      </path>
+
+      <!-- The combined dependant module classpath -->
+      <path id="dependentmodule.classpath">
+         <path refid="jboss.j2se.classpath"/>
+         <path refid="jboss.jmx.classpath"/>
+         <path refid="jboss.mbeans.classpath"/>
+         <path refid="jboss.main.classpath"/>
+         <path refid="jboss.system.classpath"/>
+         <pathelement location="output/classes" />
+      </path>
+
+      <!-- ===== -->
+      <!-- Tasks -->
+      <!-- ===== -->
+
+      <call target="_default:task-init" />
+
+      <path id="thirdparty.classpath">
+         <path refid="library.classpath" />
+         <path refid="dependentmodule.classpath" />
+      </path>
+
+   </target>
+   <patternset id="compile-resources.pattern">
+      <include name="${src.resources}/**" />
+   </patternset>
+
+   <!-- ================================================================== -->
+   <!-- Compile                                                            -->
+   <!-- ================================================================== -->
+
+   <!--
+     | Compile everything.
+     |
+     | This target should depend on other compile-* targets for each
+     | different type of compile that needs to be performed, short of
+     | documentation compiles.
+   -->
+
+   <target name="compile" description="Compile all source files."
+      depends="_default:compile-classes, _default:compile-test-classes, _default:compile-resources" />
+
+   <target name="compile-tests-support" depends="init" unless="compile.disable"
+      description="Compile the ${source.support.java} tree">
+      <mkdir dir="${build.support.classes}"/>
+      
+      <javac destdir="${build.support.classes}"
+         optimize="${javac.optimize}"
+         target="${javac.target}"
+         source="${javac.source}"
+         debug="${javac.debug}"
+         depend="${javac.depend}"
+         verbose="${javac.verbose}"
+         deprecation="${javac.deprecation}"
+         includeAntRuntime="${javac.include.ant.runtime}"
+         includeJavaRuntime="${javac.include.java.runtime}"
+         includes="${javac.includes}"
+         excludes="${javac.excludes}"
+         failonerror="${javac.fail.onerror}">
+         <bootclasspath>
+            <path refid="javac.bootclasspath"/>
+         </bootclasspath>
+         <src path="${source.support.java}"/>
+         <classpath refid="javac.classpath"/>
+      </javac>
+   </target>
+
+   <!-- ================================================================== -->
+   <!-- Archives                                                           -->
+   <!-- ================================================================== -->
+
+   <target name="module-jars">
+       <!-- Build jboss-system-jmx-test.jar -->
+       <jar jarfile="${build.lib}/jboss-system-jmx-test.jar" manifest="${build.etc}/default.mf">
+          <fileset dir="${build.classes}"/>
+          <fileset dir="${build.resources}/tests">
+             <include name="org/**"/>
+          </fileset>
+       </jar>
+   </target>
+   <!-- Jars built from the independent src/tests-support,output/tests-support-classes trees -->
+   <target name="tests-support-jars" depends="compile-tests-support">
+      <ant antfile="build-support-jars.xml" inheritAll="true" dir="." />
+      <call target="_default:compile-resources"/>
+   </target>
+
+   <!-- ================================================================== -->
+   <!-- Tests                                                              -->
+   <!-- ================================================================== -->
+
+   <target name="tests" depends="most"
+      description="Execute all tests in the given test directory.">
+      <mkdir dir="${build.reports}" />
+      <mkdir dir="${build.testlog}" />
+      <!-- Remove the test.log so each run has a fresh log -->
+      <delete file="${build.testlog}/test.log" />
+      <junit dir="${module.output}" printsummary="yes" haltonerror="false" haltonfailure="false" fork="true">
+
+         <sysproperty key="build.testlog" value="${build.testlog}" />
+         <syspropertyset id="jbosstest-properties">
+            <propertyref prefix="jbosstest" />
+         </syspropertyset>
+
+         <classpath>
+            <pathelement location="${build.classes}" />
+            <pathelement location="${build.resources}/tests" />
+            <path refid="javac.classpath" />
+            <path refid="apache.xerces.classpath" />
+         </classpath>
+
+         <formatter type="plain" usefile="true" />
+         <formatter type="xml" usefile="true" />
+
+         <batchtest todir="${build.reports}" haltonerror="false" haltonfailure="false" fork="true">
+
+            <fileset dir="${build.classes}">
+               <include name="org/jboss/test/**/*TestCase.class" />
+            </fileset>
+         </batchtest>
+      </junit>
+   </target>
+
+   <target name="one-test" depends="init"
+      description="Execute the test defined by ${test}">
+      <mkdir dir="${build.reports}" />
+      <mkdir dir="${build.testlog}" />
+      <!-- Remove the test.log so each run has a fresh log -->
+      <delete file="${build.testlog}/test.log" />
+      <junit dir="${module.output}" printsummary="yes" haltonerror="false" haltonfailure="false" fork="true">
+
+         <sysproperty key="build.testlog" value="${build.testlog}" />
+         <syspropertyset id="jbosstest-properties">
+            <propertyref prefix="jbosstest" />
+         </syspropertyset>
+
+         <classpath>
+            <pathelement location="${build.classes}" />
+            <pathelement location="${build.resources}/tests" />
+            <path refid="thirdparty.classpath" />
+            <path refid="apache.xerces.classpath"/>
+         </classpath>
+
+         <formatter type="plain" usefile="true" />
+         <formatter type="xml" usefile="true" />
+
+         <test todir="${build.reports}" name="${test}" haltonerror="${junit.batchtest.haltonerror}" haltonfailure="${junit.batchtest.haltonfailure}" fork="${junit.batchtest.fork}" />
+      </junit>
+   </target>
+
+   <target name="memory-test" depends="most" description="Execute MemoryLeakTestCase">
+      <mkdir dir="${build.reports}" />
+      <mkdir dir="${build.testlog}" />
+
+      <junit printsummary="yes" fork="yes" haltonfailure="no">
+         <classpath>
+            <pathelement location="${build.classes}" />
+            <pathelement location="${build.resources}" />
+            <path refid="thirdparty.classpath" />
+            <path refid="javac.classpath" />
+            <path refid="apache.xerces.classpath" />
+         </classpath>
+         <jvmarg value="-agentlib:jbossAgent" />
+         <formatter type="plain" usefile="true" />
+         <formatter type="xml" usefile="true" />
+         <test fork="yes" todir="${build.reports}" name="org.jboss.test.memorytests.ClassInfoMemoryTestCase" />
+      </junit>
+
+   </target>
+
+</project>

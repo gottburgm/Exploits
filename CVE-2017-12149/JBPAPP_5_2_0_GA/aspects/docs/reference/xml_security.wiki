@@ -1,0 +1,89 @@
+!!!!XML Configured Security
+AOP Security brings J2EE/EJB like security to plain Java classes. Read up on EJB security to get a feel of what we are talking about here. You can apply security either through XML or via annotations.
+
+The XML metadata configuration is almost exactly like in the ejb-jar.xml deployment descriptor of J2EE. The exception is that we've added the ability to define security for constructor and field access of a Java class. To use AOP security, all you have to do is define security class-metadata. The needed interceptors are automatically bound to the class via a annotation binding. Below is an explanation of the security metadata you need to define.
+
+{{{
+<aop>
+...
+   <annotation tag="security" class="org.jboss.test.SecuredPOJO">
+   <security-domain>java:/jaas/other</security-domain>
+   <run-as>admin</run-as>
+}}}
+The security-domain defines the JBoss security domain to use. See JBoss J2EE documentation on what this means. The run-as tag works in the same way as the EJB run-as tag.
+
+{{{   
+   <method-permission>
+      <role-name>allowed</role-name>
+      <method>
+         <method-name>someMethod</method-name>
+      </method>
+   </method-permission>
+   <method-permission>
+      <unchecked/>
+      <method>
+         <method-name>unchecked</method-name>
+      </method>
+   </method-permission>
+}}}
+
+Method permissions are defined in the same exact way as in EJB land.
+{{{
+   <field-permission>
+     <role-name>allowed</role-name>
+     <field>
+        <field-name>someField</field-name>
+     </field>
+   </field-permission>
+   <field-permission>
+     <unchecked/>
+     <field>
+        <field-name>uncheckedField</field-name>
+     </field>
+   </field-permission>
+}}}
+Field permissions can be defined as well and are very similar to the defintion of method permissions.
+
+{{{  
+   <constructor-permission>
+      <unchecked/>
+      <constructor>
+        <constructor-params/>
+      </constructor>
+   </constructor-permission>
+}}}
+You can define permissions on constructors as well. An empty constructor-params corresponds to the default constructor.
+{{{
+   <constructor-permission>
+      <role-name>allowed</role-name>
+      <constructor>
+        <constructor-params>
+           <constructor-param>int</constructor-param>
+        </constructor-params>
+      </constructor>
+   </constructor-permission>
+}}}
+The above shows how to define a permission on a constructor with a particular argument list.
+{{{
+   
+   <exclude-list>
+      <description>Methods that connect be used</description>
+      <method>
+         <method-name>excluded</method-name>
+      </method>
+      <field>
+         <field-name>excludedField</field-name>
+      </field>
+      <constructor>
+         <constructor-params>
+            <constructor-param>java.lang.String</constructor-param>
+         </constructor-params>
+      </constructor>
+   </exclude-list>
+}}}
+As in EJB land, you can define exclude lists for fields and constructors as well as methods.
+{{{
+   
+</class-metadata>
+</aop>
+}}}

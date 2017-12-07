@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE web-app PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+   "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+   <description>Web Application that tests XACML Integration with the web container- access granted if a specific request parameter exists</description>
+   <servlet>
+     <servlet-name>test</servlet-name>
+     <jsp-file>/test.jsp</jsp-file>
+   </servlet>
+   <servlet-mapping>
+      <servlet-name>test</servlet-name>
+      <url-pattern>/test</url-pattern>
+   </servlet-mapping>
+
+   <security-constraint>
+     <web-resource-collection>
+       <web-resource-name>test</web-resource-name>
+       <description></description>
+       <url-pattern>/test/*</url-pattern>
+       <http-method>GET</http-method>
+       <http-method>POST</http-method>
+     </web-resource-collection>
+     <auth-constraint>
+       <role-name>AuthorizedUser</role-name>
+     </auth-constraint>
+   </security-constraint>
+
+   <login-config>
+      <auth-method>BASIC</auth-method>
+      <realm-name>JBoss XACML Test</realm-name>
+   </login-config>
+
+   <security-role>
+      <role-name>AuthorizedUser</role-name>
+   </security-role>
+</web-app>

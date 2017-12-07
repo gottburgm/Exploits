@@ -1,0 +1,4 @@
+!!! Installation
+
+Please see our online [wiki|http://wiki.jboss.org/wiki/Wiki.jsp?page=EmbeddedJBoss] for more information.
+

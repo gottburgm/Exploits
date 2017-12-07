@@ -1,0 +1,64 @@
+<?xml version='1.0'?>
+<!DOCTYPE policy PUBLIC
+      "-//JBoss//DTD JBOSS Security Config 3.0//EN"
+      "http://www.jboss.org/j2ee/dtd/security_config.dtd">
+
+<policy>
+    <!-- A template configuration for the jmx-console web application. This
+      defaults to the UsersRolesLoginModule the same as other and should be
+      changed to a stronger authentication mechanism as required.
+    -->
+    <application-policy name = "jbosstest-sso">
+       <authentication>
+          <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+             flag = "required">
+             <module-option name="usersProperties">sso-users.properties</module-option>
+             <module-option name="rolesProperties">sso-roles.properties</module-option>
+             <module-option name="roleGroupSeperator">.</module-option>
+          </login-module>
+       </authentication>
+    </application-policy>
+   <application-policy name = "jbosstest-web">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+            flag = "required">
+            <module-option name="usersProperties">sso-users.properties</module-option>
+            <module-option name="rolesProperties">sso-roles.properties</module-option>
+            <module-option name="roleGroupSeperator">.</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+    <!-- Security domains for testing new jca framework -->
+    <application-policy name = "HsqlDbRealm">
+       <authentication>
+          <login-module code = "org.jboss.resource.security.ConfiguredIdentityLoginModule"
+             flag = "required">
+             <module-option name = "principal">sa</module-option>
+             <module-option name = "userName">sa</module-option>
+             <module-option name = "password"></module-option>
+             <module-option name = "managedConnectionFactoryName">jboss.jca:service=LocalTxCM,name=DefaultDS</module-option>
+          </login-module>
+       </authentication>
+    </application-policy>
+  <!-- The default login configuration used by any security domain that
+  does not have a application-policy entry with a matching name
+  -->
+  <application-policy name="other">
+    <!-- A simple server login module, which can be used when the number
+    of users is relatively small. It uses two properties files:
+    users.properties, which holds users (key) and their password (value).
+    roles.properties, which holds users (key) and a comma-separated list of
+    their roles (value).
+    The unauthenticatedIdentity property defines the name of the principal
+    that will be used when a null username and password are presented as is
+    the case for an unuathenticated web client or MDB. If you want to
+    allow such users to be authenticated add the property, e.g.,
+    unauthenticatedIdentity="nobody"
+    -->
+    <authentication>
+      <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+        flag="required"/>
+    </authentication>
+  </application-policy>
+    
+</policy>

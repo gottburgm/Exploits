@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss-web PUBLIC
+   "-//JBoss//DTD Web Application 2.4//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss-web_4_0.dtd">
+
+<jboss-web>
+   <security-domain>java:/jaas/jbosstest-web</security-domain>
+   
+   <replication-config>
+      <replication-trigger>SET_AND_GET</replication-trigger>
+      <replication-granularity>SESSION</replication-granularity>
+   </replication-config>
+
+   <resource-ref>
+      <res-ref-name>jms/ConnectionFactory</res-ref-name>
+      <jndi-name>java:ConnectionFactory</jndi-name>
+   </resource-ref>
+
+   <security-role>
+      <role-name>JBossAdmin</role-name>
+      <principal-name>UnsecureRunAsServletWithPrincipalNameAndRolesPrincipal</principal-name>
+   </security-role>
+   <security-role>
+      <role-name>JBossUser</role-name>
+      <principal-name>UnsecureRunAsServletWithPrincipalNameAndRolesPrincipal</principal-name>
+   </security-role>
+
+   <ejb-ref>
+      <ejb-ref-name>ejb/remote/Session30</ejb-ref-name>
+      <jndi-name>jbosstest/ejbs/UnsecuredEJB</jndi-name>
+   </ejb-ref>
+
+   <ejb-local-ref>
+      <ejb-ref-name>ejb/local/Session30</ejb-ref-name>
+      <local-jndi-name>jbosstest/ejbs/local/ENCBean1</local-jndi-name>
+   </ejb-local-ref>
+   
+   <message-destination-ref>
+      <message-destination-ref-name>jms/callerQueue</message-destination-ref-name>
+      <jndi-name>queue/testQueue</jndi-name>
+   </message-destination-ref>
+   
+   <depends>jboss.ws:service=WebServiceDeployerJSE</depends>
+   
+   <servlet>
+      <servlet-name>EJBServlet</servlet-name>
+      <run-as-principal>runAsUser</run-as-principal>
+   </servlet>
+
+</jboss-web>

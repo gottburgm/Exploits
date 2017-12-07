@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0"> 
+
+   <!-- Additional cache configs used by test deployments -->
+   <bean name="ClusterTestCacheConfigs"
+         class="org.jboss.test.cluster.web.TestConfigurationAdder">
+         
+      <property name="configurationRegistry"><inject bean="CacheConfigurationRegistry"/></property>
+  
+   </bean>
+   
+   <bean name="ClusterTestCacheHelper" class="org.jboss.test.cluster.web.CacheHelper">
+   
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.test:service=WebTestCacheHelper", exposedInterface=org.jboss.test.cluster.web.CacheHelperMBean.class, registerDirectly=true)</annotation>
+      
+   </bean>
+
+</deployment>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <!-- The custom JAAS login configuration that installs 
+       a Configuration capable of dynamically updating the
+       config settings
+   -->
+   <mbean code="org.jboss.security.auth.login.DynamicLoginConfig"
+      name="jboss.security.tests:service=LoginConfig,test=SecureRMIAdaptor">
+      <attribute name="PolicyConfig" serialDataType="jbxb">
+         <jaas:policy
+            xsi:schemaLocation="urn:jboss:security-config:4.1 resource:security-config_4_1.xsd"
+            xmlns:jaas="urn:jboss:security-config:4.1"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            >
+            <jaas:application-policy name="subject-context">
+               <jaas:authentication>
+                 <jaas:login-module code = "org.jboss.security.auth.spi.UsersRolesLoginModule"
+                         flag = "required" />
+				  <jaas:login-module 
+					  code="org.jboss.security.auth.spi.IdentityLoginModule" 
+					   flag="required">
+                      <jaas:module-option name="principal">SpecialJMXUser</jaas:module-option>
+                      <jaas:module-option name="roles">testRole</jaas:module-option>
+                  </jaas:login-module> 
+               </jaas:authentication>
+            </jaas:application-policy>
+         </jaas:policy>         
+      </attribute>
+      <depends optional-attribute-name="LoginConfigService">
+         jboss.security:service=XMLLoginConfig
+      </depends>
+      <depends optional-attribute-name="SecurityManagerService">
+         jboss.security:service=JaasSecurityManager
+      </depends>
+   </mbean>
+</server>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<project name="Clear Oracle schema" basedir=".">
+	<target name="execute">
+		<!-- Setup database -->
+		<sql driver="oracle.jdbc.driver.OracleDriver" url="jdbc:oracle:thin:@@HOSTNAME@:@PORT@:@DATABASE_NAME@"
+			userid="@USERNAME@" password="@PASSWORD@" src="setup.sql" print="yes" delimiter="/" delimitertype="row">
+			<classpath>
+				<fileset dir="../driver">
+					<include name="*.jar"/>
+				</fileset>
+			</classpath>
+		</sql>
+	</target>
+</project>

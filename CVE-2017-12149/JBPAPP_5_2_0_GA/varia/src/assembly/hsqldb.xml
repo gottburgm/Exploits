@@ -1,0 +1,30 @@
+<assembly>
+  <id>hsqldb</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/hsqldb/Embedded**</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+  <dependencySets>
+    <dependencySet>
+      <unpack>true</unpack>
+      <unpackOptions>
+        <excludes>
+          <exclude>org/hsqldb/Embedded**</exclude>
+          <exclude>**/MANIFEST.MF</exclude>
+        </excludes>
+      </unpackOptions>
+      <includes>
+        <include>hsqldb:hsqldb</include>
+      </includes>
+    </dependencySet>
+  </dependencySets>
+</assembly>

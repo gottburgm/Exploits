@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+  <advisable class="org.jboss.test.aop.xdoclet.Intercepted"
+             methodFilter="PUBLIC"
+             fieldFilter="ALL"
+             constructorFilter="ALL"/>
+
+  <interceptor name="AnotherXml" factory="org.jboss.test.aop.xdoclet.XmlInterceptorFactory">
+    <singleton>true</singleton>
+    <config>some value</config>
+    <extra-config>
+      <abc>100</abc>
+      <def>10</def>
+    </extra-config>
+  </interceptor>
+
+  <interceptor name="BasicInterceptor" class="org.jboss.test.aop.xdoclet.BasicInterceptor"/>
+
+  <interceptor name="Xml" class="org.jboss.test.aop.xdoclet.XmlLoadingInterceptor" singleton="true">
+    <config>
+      <test>false</test>
+      <more>true</more>
+    </config>
+  </interceptor>
+
+  <interceptor-pointcut class="org.jboss.test.aop.xdoclet.Intercepted"
+                        constructorFilter="ALL"
+                        methodFilter="PRIVATE"
+                        fieldFilter="TRANSIENT|PROTECTED">
+    <interceptors>
+      <interceptor class="com.test.AnonymousInterceptor" singleton="true">
+        <config>random</config>
+      </interceptor>
+      <interceptor-ref name="Basic"/>
+      <interceptor-ref name="Xml"/>
+      <stack-ref name="SomeStack"/>
+      <interceptor factory="com.test.SomeInterceptorFactory">
+        <singleton>true</singleton>
+      </interceptor>
+    </interceptors>
+  </interceptor-pointcut>
+  
+</aop>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 4.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <entity>
+         <ejb-name>B</ejb-name>
+         <local-jndi-name>BLocal</local-jndi-name>
+         <configuration-name>custom</configuration-name>
+      </entity>
+   </enterprise-beans>
+
+    <container-configurations>
+        <container-configuration extends="cmp2.x jdbc2 pm">
+            <container-name>custom</container-name>
+            <call-ejb-store-on-clean>false</call-ejb-store-on-clean>
+        </container-configuration>
+    </container-configurations>
+</jboss>

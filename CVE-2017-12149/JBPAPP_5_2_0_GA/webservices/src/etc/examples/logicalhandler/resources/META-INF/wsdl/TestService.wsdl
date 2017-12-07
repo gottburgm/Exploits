@@ -1,0 +1,72 @@
+<!--
+  This wsdl is only used for client artifact generation
+  
+  wsimport -keep -verbose -d ../../../../java ./wsdl/TestService.wsdl
+-->
+<definitions name='SOAPEndpointService' targetNamespace='http://org.jboss.ws/jaxws/samples/logicalhandler' xmlns='http://schemas.xmlsoap.org/wsdl/'
+  xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://org.jboss.ws/jaxws/samples/logicalhandler' xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+  xmlns:jaxws="http://java.sun.com/xml/ns/jaxws" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb">
+  
+  <jaxws:bindings>
+    <jaxws:package name="org.jboss.test.ws.jaxws.logicalhandler"/>
+  </jaxws:bindings>
+  
+  <types>
+    <schema elementFormDefault='qualified' targetNamespace='http://org.jboss.ws/jaxws/samples/logicalhandler' xmlns='http://www.w3.org/2001/XMLSchema'
+      xmlns:tns='http://org.jboss.ws/jaxws/samples/logicalhandler' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+      jaxb:version="2.0">
+
+      <xsd:annotation><xsd:appinfo>
+        <jaxb:schemaBindings>
+          <jaxb:package name="org.jboss.test.ws.jaxws.logicalhandler"/>
+        </jaxb:schemaBindings>
+      </xsd:appinfo></xsd:annotation>
+      
+      <complexType name='echo'>
+        <sequence>
+          <element name="String_1" type="string" nillable="true"/>
+        </sequence>
+      </complexType>
+      <complexType name='echoResponse'>
+        <sequence>
+          <element name="result" type="string" nillable="true"/>
+        </sequence>
+      </complexType>
+      <element name='echo' type='tns:echo'/>
+      <element name='echoResponse' type='tns:echoResponse'/>
+    </schema>
+  </types>
+  
+  <message name='SOAPEndpoint_echo'>
+    <part element='tns:echo' name='parameters'/>
+  </message>
+  <message name='SOAPEndpoint_echoResponse'>
+    <part element='tns:echoResponse' name='result'/>
+  </message>
+  
+  <portType name='SOAPEndpoint'>
+    <operation name='echo'>
+      <input message='tns:SOAPEndpoint_echo'/>
+      <output message='tns:SOAPEndpoint_echoResponse'/>
+    </operation>
+  </portType>
+  
+  <binding name='SOAPEndpointBinding' type='tns:SOAPEndpoint'>
+    <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+    <operation name='echo'>
+      <soap:operation soapAction=''/>
+      <input>
+        <soap:body use='literal'/>
+      </input>
+      <output>
+        <soap:body use='literal'/>
+      </output>
+    </operation>
+  </binding>
+  
+  <service name='SOAPEndpointService'>
+    <port binding='tns:SOAPEndpointBinding' name='SOAPEndpointPort'>
+      <soap:address location='CLIENT_PROVIDED_URL'/>
+    </port>
+  </service>
+</definitions>

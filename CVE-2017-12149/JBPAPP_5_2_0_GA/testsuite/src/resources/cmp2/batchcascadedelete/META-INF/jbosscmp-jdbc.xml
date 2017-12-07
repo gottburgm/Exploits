@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jbosscmp-jdbc PUBLIC "-//JBoss//DTD JBOSSCMP-JDBC 3.2//EN" "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_2.dtd">
+
+<jbosscmp-jdbc>
+   <enterprise-beans>
+
+      <entity>
+         <ejb-name>Parent</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>Parent</table-name>
+
+         <cmp-field>
+            <field-name>id</field-name>
+            <column-name>id</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>name</field-name>
+            <column-name>name</column-name>
+
+        </cmp-field>
+
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+      <entity>
+         <ejb-name>Child</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>Child</table-name>
+
+         <cmp-field>
+            <field-name>id</field-name>
+            <column-name>id</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>parentId</field-name>
+            <column-name>parentId</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>name</field-name>
+            <column-name>name</column-name>
+
+        </cmp-field>
+
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+      <entity>
+         <ejb-name>Grandchild</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>Grandchild</table-name>
+
+         <cmp-field>
+            <field-name>id</field-name>
+            <column-name>id</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>name</field-name>
+            <column-name>name</column-name>
+
+        </cmp-field>
+
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+   </enterprise-beans>
+
+  <relationships>
+    <ejb-relation>
+      <ejb-relation-name>Grandchild-child</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>theGrandchild</ejb-relationship-role-name>
+		  <key-fields/>
+          <batch-cascade-delete/>
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>theChild</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>id</field-name>
+               <column-name>childId</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+    <ejb-relation>
+      <ejb-relation-name>child-parent</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>theChild</ejb-relationship-role-name>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>theParent</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>id</field-name>
+               <column-name>parentId</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+  </relationships>
+
+</jbosscmp-jdbc>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+         http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd"
+         version="2.1">
+
+   <enterprise-beans>
+
+      <message-driven>
+         <ejb-name>TestMDB</ejb-name>
+         <ejb-class>org.jboss.test.messagedriven.beans.TestMessageDriven</ejb-class>
+         <messaging-type>javax.jms.MessageListener</messaging-type>
+         <transaction-type>${test.messagedriven.transactionType}</transaction-type>
+         <activation-config>
+            <activation-config-property>
+               <activation-config-property-name>destination</activation-config-property-name>
+               <activation-config-property-value>${test.messagedriven.destination}</activation-config-property-value>
+            </activation-config-property>
+            <activation-config-property>
+               <activation-config-property-name>destinationType</activation-config-property-name>
+               <activation-config-property-value>${test.messagedriven.destinationType}</activation-config-property-value>
+            </activation-config-property>
+            <activation-config-property>
+               <activation-config-property-name>subscriptionDurability</activation-config-property-name>
+               <activation-config-property-value>${test.messagedriven.durability}</activation-config-property-value>
+            </activation-config-property>
+            <!--  <activation-config-property>
+               <activation-config-property-name>clientID</activation-config-property-name>
+               <activation-config-property-value>${test.messagedriven.clientID}</activation-config-property-value>
+            </activation-config-property> -->
+            <activation-config-property>
+               <activation-config-property-name>subscriptionName</activation-config-property-name>
+               <activation-config-property-value>${test.messagedriven.subscriptionName}</activation-config-property-value>
+            </activation-config-property>
+         </activation-config>
+      </message-driven>
+
+      <message-driven>
+         <ejb-name>TestDLQ</ejb-name>
+         <ejb-class>org.jboss.test.messagedriven.beans.TestMessageDriven</ejb-class>
+         <messaging-type>javax.jms.MessageListener</messaging-type>
+         <transaction-type>Bean</transaction-type>
+         <activation-config>
+            <activation-config-property>
+               <activation-config-property-name>destination</activation-config-property-name>
+               <activation-config-property-value>queue/DLQ</activation-config-property-value>
+            </activation-config-property>
+            <activation-config-property>
+               <activation-config-property-name>destinationType</activation-config-property-name>
+               <activation-config-property-value>javax.jms.Queue</activation-config-property-value>
+            </activation-config-property>
+         </activation-config>
+      </message-driven>
+
+   </enterprise-beans>
+
+   <assembly-descriptor>
+
+      <container-transaction>
+         <method>
+            <ejb-name>TestMDB</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <trans-attribute>${test.messagedriven.transactionAttribute}</trans-attribute>
+      </container-transaction>
+
+   </assembly-descriptor>
+
+</ejb-jar>

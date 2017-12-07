@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <!-- The legacy JMX kernel -->
+   <bean name="ServiceControllerLocator" class="org.jboss.test.system.controller.integration.support.ServiceControllerLocator" />
+
+   <bean name="ServiceLifecycle" class="org.jboss.test.system.controller.integration.support.TestServiceControllerLifecycleCallback">
+      <property name="mbeanServer">
+         <inject bean="ServiceControllerLocator" property="mbeanServer"/>
+      </property>
+      <property name="serviceController">
+         <inject bean="ServiceControllerLocator" property="serviceController"/>
+      </property>
+   </bean>
+
+   <bean name="TransactionManager" class="org.jboss.test.system.controller.integration.support.MockTransactionManager">
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=TransactionManager", exposedInterface=org.jboss.test.system.controller.integration.support.MockTransactionManagerMBean.class, registerDirectly=true)</annotation>
+      <property name="transactionTimeout">300</property>
+      <property name="objectStoreDir">${jboss.server.data.dir}/tx-object-store</property>
+      <install bean="ServiceLifecycle" method="install">
+         <parameter><inject fromContext="context"/></parameter>
+      </install>
+      <uninstall bean="ServiceLifecycle" method="uninstall">
+         <parameter><inject fromContext="context"/></parameter>
+      </uninstall>
+   </bean>
+
+</deployment>

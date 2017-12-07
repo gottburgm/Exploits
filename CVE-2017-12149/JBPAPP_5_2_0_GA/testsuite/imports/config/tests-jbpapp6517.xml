@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<!--
+   | Targets that run the jbpapp6517 - CheckSubDeploymentCompleteDeployer tests
+-->
+<project name="jbpapp6517.tests" xmlns:server="http://jboss.org/ns/test/ant/server">
+
+   <!-- jbpapp6517 -->
+   <patternset id="jbpapp6517-1.includes">
+      <include name="org/jboss/test/deployment/jbpapp6517/CheckCompleteDefaultTestCase.class"/>
+   </patternset>
+   <patternset id="jbpapp6517-2.includes">
+      <include name="org/jboss/test/deployment/jbpapp6517/CheckCompleteAllTestCase.class"/>
+   </patternset>
+   <patternset id="jbpapp6517-3.includes">
+      <include name="org/jboss/test/deployment/jbpapp6517/CheckCompleteEarTestCase.class"/>
+   </patternset>
+   <patternset id="jbpapp6517-4.includes">
+      <include name="org/jboss/test/deployment/jbpapp6517/CheckCompleteSarTestCase.class"/>
+   </patternset>
+
+   <!-- jbpapp6517 start -->
+   <target name="tests-jbpapp6517" description="Tests JBPAPP-6517 CheckSubDeploymentCompleteDeployer tests">
+     
+      <create-config baseconf="default" newconf="jbpapp6517">
+         <patternset>
+            <include name="**/*"/>
+         </patternset>
+      </create-config>
+      
+      <!-- set jmx user/pass to admin=admin -->
+      <copy file="${source.resources}/org/jboss/test/deployment/jbpapp6517/jmx-console-users.properties" overwrite="true" todir="${jboss.dist}/server/jbpapp6517/conf/props/" />
+
+      <!-- default case -->
+      <server:start name="jbpapp6517"/>
+      <run-junit junit.patternset="jbpapp6517-1.includes" junit.configuration="jbpapp6517"/>
+      <server:stop name="jbpapp6517"/>
+
+     <!-- test 1 check all -->
+      <server:start name="jbpapp6517"/>
+      <run-junit junit.patternset="jbpapp6517-2.includes" junit.configuration="jbpapp6517"/>
+      <server:stop name="jbpapp6517"/>
+
+     <!-- test 2 check ear -->
+      <server:start name="jbpapp6517"/>
+      <run-junit junit.patternset="jbpapp6517-3.includes" junit.configuration="jbpapp6517"/>
+      <server:stop name="jbpapp6517"/>
+
+     <!-- test 3 check sar -->
+      <server:start name="jbpapp6517"/>
+      <run-junit junit.patternset="jbpapp6517-4.includes" junit.configuration="jbpapp6517"/>
+      <server:stop name="jbpapp6517"/>
+
+   </target>
+   <!-- jbpapp6517 end -->
+</project>

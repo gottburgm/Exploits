@@ -1,0 +1,46 @@
+<project name="tests-bench-jars">
+   <!-- bench test -->
+   <target name="_jars-bench">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build bench.jar -->
+      <jar destfile="${build.lib}/bench.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/bench/interfaces/**"/>
+            <include name="org/jboss/test/bench/ejb/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/bench/ejb">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- build bench.war -->
+      <war warfile="${build.lib}/bench.war"
+         webxml="${build.resources}/bench/web/WEB-INF/web.xml"
+         manifest="${build.resources}/bench/web.mf">
+         <webinf dir="${build.resources}/bench/web/WEB-INF">
+            <include name="*"/>
+            <exclude name="web.xml"/>
+         </webinf>
+         <lib dir="${build.lib}">
+            <include name="jbosstest-bench-util.jar"/>
+         </lib>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/bench/servlet/**"/>
+         </classes>
+         <fileset dir="${build.resources}/bench/web/">
+            <include name="*"/>
+         </fileset>
+      </war>
+      
+      <!-- build bench.ear -->
+      <ear earfile="${build.lib}/bench.ear"
+         appxml="${build.resources}/bench/ear/META-INF/application.xml">
+         <fileset dir="${build.lib}">
+            <include name="bench.jar"/>
+            <include name="bench.war"/>
+         </fileset>
+      </ear>
+   </target>
+</project>

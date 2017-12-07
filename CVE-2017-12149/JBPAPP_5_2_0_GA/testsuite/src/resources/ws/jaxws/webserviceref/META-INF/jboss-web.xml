@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE jboss-web PUBLIC "-//JBoss//DTD Web Application 5.0//EN" "http://www.jboss.org/j2ee/dtd/jboss-web_5_0.dtd">
+
+<jboss-web>
+  
+      
+      <!-- 
+      @WebServiceRef(name = "service1", value = TestEndpointService.class, wsdlLocation = "WEB-INF/wsdl/TestEndpoint.wsdl")
+      <service-ref>
+        <service-ref-name>service1</service-ref-name>
+        <wsdl-override>WEB-INF/wsdl/TestEndpoint.wsdl</wsdl-override>
+      </service-ref>
+      -->
+      
+      <!-- 
+      @WebServiceRef(name = "service2", value = TestEndpointService.class)
+      -->
+      <service-ref>
+        <service-ref-name>service2</service-ref-name>
+        <wsdl-override>WEB-INF/wsdl/TestEndpoint.wsdl</wsdl-override>
+      </service-ref>
+      
+      <!-- 
+      @WebServiceRef(name = "TestEndpointService3")
+      -->
+      <service-ref>
+        <service-ref-name>TestEndpointService3</service-ref-name>
+        <wsdl-override>WEB-INF/wsdl/TestEndpoint.wsdl</wsdl-override>
+      </service-ref>
+      
+      <!-- 
+      @WebServiceRef
+      -->
+      <service-ref>
+        <service-ref-name>org.jboss.test.ws.jaxws.webserviceref.ServletClient/service4</service-ref-name>
+        <wsdl-override>WEB-INF/wsdl/TestEndpoint.wsdl</wsdl-override>
+      </service-ref>
+      
+      <!-- 
+      @WebServiceRef(name = "TestEndpointService5")
+      -->
+      <service-ref>
+        <service-ref-name>TestEndpointService5</service-ref-name>
+        <wsdl-override>WEB-INF/wsdl/TestEndpoint.wsdl</wsdl-override>
+      </service-ref>
+      
+      <!-- 
+      @WebServiceRef
+      -->
+      <service-ref>
+        <service-ref-name>org.jboss.test.ws.jaxws.webserviceref.ServletClient/serviceSetter6</service-ref-name>
+        <wsdl-override>WEB-INF/wsdl/TestEndpoint.wsdl</wsdl-override>
+      </service-ref>
+      
+      <!-- 
+      @WebServiceRef(name = "port1", value = TestEndpointService.class, type = TestEndpoint.class)
+      -->
+      <service-ref>
+        <service-ref-name>port1</service-ref-name>
+        <wsdl-override>WEB-INF/wsdl/TestEndpoint.wsdl</wsdl-override>
+      </service-ref>
+      
+      <!-- 
+      @WebServiceRef(name = "Port2", value = TestEndpointService.class)
+      -->
+      <service-ref>
+        <service-ref-name>Port2</service-ref-name>
+        <wsdl-override>WEB-INF/wsdl/TestEndpoint.wsdl</wsdl-override>
+      </service-ref>
+      
+      <!-- 
+      @WebServiceRef(value = TestEndpointService.class)
+      -->
+      <service-ref>
+        <service-ref-name>org.jboss.test.ws.jaxws.webserviceref.ServletClient/port3</service-ref-name>
+        <wsdl-override>WEB-INF/wsdl/TestEndpoint.wsdl</wsdl-override>
+      </service-ref>
+  
+</jboss-web>

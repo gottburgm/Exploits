@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE jboss PUBLIC
+   "-//JBoss//DTD JBOSS 4.0//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+   <security-domain>java:/jaas/jaas-test</security-domain>
+   <enterprise-beans>
+      <session>
+         <ejb-name>UsefulStatelessSessionBean</ejb-name>
+         <jndi-name>bean1.UsefulStatelessSessionBean</jndi-name>
+      </session>
+   </enterprise-beans>
+</jboss>

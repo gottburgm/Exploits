@@ -1,0 +1,5 @@
+<html>
+<% 
+   session.invalidate(); 
+%>
+</html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- sample security domain beans used in the profile service tests -->
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <annotation>@org.jboss.managed.api.annotation.ManagementDeployment(description="JBoss SecurityDomain Beans")</annotation>
+
+   <bean name="TestDomain1" class="org.jboss.security.plugins.JaasSecurityDomain">
+      <constructor>
+         <parameter>TestDomain1</parameter>
+      </constructor>
+      <property name="keyStorePass">somepass1</property>
+      <property name="salt">abcdefgh</property>
+      <property name="iterationCount">13</property>
+   </bean>
+
+   <bean name="TestDomain2" class="org.jboss.security.plugins.JaasSecurityDomain">
+      <constructor>
+         <parameter>TestDomain2</parameter>
+      </constructor>
+      <property name="keyStorePass">somepass2</property>
+      <property name="salt">abcdefgh</property>
+      <property name="iterationCount">17</property>
+   </bean>
+
+</deployment>
+

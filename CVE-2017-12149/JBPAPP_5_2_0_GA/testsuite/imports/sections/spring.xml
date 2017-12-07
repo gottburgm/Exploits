@@ -1,0 +1,64 @@
+<project name="tests-spring-jars">
+
+   <target name="_jars-spring">
+
+      <!-- JAR -->
+      <jar destfile="${build.lib}/spring-beans.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/spring/beans/**"/>
+         </fileset>
+      </jar>
+
+      <!-- EJB -->
+      <jar destfile="${build.lib}/spring-ejb.jar">
+         <fileset dir="${build.resources}/spring/ejb">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/spring/ejb/**"/>
+         </fileset>
+      </jar>
+
+      <!-- EAR -->
+      <mkdir dir="${build.lib}/spring-ear.ear"/>
+      <copy todir="${build.lib}/spring-ear.ear">
+         <fileset dir="${build.resources}/spring/ear">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="spring-ejb.jar" />
+         </fileset>
+      </copy>
+      <mkdir dir="${build.lib}/spring-ear.ear/lib"/>
+      <copy todir="${build.lib}/spring-ear.ear/lib">
+         <fileset dir="${build.lib}">
+            <include name="spring-beans.jar" />
+         </fileset>
+      </copy>
+
+      <!-- SERVICE -->
+      <copy tofile="${build.lib}/standalone-spring.xml" file="${build.resources}/spring/standalone-spring.xml"/>
+
+     <!-- Cluster -->
+     <jar destfile="${build.lib}/spring-cluster-pojos.jar">
+        <fileset dir="${build.resources}/spring/cluster">
+           <include name="**/*.xml"/>
+        </fileset>
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/spring/cluster/**"/>
+        </fileset>
+     </jar>
+
+     <!-- Facade -->
+     <jar destfile="${build.lib}/spring-facade.jar">
+        <fileset dir="${build.resources}/spring/facade">
+           <include name="**/*.xml"/>
+        </fileset>
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/spring/facade/**"/>
+        </fileset>
+     </jar>
+
+   </target>
+
+</project>

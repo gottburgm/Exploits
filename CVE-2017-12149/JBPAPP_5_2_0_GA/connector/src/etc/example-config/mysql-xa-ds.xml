@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: mysql-ds.xml 88948 2009-05-15 14:09:08Z jesper.pedersen $ -->
+<!--  Datasource config for MySQL using 3.0.9 available from:
+http://www.mysql.com/downloads/api-jdbc-stable.html
+-->
+
+<datasources>
+  <xa-datasource>
+    <jndi-name>MysqlDS</jndi-name>
+    <track-connection-by-tx>true</track-connection-by-tx> 
+    <xa-datasource-class>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</xa-datasource-class>
+    <xa-datasource-property name="ServerName">server_name</xa-datasource-property>
+    <xa-datasource-property name="DatabaseName">database_name</xa-datasource-property>
+    <xa-datasource-property name="User">user</xa-datasource-property>
+    <xa-datasource-property name="Password">password</xa-datasource-property>
+
+    <!-- should only be used on drivers after 3.22.1 with "ping" support
+    <valid-connection-checker-class-name>org.jboss.resource.adapter.jdbc.vendor.MySQLValidConnectionChecker</valid-connection-checker-class-name>
+    -->
+    <!-- sql to call when connection is created
+    <new-connection-sql>some arbitrary sql</new-connection-sql>
+      -->
+    <!-- sql to call on an existing pooled connection when it is obtained from pool - MySQLValidConnectionChecker is preferred for newer drivers
+    <check-valid-connection-sql>some arbitrary sql</check-valid-connection-sql>
+      -->
+
+    <!-- corresponding type-mapping in the standardjbosscmp-jdbc.xml (optional) -->
+    <metadata>
+       <type-mapping>mySQL</type-mapping>
+    </metadata>
+  </xa-datasource>
+</datasources>
+

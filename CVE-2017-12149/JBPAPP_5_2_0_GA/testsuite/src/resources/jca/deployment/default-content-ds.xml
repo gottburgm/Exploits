@@ -1,0 +1,34 @@
+<datasources>   
+   <no-tx-datasource>
+      <jndi-name>RemoteDS</jndi-name>
+      <connection-url>jdbc:hsqldb:mem:RemoteDSDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+	  <application-managed-security/>
+   </no-tx-datasource>
+      
+   <local-tx-datasource>
+      <jndi-name>RemoteDS</jndi-name>
+      <connection-url>jdbc:hsqldb:mem:RemoteDSDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <application-managed-security />
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>\
+   </local-tx-datasource>
+
+	<xa-datasource>   	     
+    </xa-datasource>
+	
+	<tx-connection-factory>
+		<jndi-name>Local</jndi-name>		
+	</tx-connection-factory>	
+
+	<tx-connection-factory>
+		<jndi-name>XA</jndi-name>		
+		<xa-transaction/>
+	</tx-connection-factory>	
+
+</datasources>

@@ -1,0 +1,29 @@
+<assembly>
+  <id>jboss-srp-client</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/security/srp/PkgCategory.class</include>
+        <include>org/jboss/security/srp/TracePriority.class</include>
+        <include>org/jboss/security/srp/SRPClientSession.class</include>
+        <include>org/jboss/security/srp/SRPServerInterface*.class</include>
+        <include>org/jboss/security/srp/SRPServerProxy.class</include>
+        <include>org/jboss/security/srp/SRPParameters.class</include>
+        <include>org/jboss/security/srp/SRPPermission.class</include>
+        <include>org/jboss/security/srp/SRPConf*.class</include>
+        <include>org/jboss/security/srp/SRPRemoteServer_Stub.class</include>
+        <include>org/jboss/security/srp/SRPRemoteServerInterface.class</include>
+        <include>org/jboss/security/srp/SRPVerifierStore.class</include>
+        <include>org/jboss/security/srp/SRPVerifierStore$*.class</include>
+        <include>org/jboss/security/srp/jaas/SRPLoginModule.class</include>
+        <include>org/jboss/security/srp/jaas/SRPPrincipal.class</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

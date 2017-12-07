@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+
+<project name="main.build"
+          default="synchronize"
+          basedir=".">
+
+   <property file="local.properties"/>
+   <!-- Import the types -->
+   <import file="../tools/etc/jbossbuild/tasks.xml"/>
+
+   <property file="synchronize.properties"/>
+
+   <build id="jbossas-thirdparty"
+          impltitle="JBossAS"
+          implversion="4.0.2"
+          implvendor="JBoss Inc."
+          implurl="http://www.jboss.org"
+          description="JBoss Application Server"
+          cvsroot="${cvs.prefix}@cvs.forge.jboss.com:/cvsroot/jboss"
+          thirdpartypath="../thirdparty/"
+          location="http://cruisecontrol.jboss.com/repository"
+          targetdefs="targets"
+          componentVisitor="com.acme.SomeGraphVisitor"
+      >
+
+      <componentref name="hibernate"
+                 version="3.0.5">
+      </componentref>
+      <componentref name="jgroups"
+                 version="2.2.7" />
+      <componentref name="tomcat"
+                 version="5.5.9" />      
+    
+   </build>
+
+   <synchronizeinfo/> 
+
+   <!-- Generate the targets -->
+   <generate generate="jbossas-thirdparty"/>
+
+   <target name="testdependencies" depends="synchronize">
+      <fail>
+     <condition>
+      <and>
+       <not>
+          <available file="../thirdparty/hibernate/3.0.5/lib/hibernate3.jar" />
+       </not>
+       <not>
+          <available file="../thirdparty/hibernate/3.0.5/lib/hibernate-annotations.jar" />
+       </not>
+       <not>
+          <available file="../thirdparty/antlr/2.7.5H3/lib/antlr.jar" />
+       </not>
+       <not>
+          <available file="../thirdparty/asm/1.5.3/lib/asm.jar" />
+       </not>
+      <not>
+          <available file="../thirdparty/asm/1.5.3/lib/asm-attrs.jar" />
+       </not>       
+      </and> 
+     </condition>
+   </fail>
+   </target>
+   
+   <target name="generate-license-xml" description="generate the license-info.xml information" depends="synchronize" >
+            <visit-componentref-graph
+            	componentVisitor="org.jboss.ant.util.graph.ComponentRefGraphLicenseVisitor"/>
+   </target> 
+   
+   <target name="generate-lib-file" description="generate the libraries.ent file with version info in classpaths" depends="synchronize">
+            <gen-lib-file filename="versionedLibraries.ent" path="../tools/etc/buildmagic/" />            	
+   </target>    
+   
+</project>
+	

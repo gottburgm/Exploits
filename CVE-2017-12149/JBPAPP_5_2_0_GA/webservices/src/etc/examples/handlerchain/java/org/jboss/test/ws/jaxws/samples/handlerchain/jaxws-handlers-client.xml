@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<handler-chains xmlns="http://java.sun.com/xml/ns/javaee"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee javaee_web_services_1_2.xsd">
+
+   <handler-chain>
+      <protocol-bindings>##SOAP11_HTTP</protocol-bindings>
+      <handler>
+         <handler-name> LogHandler </handler-name>
+         <handler-class> org.jboss.test.ws.jaxws.samples.handlerchain.LogHandler </handler-class>
+         <init-param>
+            <param-name>logCategory</param-name>
+            <param-value>MyService</param-value>
+         </init-param>
+      </handler>
+      <handler>
+         <handler-name> AuthorizationHandler </handler-name>
+         <handler-class> org.jboss.test.ws.jaxws.samples.handlerchain.AuthorizationHandler </handler-class>
+         <soap-role>SecurityProvider</soap-role>
+      </handler>
+      <handler>
+         <handler-name> RoutingHandler </handler-name>
+         <handler-class> org.jboss.test.ws.jaxws.samples.handlerchain.RoutingHandler </handler-class>
+      </handler>
+      <handler>
+         <handler-name> MimeHandler </handler-name>
+         <handler-class> org.jboss.test.ws.jaxws.samples.handlerchain.ClientMimeHandler </handler-class>
+      </handler>
+   </handler-chain>
+</handler-chains>

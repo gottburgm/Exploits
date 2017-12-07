@@ -1,0 +1,155 @@
+<jbsx:policy xsi:schemaLocation="urn:jboss:security-config:5.0 resource:security-config_5_0.xsd" xmlns:jbsx="urn:jboss:security-config:5.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+   <jbsx:application-policy name="xacml-domain">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.XACMLAuthorizationModule" flag="required" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="required-permit-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="required" />
+     </jbsx:authorization>
+   </jbsx:application-policy> 
+
+   <jbsx:application-policy name="required-deny-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="required" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="requisite-permit-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="requisite" />
+     </jbsx:authorization>
+   </jbsx:application-policy> 
+
+  <jbsx:application-policy name="requisite-deny-policy">
+    <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="requisite" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="sufficient-permit-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="sufficient" />
+     </jbsx:authorization>
+   </jbsx:application-policy> 
+
+  <jbsx:application-policy name="sufficient-deny-policy">
+    <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="sufficient" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="optional-permit-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="sufficient" />
+     </jbsx:authorization>
+   </jbsx:application-policy> 
+
+  <jbsx:application-policy name="optional-deny-policy">
+    <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="sufficient" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="required-deny-sufficient-permit-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="required" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="sufficient" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="required-permit-sufficient-deny-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="required" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="sufficient" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="required-permit-required-deny-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="required" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="required" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="required-permit-required-permit-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="required" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="required" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="required-permit-required-permit-sufficient-deny-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="required" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="required" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="sufficient" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="required-permit-required-permit-requisite-deny-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="required" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="required" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="requisite" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="required-permit-required-permit-optional-deny-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="required" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="required" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="optional" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="required-permit-required-deny-requisite-permit-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="required" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="required" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="requisite" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="requisite-permit-requisite-permit-sufficient-deny-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="requisite" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="requisite" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="sufficient" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="sufficient-permit-required-deny-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="sufficient" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="required" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="sufficient-permit-sufficient-deny-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="sufficient" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="sufficient" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="optional-deny-sufficient-permit-required-deny-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="optional" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="sufficient" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="required" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+   <jbsx:application-policy name="sufficient-deny-optional-deny-policy">
+     <jbsx:authorization>
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="sufficient" />
+        <jbsx:policy-module code="org.jboss.security.authorization.modules.AllDenyAuthorizationModule" flag="optional" />
+     </jbsx:authorization>
+   </jbsx:application-policy>
+
+</jbsx:policy>

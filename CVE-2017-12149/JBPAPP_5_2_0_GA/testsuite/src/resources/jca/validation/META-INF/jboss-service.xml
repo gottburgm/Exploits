@@ -1,0 +1,5 @@
+<server>
+	
+	<mbean code="org.jboss.test.jca.support.MockJcaSupportService" name="jboss.jca:service=MockJcaSupportService"/>
+
+</server>

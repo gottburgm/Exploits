@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE doc [<!ATTLIST e9 attr CDATA "default">
+<!ATTLIST b attr CDATA "default_b">
+<!ENTITY foo "foo">
+<!ENTITY bar "bar">
+]>
+<!-- a comment -->
+<?pi a pi?>
+<?name ?>
+<? ?>
+<doc xmlns="rootbaseuri" xmlns:a="http:a" a:x="y">
+<h:hello xmlns:h="testuri1" xmlns="baseuri">
+<h:a>foo bar foo</h:a>
+<b xmlns:h="testuri2" h:foo="bar"/>
+<x/>
+<cd>    </cd>
+<amp>  &amp;&gt;&lt;  </amp> &foo;
+&bar;
+&foo;&bar;&foo;
+</h:hello>
+<![CDATA[<xml></xml>]]>
+<a>
+<b1><c><d><e></e></d></c></b1>
+<b2><c><d><e></e></d></c></b2>
+<b3><c><d><e></e></d></c></b3>
+</a>
+<e9/>
+</doc>

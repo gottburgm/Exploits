@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+                  <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
+                  <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+                  <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+                  <!ENTITY targets SYSTEM "../tools/etc/buildmagic/targets.ent">
+                  ]>
+
+   <!-- ====================================================================== -->
+   <!--                                                                        -->
+   <!--  JBoss, the OpenSource J2EE webOS                                      -->
+   <!--                                                                        -->
+   <!--  Distributable under LGPL license.                                     -->
+   <!--  See terms of license at http://www.gnu.org.                           -->
+   <!--                                                                        -->
+   <!-- ====================================================================== -->
+
+   <!-- $Id: build.xml 78864 2008-09-25 15:57:06Z pgier $ -->
+
+<project default="main" name="JBoss/JMX-Remoting">
+
+   <!-- ================================================================== -->
+   <!-- Setup                                                              -->
+   <!-- ================================================================== -->
+
+<!--
+      | Include the common Buildmagic elements.
+      |
+      | This defines several different targets, properties and paths.
+      | It also sets up the basic extention tasks amoung other things.
+    -->
+
+   &buildmagic;
+
+<!--
+      | Include the normal targets.
+    -->
+   &targets;
+
+   <!-- ================================================================== -->
+   <!-- Configuration                                                      -->
+   <!-- ================================================================== -->
+
+   <!--
+    | Configure the build system.
+    |
+    | This target is invoked by the Buildmagic initialization logic and
+    | should contain module specific configuration elements.
+    -->
+
+   <target name="configure" unless="configure.disable">
+
+      <!-- =================== -->
+      <!-- Basic Configuration -->
+      <!-- =================== -->
+
+      <!-- Module name(s) & version -->
+      <property name="module.name" value="jmx-remoting"/>
+      <property name="module.Name" value="JBoss JMX Remoting"/>
+      <property name="module.version" value="1.0.1"/>
+
+      <property name="javac.target" value="1.5"/>
+      <property name="javac.source" value="1.5"/>
+     
+      <!-- ========= -->
+      <!-- Libraries -->
+      <!-- ========= -->
+
+      &libraries;
+      <!-- The combined library classpath -->
+      <path id="library.classpath">
+         <path refid="apache.log4j.classpath"/>
+         <path refid="oswego.concurrent.classpath"/>
+         <path refid="junit.junit.classpath"/>
+         <path refid="jboss.remoting.classpath"/>
+      </path>
+
+      <!-- ======= -->
+      <!-- Modules -->
+      <!-- ======= -->
+
+      &modules;
+      <!-- The combined dependent module classpath -->
+      <path id="dependentmodule.classpath">
+      <path refid="jboss.common.core.classpath"/>
+      <path refid="jboss.common.logging.spi.classpath"/>
+      <path refid="jboss.common.logging.log4j.classpath"/>
+      <path refid="jboss.common.logging.jdk.classpath"/>
+         <path refid="jboss.j2se.classpath"/>
+      </path>
+
+      <!-- ===== -->
+      <!-- Tasks -->
+      <!-- ===== -->
+
+      <call target="_default:task-init"/>
+
+      <property name="source.tests.java" value="${module.source}/tests/src"/>
+      <property name="build.tests.classes" value="${module.output}/tests.classes"/>
+      <property name="build.tests.output" value="${module.output}/tests.results"/>
+      <property name="build.tests.lib" value="${module.output}/lib"/>
+      <property name="build.tests.output" value="${module.output}/reports"/>
+      <property name="build.performance.tests.output" value="${build.tests.output}/performance"/>
+      <property name="dist" value="${module.output}/dist"/>
+
+
+
+      <!-- Packages to include when generating api documentation -->
+      <!--      <property name="javadoc.packages" value="org.jboss.remoting.*"/> -->
+
+
+      <path id="test.classpath">
+         <path refid="library.classpath"/>
+         <path refid="dependentmodule.classpath"/>
+         <pathelement path="${build.lib}/jboss-jmx-remoting.jar"/>
+      </path>
+
+   </target>
+
+   <patternset id="compile-rmi.pattern">
+      <include name="**/RMIServerImpl.class"/>
+      <include name="**/RMIConnectionImpl.class"/>
+   </patternset>
+
+   <!-- ================================================================== -->
+   <!-- Compile                                                            -->
+   <!-- ================================================================== -->
+
+<!--
+      | Compile everything.
+      |
+      | This target should depend on other compile-* targets for each
+      | different type of compile that needs to be performed, short of
+      | documentation compiles.
+    -->
+
+   <target name="compile"
+           description="Compile all source files."
+           depends="_default:compile-classes,
+               _default:compile-rmi,
+               _default:compile-etc">
+      <copy file="${build.classes}/javax/management/remote/rmi/RMIServerImpl_Stub.class"
+         todir="${build.classes}/rmi/javax/management/remote/rmi"/>
+      <copy file="${build.classes}/javax/management/remote/rmi/RMIConnectionImpl_Stub.class"
+         todir="${build.classes}/rmi/javax/management/remote/rmi"/>
+ </target>
+
+   <!-- ================================================================== -->
+   <!-- Archives                                                           -->
+   <!-- ================================================================== -->
+
+<!--
+      |  Build all jar files.
+     -->
+   <target name="module-jars" description="Creates the jar files">
+
+
+      <mkdir dir="${build.lib}"/>
+
+      <!-- Build the jnpserver.jar -->
+      <jar jarfile="${build.lib}/jboss-jmx-remoting.jar"
+           manifest="${build.etc}/default.mf">
+         <fileset dir="${build.classes}">
+            <!-- Include everything else -->
+            <include name="org/jboss/**"/>
+            <include name="javax/management/**"/>
+         </fileset>
+         <fileset dir="${build.etc}">
+            <!-- Include xmbean descriptors -->
+            <include name="org/jboss/**/*.xml"/>
+         </fileset>
+      </jar>
+
+   </target>
+
+   <target name="tests" description="Runs jmx remoting functional and performance tests." depends="init,module-jars">
+      <antcall target="functional-tests" inheritrefs="true"/>
+      <antcall target="performance-tests" inheritrefs="true"/>
+      <antcall target="report-tests" inheritrefs="true"/>
+   </target>
+
+   <target name="javadoc" description="Generate javadoc" depends="docs-javadocs_1_4">
+   </target>
+
+   <!-- Compile all test files -->
+   <target name="compile-test-classes">
+      <mkdir dir="${build.tests.classes}"/>
+      <javac destdir="${build.tests.classes}"
+         optimize="${javac.optimize}"
+         target="1.4"
+         source="1.4"
+         debug="${javac.debug}"
+         depend="${javac.depend}"
+         verbose="${javac.verbose}"
+         deprecation="${javac.deprecation}"
+         includeAntRuntime="${javac.include.ant.runtime}"
+         includeJavaRuntime="${javac.include.java.runtime}"
+         failonerror="${javac.fail.onerror}">
+         <src path="${source.tests.java}"/>
+         <classpath refid="test.classpath"/>
+         <include name="**/*.java"/>
+      </javac>
+   </target>
+
+
+   <target name="tests-jar" depends="compile-test-classes" description="Creates the jar file with all the tests">
+      <mkdir dir="${build.tests.lib}"/>
+
+      <!-- Build the jboss-remoting-tests.jar -->
+      <jar jarfile="${build.tests.lib}/jboss-jmx-remoting-tests.jar"
+         manifest="${build.etc}/default.mf">
+         <fileset dir="${build.tests.classes}">
+            <!-- Include everything else -->
+            <include name="test/**"/>
+         </fileset>
+      </jar>
+   </target>
+
+   <target name="report-tests">
+      <junitreport todir="${build.tests.output}">
+         <fileset dir="${build.tests.output}">
+            <include name="TEST-*.xml"/>
+         </fileset>
+         <fileset dir="${build.performance.tests.output}">
+            <include name="**/TEST-*.xml"/>
+         </fileset>
+         <report format="frames" todir="${build.tests.output}/html"/>
+      </junitreport>
+   </target>
+
+   <target name="functional-tests" depends="tests-jar">
+      <mkdir dir="${build.tests.output}"/>
+      <junit printsummary="true" fork="yes" includeantruntime="true">
+         <classpath>
+            <path refid="test.classpath"/>
+            <pathelement location="${build.tests.lib}/jboss-jmx-remoting-tests.jar"/>
+         </classpath>
+         <formatter type="xml"/>
+         <batchtest fork="yes" todir="${build.tests.output}"
+            haltonfailure="no">
+            <formatter type="xml"/>
+            <fileset dir="${build.tests.classes}">
+               <include name="test/**/*Test*.class"/>
+            </fileset>
+         </batchtest>
+      </junit>
+   </target>
+
+</project>
+

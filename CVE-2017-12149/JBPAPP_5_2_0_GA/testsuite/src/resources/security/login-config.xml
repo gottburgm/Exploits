@@ -1,0 +1,196 @@
+<?xml version='1.0'?>
+<!DOCTYPE policy PUBLIC
+      "-//JBoss//DTD JBOSS Security Config 3.0//EN"
+      "http://www.jboss.org/j2ee/dtd/security_config.dtd">
+
+<!-- The JAAS login configuration file for the XMLLoginConfig implementation.
+This file coresponds to the hard-coded configuration defined in the
+org.jboss.test.security.test.LoginModulesUnitTestCase class.
+-->
+<policy>
+
+   <application-policy name="testClientLogin">
+      <authentication>
+         <login-module code="org.jboss.security.ClientLoginModule"
+            flag="required">
+            <module-option name="restore-login-identity">true</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+   <application-policy name="testIdentity">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.IdentityLoginModule"
+            flag="required">
+            <module-option name="principal">stark</module-option>
+            <module-option name="roles">Role3,Role4</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+   <application-policy name="testJdbc">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.DatabaseServerLoginModule"
+            flag="required">
+            <module-option name="dsJndiName">testJdbc</module-option>
+            <module-option name="principalsQuery">select Password from Principals where PrincipalID=?</module-option>
+            <module-option name="rolesQuery">select Role, RoleGroup from Roles where PrincipalID=?</module-option>
+            <module-option name="suspendResume">false</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+   <application-policy name="testSimpl">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.SimpleServerLoginModule"
+            flag="required"/>
+      </authentication>
+   </application-policy>
+   <application-policy name="testUsernamePasswordHash">
+      <authentication>
+         <login-module code="org.jboss.test.security.test.LoginModulesUnitTestCase$HashTestLoginModule"
+            flag="required">
+            <module-option name="hashAlgorithm">MD5</module-option>
+            <module-option name="hashEncoding">base64</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+   <application-policy name="testUsernamePasswordHashWithDigestCallback">
+      <authentication>
+         <login-module code="org.jboss.test.security.test.LoginModulesUnitTestCase$HashTestDigestCallbackLoginModule"
+            flag="required">
+            <module-option name="hashAlgorithm">MD5</module-option>
+            <module-option name="hashEncoding">base64</module-option>
+            <module-option name="hashCharset">UTF-8</module-option>
+            <module-option name="digestCallback">org.jboss.test.security.test.TestDigestCallback</module-option>
+            <module-option name="digest.preSalt">pre</module-option>
+            <module-option name="digest.postSalt">post</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+   <application-policy name="testAnon">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.AnonLoginModule"
+            flag="required">
+            <module-option name="unauthenticatedIdentity">nobody</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+   <application-policy name="testNull">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.AnonLoginModule"
+            flag="required"/>
+      </authentication>
+   </application-policy>
+   <application-policy name="testSimple">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.SimpleServerLoginModule"
+            flag="required"/>
+      </authentication>
+   </application-policy>
+   <application-policy name="testUsersRoles">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+            flag="required">
+            <module-option name="usersProperties">security/users.properties</module-option>
+            <module-option name="rolesProperties">security/roles.properties</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+   <application-policy name="testUsersRolesHash">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+            flag="required">
+            <module-option name="usersProperties">security/usersb64.properties</module-option>
+            <module-option name="rolesProperties">security/roles.properties</module-option>
+            <module-option name="hashAlgorithm">MD5</module-option>
+            <module-option name="hashEncoding">base64</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+   <application-policy name="testAnonUsersRoles">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+            flag="required">
+            <module-option name="unauthenticatedIdentity">nobody</module-option>
+            <module-option name="usersProperties">security/users.properties</module-option>
+            <module-option name="rolesProperties">security/roles.properties</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+   <application-policy name="testControlFlags">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+            flag="sufficient">
+            <module-option name="usersProperties">security/users.properties</module-option>
+            <module-option name="rolesProperties">security/roles.properties</module-option>            
+         </login-module>
+
+         <login-module code="org.jboss.security.auth.spi.DatabaseServerLoginModule"
+            flag="sufficient">
+            <module-option name="dsJndiName">testJdbc</module-option>
+            <module-option name="principalsQuery">select Password from Principals where PrincipalID=?</module-option>
+            <module-option name="rolesQuery">select Role, RoleGroup from Roles where PrincipalID=?</module-option>
+            <module-option name="suspendResume">false</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+   <application-policy name="testJCACallerIdentity">
+      <authentication>
+         <login-module code="org.jboss.resource.security.CallerIdentityLoginModule"
+            flag="required">
+            <module-option name="userName">jduke</module-option>
+            <module-option name="password">theduke</module-option>
+            <module-option name="managedConnectionFactoryName">jboss:name=fakeMCF</module-option>
+            <module-option name="ignoreMissigingMCF">true</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+
+   <application-policy name="testCertLogin">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.BaseCertLoginModule"
+            flag="required">
+            <module-option name="securityDomain">testCertLogin</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+   <application-policy name="testCertRoles">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.CertRolesLoginModule"
+            flag="required">
+            <module-option name="securityDomain">testCertRoles</module-option>
+            <module-option name="usersProperties">security/users.properties</module-option>
+            <module-option name="rolesProperties">security/roles.properties</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+   <application-policy name="testPropertyReplacement">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+            flag="required">
+            <module-option name="usersProperties">${users.properties}</module-option>
+            <module-option name="rolesProperties">${roles.properties}</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+	
+   <application-policy name="testJaasSecurityDomainIdentityLoginModule">
+      <authentication>
+         <login-module code="org.jboss.resource.security.JaasSecurityDomainIdentityLoginModule"
+            flag="required">
+            <module-option name="userName">sa</module-option>
+            <module-option name="password">E5gtGMKcXPP</module-option>
+			 <module-option name="managedConnectionFactoryName">jboss.jca:service=LocalTxCM,name=DefaultDS</module-option>
+			 <module-option name="ignoreMissigingMCF">TRUE</module-option>
+			 <module-option name="jaasSecurityDomain">jboss.test:service=JaasSecurityDomain,domain=testJaasSecurityDomainIdentityLoginModule</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>  
+
+   <application-policy name="other">
+      <authentication>
+         <login-module code="org.jboss.test.security.test.LoginModulesUnitTestCase$TestLoginModule"
+            flag="required"/>
+      </authentication>
+   </application-policy>
+	
+   
+</policy>

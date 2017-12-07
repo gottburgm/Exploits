@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE jboss PUBLIC
+   "-//JBoss//DTD JBOSS 4.0//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+<jboss>
+   <security-domain>java:/jaas/xacml-test</security-domain>
+   <enterprise-beans>
+      <session>
+         <ejb-name>StatelessSession</ejb-name>
+         <jndi-name>spec.StatelessSession</jndi-name>
+      </session>
+   </enterprise-beans>
+</jboss>

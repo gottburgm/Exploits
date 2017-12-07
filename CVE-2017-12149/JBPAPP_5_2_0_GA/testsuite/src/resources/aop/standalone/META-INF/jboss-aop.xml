@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<aop>
+
+
+<!-- AOPTester -->
+<advisable class="org.jboss.test.aop.bean.POJORef"/>
+<advisable class="org.jboss.test.aop.bean.NoInterceptorsPOJO"
+   fieldFilter="ALL"
+   methodFilter="ALL"
+/>
+
+<caller-pointcut class="org.jboss.test.aop.bean.CallingPOJO"
+                 withinMethodName="callSomeMethod"
+                 calledClass="org.jboss.test.aop.bean.POJO"
+                 calledMethodName="someMethod">
+   <interceptors>
+      <interceptor class="org.jboss.test.aop.bean.CallerInterceptor"/>
+   </interceptors>
+</caller-pointcut>
+
+<interceptor name="SimpleInterceptor"
+	     factory="org.jboss.test.aop.bean.SimpleInterceptorFactory"/>
+
+<interceptor-pointcut class="org.jboss.test.aop.bean.POJO.*"
+		      fieldFilter="ALL"
+		      methodFilter="ALL"
+		      constructorFilter="ALL">
+  <interceptors>
+     <interceptor-ref name="SimpleInterceptor"/>
+  </interceptors>
+</interceptor-pointcut>
+
+<introduction-pointcut class="org.jboss.test.aop.bean.POJO">
+  <mixin>
+    <interfaces>
+        org.jboss.test.aop.bean.Introduction,
+        org.jboss.test.aop.bean.Introduction2
+    </interfaces>
+    <class>org.jboss.test.aop.bean.SomeIntroduction</class>
+    <construction>new org.jboss.test.aop.bean.SomeIntroduction(this)</construction>
+  </mixin>
+  <interfaces>
+        org.jboss.test.aop.bean.InterfaceMixin
+  </interfaces>
+</introduction-pointcut>
+
+<introduction-pointcut class="org.jboss.test.aop.bean.POJOChild">
+  <mixin>
+    <interfaces>
+        org.jboss.test.aop.bean.SubclassIntroduction
+    </interfaces>
+    <class>org.jboss.test.aop.bean.AnotherIntroduction</class>
+  </mixin>
+</introduction-pointcut>
+
+<introduction-pointcut group="introduction-tag">
+  <mixin>
+    <interfaces>
+        org.jboss.test.aop.bean.Introduction,
+        org.jboss.test.aop.bean.Introduction2
+    </interfaces>
+    <class>org.jboss.test.aop.bean.SomeIntroduction</class>
+    <construction>new org.jboss.test.aop.bean.SomeIntroduction(this)</construction>
+  </mixin>
+</introduction-pointcut>
+
+<class-metadata group="introduction-tag" class="org.jboss.test.aop.bean.NoInterceptorsPOJO">
+</class-metadata>
+
+<interceptor-pointcut class="org.jboss.test.aop.simpleejb.SimpleBean">
+  <interceptors>
+    <interceptor name="SimpleBeanInterceptor"
+	     factory="org.jboss.test.aop.bean.SimpleBeanInterceptorFactory"/>
+  </interceptors>
+</interceptor-pointcut>
+
+<class-metadata group="transaction" class="org.jboss.test.aop.bean.POJO.*">
+  <default>
+    <trans-attribute>Required</trans-attribute>
+  </default>
+  <method name="someMethod.*">
+    <trans-attribute>RequiresNew</trans-attribute>
+  </method>
+  <method name="someMethod3">
+    <trans-attribute>Supports</trans-attribute>
+  </method>
+  <field name="privateField">
+    <trans-attribute>NotSupported</trans-attribute>
+  </field>
+  <field name="protectedField">
+    <trans-attribute>Supports</trans-attribute>
+  </field>
+  
+</class-metadata>
+  
+		      
+</aop>

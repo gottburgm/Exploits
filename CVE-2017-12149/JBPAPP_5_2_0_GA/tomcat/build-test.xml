@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+   <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+]>
+
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--  JBoss, the OpenSource J2EE webOS                                      -->
+<!--                                                                        -->
+<!--  Distributable under LGPL license.                                     -->
+<!--  See terms of license at http://www.gnu.org.                           -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<!-- $Id: build-test.xml 110795 2011-02-25 23:13:14Z fnasser@redhat.com $ -->
+
+
+<project default="main" name="JBoss/EJB3 Tests">
+   <import file="../tools/etc/buildmagic/build-common.xml"/>
+   &libraries;
+   &modules;
+
+   <!-- ======================================================== -->
+   <!-- Initialization                                           -->
+   <!-- ======================================================== -->
+   <tstamp>
+      <format property="TIMENOW" pattern="yyyy-MM-dd.HH-mm" timezone="GMT"/>
+   </tstamp>
+   <echo message="${TIMENOW}" file="run.tstamp"/>
+
+   <property name="results_web" value="http://jboss.sourceforge.net/junit-results/32"/>
+   <property name="buildlog.level" value="info" />
+   <property environment="env"/>
+
+   <!-- Set a hostname property based on COMPUTERNAME for win32, HOSTNAME
+   otherwise and initialize the node0/node1 cluster hostnames to localhost
+   and ${hostname} by default. If you cannot route multicast traffic between
+   localhost and hostname, then you need to specify node0 and node1 binding
+   in the local.properties that can in order to be able to run the clustering
+   tests.
+   -->
+   <condition property="hostname" value="${env.COMPUTERNAME}">
+      <os family="windows"/>
+   </condition>
+   <condition property="hostname" value="${env.HOSTNAME}">
+      <not>
+         <os family="windows"/>
+      </not>
+   </condition>
+
+   <!--We will use local.properties file to provide some configuration
+       to the testsuite mainly for the Clustering framework. Please
+       do not checkin your local.properties file into CVS-->
+   <property file="local.properties"/>
+
+   <!-- Cluster node0 defaults -->
+   <property name="node0" value="localhost" />
+   <property name="node0.http.url" value="http://${node0}:8080" />
+   <property name="node0.jndi.url" value="jnp://${node0}:1099" />
+   <property name="node1" value="${hostname}" />
+   <property name="node1.http.url" value="http://${node1}:8080" />
+   <property name="node1.jndi.url" value="jnp://${node1}:1099" />
+
+
+   <!-- Import the jboss server run targets -->
+   <import file="../testsuite/imports/server-config.xml"/>
+   <!-- Propagate the dist directory as a jbosstest system property -->
+   <property name="jbosstest.dist" value="${jboss.dist}"/>
+
+   <macrodef name="wait-on-host">
+      <attribute name="seconds" default="${jboss.startup.timeout}"/>
+      <attribute name="host" default="${node0}"/>
+      <sequential>
+         <echo>Waiting for @{host} to start (max wait @{seconds} seconds)...</echo>
+         <waitfor maxwait="@{seconds}" maxwaitunit="second"
+            checkevery="5" checkeveryunit="second" timeoutproperty="startup.timeout">
+            <http url="http://@{host}:8080/"/>
+         </waitfor>
+         <fail message="Timeout waiting for nodes to start" if="startup.timeout"/>
+      </sequential>
+   </macrodef>
+
+   <macrodef name="wait-on-shutdown">
+      <attribute name="seconds" default="60"/>
+      <attribute name="conf"/>
+      <sequential>
+         <echo message="Waiting for '@{conf}' server to stop..."/>
+         <waitfor maxwait="@{seconds}" maxwaitunit="second"
+            checkevery="5" checkeveryunit="second" timeoutproperty="shutdown.timeout">
+            <available file="server.log">
+               <filepath>
+                  <fileset dir="${jboss.dist}/server/@{conf}/log/" includes="server.log">
+                     <contains text="[org.jboss.system.server.Server] Shutdown complete"/>
+                  </fileset>
+               </filepath>
+            </available>
+         </waitfor>
+         <fail message="Timeout waiting for '@{conf}' server to shutdown." if="shutdown.timeout"/>
+      </sequential>
+   </macrodef>
+
+   <!-- =================== -->
+   <!-- Basic Configuration -->
+   <!-- =================== -->
+
+   <!-- Module name(s) & version -->
+   <property name="module.name" value="tomcat"/>
+   <property name="module.Name" value="JBoss Testsuite"/>
+   <property name="module.version" value="DEV"/>
+
+
+   <!-- ========= -->
+   <!-- Libraries -->
+   <!-- ========= -->
+
+   <!-- The combined library classpath -->
+   <path id="library.classpath">
+      <path refid="sun.jaf.classpath"/>
+      <path refid="jboss.web.classpath"/>
+      <path refid="javassist.classpath"/>
+      <path refid="qdox.classpath"/>
+      <path refid="hibernate3.classpath"/>
+      <path refid="dom4j.dom4j.classpath"/>
+      <path refid="javassist.classpath"/>
+      <path refid="trove.classpath"/>
+      <path refid="xdoclet.xdoclet.classpath"/>
+      <path refid="apache.ant.classpath"/>
+      <path refid="oswego.concurrent.classpath"/>
+      <path refid="junit.junit.classpath"/>
+      <path refid="apache.log4j.classpath"/>
+      <path refid="apache.xerces.classpath"/>
+      <path refid="jboss.remoting.classpath"/>
+      <path refid="jgroups.jgroups.classpath"/>
+      <path refid="apache.httpclient.classpath"/>
+      <path refid="apache.logging.classpath"/>
+      <path refid="sun.javamail.classpath"/>
+      <path refid="jboss.serialization.classpath"/>
+      <path refid="org.jboss.ws.native.classpath"/>
+      <path refid="org.jboss.spec.javax.xml.rpc.classpath"/>
+      <path refid="saaj.api.classpath"/>
+      <path refid="quartz.quartz.classpath"/>
+      <path refid="jboss.microcontainer.classpath"/>
+   </path>
+
+   <!-- ======= -->
+   <!-- Modules -->
+   <!-- ======= -->
+
+   <!-- ======= -->
+   <!-- Modules -->
+   <!-- ======= -->
+   <!-- InternalServer -->
+   <!-- This could be a mistake.  Perhaps, though, it would be a good idea to separate
+   tests that need internal jboss classes from those that don't.  When I put it in, only
+   the jca XATxConnectionManagerUnitTestCase needed an internal class (the tx manager)-->
+   <property name="jboss.internal-server.root" value="${project.root}/server/output"/>
+   <property name="jboss.internal-server.lib" value="${jboss.internal-server.root}/lib"/>
+   <path id="jboss.internal-server.classpath">
+      <pathelement path="${jboss.server.lib}/jboss.jar"/>
+      <pathelement path="${jboss.server.lib}/jboss-main.jar"/>
+      <pathelement path="${jboss.server.lib}/jboss-system.jar"/>
+   </path>
+
+   <!-- The combined dependent module classpath -->
+   <path id="dependentmodule.classpath">
+      <path refid="jboss.j2ee.classpath"/>
+      <path refid="jboss.j2se.classpath"/>
+      <path refid="jboss.aop.classpath"/>
+      <path refid="jboss.aspects.classpath"/>
+      <path refid="jboss.common.classpath"/>
+      <path refid="jboss.cache.classpath"/>
+      <path refid="jboss.cluster.classpath"/>
+      <path refid="jboss.main.classpath"/>
+      <path refid="jboss.system.classpath"/>
+      <path refid="jboss.jnpserver.classpath"/>
+      <path refid="jboss.transaction.classpath"/>
+      <path refid="jboss.security.classpath"/>
+      <!-- this is for the NonSerializableFactory -->
+      <path refid="jboss.server.classpath"/>
+      <path refid="jboss.mq.classpath"/>
+      <path refid="jboss.test.classpath"/>
+      <!--path refid="jboss.webservice.classpath"/-->
+   </path>
+
+   <!-- RMI Stub generation -->
+
+   <!-- ===== -->
+   <!-- Tasks -->
+   <!-- ===== -->
+
+   <!-- Where source files live -->
+   <property name="source.java" value="${module.source}/tests"/>
+   <property name="source.etc" value="${module.source}/etc"/>
+   <property name="resources" value="${module.source}/resources"/>
+   <property name="source.stylesheets" value="../testsuite/src/stylesheets"/>
+
+   <!-- Where build generated files will go -->
+   <property name="build.reports" value="${module.output}/reports"/>
+   <property name="build.testlog" value="${module.output}/log"/>
+   <property name="build.classes" value="${module.output}/test-classes"/>
+   <property name="build.lib" value="${module.output}/test-lib"/>
+   <property name="build.api" value="${module.output}/api"/>
+   <property name="build.etc" value="${module.output}/etc"/>
+   <property name="build.stylesheets" value="${module.output}/stylesheets"/>
+   <!-- build.resources is needed for the test-configs directory used by the create-config macro -->
+   <property name="build.resources" value="${module.source}/resources"/>
+
+   <!-- Install/Release structure -->
+   <property name="install.id" value="${module.name}-${module.version}"/>
+   <property name="release.id" value="${install.id}"/>
+   <property name="install.root" value="${module.output}/${install.id}"/>
+
+   <!-- The combined thirdparty classpath -->
+   <path id="thirdparty.classpath">
+      <path refid="library.classpath"/>
+      <path refid="dependentmodule.classpath"/>
+   </path>
+
+   <!-- This module is based on Java 1.2 -->
+   <property name="javac.target" value="1.2"/>
+
+   <!-- classpath and local.classpath must have a value using with a path -->
+   <property name="classpath" value=""/>
+   <property name="local.classpath" value="${module.output}/classes"/>
+
+   <!-- The classpath required to build classes. -->
+   <path id="javac.classpath">
+      <pathelement path="${classpath}"/>
+      <!--pathelement path="${resources}/test/seam/jboss-seam.jar"/-->
+      <pathelement path="${local.classpath}"/>
+      <path refid="thirdparty.classpath"/>
+   </path>
+
+   <path id="client.classpath">
+      <path refid="apache.log4j.classpath"/>
+      <path refid="apache.logging.classpath"/>
+      <path refid="jboss.test.classpath"/>
+      <path refid="jboss.web.classpath"/>
+      <pathelement path="${jboss.dist}/client/jbossall-client.jar"/>
+   </path>
+
+   <!-- The classpath required to build javadocs. -->
+   <path id="javadoc.classpath">
+      <path refid="javac.classpath"/>
+   </path>
+
+   <!-- Packages to include when generating api documentation -->
+   <property name="javadoc.packages" value="javax.*"/>
+
+   <!-- Override JUnit defaults -->
+   <property name="jbosstest.iterationcount" value="10"/>
+   <property name="jbosstest.threadcount" value="5"/>
+   <property name="jbosstest.beancount" value="5"/>
+   <property name="jbosstest.nodeploy" value="false"/>
+
+   <target name="init">
+      <record name="${basedir}/build.log" append="yes" action="start" loglevel="error"/>
+      <!-- Setup the version 1 classes so the tests compile -->
+   </target>
+
+   <!-- ================================================================== -->
+   <!-- Compile                                                            -->
+   <!-- ================================================================== -->
+
+   <!--
+      | Compile everything.
+      |
+      | This target should depend on other compile-* targets for each
+      | different type of compile that needs to be performed, short of
+      | documentation compiles.
+    -->
+
+   <!-- Compile all class files -->
+   <target name="compile-classes" depends="init">
+      <mkdir dir="${build.classes}"/>
+      <javac destdir="${build.classes}"
+         optimize="${javac.optimize}"
+         debug="${javac.debug}"
+         source="1.5"
+         target="1.5"
+         depend="${javac.depend}"
+         verbose="${javac.verbose}"
+         deprecation="${javac.deprecation}"
+         includeAntRuntime="${javac.include.ant.runtime}"
+         includeJavaRuntime="${javac.include.java.runtime}"
+         failonerror="${javac.fail.onerror}">
+         <src path="${source.java}"/>
+         <classpath refid="javac.classpath"/>
+      </javac>
+   </target>
+
+   <target name="compile-stylesheets">
+      <mkdir dir="${build.stylesheets}"/>
+      <copy todir="${build.stylesheets}" filtering="yes">
+         <fileset dir="${source.stylesheets}">
+            <include name="**/*"/>
+         </fileset>
+      </copy>
+   </target>
+   <!-- ================================================================== -->
+   <!-- Archives                                                           -->
+   <!-- ================================================================== -->
+
+
+   <target name="jars" depends="compile-classes"/>
+
+   <target name="test" depends="init" if="test"
+      description="Execute all tests in the given test directory.">
+      <!-- For use when we do not need to pass in any special jvmargs; forks the test process -->
+      <antcall target="test-with-jvmargs" inheritRefs="true">
+         <param name="test" value="${test}"/>
+         <param name="jvmargs" value=""/>
+      </antcall>
+   </target>
+
+   <target name="test-with-jvmargs" if="test">
+      <!-- For use when we need to pass in special jvmargs -->
+
+      <mkdir dir="${build.reports}"/>
+      <mkdir dir="${build.testlog}"/>
+      <!-- Remove the test.log so each run has a fresh log -->
+      <delete file="${build.testlog}/test.log"/>
+
+     <!-- These tests need extra stuff on classpath -->
+      <condition property="client.run.classpath" value="security.client.classpath">
+         <equals arg1="${test}" arg2="security"/>
+      </condition>
+      <condition property="client.run.classpath" value="dd.web.client.classpath">
+         <equals arg1="${test}" arg2="dd/web"/>
+      </condition>
+      <condition property="client.run.classpath" value="dd.classpath">
+         <equals arg1="${test}" arg2="dd"/>
+      </condition>
+      <condition property="client.run.classpath" value="client.classpath">
+         <not>
+            <isset property="client.run.classpath"/>
+         </not>
+      </condition>
+
+      <junit dir="${module.output}"
+         printsummary="yes"
+         haltonerror="false"
+         haltonfailure="false"
+         showoutput="yes"
+         fork="true">
+
+         <sysproperty key="jbosstest.deploy.dir" value="${build.lib}"/>
+         <sysproperty key="build.testlog" value="${build.testlog}"/>
+         <sysproperty key="log4j.configuration" value="file:${resources}/test/log4j.xml"/>
+         <sysproperty key="jbosstest.threadcount" value="${jbosstest.threadcount}"/>
+         <sysproperty key="jbosstest.iterationcount" value="${jbosstest.iterationcount}"/>
+         <sysproperty key="jbosstest.beancount" value="${jbosstest.beancount}"/>
+         <sysproperty key="java.security.auth.login.config" value="${resources}/test/security/auth.conf"/>
+
+
+         <!-- properties needed for clustering -->
+         <sysproperty key="jbosstest.cluster.node0" value="${node0}"/>
+         <sysproperty key="jbosstest.cluster.node0.http.url" value="${node0.http.url}"/>
+         <sysproperty key="jbosstest.cluster.node0.jndi.url" value="${node0.jndi.url}"/>
+         <sysproperty key="jbosstest.cluster.node1" value="${node1}"/>
+         <sysproperty key="jbosstest.cluster.node1.http.url" value="${node1.http.url}"/>
+         <sysproperty key="jbosstest.cluster.node1.jndi.url" value="${node1.jndi.url}"/>
+         <sysproperty key="java.naming.provider.url" value="${node0.jndi.url}"/>
+
+
+         <jvmarg line="${jvmargs}" />
+
+         <classpath>
+            <path refid="asm.asm.classpath"/>
+            <path refid="hibernate.hibernate.classpath"/>
+            <pathelement location="${build.classes}"/>
+            <pathelement location="${resources}/test"/>
+            <path refid="${client.run.classpath}"/>
+            <path refid="org.jboss.ws.native.classpath"/>
+            <path refid="org.jboss.spec.javax.xml.rpc.classpath"/>
+            <path refid="saaj.api.classpath"/>
+            <path refid="apache.xerces.classpath"/>
+            <path refid="sun.jaf.classpath"/>
+            <path refid="sun.javamail.classpath"/>
+            <path refid="apache.httpclient.classpath"/>
+            <pathelement path="${local.classpath}"/>
+            <path refid="dependentmodule.classpath"/>
+            <!--path refid="library.classpath"/-->
+         </classpath>
+
+         <formatter type="plain" usefile="true"/>
+         <formatter type="xml" usefile="true"/>
+
+         <batchtest todir="${build.reports}"
+            haltonerror="false"
+            haltonfailure="false"
+            fork="true">
+
+            <fileset dir="${build.classes}">
+               <include name="org/jboss/test/web/${test}/unit/*TestCase.class"/>
+            </fileset>
+         </batchtest>
+      </junit>
+   </target>
+
+   <!-- Single unit test -->
+   <target name="one-test-with-jvmargs" if="test">
+      <!-- For use when we need to pass in special jvmargs -->
+
+      <mkdir dir="${build.reports}"/>
+      <mkdir dir="${build.testlog}"/>
+      <!-- Remove the test.log so each run has a fresh log -->
+      <delete file="${build.testlog}/test.log"/>
+
+     <!-- These tests need extra stuff on classpath -->
+      <condition property="client.run.classpath" value="client.classpath">
+         <not>
+            <isset property="client.run.classpath"/>
+         </not>
+      </condition>
+
+      <junit dir="${module.output}"
+         printsummary="yes"
+         haltonerror="false"
+         haltonfailure="false"
+         showoutput="yes"
+         fork="true">
+
+         <sysproperty key="jbosstest.deploy.dir" value="${build.lib}"/>
+         <sysproperty key="build.testlog" value="${build.testlog}"/>
+         <sysproperty key="log4j.configuration" value="file:${resources}/test/log4j.xml"/>
+         <sysproperty key="jbosstest.threadcount" value="${jbosstest.threadcount}"/>
+         <sysproperty key="jbosstest.iterationcount" value="${jbosstest.iterationcount}"/>
+         <sysproperty key="jbosstest.beancount" value="${jbosstest.beancount}"/>
+         <sysproperty key="java.security.auth.login.config" value="${resources}/test/security/auth.conf"/>
+
+
+         <!-- properties needed for clustering -->
+         <sysproperty key="jbosstest.cluster.node0" value="${node0}"/>
+         <sysproperty key="jbosstest.cluster.node0.http.url" value="${node0.http.url}"/>
+         <sysproperty key="jbosstest.cluster.node0.jndi.url" value="${node0.jndi.url}"/>
+         <sysproperty key="jbosstest.cluster.node1" value="${node1}"/>
+         <sysproperty key="jbosstest.cluster.node1.http.url" value="${node1.http.url}"/>
+         <sysproperty key="jbosstest.cluster.node1.jndi.url" value="${node1.jndi.url}"/>
+         <sysproperty key="java.naming.provider.url" value="${node0.jndi.url}"/>
+
+
+         <jvmarg line="${jvmargs}" />
+
+         <classpath>
+            <path refid="asm.asm.classpath"/>
+            <path refid="hibernate.hibernate.classpath"/>
+            <pathelement location="${build.classes}"/>
+            <pathelement location="${resources}/test"/>
+            <path refid="${client.run.classpath}"/>
+            <path refid="org.jboss.ws.native.classpath"/>
+            <path refid="org.jboss.spec.javax.xml.rpc.classpath"/>
+            <path refid="saaj.api.classpath"/>
+            <path refid="apache.xerces.classpath"/>
+            <path refid="sun.jaf.classpath"/>
+            <path refid="sun.javamail.classpath"/>
+            <path refid="apache.httpclient.classpath"/>
+            <pathelement path="${local.classpath}"/>
+         </classpath>
+
+         <formatter type="xml" usefile="true"/>
+         <test name="${test}" todir="${build.reports}"/>
+      </junit>
+   </target>
+
+  
+   <target name="run" depends="init" if="class"
+      description="Execute all tests in the given test directory.">
+      <java fork="true" classname="${class}">
+         <classpath>
+            <pathelement location="${build.classes}"/>
+            <pathelement location="${resources}/test"/>
+            <path refid="javac.classpath"/>
+         </classpath>
+      </java>
+   </target>
+
+   <target name="tests" depends="init" description="Execute all tests">
+      <antcall target="standalone-tests" inheritRefs="true"/>
+      <antcall target="ejb-tests" inheritRefs="true"/>
+      <antcall target="entity-tests" inheritRefs="true"/>
+      <antcall target="ssl-simple-test"  inheritRefs="true"/>
+      <antcall target="ssl-advanced-test"  inheritRefs="true"/>
+      <antcall target="jacc-test" inheritRefs="true"/>
+      <antcall target="clustered-tests" inheritRefs="true"/>
+   </target>
+
+   <!-- ================================================================== -->
+   <!-- Cleaning                                                           -->
+   <!-- ================================================================== -->
+
+   <!-- Clean up all build output -->
+   <target name="clean"
+      description="Cleans up most generated files." depends="init">
+      <delete dir="${build.classes}/org/jboss/test"/>
+   </target>
+
+   <!-- ================================================================== -->
+   <!-- Misc.                                                              -->
+   <!-- ================================================================== -->
+
+   <target name="main"
+      description="Executes the default target (most)."
+      depends="jars"/>
+
+
+   <target name="tests-report-html" depends="compile-stylesheets">
+      <mkdir dir="${build.reports}/html"/>
+
+      <junitreport todir="${build.reports}">
+         <fileset dir="${build.reports}">
+            <include name="TEST-*.xml"/>
+         </fileset>
+         <report format="frames"
+            todir="${build.reports}/html"
+            styledir="${build.stylesheets}"
+            />
+      </junitreport>
+   </target>
+
+  <target name="tests-report-text" depends="tests-report-html">
+    <mkdir dir="${build.reports}/text"/>
+
+    <style basedir="${build.reports}"
+      destdir="${build.reports}/text"
+      extension=".txt"
+      style="${build.stylesheets}/summary1b.xsl"
+      includes="TESTS-TestSuites.xml">
+      <param name="thedate" expression="${TIMENOW}"/>
+      <param name="java_version" expression="${java.version}"/>
+      <param name="java_vendor" expression="${java.vendor}"/>
+      <param name="java_vm_specification_version" expression="${java.vm.specification.version}"/>
+      <param name="java_vm_version" expression="${java.vm.version}"/>
+      <param name="java_vm_name" expression="${java.vm.name}"/>
+      <param name="java_vm_info" expression="${java.vm.info}"/>
+      <param name="java_specification_version" expression="${java.specification.version}"/>
+      <param name="java_class_version" expression="${java.class.version}"/>
+      <param name="os_name" expression="${os.name}"/>
+      <param name="os_arch" expression="${os.arch}"/>
+      <param name="os_version" expression="${os.version}"/>
+      <param name="builduid" expression="${TIMENOW}"/>
+      <param name="results_web" expression="${results_web}"/>
+    </style>
+  </target>
+
+
+   <target name="tests-report-clean">
+      <delete dir="${build.reports}"/>
+   </target>
+
+</project>

@@ -1,0 +1,98 @@
+<project name="tests-perf-jars">
+<!-- perf test -->
+   <target name="_jars-perf">
+      <mkdir dir="${build.lib}"/>
+
+      <!-- build perftest.jar -->
+      <jar destfile="${build.lib}/perftest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/perf/interfaces/**"/>
+            <include name="org/jboss/test/perf/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/perf">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+
+      <!-- build perf.jar -->
+      <jar destfile="${build.lib}/perf.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/perf/interfaces/**"/>
+            <include name="org/jboss/test/perf/ejb/**"/>
+         </fileset>
+         <metainf dir="${build.resources}/perf/META-INF">
+            <exclude name="jboss-service.xml"/>
+         </metainf>
+      </jar>
+      <!-- build probe.jar -->
+      <jar destfile="${build.lib}/probe.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/perf/interfaces/Perf*"/>
+            <include name="org/jboss/test/perf/interfaces/Probe*"/>
+            <include name="org/jboss/test/perf/ejb/Perf*"/>
+            <include name="org/jboss/test/perf/ejb/Probe*"/>
+            <include name="org/jboss/test/util/Debug.class"/>
+         </fileset>
+         <metainf dir="${build.resources}/perf/probe">
+            <exclude name="jboss-service.xml"/>
+         </metainf>
+      </jar>
+
+      <!-- build secure-perf.jar -->
+      <jar destfile="${build.lib}/secure-perf.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/perf/interfaces/**"/>
+            <include name="org/jboss/test/perf/ejb/**"/>
+         </fileset>
+         <metainf dir="${build.resources}/secure-perf/META-INF"/>
+         <fileset dir="${build.resources}/secure-perf">
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </fileset>
+      </jar>
+
+      <!-- build the perf-service.sar -->
+      <jar destfile="${build.lib}/perf-service.sar">
+         <!-- jboss-service.xml for tomcat plugin -->
+         <metainf dir="${build.resources}/perf">
+            <include name="jboss-service.xml"/>
+         </metainf>
+         <!-- The service classes -->
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/perf/test/PerfTest.class"/>
+            <include name="org/jboss/test/perf/test/PerfTestMBean.class"/>
+         </fileset>
+         <!-- The perf.jar -->
+         <fileset dir="${build.lib}">
+            <include name="perf.jar"/>
+         </fileset>
+      </jar>
+
+      <!-- build the perf-service2.sar, does not include perf.jar -->
+      <jar destfile="${build.lib}/perf-service2.sar">
+         <!-- jboss-service.xml for tomcat plugin -->
+         <metainf dir="${build.resources}/perf">
+            <include name="jboss-service.xml"/>
+         </metainf>
+         <!-- The service classes -->
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/perf/test/PerfTest.class"/>
+            <include name="org/jboss/test/perf/test/PerfTestMBean.class"/>
+         </fileset>
+      </jar>
+
+      <!-- The perf-service ear -->
+      <ear earfile="${build.lib}/perf-service.ear"
+         appxml="${build.resources}/perf/application.xml">
+         <fileset dir="${build.lib}">
+            <include name="perf.jar"/>
+            <include name="perf-service2.sar"/>
+         </fileset>
+      </ear>
+   </target>
+</project>

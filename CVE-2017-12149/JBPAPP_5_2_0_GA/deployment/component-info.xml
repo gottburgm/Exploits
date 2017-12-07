@@ -1,0 +1,26 @@
+<project name="deployment-component-info">
+
+   <!-- ============================================================ -->
+   <!-- Deployment                                                   -->
+   <!-- ============================================================ -->
+   <component id="deployment"
+              module="jboss-deployment"
+              version="5.0-SNAPSHOT"
+              specTitle="J2EE Deployment API"
+              specVersion="Sun Microsystems"
+              specVendor="1.1"
+              implTitle="JBoss JSR-88 Deployment API"
+              implURL="http://www.jboss.org"
+              implVersion="1.1-DEV"
+              implVendor="JBoss"
+   >
+      <artifact id="jboss-deployment.jar"/>
+      <artifact id="jboss-jsr88.jar"/>
+      <artifact id="jsr88-service.xml"/>
+      
+      <export>
+         <include input="jboss-deployment.jar"/>
+      </export>
+      
+   </component>
+</project>

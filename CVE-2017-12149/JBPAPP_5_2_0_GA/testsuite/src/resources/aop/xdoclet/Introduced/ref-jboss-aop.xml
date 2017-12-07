@@ -1,0 +1,23 @@
+<aop>
+  <advisable class="org.jboss.test.aop.xdoclet.Introduced"/>
+
+  <introduction-pointcut class="org.jboss.test.aop.xdoclet.Introduced">
+    <mixin>
+      <class>com.test.MyMixin</class>
+      <construction>new com.test.MyMixin(this, "string param", 100)</construction>
+      <interfaces>
+        com.test.SomeInterface,
+        org.borg.AnotherInterface
+      </interfaces>
+    </mixin>
+  </introduction-pointcut>
+
+  <introduction-pointcut class="org.jboss.test.aop.xdoclet.Introduced">
+    <interfaces>
+      com.test.SomeInterface,
+      org.borg.AnotherInterface
+    </interfaces>
+  </introduction-pointcut>
+  
+</aop>
+

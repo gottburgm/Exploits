@@ -1,0 +1,23 @@
+<assembly>
+  <id>ejb-management</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/management/mejb/**</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>src/resources</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>META-INF/**</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

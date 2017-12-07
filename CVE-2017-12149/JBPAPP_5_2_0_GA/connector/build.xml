@@ -1,0 +1,530 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+   <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
+   <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+]>
+
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--  JBoss, the OpenSource J2EE webOS                                      -->
+<!--                                                                        -->
+<!--  Distributable under LGPL license.                                     -->
+<!--  See terms of license at http://www.gnu.org.                           -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<!-- $Id: build.xml 113230 2012-07-17 13:54:45Z jeff.zhang $ -->
+
+<project default="main" name="JBoss/Connector">
+
+  <!-- ================================================================== -->
+  <!-- Setup                                                              -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Include the common Buildmagic elements.
+     |
+     | This defines several different targets, properties and paths.
+     | It also sets up the basic extention tasks amoung other things.
+   -->
+
+  &buildmagic;
+
+
+  <!-- ================================================================== -->
+  <!-- Initialization                                                     -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Initialize the build system.  Must depend on '_buildmagic:init'.  
+     | Other targets should depend on 'init' or things will mysteriously fail.
+   -->
+
+  <target name="init" unless="init.disable" depends="_buildmagic:init">
+  </target>
+
+
+  <!-- ================================================================== -->
+  <!-- Configuration                                                      -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Configure the build system.  
+     |
+     | This target is invoked by the Buildmagic initialization logic and 
+     | should contain module specific configuration elements.
+   -->
+
+  <target name="configure" unless="configure.disable">
+
+    <!-- =================== -->
+    <!-- Basic Configuration -->
+    <!-- =================== -->
+
+    <!-- Module name(s) & version -->
+    <property name="module.name" value="connector"/>
+    <property name="module.Name" value="JBoss Connector"/>
+    <property name="module.version" value="DEV"/>
+
+    <!-- ========= -->
+    <!-- Libraries -->
+    <!-- ========= -->
+    &libraries;
+
+    <!-- The combined library classpath -->
+    <path id="library.classpath">
+      <path refid="apache.log4j.classpath"/>
+      <path refid="apache.commons.classpath"/>
+      <path refid="sun.javamail.classpath"/>
+      <path refid="quartz.quartz.classpath"/>
+      <path refid="jboss.metadata.classpath"/>       
+      <path refid="jboss.jboss.deployers.classpath"/>      
+      <path refid="jboss.integration.classpath"/>
+      <path refid="jboss.jboss.cl.classpath"/>
+      <path refid="jboss.jboss.man.classpath"/>      
+      <path refid="jboss.jboss.mdr.classpath"/>      
+      <path refid="jboss.jboss.reflect.classpath"/>      
+      <path refid="jboss.microcontainer.classpath"/>
+      <path refid="jboss.profileservice.spi.classpath"/>
+      <path refid="jboss.jboss.vfs.classpath"/>
+      <path refid="sun.jaxb.classpath"/>
+      <path refid="sun.jaf.classpath"/>
+      <path refid="stax.api.classpath"/>
+      <path refid="jboss.common.beans.classpath"/>
+    </path>
+
+    <!-- ======= -->
+    <!-- Modules -->
+    <!-- ======= -->
+
+    &modules;
+
+    <!-- The combined depedant module classpath -->
+    <path id="dependentmodule.classpath">
+      <path refid="jboss.common.core.classpath"/>
+      <path refid="jboss.common.logging.spi.classpath"/>
+      <path refid="jboss.common.logging.log4j.classpath"/>
+      <path refid="jboss.common.logging.jdk.classpath"/>
+      <path refid="jboss.jboss.javaee.classpath"/>
+      <path refid="jboss.jboss.jaspi.api.classpath"/>
+      <path refid="jboss.jbosssx.classpath"/>
+      <path refid="jboss.jboss.security.spi.classpath"/>
+      <path refid="jboss.security.int.classpath"/>
+      <path refid="jboss.server.classpath"/>
+      <path refid="jboss.jboss.bootstrap.classpath"/>
+      <path refid="jboss.system.classpath"/>
+      <path refid="jboss.systemjmx.classpath"/>
+      <path refid="jboss.j2se.classpath"/>
+      <path refid="jboss.serialization.classpath"/>
+      <path refid="jboss.jbossxb.classpath"/> 	
+      <path refid="jboss.aop.classpath"/>
+    </path>
+
+    <!-- ===== -->
+    <!-- Tasks -->
+    <!-- ===== -->
+
+    <!-- Where source files live -->
+    <property name="source.java" value="${module.source}/main"/>
+    <property name="source.etc" value="${module.source}/etc"/>
+    <property name="source.resources" value="${module.source}/resources"/>
+
+    <!-- Where build generated files will go -->
+    <property name="build.reports" value="${module.output}/reports"/>
+    <property name="build.classes" value="${module.output}/classes"/>
+    <property name="build.lib" value="${module.output}/lib"/>
+    <property name="build.api" value="${module.output}/api"/>
+    <property name="build.jmx-api" value="${module.output}/jmx-api"/>
+    <property name="build.etc" value="${module.output}/etc"/>
+    <property name="build.resources" value="${module.output}/resources"/>
+    <property name="build.stylesheets" value="${module.output}/stylesheets"/>
+
+    <property name="tools.stylesheets" value="${project.tools}/etc/stylesheets"/>
+
+    <!--xdoclet output directories-->
+    <property name="build.gen-src" value="${module.output}/gen-src/"/>
+    <property name="build.jmx-doc" value="${module.output}/jmx-doc/"/>
+
+    <!-- Install/Release structure -->
+    <property name="install.id" value="${module.name}-${module.version}"/>
+    <property name="release.id" value="${install.id}"/>
+    <property name="install.root" value="${module.output}/${install.id}"/>
+
+    <!-- The combined thirdparty classpath -->
+    <path id="thirdparty.classpath">
+      <path refid="library.classpath"/>
+      <path refid="dependentmodule.classpath"/>
+    </path>
+
+    <!-- classpath and local.classpath must have a value using with a path -->
+    <property name="classpath" value=""/>
+    <property name="local.classpath" value=""/>
+
+    <!-- The classpath required to build classes. -->
+    <path id="javac.classpath">
+      <pathelement path="${classpath}"/>
+      <pathelement path="${local.classpath}"/>
+      <path refid="thirdparty.classpath"/>
+    </path>
+
+    <!-- The classpath required to build javadocs. -->
+    <path id="javadoc.classpath">
+      <path refid="javac.classpath"/>
+    </path>
+
+    <!-- Packages to include when generating api documentation -->
+    <property name="javadoc.packages" value="org.jboss.*"/>
+
+    <!-- xdoclet -->
+    <path id="xdoclet.task.classpath">
+      <path refid="javac.classpath"/>
+      <fileset dir="${xdoclet.xdoclet.lib}">
+        <include name="**/*.jar"/>
+      </fileset>
+    </path>
+    <property name="xdoclet.task.classpath"
+      refid="xdoclet.task.classpath"/>
+
+  </target>
+  
+  <!-- new jaxb generation 
+  <target name="jaxb">
+  	<taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask" classpathref="thirdparty.classpath"/>
+  	<xjc schema="${source.resources}/schema/jboss-cf.xsd" package="org.jboss.resource.deployment.mx" target="/Users/wmprice">  	
+  	</xjc> 
+  </target>
+	
+	<target name="schema">
+	  	<taskdef name="schemagen" classname="com.sun.tools.jxc.SchemaGenTask" classpathref="thirdparty.classpath"/>
+		<schemagen srcdir="${source.java}/org/jboss/resource/metadata/mcf" destdir="/Users/wmprice/testschema"/>
+  	</target>
+	-->
+	
+  <!-- ================================================================== -->
+  <!-- Compile                                                            -->
+  <!-- ================================================================== -->
+
+  <!-- 
+     |  Compile everything.
+     |
+     |  This target should depend on other compile-* targets for each 
+     |  different type of compile that needs to be performed, short of
+     |  documentation compiles.
+    -->
+  <target name="compile"
+    depends="compile-classes, compile-resources, compile-etc"
+    description="Compile all source files."/>
+
+  <!-- Compile all class files -->
+  <target name="compile-classes" depends="init">
+    <mkdir dir="${build.classes}"/>
+
+    <javac destdir="${build.classes}"
+      optimize="${javac.optimize}"
+      target="1.5"
+      source="1.5"
+      debug="${javac.debug}"
+      depend="${javac.depend}"
+      verbose="${javac.verbose}"
+      deprecation="${javac.deprecation}"
+      includeAntRuntime="${javac.include.ant.runtime}"
+      includeJavaRuntime="${javac.include.java.runtime}"
+      failonerror="${javac.fail.onerror}">
+      <src path="${source.java}"/>
+      <exclude name="org/jboss/resource/adapter/jdbc/jdbc4/**" unless="HAVE_JDK_1.6"/>
+      <exclude name="org/jboss/resource/adapter/jdbc/jdbc4_1/**" unless="HAVE_JDK_1.7"/>
+      <exclude name="org/jboss/resource/adapter/jdbc/jdk5/**" unless="IS_JDK_1.5"/>
+      <exclude name="org/jboss/resource/adapter/jdbc/jdk6/**" unless="IS_JDK_1.6"/>
+      <exclude name="org/jboss/resource/adapter/jdbc/jdk7/**" unless="IS_JDK_1.7"/>
+      <classpath refid="javac.classpath"/>
+    </javac>
+  </target>
+
+  <!-- Compile resource files -->
+  <target name="compile-resources" depends="init">
+    <mkdir dir="${build.resources}"/>
+    <copy todir="${build.resources}" filtering="yes">
+      <fileset dir="${source.resources}">
+        <include name="**/*"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <!-- Compile manifests -->
+  <target name="compile-etc" depends="init">
+    <mkdir dir="${build.etc}"/>
+    <copy todir="${build.etc}" filtering="yes">
+      <fileset dir="${source.etc}">
+        <include name="**"/>
+      </fileset>
+    </copy>
+  </target>
+
+
+  <!-- ================================================================== -->
+  <!-- Archives                                                           -->
+  <!-- ================================================================== -->
+
+  <!-- 
+     |  Build all jar files.
+    -->
+  <target name="jars"
+    description="Builds all jar files."
+    depends="_buildmagic:build-bypass-check"
+    unless="build-bypass.on">
+
+    <call target="compile"/>
+
+    <mkdir dir="${build.lib}"/>
+	<mkdir dir="${build.lib}/jboss-jca.deployer"/>
+	<mkdir dir="${build.lib}/jboss-jca.deployer/META-INF"/>
+  	
+  	<jar jarfile="${build.lib}/jboss-jca-deployer.jar" 
+  		 manifest="${build.etc}/default.mf">
+		
+  		<fileset dir="${build.classes}">
+			<include name="org/jboss/resource/deployers/**"/>  				
+			<include name="org/jboss/resource/deployment/**"/>  				
+			<include name="org/jboss/resource/metadata/repository/**"/>  				
+  		</fileset>  		
+  	</jar>
+    <!--
+  	<jar jarfile="${build.lib}/jboss-jca-metadata.jar" 
+  		manifest="${build.etc}/default.mf">
+
+  		<fileset dir="${build.classes}">
+			<include name="org/jboss/resource/metadata/**"/>  				
+			<exclude name="org/jboss/resource/metadata/repository/**"/>  				
+  		</fileset>  		  		
+  	</jar>
+  	-->
+  	
+  	<copy file="${build.lib}/jboss-jca-deployer.jar" todir="${build.lib}/jboss-jca.deployer/"/>
+  	<!-- 
+	<copy file="${build.lib}/jboss-jca-metadata.jar" todir="${build.lib}/jboss-jca.deployer/"/>
+  	-->
+  	<copy file="${build.resources}/deployers/jca-deployers-jboss-beans.xml" todir="${build.lib}/jboss-jca.deployer/META-INF"/>
+  	  	  	
+  	<!-- Build jboss-jca.jar -->
+    <jar jarfile="${build.lib}/jboss-jca.jar"
+      manifest="${build.etc}/default.mf">
+      <fileset dir="${build.classes}">
+        <include name="**"/>
+         <exclude name="**/adapter/**"/>
+         <exclude name="org/jboss/resource/deployers/**"/>
+      </fileset>
+      <fileset dir="${build.resources}">
+        <include name="dtd/**"/>
+        <include name="stylesheets/**"/>
+      </fileset>
+    </jar>
+
+    <!-- Create the jar containing common classes for the JDBC wrapper resource adapters -->
+    <jar jarfile="${build.lib}/jboss-common-jdbc-wrapper.jar"
+      manifest="${build.etc}/default.mf">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/resource/adapter/jdbc/JBossWrapper.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/WrapperConnectionFactory.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/ExceptionSorter.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/CheckValidConnectionSQL.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/ValidConnectionChecker.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/StaleConnectionChecker.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/StaleConnectionException.class"/>
+      	<include name="org/jboss/resource/adapter/jdbc/vendor/*.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/Null*.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/Wrap*.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/BaseWrap*.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/CachedCallableStatement.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/CachedPreparedStatement.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/PreparedStatementCache*.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/StatementAccess.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/ReentrantLock.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/jdbc4/*.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/jdbc4_1/*.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/jdk5/*.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/jdk6/*.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/jdk7/*.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/URLSelectorStrategy.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/remote/*"/>
+        <!-- JBAS-2250 hack -->
+        <include name="org/jboss/ejb/plugins/cmp/jdbc/*" />
+      </fileset>
+    </jar>
+
+    <!-- Create the new local transaction JDBC wrapper resource adapter -->
+    <!-- Build ra-jdbc-libs.jar -->
+    <jar jarfile="${build.lib}/jboss-local-jdbc.jar"
+      manifest="${build.etc}/default.mf">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/resource/adapter/jdbc/local/Local*.class"/>
+      </fileset>
+    </jar>
+
+    <!-- Build jboss-local-jdbc.rar -->
+    <jar jarfile="${build.lib}/jboss-local-jdbc.rar"
+      manifest="${build.etc}/default.mf">
+      <fileset dir="${build.resources}/local-rar">
+        <include name="**/*"/>
+      </fileset>
+      <fileset dir="${build.lib}">
+        <include name="jboss-local-jdbc.jar"/>
+      </fileset>
+    </jar>
+
+
+    <!-- Create the xa transaction JDBC wrapper resource adapter -->
+    <!-- Build ra-xa-libs.jar -->
+    <jar jarfile="${build.lib}/jboss-xa-jdbc.jar"
+      manifest="${build.etc}/default.mf">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/resource/adapter/jdbc/xa/**/*.class"/>
+      </fileset>
+    </jar>
+
+    <!-- Build jboss-xa.rar -->
+    <jar jarfile="${build.lib}/jboss-xa-jdbc.rar"
+      manifest="${build.etc}/default.mf">
+      <fileset dir="${build.resources}/xa-rar">
+        <include name="**/*"/>
+      </fileset>
+      <fileset dir="${build.lib}">
+        <include name="jboss-xa-jdbc.jar"/>
+      </fileset>
+    </jar>
+
+
+    <!-- jms-ra.rar -->
+    <jar jarfile="${build.lib}/jms-ra.jar"
+      manifest="${build.etc}/default.mf">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/resource/adapter/jms/**"/>
+      </fileset>
+    </jar>
+    <jar jarfile="${build.lib}/jms-ra.rar"
+      manifest="${build.etc}/default.mf">
+      <fileset dir="${build.lib}">
+        <include name="jms-ra.jar"/>
+      </fileset>
+      <fileset dir="${build.resources}/jms-rar/">
+        <include name="**"/>
+      </fileset>
+    </jar>
+
+     <!-- mail-ra.rar -->
+     <jar jarfile="${build.lib}/mail-ra.jar"
+       manifest="${build.etc}/default.mf">
+       <fileset dir="${build.classes}">
+         <include name="org/jboss/resource/adapter/mail/**"/>
+       </fileset>
+     </jar>
+     <jar jarfile="${build.lib}/mail-ra.rar"
+       manifest="${build.etc}/default.mf">
+       <fileset dir="${build.lib}">
+         <include name="mail-ra.jar"/>
+       </fileset>
+       <fileset dir="${build.resources}/mail-rar/">
+         <include name="**"/>
+       </fileset>
+     </jar>
+
+     <!-- quartz-ra.rar -->
+     <jar jarfile="${build.lib}/quartz-ra.jar"
+       manifest="${build.etc}/default.mf">
+       <fileset dir="${build.classes}">
+         <include name="org/jboss/resource/adapter/quartz/**"/>
+       </fileset>
+     </jar>
+
+     <jar jarfile="${build.lib}/quartz-ra.rar"
+       manifest="${build.etc}/default.mf">
+       <fileset dir="${build.lib}">
+         <include name="quartz-ra.jar"/>
+       </fileset>
+        <fileset dir="${source.resources}/quartz-rar">
+           <include name="META-INF/ra.xml"/>
+        </fileset>
+     </jar>
+
+
+    <!-- jbosscx-client.jar -->
+    <jar jarfile="${build.lib}/jbosscx-client.jar"
+      manifest="${build.etc}/default.mf">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/resource/JBossResourceException.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/remote/*"/>
+        <include name="org/jboss/resource/connectionmanager/JBossLocalXAException.class"/>
+        <include name="org/jboss/resource/adapter/jdbc/JBossWrapper.class"/>
+      </fileset>
+    </jar>
+
+    <!-- Update the build marker to allow bypassing -->
+    <touch file="${build-bypass.marker}"/>
+
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- Install & Release                                                  -->
+  <!-- ================================================================== -->
+
+  <target name="install"
+    description="Install the structure for a release."
+    depends="all, _buildmagic:install:default"/>
+
+  <target name="release" depends="install"/>
+
+  <target name="release-zip"
+    description="Builds a ZIP distribution."
+    depends="release, _buildmagic:release:zip"/>
+
+  <target name="release-tar"
+    description="Builds a TAR distribution."
+    depends="release, _buildmagic:release:tar"/>
+
+  <target name="release-tgz"
+    description="Builds a TAR-GZ distribution."
+    depends="release, _buildmagic:release:tgz"/>
+
+  <target name="release-all"
+    description="Builds a distribution for each archive type."
+    depends="release-zip, release-tgz"/>
+
+
+  <!-- ================================================================== -->
+  <!-- Cleaning                                                           -->
+  <!-- ================================================================== -->
+
+  <!-- Clean up all build output -->
+  <target name="clean"
+    description="Cleans up most generated files."
+    depends="_buildmagic:clean">
+  </target>
+
+  <!-- Clean up all generated files -->
+  <target name="clobber"
+    description="Cleans up all generated files."
+    depends="_buildmagic:clobber, clean">
+  </target>
+
+
+  <!-- ================================================================== -->
+  <!-- Misc.                                                              -->
+  <!-- ================================================================== -->
+
+  <target name="main"
+    description="Executes the default target (most)."
+    depends="most"/>
+
+  <target name="all"
+    description="Builds everything."
+    depends="jars, docs"/>
+
+  <target name="most"
+    description="Builds almost everything."
+    depends="jars"/>
+
+  <target name="help"
+    description="Show this help message."
+    depends="_buildmagic:help:standard"/>
+
+</project>

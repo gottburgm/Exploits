@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar >
+
+   <enterprise-beans>
+
+      <!-- Session Beans -->
+      <session>
+         <description>JUnit Session Bean Test Runner</description>
+         <ejb-name>EJBTestRunnerEJB</ejb-name>
+         <home>org.jboss.test.util.ejb.EJBTestRunnerHome</home>
+         <remote>org.jboss.test.util.ejb.EJBTestRunner</remote>
+         <ejb-class>org.jboss.test.util.ejb.EJBTestRunnerBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Bean</transaction-type>
+      </session>
+
+      <!-- Entity Beans -->
+      <entity >
+         <ejb-name>B</ejb-name>
+
+         <local-home>org.jboss.test.cmp2.jbas1361.BLocalHome</local-home>
+         <local>org.jboss.test.cmp2.jbas1361.BLocal</local>
+
+         <ejb-class>org.jboss.test.cmp2.jbas1361.BBean</ejb-class>
+         <persistence-type>Container</persistence-type>
+         <prim-key-class>org.jboss.test.cmp2.jbas1361.BPK</prim-key-class>
+         <reentrant>false</reentrant>
+         <cmp-version>2.x</cmp-version>
+         <abstract-schema-name>B</abstract-schema-name>
+         <cmp-field >
+            <description><![CDATA[]]></description>
+            <field-name>id</field-name>
+         </cmp-field>
+         <cmp-field >
+            <description><![CDATA[]]></description>
+            <field-name>name</field-name>
+         </cmp-field>
+      </entity>
+
+      <entity>
+         <ejb-name>A</ejb-name>
+
+         <local-home>org.jboss.test.cmp2.jbas1361.ALocalHome</local-home>
+         <local>org.jboss.test.cmp2.jbas1361.ALocal</local>
+
+         <ejb-class>org.jboss.test.cmp2.jbas1361.ABean</ejb-class>
+         <persistence-type>Container</persistence-type>
+         <prim-key-class>java.lang.Integer</prim-key-class>
+         <reentrant>false</reentrant>
+         <cmp-version>2.x</cmp-version>
+         <abstract-schema-name>A</abstract-schema-name>
+         <cmp-field >
+            <description><![CDATA[]]></description>
+            <field-name>id</field-name>
+         </cmp-field>
+         <cmp-field >
+            <description><![CDATA[]]></description>
+            <field-name>name</field-name>
+         </cmp-field>
+         <primkey-field>id</primkey-field>
+      </entity>
+
+   </enterprise-beans>
+
+   <!-- Relationships -->
+   <relationships >
+      <ejb-relation >
+         <ejb-relation-name>A-B</ejb-relation-name>
+
+         <ejb-relationship-role >
+            <ejb-relationship-role-name>B-has-A</ejb-relationship-role-name>
+            <multiplicity>Many</multiplicity>
+            <relationship-role-source >
+               <ejb-name>B</ejb-name>
+            </relationship-role-source>
+            <cmr-field >
+               <cmr-field-name>a</cmr-field-name>
+            </cmr-field>
+         </ejb-relationship-role>
+
+         <ejb-relationship-role >
+            <ejb-relationship-role-name>A-has-B</ejb-relationship-role-name>
+            <multiplicity>One</multiplicity>
+            <relationship-role-source >
+               <ejb-name>A</ejb-name>
+            </relationship-role-source>
+            <cmr-field >
+               <cmr-field-name>b</cmr-field-name>
+               <cmr-field-type>java.util.Collection</cmr-field-type>
+            </cmr-field>
+         </ejb-relationship-role>
+
+      </ejb-relation>
+   </relationships>
+
+   <!-- Assembly Descriptor -->
+   <assembly-descriptor >
+   <container-transaction >
+      <method >
+         <ejb-name>B</ejb-name>
+          <method-name>*</method-name>
+       </method>
+       <trans-attribute>Required</trans-attribute>
+    </container-transaction>
+   <container-transaction >
+      <method >
+         <ejb-name>A</ejb-name>
+          <method-name>*</method-name>
+       </method>
+       <trans-attribute>Required</trans-attribute>
+    </container-transaction>
+   </assembly-descriptor>
+
+</ejb-jar>

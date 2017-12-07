@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Specification-Title: J2EE Deployment API
+Specification-Vendor: Sun Microsystems, Inc.
+Specification-Version: 1.1
+Implementation-Title: JBoss JSR-88 Deployment API
+Implementation-Vendor: JBoss Inc.
+Implementation-Version: 1.1-DEV
+J2EE-DeploymentFactory-Implementation-Class: org.jboss.deployment.spi.factories.DeploymentFactoryImpl

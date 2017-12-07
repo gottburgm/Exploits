@@ -1,0 +1,123 @@
+<project name="server-component-info">
+   <!-- ============================================================ -->
+   <!-- Server                                                       -->
+   <!-- ============================================================ -->
+
+   <component id="server"
+              module="jboss"
+              version="5.0-SNAPSHOT"
+   >
+      <!-- lib -->
+      <artifact id="jboss.jar"/>
+      <artifact id="jmx-adaptor-plugin.jar"/>
+      <artifact id="jboss-minimal.jar"/>
+      <artifact id="jboss-client.jar"/>
+	<artifact id="jboss-metamodel.jar"/>
+
+      <!-- deploy -->
+      <artifact id="uuid-key-generator.sar"/>
+      <artifact id="sqlexception-service.xml" outputpath="resources/exception-processor"/>
+      <artifact id="client-deployer-service.xml" outputpath="resources/client-deployer"/>
+      <artifact id="jboss-service.xml" outputpath="resources/jmx-invoker-adaptor/META-INF" />
+      <artifact id="cache-invalidation-service.xml" outputpath="etc/deploy"/>
+      <artifact id="ear-deployer.xml" outputpath="etc/deploy"/>
+      <artifact id="ejb-deployer.xml" outputpath="etc/deploy"/>
+                   
+      <!-- conf -->
+      <artifact id="jboss-minimal.xml" outputpath="etc/conf/default"/>
+      <artifact id="conf-jboss-service.xml" filename="jboss-service.xml" outputpath="resources/jmx-invoker-adaptor/META-INF"/>
+      <artifact id="jndi.properties" outputpath="etc/conf/default"/>
+      <artifact id="log4j.xml" outputpath="etc/conf/default"/>
+      <artifact id="login-config.xml" outputpath="etc/conf/default"/>
+      <artifact id="server.policy" outputpath="etc/conf/default"/>
+      <artifact id="standardjaws.xml" outputpath="etc/conf/default"/>
+      <artifact id="standardjboss.xml" outputpath="etc/conf/default"/>
+      <artifact id="standardjbosscmp-jdbc.xml" outputpath="etc/conf/default"/>
+      <artifact id="AttributePersistenceService-xmbean.xml" outputpath="etc/conf/default/xmdesc"/>
+      <artifact id="ClientUserTransaction-xmbean.xml" outputpath="etc/conf/default/xmdesc"/>
+      <artifact id="JNDIView-xmbean.xml" outputpath="etc/conf/default/xmdesc"/>
+      <artifact id="Log4jService-xmbean.xml" outputpath="etc/conf/default/xmdesc"/>
+      <artifact id="NamingService-xmbean.xml" outputpath="etc/conf/default/xmdesc"/>
+      <artifact id="TransactionManagerService-xmbean.xml" outputpath="etc/conf/default/xmdesc"/>
+      <artifact id="org.jboss.deployment.MainDeployer-xmbean.xml" outputpath="etc/conf/default/xmdesc"/>
+      <artifact id="org.jboss.deployment.SARDeployer-xmbean.xml" outputpath="etc/conf/default/xmdesc"/>
+      <artifact id="org.jboss.deployment.JARDeployer-xmbean.xml" outputpath="etc/conf/default/xmdesc"/>
+      <artifact id="jmx-console-roles.properties" />
+      <artifact id="jmx-console-users.properties" />  
+      
+
+      <!-- dtd -->
+      <artifact id="XMLSchema.dtd"/>
+      <artifact id="application-client_1_3.dtd"/>
+      <artifact id="application_1_2.dtd"/>
+      <artifact id="application_1_3.dtd"/>
+      <artifact id="connector_1_0.dtd"/>
+      <artifact id="datatypes.dtd"/>
+      <artifact id="ejb-jar.dtd"/>
+      <artifact id="ejb-jar_2_0.dtd"/>
+      <artifact id="jaws.dtd"/>
+      <artifact id="jaws_2_4.dtd"/>
+      <artifact id="jaws_3_0.dtd"/>
+      <artifact id="jboss-app_3_0.dtd"/>
+      <artifact id="jboss-app_3_2.dtd"/>
+      <artifact id="jboss-app_4_0.dtd"/>
+      <artifact id="jboss-client_3_2.dtd"/>
+      <artifact id="jboss-client_4_0.dtd"/>
+      <artifact id="jboss-web.dtd"/>
+      <artifact id="jboss-web_3_0.dtd"/>
+      <artifact id="jboss-web_3_2.dtd"/>
+      <artifact id="jboss-web_4_0.dtd"/>
+      <artifact id="jboss.dtd"/>
+      <artifact id="jboss_2_4.dtd"/>
+      <artifact id="jboss_3_0.dtd"/>
+      <artifact id="jboss_3_2.dtd"/>
+      <artifact id="jboss_4_0.dtd"/>
+      <artifact id="jbosscmp-jdbc_3_0.dtd"/>
+      <artifact id="jbosscmp-jdbc_3_2.dtd"/>
+      <artifact id="jbosscmp-jdbc_4_0.dtd"/>
+      <artifact id="security_config.dtd"/>
+      <artifact id="web-app_2_2.dtd"/>
+      <artifact id="web-app_2_3.dtd"/>
+
+      <!-- schema -->
+      <artifact id="application-client_1_4.xsd"/>
+      <artifact id="application_1_4.xsd"/>
+      <artifact id="connector_1_5.xsd"/>
+      <artifact id="ejb-jar_2_1.xsd"/>
+      <artifact id="j2ee_1_4.xsd"/>
+      <artifact id="j2ee_jaxrpc_mapping_1_1.xsd"/>
+      <artifact id="j2ee_web_services_1_1.xsd"/>
+      <artifact id="j2ee_web_services_client_1_1.xsd"/>
+      <artifact id="jsp_2_0.xsd"/>
+      <artifact id="security-config_4_0.xsd"/>
+      <artifact id="web-app_2_4.xsd"/>
+      <artifact id="web-jsptaglibrary_2_0.xsd"/>
+      <artifact id="xml.xsd"/>
+      <artifact id="java-properties_1_0.xsd"/>
+      <artifact id="jbxb_1_0.xsd" />               
+
+      <!-- bin -->
+      <artifact id="deployer.bat"/>
+      <artifact id="deployer.sh"/>
+      <artifact id="jboss_init_redhat.sh"/>
+      <artifact id="jboss_init_suse.sh"/>
+      <artifact id="shutdown.bat"/>
+      <artifact id="shutdown.sh"/>
+      <artifact id="shutdown.jar"/>
+
+      <artifact id="verifier.jar"/>
+      <artifact id="jboss-security.jar"/>
+      <artifact id="server-testsuite-support.jar"/>
+      <artifact id="jmx-invoker-adaptor-client.jar"/>
+      
+      <!--TODO:  come up with a better system for directory creation
+       -->
+      <artifact id="all" artifacttype="dir"/>
+      <artifact id="default" artifacttype="dir"/>      
+      
+      <export>
+         <include input="jboss.jar"/>
+         <include input="jmx-adaptor-plugin.jar"/>
+      </export>
+   </component>
+</project>

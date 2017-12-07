@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <mbean code="org.jboss.test.jrmp.mbean.JRMPDLTest"
+          name="jboss.test:test=JRMPDLTest">
+   </mbean>
+</server>

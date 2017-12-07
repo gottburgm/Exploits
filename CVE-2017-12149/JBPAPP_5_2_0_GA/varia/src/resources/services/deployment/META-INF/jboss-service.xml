@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Documentation for the deployment service can be found at: 
+  http://www.jboss.org/wiki/Wiki.jsp?page=DeploymentService
+-->
+<server>
+  <mbean code="org.jboss.services.deployment.DeploymentService"
+         name="jboss:service=DeploymentService">
+    
+    <!--
+    <attribute name="TemplateDir">conf/templates</attribute>
+    <attribute name="DeployDir">deploy</attribute>
+    <attribute name="UndeployDir">undeploy</attribute>
+    -->
+  </mbean>
+</server>

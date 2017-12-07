@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Tests of the Scheduler services
+$Id: test-default-scheduler-service.xml 81742 2008-11-27 17:07:11Z adrian@jboss.org $
+-->
+
+<server>
+
+   <!-- Scheduler, infinite reps -->
+   <!-- Note: No good way to verify this works correctly --> 
+
+   <mbean code="org.jboss.varia.scheduler.Scheduler"
+      name="test:service=Scheduler">
+      <attribute name="StartAtStartup">true</attribute>
+      <attribute name="SchedulableClass">org.jboss.varia.scheduler.example.SchedulableExample</attribute>
+      <attribute name="SchedulableArguments">Schedulabe Test,12345</attribute>
+      <attribute name="SchedulableArgumentTypes">java.lang.String,int</attribute>
+      <attribute name="InitialStartDate">0</attribute>
+      <attribute name="SchedulePeriod">500</attribute>
+      <attribute name="InitialRepetitions">-1</attribute>
+   </mbean>
+
+   <!-- Scheduler, one rep -->
+
+   <mbean code="org.jboss.varia.scheduler.example.SchedulableMBeanExample"
+      name="test:name=SchedulableMBeanExample,instance=1">
+   </mbean>
+   <mbean code="org.jboss.varia.scheduler.Scheduler"
+      name="test:service=Scheduler,name=SchedulableMBeanExample,instance=1">
+      <attribute name="StartAtStartup">true</attribute>
+      <attribute name="SchedulableMBean">test:name=SchedulableMBeanExample,instance=1</attribute>
+      <attribute name="SchedulableMBeanMethod">hit( NOTIFICATION, DATE, REPETITIONS, SCHEDULER_NAME, java.lang.String )</attribute>
+      <attribute name="InitialStartDate">NOW</attribute>
+      <attribute name="SchedulePeriod">5000</attribute>
+      <attribute name="InitialRepetitions">1</attribute>
+   </mbean>
+
+   <!-- Scheduler, not started -->
+
+   <mbean code="org.jboss.varia.scheduler.example.SchedulableMBeanExample"
+      name="test:name=SchedulableMBeanExample,instance=2">
+   </mbean>
+   <mbean code="org.jboss.varia.scheduler.Scheduler"
+      name="test:service=Scheduler,name=SchedulableMBeanExample,instance=2">
+      <attribute name="StartAtStartup">false</attribute>
+      <attribute name="SchedulableMBean">test:name=SchedulableMBeanExample,instance=2</attribute>
+      <attribute name="SchedulableMBeanMethod">hit( NOTIFICATION, DATE, REPETITIONS, SCHEDULER_NAME, java.lang.String )</attribute>
+      <attribute name="InitialStartDate">NOW</attribute>
+      <attribute name="SchedulePeriod">5000</attribute>
+      <attribute name="InitialRepetitions">-1</attribute>
+   </mbean>
+
+   <!-- ScheduleManager -->
+
+   <mbean code="org.jboss.varia.scheduler.example.SchedulableMBeanExample"
+      name="test:name=SchedulableMBeanExample,instance=3">
+   </mbean>
+
+   <mbean code="org.jboss.varia.scheduler.ScheduleManager"
+      name="test:service=Scheduler,name=ScheduleManager">
+   </mbean>
+
+   <mbean code="org.jboss.varia.scheduler.SingleScheduleProvider"
+      name="test:service=SingleScheduleProvider">
+      <attribute name="TargetMethod">hit( NOTIFICATION, DATE, REPETITIONS, SCHEDULER_NAME, java.lang.String )</attribute>
+	  <depends optional-attribute-name="ScheduleManagerName">test:service=Scheduler,name=ScheduleManager</depends>
+	  <depends optional-attribute-name="TargetName">test:name=SchedulableMBeanExample,instance=3</depends>
+      <attribute name="StartDate">NOW</attribute>
+      <attribute name="Repetitions">3</attribute>
+      <attribute name="Period">5000</attribute>
+   </mbean>
+
+</server>

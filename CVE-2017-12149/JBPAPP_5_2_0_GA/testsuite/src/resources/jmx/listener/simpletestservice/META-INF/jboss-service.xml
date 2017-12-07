@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: jboss-service.xml 33213 2005-07-06 16:11:34Z dimitris $ -->
+<!DOCTYPE server
+    PUBLIC "-//JBoss//DTD MBean Service 4.0//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-service_4_0.dtd">
+
+<server>
+   <mbean code="org.jboss.test.jmx.listener.TestService"
+          name="jboss.test:service=TestService">
+   </mbean>
+</server>

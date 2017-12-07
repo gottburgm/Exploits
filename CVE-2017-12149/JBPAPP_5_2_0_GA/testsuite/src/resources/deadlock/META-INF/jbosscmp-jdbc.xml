@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE jbosscmp-jdbc PUBLIC
+   "-//JBoss//DTD JBOSSCMP-JDBC 3.2//EN"
+   "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_2.dtd">
+
+<jbosscmp-jdbc>
+   <defaults>
+      <datasource>java:/DeadlockDS</datasource>
+      <datasource-mapping>Hypersonic SQL</datasource-mapping>
+      <create-table>true</create-table>
+      <remove-table>true</remove-table>
+      <pk-constraint>true</pk-constraint>
+   </defaults>
+
+   <enterprise-beans>
+        <entity>
+            <ejb-name>nextgenEnterpriseEntity</ejb-name>
+            <table-name>NEXTGENENTITY</table-name>
+        </entity>
+        <entity>
+            <ejb-name>nextgenEnterpriseEntityReentrant</ejb-name>
+            <table-name>NEXTGENREENTR</table-name>
+        </entity>
+        <entity>
+            <ejb-name>nextgenEnterpriseEntityNotSupported</ejb-name>
+            <table-name>NEXTGENNOTSUP</table-name>
+        </entity>
+        <entity>
+            <ejb-name>nextgenEnterpriseEntityNotSupportedReentrant</ejb-name>
+            <table-name>NEXTGENNOTSUPREENTR</table-name>
+        </entity>
+    </enterprise-beans>
+   <relationships>
+      <ejb-relation>
+         <ejb-relation-name>Deadlock-relationship</ejb-relation-name>
+         <ejb-relationship-role>
+            <ejb-relationship-role-name>next</ejb-relationship-role-name>
+            <key-fields>
+               <key-field>
+                  <field-name>name</field-name>
+                  <column-name>next_name</column-name>
+               </key-field>
+            </key-fields>
+         </ejb-relationship-role>
+         <ejb-relationship-role>
+            <ejb-relationship-role-name>previous</ejb-relationship-role-name>
+            <key-fields/>
+         </ejb-relationship-role>
+      </ejb-relation>
+   </relationships>
+</jbosscmp-jdbc>

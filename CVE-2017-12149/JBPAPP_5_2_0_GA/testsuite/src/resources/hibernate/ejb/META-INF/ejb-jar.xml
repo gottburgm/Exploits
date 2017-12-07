@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar >
+
+   <description>EJB for testing Hibernate EJB-interceptor</description>
+   <display-name>Hibernate EJB Interception Test</display-name>
+
+   <enterprise-beans>
+      <session >
+         <description><![CDATA[An ejb to test the ejb method interception style of transparent session management.]]></description>
+
+         <ejb-name>ProfileService</ejb-name>
+
+         <home>org.jboss.test.hibernate.ejb.interfaces.ProfileServiceHome</home>
+         <remote>org.jboss.test.hibernate.ejb.interfaces.ProfileService</remote>
+         <ejb-class>org.jboss.test.hibernate.ejb.ProfileBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+
+      </session>
+   </enterprise-beans>
+
+   <assembly-descriptor >
+     <security-role>
+       <description>The 'all' role for Hibernate-JACC testing</description>
+       <role-name>all</role-name>
+     </security-role>
+     <security-role>
+       <description>The 'steve' role for Hibernate-JACC testing</description>
+       <role-name>steve</role-name>
+     </security-role>
+      <container-transaction >
+         <method >
+            <ejb-name>ProfileService</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <trans-attribute>Required</trans-attribute>
+      </container-transaction>
+   </assembly-descriptor>
+
+</ejb-jar>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+     Secure Socket Transport Example: the deployment descriptor for the secure socket factory
+     service, secure connector and secure connection factory.
+
+     $Id: messaging-secure-socket-service.xml 85945 2009-03-16 19:45:12Z dimitris@jboss.org $
+ -->
+
+<server>
+
+   <mbean code="org.jboss.jms.server.connectionfactory.ConnectionFactory"
+      name="jboss.messaging.destination:service=SecureConnectionFactory"
+      xmbean-dd="xmdesc/ConnectionFactory-xmbean.xml">
+      <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+      <depends optional-attribute-name="Connector">jboss.messaging:service=Connector,transport=sslbisocket</depends>
+      <attribute name="JNDIBindings">
+         <bindings>
+            <binding>/SecureConnectionFactory</binding>
+         </bindings>
+      </attribute>
+   </mbean>
+
+</server>

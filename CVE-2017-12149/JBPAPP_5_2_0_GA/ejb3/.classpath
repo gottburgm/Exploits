@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main"/>
+	<classpathentry exported="true" kind="src" path="/aspects"/>
+	<classpathentry exported="true" kind="src" path="/connector"/>
+	<classpathentry exported="true" kind="src" path="/iiop"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/hibernate-annotations/lib/hibernate-annotations.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/hibernate-entitymanager/lib/hibernate-entitymanager.jar" sourcepath="/thirdparty/hibernate-entitymanager/lib/hibernate-entitymanager-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/serialization/lib/jboss-serialization.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-ejb3-cache/lib/jboss-ejb3-cache.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-cache/lib/jboss-ejb3-cache-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-ejb3-ext-api/lib/jboss-ejb3-ext-api.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-ext-api/lib/jboss-ejb3-ext-api-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/web/lib/jbossweb.jar" sourcepath="/thirdparty/jboss/web/lib/jbossweb-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-ejb3-interceptors/lib/jboss-ejb3-interceptors.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-interceptors/lib/jboss-ejb3-interceptors-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-ejb3-metadata/lib/jboss-ejb3-metadata.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-metadata/lib/jboss-ejb3-metadata-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-ejb3-ext-api-impl/lib/jboss-ejb3-ext-api-impl.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-ext-api-impl/lib/jboss-ejb3-ext-api-impl-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jboss-ejb3-core/lib/jboss-ejb3-core.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-core/lib/jboss-ejb3-core-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/junit/lib/junit.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/test/lib/jboss-test.jar" sourcepath="/thirdparty/jboss/test/lib/jboss-test-src.zip"/>
+	<classpathentry kind="lib" path="/thirdparty/org/jboss/ws/lib/jbossws-spi.jar" sourcepath="/thirdparty/org/jboss/ws/lib/jbossws-spi-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/hibernate/lib/hibernate-core.jar" sourcepath="/thirdparty/hibernate/lib/hibernate-core-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-jpa-deployers/lib/jboss-jpa-deployers.jar" sourcepath="/thirdparty/jboss/jboss-jpa-deployers/lib/jboss-jpa-deployers-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-ejb3-transactions/lib/jboss-ejb3-transactions.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-transactions/lib/jboss-ejb3-transactions-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-ejb3-common/lib/jboss-ejb3-common.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-common/lib/jboss-ejb3-common-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-ejb3-timerservice-spi/lib/jboss-ejb3-timerservice-spi.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-timerservice-spi/lib/jboss-ejb3-timerservice-spi-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-dependency.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-dependency-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-mdr/lib/jboss-mdr.jar" sourcepath="/thirdparty/jboss/jboss-mdr/lib/jboss-mdr-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-reflect/lib/jboss-reflect.jar" sourcepath="/thirdparty/jboss/jboss-reflect/lib/jboss-reflect-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-kernel.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-kernel-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-ejb3-endpoint/lib/jboss-ejb3-endpoint.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-endpoint/lib/jboss-ejb3-endpoint-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-ejb3-proxy-spi/lib/jboss-ejb3-proxy-spi.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-proxy-spi/lib/jboss-ejb3-proxy-spi-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-ejb3-proxy-impl/lib/jboss-ejb3-proxy-impl.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-proxy-impl/lib/jboss-ejb3-proxy-impl-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-ejb3-endpoint-deployer/lib/jboss-ejb3-endpoint-deployer.jar" sourcepath="/thirdparty/jboss/jboss-ejb3-endpoint-deployer/lib/jboss-ejb3-endpoint-deployer-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-ejb3-vfs-spi/lib/jboss-ejb3-vfs-spi.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-ejb3-vfs-impl-vfs2/lib/jboss-ejb3-vfs-impl-vfs2.jar"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- specifies the location of the process definition -->
+<bpelDefinition location="hello.bpel" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbpm.org/bpel
+                      http://jbpm.org/bpel/bpel_definition_1_0.xsd"
+  xmlns="http://jbpm.org/bpel" >
+
+  <!-- makes WSDL interface elements available to the process -->
+	<imports>
+	  <wsdl namespace="http://jbpm.org/examples/hello" location="hello.wsdl"/>
+  </imports>
+
+</bpelDefinition>

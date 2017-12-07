@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+        http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" version="2.4">
+  <description>X</description>
+  <display-name>X</display-name>
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>JBAS-3043</web-resource-name>
+      <description>no description</description>
+      <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>Z</role-name>
+    </auth-constraint>
+    <user-data-constraint>
+      <description>no description</description>
+      <transport-guarantee>NONE</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+
+  <login-config>
+    <auth-method>BASIC</auth-method>
+    <realm-name>JBAS-3043-1</realm-name>
+  </login-config>
+
+  <security-role>
+    <role-name>Z</role-name>
+  </security-role>
+
+</web-app>

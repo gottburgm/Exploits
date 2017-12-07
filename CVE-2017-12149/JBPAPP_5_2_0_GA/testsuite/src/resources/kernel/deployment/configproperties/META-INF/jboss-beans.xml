@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="urn:jboss:bean-deployer bean-deployer_1_0.xsd"
+            xmlns="urn:jboss:bean-deployer">
+
+   <bean name="ConfigProperties" class="java.util.Properties">
+      <constructor>
+         <parameter>
+            <map class="java.util.Properties" keyClass="java.lang.String" valueClass="java.lang.String">
+               <entry><key>config.property1</key><value>value1</value></entry>
+               <entry><key>config.property2</key><value>value2</value></entry>
+               <entry><key>config.property3</key><value>value3</value></entry>
+            </map>
+         </parameter>
+      </constructor>
+   </bean>
+   
+   <bean name="ConfigPropertiesBinder" class="org.jboss.test.kernel.deployment.jboss.beans.POJOJNDIBinder">
+      <constructor><parameter>test/kernel/deployment/config/properties</parameter></constructor>
+      <property name="pojo"><inject bean="ConfigProperties" state="Instantiated"/></property>
+   </bean>
+      
+</deployment>

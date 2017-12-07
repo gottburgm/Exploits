@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 5.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_5_0.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <session>
+         <ejb-name>SessionB</ejb-name>
+         <configuration-name>Pooled Stateless SessionBean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>stateless-pooled-invoker</invoker-proxy-binding-name>
+               <jndi-name>SessionB</jndi-name>
+            </invoker>
+         </invoker-bindings>
+      </session>
+   </enterprise-beans>
+
+   <invoker-proxy-bindings>
+      <!--<invoker-proxy-binding>-->
+         <!--<name>stateless-pooled-invoker</name>-->
+         <!--<invoker-mbean>jboss:service=invoker,type=pooled</invoker-mbean>-->
+         <!--<proxy-factory>org.jboss.proxy.ejb.ProxyFactory</proxy-factory>-->
+         <!--<proxy-factory-config>-->
+            <!--<client-interceptors>-->
+               <!--<home>-->
+                  <!--<interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>-->
+                  <!--<interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>-->
+                  <!--<interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>-->
+                  <!--<interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>-->
+               <!--</home>-->
+               <!--<bean>-->
+                  <!--<interceptor>org.jboss.proxy.ejb.StatelessSessionInterceptor</interceptor>-->
+                  <!--<interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>-->
+                  <!--<interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>-->
+                  <!--<interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>-->
+               <!--</bean>-->
+            <!--</client-interceptors>-->
+         <!--</proxy-factory-config>-->
+      <!--</invoker-proxy-binding>-->
+
+      <invoker-proxy-binding>
+        <name>stateless-pooled-invoker</name>
+        <invoker-mbean>jboss:service=invoker,type=pooled</invoker-mbean>
+        <proxy-factory>org.jboss.proxy.ejb.ProxyFactory</proxy-factory>
+        <proxy-factory-config>
+          <client-interceptors>
+            <home>
+              <interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>
+              <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+              <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+              <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+               <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+              <!--<interceptor call-by-value="false">org.jboss.invocation.InvokerInterceptor</interceptor>-->
+              <!--<interceptor call-by-value="true">org.jboss.invocation.MarshallingInvokerInterceptor</interceptor>-->
+            </home>
+            <bean>
+              <interceptor>org.jboss.proxy.ejb.StatelessSessionInterceptor</interceptor>
+              <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+              <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+              <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+               <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+              <!--<interceptor call-by-value="false">org.jboss.invocation.InvokerInterceptor</interceptor>-->
+              <!--<interceptor call-by-value="true">org.jboss.invocation.MarshallingInvokerInterceptor</interceptor>-->
+            </bean>
+          </client-interceptors>
+        </proxy-factory-config>
+      </invoker-proxy-binding>
+
+   </invoker-proxy-bindings>
+
+   <container-configurations>
+     <container-configuration extends="Standard Stateless SessionBean">
+        <container-name>Pooled Stateless SessionBean</container-name>
+        <invoker-proxy-binding-name>stateless-pooled-invoker</invoker-proxy-binding-name>
+     </container-configuration>
+   </container-configurations>
+
+
+</jboss>

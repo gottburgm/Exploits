@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server>
+
+<server>
+  <depends>jboss:service=DefaultPartition</depends>
+
+  <mbean code="org.jboss.test.aop.bean.AOPTester"
+	 name="jboss.aop:name=AOPTester"/>
+
+  <mbean code="org.jboss.test.aop.bean.TxTester"
+	 name="jboss.aop:name=TxTester"/>
+
+  <mbean code="org.jboss.test.aop.bean.ObservableTester"
+	 name="jboss.aop:name=ObservableTester"/>
+
+  <mbean code="org.jboss.test.aop.bean.RemotingTester"
+	 name="jboss.aop:name=RemotingTester"/>
+
+  <mbean code="org.jboss.test.aop.bean.VersionedObjectTester"
+	 name="jboss.aop:name=VersionedObjectTester"/>
+
+  <mbean code="org.jboss.test.aop.bean.TxLockTester"
+	 name="jboss.aop:name=TxLockTester"/>
+
+  <mbean code="org.jboss.test.aop.bean.SecurityTester"
+	 name="jboss.aop:name=SecurityTester"/>  
+
+<!-- -->
+  <mbean code="org.jboss.remoting.transport.Connector"
+	 name="jboss.remoting:type=Connector,transport=socket5150">
+    <attribute name="InvokerLocator">socket://localhost:5150</attribute> 
+    <attribute name="Configuration"> 
+       <handlers>
+          <handler subsystem="AOP">org.jboss.aspects.remoting.AOPRemotingInvocationHandler</handler>
+       </handlers>
+    </attribute>
+  </mbean>
+
+<!--generic clustering and dtm -->
+  <mbean code="org.jboss.remoting.transport.Connector"
+	 name="jboss.aop.test:type=Connector,transport=socket5151">
+    <attribute name="InvokerLocator">socket://localhost:5151</attribute> 
+  </mbean>
+
+
+</server>

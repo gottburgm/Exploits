@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<mbeans-descriptors>
+
+   <mbean name="CachedConnectionValve"
+      description="Valve checks for unclosed connections on a servlet request"
+      domain="Catalina"
+      group="Valve"
+      type="org.jboss.web.tomcat.service.jca.CachedConnectionValve">
+
+      <attribute name="className"
+         description="Fully qualified class name of the managed object"
+         type="java.lang.String"
+         writeable="false"/>
+
+      <attribute name="debug"
+         description="The debugging detail level for this component"
+         type="int"/>
+
+      <attribute name="containerName"
+         description="Object name of the container"
+         type="javax.management.ObjectName"/>
+
+      <attribute name="cachedConnectionManagerObjectName"
+         description="The cached connection manager"
+         type="java.lang.String"/>
+
+   </mbean>
+
+</mbeans-descriptors>

@@ -1,0 +1,533 @@
+<project name="tests-security-jars">
+   <!-- security test -->
+   <target name="_jars-security">
+      <mkdir dir="${build.lib}"/>
+
+      <!-- caller-info.jar -->
+      <jar destfile="${build.lib}/caller-info.jar">
+         <metainf dir="${build.resources}/security/caller-info">
+            <include name="ejb-jar.xml" />
+            <include name="jboss.xml" />
+            <include name="caller-info-config.xml" />
+         </metainf>
+         <fileset dir="${build.resources}/security/caller-info">
+            <include name="login-service.xml" />
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/ejb/Cmp2Bean.*"/>
+            <include name="org/jboss/test/security/ejb/SubjectSessionBean.*"/>
+            <include name="org/jboss/test/security/ejb/StatelessSessionBean4.*"/>
+            <include name="org/jboss/test/security/ejb/StatefulSessionBean.*"/>
+            <include name="org/jboss/test/security/interfaces/**"/>
+         </fileset>
+      </jar>
+
+      <!-- subject-context.ear/{subject-context.jar,subject-context.war} -->
+      <jar destfile="${build.lib}/subject-context.jar">
+         <metainf dir="${build.resources}/security/subject-context">
+            <include name="ejb-jar.xml" />
+            <include name="jboss.xml" />
+         </metainf>
+         <fileset dir="${build.resources}/security/subject-context">
+            <include name="jaas-service.xml" />
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/ejb/RunAsBean.*"/>
+            <include name="org/jboss/test/security/ejb/SecuredBean.*"/>
+            <include name="org/jboss/test/security/interfaces/CallerInfo*"/>
+            <include name="org/jboss/test/security/interfaces/RunAsServiceRemote*"/>
+            <include name="org/jboss/test/security/interfaces/SecuredServiceRemote*"/>
+         </fileset>
+      </jar>
+      <war warfile="${build.lib}/subject-context.war"
+         webxml="${build.resources}/security/subject-context/web.xml">
+         <webinf dir="${build.resources}/security/subject-context">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/security/servlets/RunAsServlet.*"/>
+         </classes>
+      </war>
+      <ear destfile="${build.lib}/subject-context.ear"
+         appxml="${build.resources}/security/subject-context/application.xml" >
+         <fileset dir="output/lib">
+            <include name="subject-context.jar" />
+            <include name="subject-context.war" />
+         </fileset>
+      </ear>
+
+      <!-- build security-client.jar -->
+      <jar destfile="${build.lib}/security-client.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/interfaces/**"/>
+         </fileset>
+      </jar>
+
+      <!-- build security-spec.jar -->
+      <jar destfile="${build.lib}/security-spec.sar">
+         <metainf dir="${build.resources}/security-spec/service-inf"/>
+         <fileset dir="${build.resources}/security">
+            <include name="tst.keystore"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/security-spec.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/interfaces/**"/>
+            <include name="org/jboss/test/security/ejb/**"/>
+            <include name="org/jboss/test/security/test/Namespace*"/>
+            <include name="org/jboss/test/security/test/PermissionName*"/>
+         </fileset>
+         <fileset dir="${build.resources}/security-spec">
+            <include name="META-INF/ejb-jar.xml"/>
+            <include name="META-INF/jboss.xml"/>
+            <include name="META-INF/jboss-structure.xml"/>
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="security-spec.sar"/>
+         </fileset>
+      </jar>
+      <antcall target="sign-file">
+         <param name="file" value="security-spec.jar"/>
+      </antcall>
+
+      <!-- build security-srp.jar and security-srp.sar -->
+      <jar destfile="${build.lib}/security-srp.sar">
+         <metainf dir="${build.resources}/security-srp/service-inf"/>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/service/PropertiesVerifierStore*.class"/>
+            <include name="org/jboss/test/security/service/SecurityConfig*.class"/>
+            <include name="org/jboss/test/security/service/SRPCache*.class"/>
+            <include name="org/jboss/test/security/interceptors/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/security-srp">
+            <include name="users.properties"/>
+         </fileset>
+         <fileset dir="${jboss.varia.lib}">
+            <include name="jboss-srp.jar"/>
+         </fileset>
+      </jar>
+
+      <jar destfile="${build.lib}/security-srp.jar">
+         <metainf dir="${build.resources}/security-srp/ejb-inf"/>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/ejb/StatelessSessionBean.class"/>
+            <include name="org/jboss/test/security/interfaces/StatelessSession*"/>
+         </fileset>
+         <fileset dir="${build.resources}/security-srp">
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="security-srp.sar"/>
+         </fileset>
+      </jar>
+
+      <!-- build https-service.sar -->
+      <jar destfile="${build.lib}/https-service.sar">
+         <metainf dir="${build.resources}/security/https-service"/>
+         <metainf dir="${build.resources}/security">
+            <include name="tst.keystore"/>
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/service/Https*.class"/>
+         </fileset>
+      </jar>
+
+      <!-- build security-proxy.jar -->
+      <jar destfile="${build.lib}/security-proxy.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/ejb/IOStatelessSessionBean.class"/>
+            <include name="org/jboss/test/security/ejb/IOStatefulSessionBean.class"/>
+            <include name="org/jboss/test/security/interfaces/IOSession.class"/>
+            <include name="org/jboss/test/security/interfaces/IOSessionHome.class"/>
+            <include name="org/jboss/test/security/interfaces/ReadAccessException.class"/>
+            <include name="org/jboss/test/security/proxy/SessionSecurityProxy.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/security-proxy">
+            <include name="*.properties"/>
+         </fileset>
+         <metainf dir="${build.resources}/security-proxy/META-INF"/>
+      </jar>
+
+      <!-- build securitymgr-ejb.jar -->
+      <jar destfile="${build.lib}/securitymgr-ejb.jar">
+         <metainf dir="${build.resources}/securitymgr/META-INF"/>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/securitymgr/ejb/**"/>
+            <include name="org/jboss/test/securitymgr/interfaces/**"/>
+         </fileset>
+      </jar>
+
+      <!-- build securitymgr-tests.jar -->
+      <jar destfile="${build.lib}/securitymgr-tests.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/*.class"/>
+            <include name="org/jboss/test/securitymgr/test/**"/>
+         </fileset>
+      </jar>
+
+      <!-- Test Custom Principal Propagation -->
+      <war destfile="${build.lib}/custom-principal.war"
+         webxml="${build.resources}/web/custom-principal/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/web/custom-principal/WEB-INF/">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <fileset dir="${build.resources}/web/custom-principal">
+            <include name="**/*.html"/>
+            <include name="**/*.jsp"/>
+         </fileset>
+      </war>
+
+      <!-- build security-jaas.jar -->
+      <jar destfile="${build.lib}/security-jaas.sar">
+         <metainf dir="${build.resources}/security/service-inf"/>
+         <zipfileset dir="${build.resources}/security" prefix="security">
+            <include name="roles.properties"/>
+            <include name="users.properties"/>
+         </zipfileset>
+      </jar>
+      <war warfile="${build.lib}/security-jaas.war"
+         webxml="${build.resources}/security/WEB-INF/jaas-web.xml">
+         <webinf dir="${build.resources}/security/WEB-INF">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/security/servlets/**"/>
+         </classes>
+      </war>
+      <jar destfile="${build.lib}/security-jaas.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/interfaces/CustomPrincipal*"/>
+            <include name="org/jboss/test/security/ejb/CustomPrincipal*"/>
+         </fileset>
+         <fileset dir="${build.resources}/security">
+            <include name="META-INF/ejb-jar.xml"/>
+            <include name="META-INF/jboss.xml"/>
+         </fileset>
+      </jar>
+      <ear earfile="${build.lib}/security-jaas.ear"
+         appxml="${build.resources}/security/META-INF/application-jaas.xml">
+         <metainf dir="${build.resources}/security/META-INF">
+            <include name="jboss-app.xml"/>
+         </metainf>
+         <fileset dir="${build.lib}">
+            <include name="security-jaas.jar"/>
+            <include name="security-jaas.sar"/>
+            <include name="security-jaas.war"/>
+            <include name="custom-principal.war"/>
+         </fileset>
+      </ear>
+      <!-- build security-incpt.jar -->
+      <jar destfile="${build.lib}/security-incpt.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/testbean/bean/StatelessSessionBean.class"/>
+            <include name="org/jboss/test/testbean/interfaces/StatelessSessionHome.class"/>
+            <include name="org/jboss/test/testbean/interfaces/StatelessSession.class"/>
+            <include name="org/jboss/test/testbean/interfaces/BusinessMethodException.class"/>
+         </fileset>
+         <metainf dir="${build.resources}/security-incpt/META-INF"/>
+      </jar>
+
+      <!-- web-constraints.war -->
+      <war warfile="${build.lib}/web-constraints.war"
+        webxml="${build.resources}/security/web-constraints/web.xml">
+         <classes dir="${build.resources}/security/web-constraints/">
+            <include name="*.properties"/>
+         </classes>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/security/servlets/ConstraintsServlet.class"/>
+         </classes>
+      </war>
+
+      <!-- build client-login-tests.jar -->
+      <jar destfile="${build.lib}/client-login-tests.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/clientlogin/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/security/client-login">
+            <include name="jaas-service.xml"/>
+         </fileset>
+         <metainf dir="${build.resources}/security/client-login">
+            <include name="ejb-jar.xml" />
+            <include name="jboss.xml" />
+         </metainf>
+      </jar>
+
+      <!-- build missing-methods-unchecked.jar -->
+      <jar destfile="${build.lib}/missing-methods-unchecked.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/ejb/MissingMethodBean.class"/>
+            <include name="org/jboss/test/security/interfaces/CalledSession.class"/>
+            <include name="org/jboss/test/security/interfaces/CalledSessionHome.class"/>
+         </fileset>
+         <zipfileset dir="${build.resources}/security/excluded-mode" fullpath="META-INF/jboss.xml">
+            <include name="jboss-unchecked.xml" />
+         </zipfileset>
+         <zipfileset dir="${build.resources}/security/excluded-mode" prefix="META-INF">
+            <include name="ejb-jar.xml" />
+         </zipfileset>
+         <zipfileset dir="${build.resources}/security/excluded-mode">
+            <include name="jaas-service.xml" />
+         </zipfileset>
+      </jar>
+
+      <!-- build missing-methods-excluded.jar -->
+      <jar destfile="${build.lib}/missing-methods-excluded.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/ejb/MissingMethodBean.class"/>
+            <include name="org/jboss/test/security/interfaces/CalledSession.class"/>
+            <include name="org/jboss/test/security/interfaces/CalledSessionHome.class"/>
+         </fileset>
+         <zipfileset dir="${build.resources}/security/excluded-mode" fullpath="META-INF/jboss.xml">
+            <include name="jboss-excluded.xml" />
+         </zipfileset>
+         <zipfileset dir="${build.resources}/security/excluded-mode" prefix="META-INF">
+            <include name="ejb-jar.xml" />
+         </zipfileset>
+      </jar>
+
+      <!-- security-jacc-callerinrole.jar -->
+      <jar destfile="${build.lib}/security-jacc-callerinrole.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/interfaces/Useful*"/>
+            <include name="org/jboss/test/security/ejb/Useful*"/>
+         </fileset>
+         <fileset dir="${build.resources}/security/jacc/callerInRole">
+            <include name="META-INF/ejb-jar.xml"/>
+            <include name="META-INF/jboss.xml"/>
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </fileset>
+      </jar>
+
+      <!-- deepcopy.war -->
+      <war warfile="${build.lib}/deepcopy.war" 
+         webxml="${build.resources}/security/deepcopy/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/security/deepcopy/WEB-INF">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include 
+               name="org/jboss/test/security/servlets/DeepCopy*.class"/>
+         </classes>
+      </war>
+
+      <!-- package the resources as a jar -->
+      <jar destfile="${build.lib}/deepcopy-resources.jar">
+         <fileset dir="${build.resources}/security/deepcopy/META-INF">
+            <include name="deepcopy-config.xml"/>
+         </fileset>
+      </jar>
+
+      <!--deepcopy.ear-->
+      <ear destfile="${build.lib}/deepcopy.ear" 
+         appxml="${build.resources}/security/deepcopy/META-INF/application.xml" >
+         <metainf dir="${build.resources}/security/deepcopy/META-INF">
+            <include name="*.xml"/>
+            <exclude name="deepcopy-service.xml"/>
+            <exclude name="deepcopy-config.xml"/>
+            <exclude name="application.xml"/>
+         </metainf>
+         <zipfileset dir="${build.resources}/security/deepcopy/META-INF">
+            <include name="deepcopy-service.xml" />
+         </zipfileset>
+         <zipfileset dir="output/lib" prefix="lib">
+            <include name="deepcopy-resources.jar" />
+         </zipfileset>
+         <fileset dir="output/lib">
+            <include name="deepcopy.war" />
+         </fileset>
+      </ear>
+
+      <!-- xacml-ejb.jar -->
+      <jar destfile="${build.lib}/xacml-ejb.jar">
+         <metainf dir="${build.resources}/security/authorization/xacml-ejb/META-INF">
+            <include name="ejb-jar.xml" />
+            <include name="jboss.xml" />
+            <include name="jboss-xacml-policy.xml" />
+            <include name="jbossxacml-config.xml" />
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/ejb/StatelessSessionBean4.*"/>
+            <include name="org/jboss/test/security/ejb/StatefulSessionBean.*"/>
+            <include name="org/jboss/test/security/interfaces/Stateless*"/>
+         </fileset>
+         <fileset dir="${build.resources}/security-spec">
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </fileset>
+      </jar>
+
+      <!--jmxinvoker-authorization-test.jar -->
+      <jar destfile="${build.lib}/jmxinvoker-authorization-test.jar">
+         <fileset dir="${build.resources}/jmx/jmxadaptor/">
+            <include name="jmxinvoker-roles.properties"/>
+         </fileset>
+         <fileset dir="${build.resources}/security/">
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </fileset>
+      </jar>
+
+      <!-- ejb-null-security-domain.jar -->
+      <jar destfile="${build.lib}/ejb-null-security-domain.jar">
+         <metainf dir="${build.resources}/security/ejb-null-security-domain">
+            <include name="ejb-jar.xml" />
+            <include name="jboss.xml" />
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/ejb/StatelessSessionBean.*"/>
+            <include name="org/jboss/test/security/interfaces/StatelessSession*"/>
+         </fileset>
+         <fileset dir="${build.resources}/security">
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </fileset>
+      </jar>
+
+      <!--JASPI WEB Form -->
+      <war warfile="${build.lib}/jaspi-web-form.war"
+        webxml="${build.resources}/security/jaspi/jaspi-web-form.war/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/security/jaspi/jaspi-web-form.war/WEB-INF">
+            <include name="jboss-web.xml"/>
+            <include name="context.xml"/>
+         </webinf>
+         <classes dir="${build.resources}/security/jaspi/jaspi-web-form.war/WEB-INF/classes"/>
+         <fileset dir="${build.resources}/security/jaspi/jaspi-web-form.war">
+            <include name="*jsp"/>
+            <include name="*html"/>
+         </fileset>
+      </war>
+
+      <!--JASPI WEB Basic -->
+      <war warfile="${build.lib}/jaspi-web-basic.war"
+        webxml="${build.resources}/security/jaspi/jaspi-web-basic.war/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/security/jaspi/jaspi-web-basic.war/WEB-INF">
+            <include name="jboss-web.xml"/>
+            <include name="context.xml"/>
+         </webinf>
+         <classes dir="${build.resources}/security/jaspi/jaspi-web-basic.war/WEB-INF/classes"/>
+         <fileset dir="${build.resources}/security/jaspi/jaspi-web-basic.war">
+            <include name="*jsp"/>
+            <include name="*html"/>
+         </fileset>
+      </war>
+
+      <!-- JBAS-6060: Tolerate security domain with no java:/jaas prefix -->
+      <war warfile="${build.lib}/sdtolerate.war"
+        webxml="${build.resources}/security/sdtolerate/web/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/security/sdtolerate/web/WEB-INF">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <fileset dir="${build.resources}/security/sdtolerate/web">
+            <include name="*jsp"/>
+            <include name="*html"/>
+         </fileset>
+      </war>
+
+      <jar destfile="${build.lib}/sdtolerate.jar">
+         <metainf dir="${build.resources}/security/sdtolerate/ejb">
+            <include name="ejb-jar.xml" />
+            <include name="jboss.xml" />
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/ejb/StatelessSessionBean.*"/>
+            <include name="org/jboss/test/security/interfaces/StatelessSession*"/>
+         </fileset>
+      </jar>
+
+      <jar destfile="${build.lib}/sdtolerate-resources.jar">
+         <fileset dir="${build.resources}/security/sdtolerate">
+            <include name="*.properties" />
+         </fileset>
+      </jar>
+
+      <ear earfile="${build.lib}/sdtolerate.ear"
+         appxml="${build.resources}/security/sdtolerate/application.xml">
+         <fileset dir="${build.lib}">
+            <include name="sdtolerate.jar"/>
+            <include name="sdtolerate.war"/>
+         </fileset>
+         <fileset dir="${build.resources}/security/sdtolerate">
+            <include name="*-jboss-beans.xml" />
+         </fileset>
+         <zipfileset dir="${build.lib}" prefix="lib">
+            <include name="sdtolerate-resources.jar" />
+         </zipfileset>
+      </ear>
+
+      <!-- acl-integration.jar -->
+      <jar destfile="${build.lib}/acl-integration.jar">
+         <metainf dir="${build.resources}/security/authorization/acl-ejb/META-INF">
+            <include name="jboss-acl-policy.xml" />
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/ejb/ACLSessionImpl.class"/>
+            <include name="org/jboss/test/security/interfaces/ACLSession.class"/>
+            <include name="org/jboss/test/security/resources/TestResource.class"/>
+         </fileset>
+      </jar>
+
+      <!-- ejb3 security ear -->
+      <jar destfile="${build.lib}/security-ejb3.jar">
+         <metainf dir="${build.resources}/security/ejb3/META-INF">
+            <include name="jboss.xml" />
+         </metainf>
+         <fileset dir="${build.resources}/security/ejb3/config">
+            <include name="ejb3-test-users.properties"/>
+            <include name="ejb3-test-roles.properties"/>
+            <include name="ejb3-test-jboss-beans.xml"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/ejb3/*.class"/>
+         </fileset>
+      </jar>
+      <antcall target="sign-file">
+         <param name="file" value="security-ejb3.jar"/>
+      </antcall>
+
+      <!-- JBAS-1824:All Star Role jacc(create WebResourcePerm(url,null) -->
+      <war warfile="${build.lib}/jacc-allstarrole.war"
+        webxml="${build.resources}/security/jacc/allStarRole/WEB-INF/web.xml">
+         <fileset dir="${build.resources}/security/jacc/allStarRole">
+            <include name="*html"/>
+            <include name="WEB-INF/classes/*"/>
+            <include name="WEB-INF/jboss-web.xml"/>
+         </fileset>
+      </war>
+      <war warfile="${build.lib}/jacc-allstarrole-noconfig.war"
+         webxml="${build.resources}/security/jacc/allStarRole/WEB-INF/web.xml">
+         <fileset dir="${build.resources}/security/jacc/allStarRole/">
+            <include name="*html"/>
+         </fileset>
+      </war>
+      <!--jacc-allStarRolePolicyProvider.jar -->
+      <jar destfile="${build.lib}/jacc-allStarRolePolicyProvider.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jacc/test/allstarrole/*olicy*" />
+            <include name="org/jboss/test/jacc/test/policy/*olicy*" />
+         </fileset>
+      </jar>
+
+      <!-- JBAS-6710: Password Masking in XML -->
+      <jar destfile="${build.lib}/passwordbean.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/beans/TestPasswordInjectedBean.class"/>
+         </fileset>
+      </jar>
+
+      <!-- RMI over HTTPS test -->
+      <jar destfile="${build.lib}/rmi-over-https-test.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/security/rmi/ejb3/*.class"/>
+         </fileset>
+      </jar>
+      <antcall target="sign-file">
+         <param name="file" value="rmi-over-https-test.jar"/>
+      </antcall>
+      
+   </target>
+</project>

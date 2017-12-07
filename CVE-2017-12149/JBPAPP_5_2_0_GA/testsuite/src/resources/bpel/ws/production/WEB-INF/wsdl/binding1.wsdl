@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://jbpm.org/examples/hello" xmlns:tns="http://jbpm.org/examples/hello" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <import namespace="http://jbpm.org/examples/hello" location="hello.wsdl"/>
+  <binding name="helloPTBinding" type="tns:helloPT">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="sayHello">
+      <soap:operation soapAction="http://jbpm.org/examples/sayHello"/>
+      <input>
+        <soap:body use="literal" namespace="http://jbpm.org/examples/hello"/>
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://jbpm.org/examples/hello"/>
+      </output>
+    </operation>
+  </binding>
+</definitions>

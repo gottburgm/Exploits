@@ -1,0 +1,7 @@
+<!DOCTYPE jboss-app SYSTEM "http://www.jboss.org/j2ee/dtd/jboss-app_5_0.dtd">
+<jboss-app>
+	<module-order>strict</module-order>
+        <loader-repository>passivationcl.ear:loader=passivationcl.ear
+           <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
+	</loader-repository>
+</jboss-app>

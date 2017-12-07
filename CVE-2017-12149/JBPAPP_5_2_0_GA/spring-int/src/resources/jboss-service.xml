@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE server>
+
+<server>
+
+   <!--
+       Defines the Spring deployer service.  See the javadocs for
+       org.jboss.spring.deployment.SpringDeployer for more info.
+   -->
+
+   <!--<mbean code="org.jboss.spring.deployment.SpringBeanFactoryDeployer" name="jboss.spring:service=SpringBeanFactoryDeployer" />-->
+
+   <mbean code="org.jboss.spring.deployment.SpringApplicationContextDeployer"
+          name="jboss.spring:service=SpringApplicationContextDeployer"/>
+
+</server>
+
+
+

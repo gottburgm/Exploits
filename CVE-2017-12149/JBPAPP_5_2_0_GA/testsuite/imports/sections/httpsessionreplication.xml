@@ -1,0 +1,22 @@
+<project name="tests-httpsessionreplication-jars">
+   <!-- httpsessionreplication test -->
+   <target name="_jars-httpsessionreplication">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build httpsessionreplication.jar -->
+      <jar destfile="${build.lib}/httpsessionreplication.jar">
+         <!--
+         <fileset dir="${build.classes}">
+         <patternset refid="jboss.test.util.ejb.set"/>
+         <include name="org/jboss/test/testbean/interfaces/**"/>
+         <include name="org/jboss/test/testbeancluster/interfaces/**"/>
+         <include name="org/jboss/test/testbean/bean/**"/>
+         <include name="org/jboss/test/testbeancluster/bean/**"/>
+         </fileset>
+         -->
+         <fileset dir="${build.resources}/cluster">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

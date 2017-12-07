@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!--
+  - DispatcherServlet application context for JBoss-Spring
+	-->
+<beans>
+
+   <bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+      <property name="basename">
+         <value>views</value>
+      </property>
+   </bean>
+
+   <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+      <property name="mappings">
+         <props>
+            <prop key="/number.htm">appController</prop>
+            <prop key="/word.htm">appController</prop>
+            <prop key="/horoscope.htm">appController</prop>
+         </props>
+      </property>
+   </bean>
+
+   <!-- ========================= CONTROLLER DEFINITIONS ========================= -->
+
+   <bean id="appControllerResolver"
+         class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
+      <property name="mappings">
+         <props>
+            <prop key="/number.htm">numberHandler</prop>
+            <prop key="/word.htm">wordHandler</prop>
+            <prop key="/horoscope.htm">horoscopeHandler</prop>
+         </props>
+      </property>
+   </bean>
+
+   <bean id="appController" class="org.jboss.tutorial.web.AppController">
+      <property name="methodNameResolver">
+         <ref local="appControllerResolver"/>
+      </property>
+      <property name="randomizer">
+         <ref bean="randomizer"/>
+      </property>
+      <property name="horoscope">
+         <ref bean="horoscope"/>
+      </property>
+   </bean>
+
+</beans>

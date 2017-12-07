@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+
+   <local-tx-datasource>
+      <jndi-name>ProfileServiceTestDS</jndi-name>
+      <connection-url>jdbc:hsqldb:${jboss.server.data.dir}${/}hypersonic${/}localDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <user-name>sa</user-name>
+      <password></password>
+      <min-pool-size>5</min-pool-size>
+      <max-pool-size>20</max-pool-size>
+      <idle-timeout-minutes>0</idle-timeout-minutes>
+      <security-domain>HsqlDbRealm</security-domain>
+      <prepared-statement-cache-size>32</prepared-statement-cache-size>
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+   </local-tx-datasource>
+
+   <mbean code="org.jboss.security.plugins.JaasSecurityDomain"
+      name="jboss.security:service=JaasSecurityDomain,domain=ServerMasterPassword">
+      <constructor>
+         <arg type="java.lang.String" value="ServerMasterPassword"/>
+      </constructor>
+      <attribute name="KeyStorePass">{CLASS}org.jboss.security.plugins.FilePassword:${jboss.server.home.dir}/conf/server.password</attribute>
+      <attribute name="Salt">abcdefgh</attribute>
+      <attribute name="IterationCount">13</attribute>
+   </mbean>
+
+
+   <mbean code="org.jboss.jdbc.HypersonicDatabase" 
+     name="jboss:service=Hypersonic,database=profileserviceTestDB">
+     <attribute name="Database">profileserviceTestDB</attribute>
+     <attribute name="InProcessMode">true</attribute>
+     <depends>NoopDependency</depends>
+   </mbean>
+   
+   <loader-repository>
+      profile.service.test.ds:sar=profile.test.ds
+      <loader-repository-config>
+         java2ParentDelegation=true
+      </loader-repository-config>
+   </loader-repository>
+
+</datasources>

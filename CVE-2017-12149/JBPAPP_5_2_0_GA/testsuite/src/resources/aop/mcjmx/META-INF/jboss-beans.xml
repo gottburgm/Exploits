@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <bean name="AnnotatedBean" class="org.jboss.test.aop.mcjmx.AnnotatedBean"/>
+   <bean name="XmlBean" class="org.jboss.test.aop.mcjmx.XmlBean">
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.aop:name=XmlBean", exposedInterface=org.jboss.test.aop.mcjmx.BeanInterface.class)</annotation>
+   </bean>
+   <bean name="BeanWithCtorMethodCall" class="org.jboss.test.aop.mcjmx.SubClassBeanWithMethodCallInCtor">
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.aop:name=BeanWithCtorMethodCall", exposedInterface=org.jboss.test.aop.mcjmx.BeanInterface.class)</annotation>
+   </bean>
+</deployment>

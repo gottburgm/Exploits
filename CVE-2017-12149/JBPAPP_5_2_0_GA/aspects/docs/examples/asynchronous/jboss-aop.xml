@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+<aspect class="org.jboss.aspects.asynchronous.aspects.jboss.AsynchronousAspect" scope="PER_VM"/>
+   
+<bind pointcut="execution(* *->@org.jboss.aspects.asynchronous.aspects.jboss.Asynchronous(..))">
+   <advice name="execute" aspect="org.jboss.aspects.asynchronous.aspects.jboss.AsynchronousAspect"/>
+</bind>  
+                                                                           
+<introduction expr="has(* *->@org.jboss.aspects.asynchronous.aspects.jboss.Asynchronous(..)) OR class(@org.jboss.aspects.asynchronous.aspects.jboss.Asynchronous)">
+
+       <mixin>
+          <interfaces>
+            org.jboss.aspects.asynchronous.aspects.AsynchronousFacade
+          </interfaces>
+          <class>org.jboss.aspects.asynchronous.aspects.AsynchronousFacadeImpl</class>
+          <construction>new org.jboss.aspects.asynchronous.aspects.AsynchronousFacadeImpl()</construction>
+       </mixin>
+</introduction>
+
+</aop>

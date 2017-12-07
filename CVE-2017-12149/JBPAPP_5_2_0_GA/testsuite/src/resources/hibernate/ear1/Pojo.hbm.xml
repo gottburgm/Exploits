@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+   "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping default-lazy="false" package="org.jboss.test.hibernate.model.v1">
+
+    <class name="Person" table="PersonEAR1">
+        <id name="id" type="long" column="id_">
+            <generator class="native"/>
+        </id>
+        <property name="name"/>
+        <property name="address"/>
+        <property name="IQ" column="iq" />
+        <property name="BDay" column="bday"/>
+        <property name="pay"/>
+    </class>
+</hibernate-mapping>

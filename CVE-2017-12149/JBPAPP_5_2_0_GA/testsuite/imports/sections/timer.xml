@@ -1,0 +1,56 @@
+<project name="tests-timer-jars">
+   <!-- EJB Timer Service test -->
+   <target name="_jars-timer">
+      <!-- build session-bean-timer.jar -->
+      <zip destfile="${build.lib}/ejb-timer.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/timer/ejb/**"/>
+            <include name="org/jboss/test/timer/interfaces/**"/>
+         </fileset>
+         <zipfileset dir="${build.resources}/timer/ejb" prefix="META-INF">
+            <include name="*.xml"/>
+         </zipfileset>
+      </zip>
+      <zip destfile="${build.lib}/ejb-timer.war">
+         <zipfileset dir="${build.classes}" prefix="WEB-INF/classes">
+            <include name="org/jboss/test/timer/servlet/**"/>
+         </zipfileset>
+         <zipfileset dir="${build.resources}/timer/war" prefix="WEB-INF">
+            <include name="web.xml"/>
+         </zipfileset>
+      </zip>
+      <!-- build ejb-timer.sar -->
+      <jar destfile="${build.lib}/ejb-timer.sar">
+         <metainf dir="${build.resources}/timer/service"/>
+      </jar>
+      <zip destfile="${build.lib}/ejb-timer.ear">
+         <zipfileset dir="${build.resources}/timer/ear" prefix="META-INF">
+            <include name="*.xml"/>
+         </zipfileset>
+         <zipfileset dir="${build.lib}">
+            <include name="ejb-timer.sar"/>
+            <include name="ejb-timer.jar"/>
+            <include name="ejb-timer.war"/>
+         </zipfileset>
+      </zip>
+
+      <jar destfile="${build.lib}/transactional-timer-test.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/txtimer/**"/>
+            <include name="org/jboss/test/util/ejb/*"/>
+         </fileset>
+         <fileset dir="${build.resources}/txtimer/test">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${junit.junit.lib}/junit.jar">
+            <patternset refid="ejbrunner.set"/>
+         </zipfileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar">
+            <patternset refid="jboss.test.set"/>
+         </zipfileset>
+      </jar>
+
+   </target>
+   
+</project>

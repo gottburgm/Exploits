@@ -1,0 +1,6 @@
+
+public String objectName()
+{
+   return "jboss.test:service=test3.bsh";
+}
+

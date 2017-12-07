@@ -1,0 +1,15 @@
+<project name="tests-scripts-jars">
+  <!-- webservice tests -->
+  <target name="_jars-scripts">
+    <mkdir dir="${build.lib}"/>
+    
+    <echo message="Using target node: ${node0}"/>
+    
+    <!-- jaxws-endpoint-servlet -->
+    <war warfile="${build.lib}/wsrunclient-test.war" webxml="${build.resources}/scripts/web.xml">
+      <classes dir="${build.classes}">
+        <include name="org/jboss/test/scripts/support/EchoJavaBean.class"/>
+      </classes>
+    </war>
+  </target>
+</project>

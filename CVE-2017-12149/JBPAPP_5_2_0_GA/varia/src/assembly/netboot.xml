@@ -1,0 +1,29 @@
+<assembly>
+  <id>netboot</id>
+  <formats>
+    <format>war</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <files>
+    <file>
+      <source>src/resources/netboot/WEB-INF/web.xml</source>
+      <outputDirectory>WEB-INF</outputDirectory>
+    </file>
+  </files>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/WEB-INF/classes</outputDirectory>
+      <includes>
+        <include>org/jboss/netboot/**</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>src/resources/netboot</directory>
+      <outputDirectory>/</outputDirectory>
+      <excludes>
+        <exclude>WEB-INF/web.xml</exclude>
+      </excludes>
+    </fileSet>
+  </fileSets>
+</assembly>

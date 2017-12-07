@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!DOCTYPE jboss PUBLIC
+   "-//JBoss//DTD JBOSS 4.0//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <session>
+         <ejb-name>StatelessSession</ejb-name>
+         <jndi-name>StatelessSession</jndi-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>stateless-pooled-invoker</invoker-proxy-binding-name>
+               <jndi-name>PooledStatelessSession</jndi-name>
+            </invoker>
+             <invoker>
+               <invoker-proxy-binding-name>stateless-unified-invoker</invoker-proxy-binding-name>
+               <jndi-name>StatelessSession</jndi-name>
+            </invoker>
+        </invoker-bindings>
+      </session>
+      <session>
+         <ejb-name>StatelessSessionWithPooledSSL</ejb-name>
+         <configuration-name>SSL Stateless SessionBean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>stateless-ssl-invoker</invoker-proxy-binding-name>
+               <jndi-name>StatelessSessionWithPooledSSL</jndi-name>
+            </invoker>
+         </invoker-bindings>
+      </session>
+   </enterprise-beans>
+
+   <invoker-proxy-bindings>
+      <invoker-proxy-binding>
+         <name>stateless-pooled-invoker</name>
+         <invoker-mbean>jboss:service=invoker,type=pooled</invoker-mbean>
+         <proxy-factory>org.jboss.proxy.ejb.ProxyFactory</proxy-factory>
+         <proxy-factory-config>
+            <client-interceptors>
+               <home>
+                  <interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </home>
+               <bean>
+                  <interceptor>org.jboss.proxy.ejb.StatelessSessionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </bean>
+            </client-interceptors>
+         </proxy-factory-config>
+      </invoker-proxy-binding>
+
+      <invoker-proxy-binding>
+         <name>stateless-ssl-invoker</name>
+         <invoker-mbean>jboss:service=invoker,type=pooled,socketType=SSLSocketFactory,wantsClientAuth=true</invoker-mbean>
+         <proxy-factory>org.jboss.proxy.ejb.ProxyFactory</proxy-factory>
+         <proxy-factory-config>
+            <client-interceptors>
+               <home>
+                  <interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </home>
+               <bean>
+                  <interceptor>org.jboss.proxy.ejb.StatelessSessionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </bean>
+            </client-interceptors>
+         </proxy-factory-config>
+      </invoker-proxy-binding>
+
+   </invoker-proxy-bindings>
+
+   <container-configurations>
+      <container-configuration extends="Standard Stateless SessionBean">
+        <container-name>SSL Stateless SessionBean</container-name>
+        <container-interceptors>
+          <interceptor>org.jboss.ejb.plugins.ProxyFactoryFinderInterceptor</interceptor>
+          <interceptor>org.jboss.ejb.plugins.LogInterceptor</interceptor>
+           <interceptor>org.jboss.ejb.plugins.SSLSessionInterceptor</interceptor>
+           <interceptor>org.jboss.ejb.plugins.security.PreSecurityInterceptor</interceptor>
+           <interceptor>org.jboss.ejb.plugins.SecurityInterceptor</interceptor>
+          <!-- CMT -->
+          <interceptor transaction="Container">org.jboss.ejb.plugins.TxInterceptorCMT</interceptor>
+          <interceptor transaction="Container">org.jboss.ejb.plugins.CallValidationInterceptor</interceptor>
+          <interceptor transaction="Container">org.jboss.ejb.plugins.StatelessSessionInstanceInterceptor</interceptor>
+          <interceptor>org.jboss.resource.connectionmanager.CachedConnectionInterceptor</interceptor>
+        </container-interceptors>
+        <security-domain>java:/jaas/pooled-ssl</security-domain>
+      </container-configuration>
+
+   </container-configurations>
+</jboss>

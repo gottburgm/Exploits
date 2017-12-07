@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: scanner-service.xml 33276 2005-07-07 10:08:24Z dimitris $ -->
+
+<server>
+   <!-- ==================================================================== -->
+   <!-- Deployment Scanning                                                  -->
+   <!-- ==================================================================== -->
+
+   <!-- An mbean for hot deployment/undeployment of archives.
+   -->
+   <mbean code="org.jboss.deployment.scanner.URLDeploymentScanner"
+      name="jboss.test:type=DeploymentScanner2,flavor=URL">
+
+      <!-- Uncomment (and comment/remove version below) to enable usage of the
+        DeploymentCache
+      <depends optional-attribute-name="Deployer">jboss.deployment:type=DeploymentCache</depends>
+      -->
+      <depends optional-attribute-name="Deployer">jboss.system:service=MainDeployer</depends>
+
+      <!-- The URLComparator can be used to specify a deployment ordering
+           for deployments found in a scanned directory.  The class specified
+           must be an implementation of java.util.Comparator, it must be able
+           to compare two URL objects, and it must have a no-arg constructor.
+           Two deployment comparators are shipped with JBoss:
+             - org.jboss.deployment.DeploymentSorter
+               Sorts by file extension, as follows:
+                 "sar", "service.xml", "rar", "jar", "war", "wsr", "ear", "zip",
+                 "*"
+             - org.jboss.deployment.scanner.PrefixDeploymentSorter
+               If the name portion of the url begins with 1 or more digits, those
+               digits are converted to an int (ignoring leading zeroes), and
+               files are deployed in that order.  Files that do not start with
+               any digits will be deployed first, and they will be sorted by
+               extension as above with DeploymentSorter.
+      -->
+      <attribute name="URLComparator">org.jboss.deployment.DeploymentSorter</attribute>
+      <!--
+      <attribute name="URLComparator">org.jboss.deployment.scanner.PrefixDeploymentSorter</attribute>
+      -->
+
+      <!-- The FilterInstance specifies a URLLister.URLFilter for scanned
+           directories. This DeploymentFilter is initialized with the given
+           prefixes, suffixes and matches that define which URLs should be
+           ignored.
+      -->
+      <attribute name="FilterInstance"
+         attributeClass="org.jboss.deployment.scanner.DeploymentFilter"
+         serialDataType="javaBean">
+         <!-- Files starting with theses strings are ignored -->
+         <property name="prefixes">#,%,\,,.,_$</property>
+         <!-- Files ending with theses strings are ignored -->
+         <property name="suffixes">#,$,%,~,\,v,.BAK,.bak,.old,.orig,.tmp,.rej,.sh</property>
+         <!-- Files matching with theses strings are ignored -->
+         <property name="matches">.make.state,.nse_depinfo,CVS,CVS.admin,RCS,RCSLOG,SCCS,TAGS,core,tags</property>
+      </attribute>
+
+      <!-- Frequency in milliseconds to rescan the URLs for changes -->
+      <attribute name="ScanPeriod">5000</attribute>
+      <!-- A flag to disable the scans -->
+      <attribute name="ScanEnabled">true</attribute>
+
+      <!-- URLs are comma separated and resolve relative to the server home URL
+         unless the given path is absolute. If the URL ends in "/" it is
+         considered a collection and scanned, otherwise it is simply deployed;
+         this follows RFC2518 convention and allows discrimination between
+         collections and directories that are simply unpacked archives.
+
+         URLs may be local (file:) or remote (http:). Scanning is supported
+         for remote URLs but unpacked deployment units are not.
+
+         Example URLs:
+            deploy/
+                 scans ${jboss.server.url}/deploy/, which is local or remote
+                 depending on the URL used to boot the server
+            ${jboss.server.home}/deploy/
+                 scans ${jboss.server.home)/deploy, which is always local
+            file:/var/opt/myapp.ear
+                 deploy myapp.ear from a local location
+            file:/var/opt/apps/
+                 scans the specified directory
+            http://www.test.com/netboot/myapp.ear
+                 deploys myapp.ear from a remote location
+            http://www.test.com/netboot/apps/
+                 scans the specified WebDAV location
+       -->
+      <attribute name="URLs">
+         non-existent-deploy/,
+         non-existent-service.xml,
+	     test-service.xml
+      </attribute>
+
+      <!-- Indicates if the scanner should recursively scan directories that
+      contain no "." in their names. This can be used to group applications
+      and services that must be deployed and that have the same
+      logical function in the same directory i.e.
+        deploy/JMX/
+        deploy/JMS/
+        ...
+      -->
+
+      <attribute name="RecursiveSearch">True</attribute>
+
+   </mbean>
+
+</server>

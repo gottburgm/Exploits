@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+   "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+   "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+   <session-factory name="java:/hibernate/ear1/HibernateFactory">
+      <property name="show_sql">true</property>
+      <property name="connection.datasource">java:/DefaultDS</property>
+      <property name="dialect">org.hibernate.dialect.HSQLDialect</property>
+      <property name="cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
+      <property name="transaction.factory_class">
+         org.hibernate.transaction.CMTTransactionFactory
+      </property>
+      <property name="jta.UserTransaction">java:comp/UserTransaction</property>
+      <property name="transaction.manager_lookup_class">
+         org.hibernate.transaction.JBossTransactionManagerLookup
+      </property>
+      <mapping resource="META-INF/Pojo.hbm.xml"/>
+   </session-factory>
+</hibernate-configuration>

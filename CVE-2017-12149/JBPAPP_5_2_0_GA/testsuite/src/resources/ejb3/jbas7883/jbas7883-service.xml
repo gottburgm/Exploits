@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+  
+<!DOCTYPE server
+    PUBLIC "-//JBoss//DTD MBean Service 4.0//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-service_4_0.dtd">
+
+<server>
+
+
+  <mbean code="org.jboss.mail.MailService" name="jboss:service=Mail1">
+    <attribute name="JNDIName">mail/Mail1</attribute>
+    <attribute name="Configuration">
+      <configuration>
+        <property name="mail.transport.protocol" value="smtp" />
+        <property name="mail.smtp.host" value="1.1.1.1" />
+      </configuration>
+    </attribute>
+  </mbean>
+
+  <mbean code="org.jboss.mail.MailService" name="jboss:service=Mail2">
+    <attribute name="JNDIName">mail/Mail2</attribute>
+    <attribute name="Configuration">
+      <configuration>
+        <property name="mail.transport.protocol" value="smtp" />
+        <property name="mail.smtp.host" value="2.2.2.2" />
+      </configuration>
+    </attribute>
+  </mbean>
+  
+  <mbean code="org.jboss.mail.MailService" name="jboss:service=Mail3">
+    <attribute name="JNDIName">java:/Mail3</attribute>
+    <attribute name="Configuration">
+      <configuration>
+        <property name="mail.transport.protocol" value="smtp" />
+        <property name="mail.smtp.host" value="3.3.3.3" />
+      </configuration>
+    </attribute>
+  </mbean>  
+
+</server>    

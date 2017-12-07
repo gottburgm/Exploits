@@ -1,0 +1,54 @@
+<configuration xmlns="urn:hornetq" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                        xsi:schemaLocation="urn:hornetq ../../../../src/schemas/hornetq-configuration.xsd ">
+
+   <address-settings>
+      <!--default for catch all-->
+      <address-setting match="jms.queue.*">
+         <max-delivery-attempts>5</max-delivery-attempts>
+         <dead-letter-address>jms.queue.DLQ</dead-letter-address>
+         <expiry-address>jms.queue.ExpiryQueue</expiry-address>
+         <redelivery-delay>0</redelivery-delay>
+         <max-size-bytes>-1</max-size-bytes>
+      </address-setting>
+      <address-setting match="jms.topic.*">
+         <max-delivery-attempts>${test.messagedriven.DLQMaxResent}</max-delivery-attempts>
+         <dead-letter-address>jms.queue.DLQ</dead-letter-address>
+         <expiry-address>jms.queue.ExpiryQueue</expiry-address>
+         <redelivery-delay>0</redelivery-delay>
+         <max-size-bytes>-1</max-size-bytes>
+      </address-setting>
+   </address-settings>
+
+   <security-settings>
+         <security-setting match="jms.topic.testTopic">
+             <permission type="send" roles="guest,publisher,durpublisher"/>
+             <permission type="consume" roles="guest,publisher,durpublisher"/>
+             <permission type="createDurableQueue" roles="guest,durpublisher"/>
+             <permission type="deleteDurableQueue" roles="guest,durpublisher"/>
+             <permission type="createTempQueue" roles="guest,durpublisher"/>
+             <permission type="deleteTempQueue" roles="guest,durpublisher"/>
+             <permission type="manage" roles="guest,publisher,durpublisher"/>
+         </security-setting>
+         <security-setting match="jms.topic.securedTopic">
+             <permission type="send" roles="publisher"/>
+             <permission type="consume" roles="publisher"/>
+             <permission type="manage" roles="publisher"/>
+         </security-setting>
+         <security-setting match="jms.topic.testDurableTopic">
+             <permission type="send" roles="guest,publisher,durpublisher"/>
+             <permission type="consume" roles="guest,publisher,durpublisher"/>
+             <permission type="createDurableQueue" roles="guest,durpublisher"/>
+             <permission type="deleteDurableQueue" roles="guest,durpublisher"/>
+             <permission type="createTempQueue" roles="guest,durpublisher"/>
+             <permission type="deleteTempQueue" roles="guest,durpublisher"/>
+             <permission type="manage" roles="guest,publisher,durpublisher"/>
+         </security-setting>
+         <security-setting match="jms.queue.testQueue">
+             <permission type="send" roles="guest,publisher"/>
+             <permission type="consume" roles="guest,publisher"/>
+             <permission type="manage" roles="guest,publisher"/>
+         </security-setting>
+   </security-settings>
+</configuration>
+

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE jboss-client PUBLIC "-//JBoss//DTD Application Client 5.0//EN" "http://www.jboss.org/j2ee/dtd/jboss-client_5_0.dtd">
+
+<jboss-client>
+  <jndi-name>jbossws-client</jndi-name>
+
+  <!--service-ref>
+    <service-ref-name>service2</service-ref-name>
+    <port-component-ref>
+      <service-endpoint-interface>org.jboss.test.ws.jaxws.samples.serviceref.Endpoint</service-endpoint-interface>
+      <port-qname>{http://serviceref.samples.jaxws.ws.test.jboss.org/}EndpointPort</port-qname>
+    </port-component-ref>
+  </service-ref-->
+</jboss-client>

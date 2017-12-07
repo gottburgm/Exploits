@@ -1,0 +1,36 @@
+<assembly>
+  <id>jboss-common-jdbc-wrapper</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/resource/adapter/jdbc/JBossWrapper.class</include>
+        <include>org/jboss/resource/adapter/jdbc/WrapperConnectionFactory.class</include>
+        <include>org/jboss/resource/adapter/jdbc/ExceptionSorter.class</include>
+        <include>org/jboss/resource/adapter/jdbc/CheckValidConnectionSQL.class</include>
+        <include>org/jboss/resource/adapter/jdbc/ValidConnectionChecker.class</include>
+        <include>org/jboss/resource/adapter/jdbc/StaleConnectionChecker.class</include>
+        <include>org/jboss/resource/adapter/jdbc/StaleConnectionException.class</include>
+      	<include>org/jboss/resource/adapter/jdbc/vendor/*.class</include>
+        <include>org/jboss/resource/adapter/jdbc/Null*.class</include>
+        <include>org/jboss/resource/adapter/jdbc/Wrap*.class</include>
+        <include>org/jboss/resource/adapter/jdbc/BaseWrap*.class</include>
+        <include>org/jboss/resource/adapter/jdbc/CachedCallableStatement.class</include>
+        <include>org/jboss/resource/adapter/jdbc/CachedPreparedStatement.class</include>
+        <include>org/jboss/resource/adapter/jdbc/PreparedStatementCache*.class</include>
+        <include>org/jboss/resource/adapter/jdbc/StatementAccess.class</include>
+        <include>org/jboss/resource/adapter/jdbc/jdk5/*.class</include>
+        <include>org/jboss/resource/adapter/jdbc/jdk6/*.class</include>
+		    <include>org/jboss/resource/adapter/jdbc/URLSelectorStrategy.class</include>
+        <include>org/jboss/resource/adapter/jdbc/remote/*</include>
+        <!-- JBAS-2250 hack -->
+        <include>org/jboss/ejb/plugins/cmp/jdbc/*</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

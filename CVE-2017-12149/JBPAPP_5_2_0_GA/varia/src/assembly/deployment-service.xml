@@ -1,0 +1,17 @@
+<assembly>
+  <id>deployment-service</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/services/deployment/**</include>
+        <include>org/jboss/varia/deployment/**</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

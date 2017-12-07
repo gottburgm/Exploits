@@ -1,0 +1,110 @@
+<project name="tests-hibernate-jars">
+   <target name="_jars-hibernate">
+      <mkdir dir="${build.lib}"/>
+      
+      <jar basedir="${build.classes}" destfile="${build.lib}/hib-test.har">
+         <metainf dir="${source.resources}/hibernate/mappings">
+            <include name="*"/>
+         </metainf>
+         <metainf dir="${source.resources}/hibernate/har-deployment">
+            <include name="*.xml"/>
+         </metainf>
+         <include name="org/jboss/test/hibernate/model/*"/>
+      </jar>
+      
+      <jar basedir="${build.classes}" destfile="${build.lib}/hib-test-ejb.jar">
+         <metainf dir="${source.resources}/hibernate/ejb/META-INF">
+            <include name="*"/>
+         </metainf>
+         <include name="org/jboss/test/hibernate/ejb/**"/>
+         <include name="org/jboss/test/hibernate/ProfileService.class"/>
+      </jar>
+      
+      <ear earfile="${build.lib}/hib-test.ear"
+         appxml="${source.resources}/hibernate/ear/application.xml">
+         <metainf dir="${source.resources}/hibernate/ear">
+            <include name="jboss-app.xml"/>
+         </metainf>
+         <fileset dir="${build.lib}">
+            <include name="hib-test-ejb.jar"/>
+            <include name="hib-test.har"/>
+         </fileset>
+      </ear>
+      
+      <jar basedir="${build.classes}" destfile="${build.lib}/hib-timers.har">
+         <metainf dir="${build.resources}/hibernate/ejbtimers">
+            <include name="jboss-hibernate.xml"/>
+            <include name="Timers.hbm.xml"/>
+         </metainf>
+         <include name="org/jboss/test/hibernate/SimpleInterceptor.class"/>
+      </jar>
+      <jar basedir="${build.classes}" destfile="${build.lib}/hib-timers.jar">
+         <metainf dir="${build.resources}/hibernate/ejbtimers">
+            <include name="ejb-jar.xml"/>
+            <include name="jboss.xml"/>
+         </metainf>
+         <include name="org/jboss/test/hibernate/timers/**"/>
+         <fileset dir="${build.lib}">
+            <include name="hib-timers.har"/>
+         </fileset>
+      </jar>
+
+      <!-- hib-ear1.ear,hib-ejb1.jar -->
+      <jar basedir="${build.classes}" destfile="${build.lib}/hib-ejb1.jar">
+         <metainf dir="${build.resources}/hibernate/ear1/">
+            <include name="ejb-jar.xml"/>
+            <include name="jboss.xml"/>
+            <include name="Pojo.hbm.xml"/>
+         </metainf>
+         <fileset dir="${build.resources}/hibernate/ear1/">
+            <include name="hibernate.cfg.xml"/>
+         </fileset>
+         <include name="org/jboss/test/hibernate/model/v1/**"/>
+      </jar>
+      <jar basedir="${build.lib}" destfile="${build.lib}/hib-ear1.ear">
+         <metainf dir="${build.resources}/hibernate/ear1/">
+            <include name="application.xml"/>
+            <include name="jboss-app.xml"/>
+         </metainf>
+         <include name="hib-ejb1.jar"/>
+      </jar>
+
+      <!-- hib-ear2.ear,hib-ejb2.jar -->
+      <jar basedir="${build.classes}" destfile="${build.lib}/hib-ejb2.jar">
+         <metainf dir="${build.resources}/hibernate/ear2/">
+            <include name="ejb-jar.xml"/>
+            <include name="jboss.xml"/>
+            <include name="Pojo.hbm.xml"/>
+         </metainf>
+         <fileset dir="${build.resources}/hibernate/ear2/">
+            <include name="hibernate.cfg.xml"/>
+         </fileset>
+         <include name="org/jboss/test/hibernate/model/v2/**"/>
+      </jar>
+      <jar basedir="${build.lib}" destfile="${build.lib}/hib-ear2.ear">
+         <metainf dir="${build.resources}/hibernate/ear2/">
+            <include name="application.xml"/>
+            <include name="jboss-app.xml"/>
+         </metainf>
+         <include name="hib-ejb2.jar"/>
+      </jar>
+      
+      <jar basedir="${build.classes}" destfile="${build.lib}/hib-jbas7411.har">
+         <metainf dir="${build.resources}/hibernate/jbas7411">
+            <include name="jboss-hibernate.xml"/>
+            <include name="Timers.hbm.xml"/>
+         </metainf>
+         <include name="org/jboss/test/hibernate/SimpleInterceptor.class"/>
+      </jar>
+      <jar basedir="${build.classes}" destfile="${build.lib}/hib-jbas7411.jar">
+         <metainf dir="${build.resources}/hibernate/ejbtimers">
+            <include name="ejb-jar.xml"/>
+            <include name="jboss.xml"/>
+         </metainf>
+         <include name="org/jboss/test/hibernate/timers/**"/>
+         <fileset dir="${build.lib}">
+            <include name="hib-jbas7411.har"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

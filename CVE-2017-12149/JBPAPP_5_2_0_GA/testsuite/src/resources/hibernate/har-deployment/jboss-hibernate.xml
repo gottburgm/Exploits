@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<hibernate-configuration xmlns="urn:jboss:hibernate-deployer:1.0">
+
+   <session-factory name="java:/hibernate/SessionFactory" bean="jboss.har:service=Hibernate">
+      <property name="datasourceName">java:/DefaultDS</property>
+      <property name="dialect">org.hibernate.dialect.HSQLDialect</property>
+      <property name="cacheProviderClass">org.hibernate.cache.HashtableCacheProvider</property>
+      <property name="hbm2ddlAuto">create</property>
+      <depends>jboss:service=Naming</depends>
+      <depends>jboss:service=TransactionManager</depends>
+   </session-factory>
+
+</hibernate-configuration>

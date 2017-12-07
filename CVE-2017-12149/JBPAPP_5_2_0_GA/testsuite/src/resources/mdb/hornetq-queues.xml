@@ -1,0 +1,26 @@
+<configuration xmlns="urn:hornetq" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                        xsi:schemaLocation="urn:hornetq ../../../../src/schemas/hornetq-configuration.xsd ">
+
+   <security-settings>
+        <security-setting match="jms.queue.myMDBQueue">
+             <permission type="send" roles="guest,publisher,durpublisher"/>
+             <permission type="consume" roles="guest,publisher,durpublisher"/>
+             <permission type="createDurableQueue" roles="guest,durpublisher"/>
+             <permission type="deleteDurableQueue" roles="guest,durpublisher"/>
+             <permission type="createTempQueue" roles="guest,durpublisher"/>
+             <permission type="deleteTempQueue" roles="guest,durpublisher"/>
+             <permission type="manage" roles="guest,publisher,durpublisher"/>
+         </security-setting>
+        <security-setting match="jms.topic.myMDTopic">
+             <permission type="send" roles="guest,publisher,durpublisher"/>
+             <permission type="consume" roles="guest,publisher,durpublisher"/>
+             <permission type="createDurableQueue" roles="guest,durpublisher"/>
+             <permission type="deleteDurableQueue" roles="guest,durpublisher"/>
+             <permission type="createTempQueue" roles="guest,durpublisher"/>
+             <permission type="deleteTempQueue" roles="guest,durpublisher"/>
+             <permission type="manage" roles="guest,publisher,durpublisher"/>
+         </security-setting>
+   </security-settings>
+</configuration>
+

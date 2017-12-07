@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="urn:jboss:bean-deployer bean-deployer_1_0.xsd"
+            xmlns="urn:jboss:bean-deployer">
+
+   <bean name="PojoService1" class="org.jboss.test.kernel.deployment.jboss.beans.dependspojo.SimpleService">
+      <constructor>
+         <parameter>PojoService1</parameter>
+      </constructor>
+      <property name="depends">
+         <array/>
+      </property>
+   </bean>
+   
+   <bean name="PojoService2" class="org.jboss.test.kernel.deployment.jboss.beans.dependspojo.SimpleService">
+      <constructor>
+         <parameter>PojoService2</parameter>
+      </constructor>
+      <property name="depends">
+         <array elementClass="java.lang.String">
+            <value>PojoService1</value>
+            <value>PojoService3</value>
+         </array>
+      </property>
+      <depends>PojoService1</depends>
+      <depends>PojoService3</depends>      
+   </bean>
+
+   <bean name="PojoService3" class="org.jboss.test.kernel.deployment.jboss.beans.dependspojo.SimpleService">
+      <constructor>
+         <parameter>PojoService3</parameter>
+      </constructor>
+      <property name="depends">
+         <array/>
+      </property>
+   </bean>
+   
+   <bean name="JNDIBinding" class="org.jboss.test.kernel.deployment.jboss.beans.POJOJNDIBinder">
+      <constructor><parameter>test/kernel/deployment/pojodepends</parameter></constructor>
+      <property name="pojo"><inject bean="PojoService2"/></property>
+   </bean>
+
+</deployment>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connector id="IMSTM" version="1.5"
+	   xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/connector_1_5.xsd">
+  <display-name>Test Resource Adapter</display-name>
+  <vendor-name>Test</vendor-name>
+  <eis-type>TEST</eis-type>
+  <resourceadapter-version>1.0</resourceadapter-version>
+  <license>
+    <description>
+    </description>
+    <license-required>false</license-required>
+  </license>
+  <resourceadapter>
+    <resourceadapter-class>org.jboss.test.jca.primitive.TestResourceAdapter</resourceadapter-class>
+    <config-property>
+      <config-property-name>someIntProperty</config-property-name>
+      <config-property-type>java.lang.Integer</config-property-type>
+      <config-property-value>1</config-property-value>
+    </config-property>
+    <config-property>
+      <config-property-name>someIntegerObjectProperty</config-property-name>
+      <config-property-type>java.lang.Integer</config-property-type>
+      <config-property-value>1</config-property-value>
+    </config-property>
+    <config-property>
+      <config-property-name>someBooleanProperty</config-property-name>
+      <config-property-type>java.lang.Boolean</config-property-type>
+      <config-property-value>true</config-property-value>
+    </config-property>
+    
+    <config-property>
+      <config-property-name>someBooleanObjectProperty</config-property-name>
+      <config-property-type>java.lang.Boolean</config-property-type>
+      <config-property-value>true</config-property-value>
+    </config-property>
+    
+    <!-- Outbound -->
+    
+    <outbound-resourceadapter>
+      
+      <connection-definition>
+	<managedconnectionfactory-class>org.jboss.test.jca.primitive.TestConnectionFactory</managedconnectionfactory-class>
+        
+	<config-property>
+	  <description>Some Primitive int Property</description>
+	  <config-property-name>someIntProperty</config-property-name>
+	  <config-property-type>java.lang.Integer</config-property-type>
+	</config-property>
+        
+	<config-property>
+	  <description>Some Object Integer Property</description>
+	  <config-property-name>someIntegerObjectProperty</config-property-name>
+	  <config-property-type>java.lang.Integer</config-property-type>
+	</config-property>
+        
+	<config-property>
+	  <description>Some Primitive boolean Property</description>
+	  <config-property-name>someBooleanProperty</config-property-name>
+	  <config-property-type>java.lang.Boolean</config-property-type>
+	</config-property>
+        
+	<config-property>
+	  <description>Some Object Boolean Property</description>
+	  <config-property-name>someBooleanObjectProperty</config-property-name>
+	  <config-property-type>java.lang.Boolean</config-property-type>
+	</config-property>
+        
+	<connectionfactory-interface>javax.jms.ConnectionFactory</connectionfactory-interface>
+	<connectionfactory-impl-class>org.jboss.test.jca.primitive.ConnectionFactory</connectionfactory-impl-class>
+	<connection-interface>javax.jms.Connection</connection-interface>
+	<connection-impl-class>org.jboss.test.jca.primitive.Connection</connection-impl-class>
+        
+      </connection-definition>
+      
+      <transaction-support>XATransaction</transaction-support>
+      
+      <authentication-mechanism>
+	<description>User name and password supported</description>
+	<authentication-mechanism-type>BasicPassword</authentication-mechanism-type>
+	<credential-interface>
+	  javax.resource.spi.security.PasswordCredential</credential-interface>
+      </authentication-mechanism>
+      <reauthentication-support>true</reauthentication-support>
+    </outbound-resourceadapter>
+    
+    <adminobject>
+      <adminobject-interface>javax.jms.Queue</adminobject-interface>
+      <adminobject-class>org.jboss.test.jca.primitive.AdminObject</adminobject-class>
+      <config-property>
+	<description>Some Primitive int Property</description>
+	<config-property-name>someIntProperty</config-property-name>
+	<config-property-type>java.lang.Integer</config-property-type>
+      </config-property>
+      
+      <config-property>
+	<description>Some Object Integer Property</description>
+	<config-property-name>someIntegerObjectProperty</config-property-name>
+	<config-property-type>java.lang.Integer</config-property-type>
+      </config-property>
+      
+      <config-property>
+	<description>Some Primitive boolean Property</description>
+	<config-property-name>someBooleanProperty</config-property-name>
+	<config-property-type>java.lang.Boolean</config-property-type>
+      </config-property>
+      
+      <config-property>
+	<description>Some Object Boolean Property</description>
+	<config-property-name>someBooleanObjectProperty</config-property-name>
+	<config-property-type>java.lang.Boolean</config-property-type>
+      </config-property>
+    </adminobject>
+  </resourceadapter>
+</connector>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE server
+    PUBLIC "-//JBoss//DTD MBean Service 4.0//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-service_4_0.dtd">
+
+<server>
+   <loader-repository>test:loader=scoped,name=MBeanAttributeConfiguration</loader-repository>
+      
+   <mbean code="org.jboss.test.jmx.conf.ConfTest"
+      name="test:name=MBeanAttributeConfiguration">
+      
+      <attribute name="ClassAttr">org.jboss.test.jmx.conf.SimpleClass1</attribute>
+      <attribute name="ClassArrayAttr">org.jboss.test.jmx.conf.SimpleClass1,org.jboss.test.jmx.conf.SimpleClass2</attribute>
+      <attribute name="BeanAttr" attributeClass="org.jboss.test.jmx.conf.SimpleBean" serialDataType="javaBean">
+         <property name="aString">string</property>
+         <property name="aStringArray">string1,string2</property>
+      </attribute>      
+   </mbean>
+
+</server>

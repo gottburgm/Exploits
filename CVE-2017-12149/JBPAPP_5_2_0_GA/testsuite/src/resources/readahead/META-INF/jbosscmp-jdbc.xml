@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jbosscmp-jdbc PUBLIC "-//JBoss//DTD JBOSSCMP-JDBC 3.2//EN" "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_2.dtd">
+
+<jbosscmp-jdbc>
+   <enterprise-beans>
+      <entity>
+         <ejb-name>CMPFindTestEntity</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+
+         <query>
+            <query-method>
+               <method-name>findAll</method-name>
+               <method-params/>
+            </query-method>
+            <jboss-ql><![CDATA[select object(o) from CMPFindTestEntity o]]></jboss-ql>
+         </query>
+         <query>
+            <query-method>
+               <method-name>findByCity</method-name>
+               <method-params>
+                  <method-param>java.lang.String</method-param>
+               </method-params>
+            </query-method>
+            <jboss-ql><![CDATA[select object(o) from CMPFindTestEntity o, Address address where o.key=address.key and address.city=?1]]></jboss-ql>
+         </query>
+      </entity>
+      <entity>
+         <ejb-name>Address</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>AddressEjb</table-name>
+
+         <query>
+            <query-method>
+               <method-name>findByCity</method-name>
+               <method-params>
+                  <method-param>java.lang.String</method-param>
+               </method-params>
+            </query-method>
+            <jboss-ql><![CDATA[select object(o) from Address o where o.city=?1]]></jboss-ql>
+         </query>
+      </entity>
+   </enterprise-beans>
+</jbosscmp-jdbc>

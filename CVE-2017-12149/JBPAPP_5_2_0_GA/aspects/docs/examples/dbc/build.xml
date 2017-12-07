@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project default="run" name="JBoss/AOP">
+   <target name="prepare">
+      <property name="jboss.aop.root" value="../../../.."/>
+      <property name="jboss.aop.lib" value="${jboss.aop.root}/lib"/>
+      <property name="jboss.aop.lib50" value="${jboss.aop.root}/lib-50"/>
+      
+      <path id="javassist.classpath">
+         <pathelement path="${jboss.aop.lib}/javassist.jar"/>
+      </path>
+
+      <path id="trove.classpath">
+         <pathelement path="${jboss.aop.lib}/trove.jar"/>
+      </path>
+
+      <path id="concurrent.classpath">
+         <pathelement path="${jboss.aop.lib}/concurrent.jar"/>
+      </path>
+
+      <path id="jboss.common.classpath">
+         <pathelement path="${jboss.aop.lib}/jboss-common.jar"/>
+      </path>
+
+      <path id="jboss.aop.classpath">
+         <pathelement path="${jboss.aop.lib}/jboss-aop.jar"/>
+      </path>
+
+      <path id="jboss.aspects.classpath">
+         <pathelement path="${jboss.aop.lib}/jboss-aspect-library.jar"/>
+      </path>
+      <path id="qdox.classpath">
+         <pathelement path="${jboss.aop.lib}/qdox.jar"/>
+      </path>
+
+      <path id="junit.classpath">
+         <pathelement path="${jboss.aop.lib}/junit.jar"/>
+      </path>
+      
+      <path id="beanshell.classpath">
+         <pathelement path="${jboss.aop.lib}/bsh-1.3.0.jar"/>
+      </path>
+
+      <path id="classpath">
+         <path refid="javassist.classpath"/>
+         <path refid="trove.classpath"/>
+         <path refid="jboss.aop.classpath"/>
+         <path refid="jboss.common.classpath"/>
+         <path refid="concurrent.classpath"/>
+	      <path refid="qdox.classpath"/>
+	      <path refid="junit.classpath"/>
+<!--	 <path refid="common-logging.classpath"/>-->
+         <path refid="jboss.aspects.classpath"/>
+         <path refid="beanshell.classpath"/>
+         <pathelement path="."/>
+      </path>
+
+      <taskdef name="annotationc" classname="org.jboss.aop.ant.AnnotationC" classpathref="jboss.aop.classpath"/>
+      <taskdef name="aopc" classname="org.jboss.aop.ant.AopC" classpathref="jboss.aop.classpath"/>
+   </target>
+
+
+   <target name="compile" depends="prepare">
+      <javac srcdir="."
+         destdir="."
+         debug="on"
+         deprecation="on"
+         optimize="off"
+         includes="**">
+         <classpath refid="classpath"/>
+      </javac>
+      <annotationc compilerclasspathref="classpath" classpathref="classpath" bytecode="true">
+         <src path="."/>
+      </annotationc>
+      <aopc compilerclasspathref="classpath" classpathref="classpath" verbose="true">
+         <classpath path="."/>
+         <src path="."/>
+         <aoppath>
+            <pathelement path="jboss-aop.xml"/>
+         </aoppath>
+      </aopc>
+   </target>
+
+
+<target name="run" depends="compile">
+      <java fork="yes" classname="test.dbc.Driver" classpathref="classpath" >
+         <sysproperty key="jboss.aop.path" value="jboss-aop.xml"/>
+      </java>
+</target>
+
+
+</project>

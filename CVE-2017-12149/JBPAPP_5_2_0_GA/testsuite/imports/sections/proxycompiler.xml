@@ -1,0 +1,19 @@
+<project name="tests-proxycompiler-jars">
+   <!-- proxy compiler tests -->
+   <target name="_jars-proxycompiler">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build ejbconf-test.jar -->
+      <jar destfile="${build.lib}/proxycompiler-test.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/proxycompiler/beans/**"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/proxycompiler/*"/>
+         </fileset>
+         <fileset dir="${build.resources}/proxycompiler/">
+            <include name="META-INF/*"/>
+         </fileset>
+      </jar> 
+   </target>
+</project>

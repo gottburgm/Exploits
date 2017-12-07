@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 3.2//EN" "http://www.jboss.org/j2ee/dtd/jboss_3_2.dtd">
+
+<jboss>
+
+   <enterprise-beans>
+
+     <!--
+       To add beans that you have deployment descriptor info for, add
+       a file to your XDoclet merge directory called jboss-beans.xml that contains
+       the <session></session>, <entity></entity> and <message-driven></message-driven>
+       markup for those beans.
+     -->
+
+      <session>
+         <ejb-name>DependentBEJB</ejb-name>
+         <jndi-name>test/DependentB</jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+      </session>
+      <session>
+         <ejb-name>DependentAEJB</ejb-name>
+         <jndi-name>test/DependentA</jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+      </session>
+
+   </enterprise-beans>
+
+   <resource-managers>
+   </resource-managers>
+
+  <container-configurations>
+  <container-configuration>
+    <container-name>Standard Stateless SessionBean</container-name>
+    <depends>test:name=Test</depends>
+  </container-configuration>
+</container-configurations>
+
+</jboss>

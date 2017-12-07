@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server
+    PUBLIC "-//JBoss//DTD MBean Service 4.0//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-service_4_0.dtd">
+
+<server>
+
+   <mbean code="org.jboss.test.jmx.xmbean.ServiceUsingCustomAttribute"
+      name="jboss.test:service=ServiceUsingCustomAttribute"
+      xmbean-dd="META-INF/jboss-xmbean.xml" />
+
+</server>

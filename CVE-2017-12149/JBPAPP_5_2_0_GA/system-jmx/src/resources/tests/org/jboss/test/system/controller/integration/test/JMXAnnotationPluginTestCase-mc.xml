@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <!-- The legacy JMX kernel -->
+   <bean name="ServiceControllerLocator" class="org.jboss.test.system.controller.integration.support.ServiceControllerLocator" />
+
+   <bean name="ServiceLifecycle" class="org.jboss.test.system.controller.integration.support.TestServiceControllerLifecycleCallback">
+      <property name="mbeanServer">
+         <inject bean="ServiceControllerLocator" property="mbeanServer"/>
+      </property>
+      <property name="serviceController">
+         <inject bean="ServiceControllerLocator" property="serviceController"/>
+      </property>
+   </bean>
+
+   <bean name="ExposeJMXAttributeChecker" class="org.jboss.test.system.controller.integration.support.ExposeJMXAttributeChecker">
+     <constructor>
+       <parameter><inject bean="jboss.kernel:service=KernelController"/></parameter>
+       <parameter><inject bean="jboss.kernel:service=KernelRegistry"/></parameter>
+       <parameter><inject/></parameter>
+     </constructor>
+   </bean>
+
+   <bean name="AnnotationHandlerFactory">
+      <constructor factoryClass="org.jboss.kernel.plugins.annotations.BeanAnnotationAdapterFactory" factoryMethod="getInstance" />
+   </bean>
+   <bean name="AnnotationHandler">
+      <constructor factoryMethod="getBeanAnnotationAdapter">
+         <factory bean="AnnotationHandlerFactory"/>
+      </constructor>
+      <incallback method="addAnnotationPlugin" />
+      <uncallback method="removeAnnotationPlugin" />
+   </bean>
+   <bean name="JMXPropertyPlugin" class="org.jboss.system.microcontainer.jmx.JMXPropertyAnnotationPlugin" />
+   <bean name="JMXFieldPlugin" class="org.jboss.system.microcontainer.jmx.JMXFieldAnnotationPlugin" />
+
+</deployment>

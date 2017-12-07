@@ -1,0 +1,2 @@
+# [JBWS-2561] XOP request not properly inlined
+org/jboss/test/ws/jaxws/samples/xop/doclit/XOPHandlerTestCase.*

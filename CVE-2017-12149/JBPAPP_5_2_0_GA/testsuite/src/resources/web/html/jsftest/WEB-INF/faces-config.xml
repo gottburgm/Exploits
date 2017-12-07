@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd"
+              version="1.2">
+
+   <managed-bean> 
+      <description>Injection Test</description>
+      <managed-bean-name>injectionBean</managed-bean-name>
+      <managed-bean-class>org.jboss.test.jsf.webapp.InjectionBean</managed-bean-class> 
+      <managed-bean-scope>request</managed-bean-scope> 
+   </managed-bean>
+   
+   <managed-bean> 
+      <description>Session Scope Bean</description>
+      <managed-bean-name>mySessionBean</managed-bean-name>
+      <managed-bean-class>org.jboss.test.jsf.webapp.MySessionBean</managed-bean-class> 
+      <managed-bean-scope>session</managed-bean-scope> 
+   </managed-bean>
+   
+   <managed-bean>
+     <description>Use a swing JButton as a simple javabean</description>
+     <managed-bean-name>myJButton</managed-bean-name>
+     <managed-bean-class>javax.swing.JButton</managed-bean-class>
+     <managed-bean-scope>session</managed-bean-scope>
+     <managed-property>
+       <property-name>text</property-name>
+       <value>Initial Value</value>
+     </managed-property>
+   </managed-bean>
+   
+</faces-config>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+  <mbean code="org.jboss.test.jmx.invokerproxy.MyService" name="mine:service=MyService"/>
+
+   <!-- Proxy factory for MyService that will call invoke(Invocation mi) on the target service -->
+   <mbean code="org.jboss.invocation.jrmp.server.JRMPProxyFactory"
+      name="jboss.jmx:type=adaptor,name=MyService,protocol=jrmp,service=proxyFactory">
+      <!-- Use the standard JRMPInvoker from conf/jboss-service.xxml -->
+      <depends optional-attribute-name="InvokerName">jboss:service=invoker,type=jrmp</depends>
+      <!-- The target MBean -->
+      <depends optional-attribute-name="TargetName">mine:service=MyService</depends>
+      <!-- Where to bind the proxy factory -->
+      <attribute name="JndiName">MyService</attribute>
+      <!-- MyService interface -->
+      <attribute name="ExportedInterfaces">org.jboss.test.jmx.invokerproxy.MyServiceMBean</attribute>
+      <attribute name="ClientInterceptors">
+          <interceptors>
+             <interceptor>org.jboss.proxy.ClientMethodInterceptor</interceptor>
+             <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+             <interceptor>org.jboss.jmx.connector.invoker.client.InvokerAdaptorClientInterceptor</interceptor>
+             <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+          </interceptors>
+      </attribute>
+   </mbean>
+
+   <!-- Proxy factory for MyService that will call target method on the target service -->
+   <mbean code="org.jboss.invocation.jrmp.server.JRMPProxyFactory"
+      name="jboss.jmx:type=adaptor,name=MyServiceInvokeTarget,protocol=jrmp,service=proxyFactory">
+      <!-- Use the standard JRMPInvoker from conf/jboss-service.xxml -->
+      <depends optional-attribute-name="InvokerName">jboss:service=invoker,type=jrmp</depends>
+      <!-- The target MBean -->
+      <depends optional-attribute-name="TargetName">mine:service=MyService</depends>
+      <!-- Where to bind the proxy factory -->
+      <attribute name="JndiName">MyServiceInvokeTarget</attribute>
+      <!-- Invoke target method instead of invoke(Invocation mi) -->
+      <attribute name="InvokeTargetMethod">true</attribute>
+      <!-- MyService interface -->
+      <attribute name="ExportedInterfaces">org.jboss.test.jmx.invokerproxy.MyServiceMBean</attribute>
+      <attribute name="ClientInterceptors">
+          <interceptors>
+             <interceptor>org.jboss.proxy.ClientMethodInterceptor</interceptor>
+             <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+             <interceptor>org.jboss.jmx.connector.invoker.client.InvokerAdaptorClientInterceptor</interceptor>
+             <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+          </interceptors>
+      </attribute>
+   </mbean>
+
+   <mbean code="org.jboss.test.jmx.invokerproxy.ProgramaticProxySetup"
+      name="jboss.jmx:type=adaptor,name=MyServiceInvokeTarget,protocol=jrmp,service=ProgramaticProxySetup"
+      xmbean-dd="">
+      <xmbean>
+         <descriptors>
+            <injection id="MBeanServerType" setMethod="setMBeanServer" />
+            <injection id="ObjectNameType" setMethod="setObjectName" />
+         </descriptors>
+
+         <description>A XMBean deployment that programatically exposes</description>
+         <!-- Attributes -->
+         <attribute access="read-write" getMethod="getJndiName" setMethod="setJndiName">
+            <description>The JndiName to bind the proxy under</description>
+            <name>JndiName</name>
+            <type>java.lang.String</type>
+         </attribute>
+         <attribute access="read-write" getMethod="getInvokerName" setMethod="setInvokerName">
+            <description>The detached invoker service name</description>
+            <name>InvokerName</name>
+            <type>javax.management.ObjectName</type>
+         </attribute>
+
+         <!-- Operations -->
+         <operation>
+            <description>The start lifecycle operation</description>
+            <name>start</name>
+         </operation>
+         <operation>
+            <description>The stop lifecycle operation</description>
+            <name>stop</name>
+         </operation>
+         <operation>
+            <description>An operation that returns the current date prefixed by
+            the input argument</description>
+            <name>echoDate</name>
+            <parameter>
+               <description>The prefix to include in the return echo message</description>
+               <name>prefix</name>
+               <type>java.lang.String</type>
+            </parameter>
+            <return-type>java.lang.String</return-type>
+         </operation>
+      </xmbean>
+      <attribute name="JndiName">IProxy</attribute>
+      <depends optional-attribute-name="InvokerName">jboss:service=invoker,type=jrmp</depends>
+   </mbean>
+</server>

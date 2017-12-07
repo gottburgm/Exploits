@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mbean PUBLIC
+   "-//JBoss//DTD JBOSS XMBEAN 1.2//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_xmbean_1_2.dtd">
+
+<mbean>
+   <description>Test Interceptable</description>
+   <descriptors>
+     <interceptors>
+       <interceptor code="org.jboss.mx.interceptor.DynamicInterceptor"/>
+     </interceptors>   
+   </descriptors>   
+   <class>org.jboss.test.jmx.interceptors.AdderPOJO</class>
+   
+   &interceptable;
+   
+   <!-- Operations -->
+   <operation>
+      <description>Simple Addition</description>
+      <name>add</name>
+      <parameter>
+         <description>First integer</description>
+         <name>a</name>
+         <type>int</type>
+      </parameter>
+      <parameter>
+         <description>Second integer</description>
+         <name>b</name>
+         <type>int</type>
+      </parameter>
+      <return-type>int</return-type>      
+   </operation>
+
+</mbean>

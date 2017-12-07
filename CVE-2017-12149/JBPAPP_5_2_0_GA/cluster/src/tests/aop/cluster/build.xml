@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+
+<!-- ======================================================================= -->
+<!-- JBoss build file                                                       -->
+<!-- ======================================================================= -->
+
+<project name="JBoss" default="ejbjar" basedir=".">
+
+  <property environment="env"/>
+  <property name="src.dir" value="${basedir}/src/main"/>
+  <property name="src.resources" value="${basedir}/src/resources"/>
+  <property name="jboss.home" value="${env.JBOSS_HOME}"/>
+  <property name="build.dir" value="${basedir}/build"/>
+  <property name="build.classes.dir" value="${build.dir}/classes"/>
+
+  <!-- Build classpath -->
+  <path id="classpath">
+        <fileset dir="${jboss.home}/server/all/lib">
+            <include name="**/*.jar"/>
+        </fileset>
+        <fileset dir="${jboss.home}/lib">
+            <include name="**/*.jar"/>
+        </fileset>
+	<pathelement location="${build.classes.dir}"/>
+	<!-- So that we can get jndi.properties for InitialContext -->
+	<pathelement location="${basedir}/jndi"/>
+  </path>
+
+  <property name="build.classpath" refid="classpath"/>
+
+  <!-- =================================================================== -->
+  <!-- Prepares the build directory                                        -->
+  <!-- =================================================================== -->
+  <target name="prepare" >
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.classes.dir}"/>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Compiles the source code                                            -->
+  <!-- =================================================================== -->
+  <target name="compile" depends="prepare">
+    <javac srcdir="${src.dir}"
+           destdir="${build.classes.dir}"
+           debug="on"
+           deprecation="on"
+           optimize="off"
+           includes="**">
+            <classpath refid="classpath"/>
+    </javac>
+  </target>
+
+  <target name="ejbjar" depends="compile">
+    <jar jarfile="build/titan.sar">
+      <fileset dir="${build.classes.dir}">
+      	  <include name="org/jboss/test/*.class"/>
+      </fileset>
+      <fileset dir="${src.resources}/">
+          <include name="**/*.xml"/>
+      </fileset>
+     </jar>
+  </target>
+
+  <target name="run.client" depends="ejbjar">
+    <java classname="org.jboss.test.Client" fork="yes" dir=".">
+      <classpath refid="classpath"/>
+      <arg line="${locator}"/>
+    </java>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Cleans up generated stuff                                           -->
+  <!-- =================================================================== -->
+  <target name="clean.db">
+    <delete dir="${jboss.home}/server/default/db/hypersonic"/>
+  </target>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+    <delete file="${jboss.home}/server/default/deploy/titan.jar"/>
+  </target>
+
+
+</project>
+

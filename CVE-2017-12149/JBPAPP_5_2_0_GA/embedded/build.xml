@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+        <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
+        <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+        <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+        ]>
+
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--  JBoss, the OpenSource J2EE webOS                                      -->
+<!--                                                                        -->
+<!--  Distributable under LGPL license.                                     -->
+<!--  See terms of license at http://www.gnu.org.                           -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<!-- $Id: build.xml 110795 2011-02-25 23:13:14Z fnasser@redhat.com $ -->
+
+<project default="main" name="JBoss/Embedded">
+
+   <!-- ================================================================== -->
+   <!-- Setup                                                              -->
+   <!-- ================================================================== -->
+
+   <!--
+      | Include the common Buildmagic elements.
+      |
+      | This defines several different targets, properties and paths.
+      | It also sets up the basic extention tasks amoung other things.
+    -->
+
+   &buildmagic;
+
+
+   <!-- ================================================================== -->
+   <!-- Initialization                                                     -->
+   <!-- ================================================================== -->
+
+   <!--
+      | Initialize the build system.  Must depend on '_buildmagic:init'.
+      | Other targets should depend on 'init' or things will mysteriously fail.
+    -->
+
+   <target name="init" unless="init.disable" depends="_buildmagic:init">
+   </target>
+
+
+   <!-- ================================================================== -->
+   <!-- Configuration                                                      -->
+   <!-- ================================================================== -->
+
+   <!--
+      | Configure the build system.
+      |
+      | This target is invoked by the Buildmagic initialization logic and
+      | should contain module specific configuration elements.
+    -->
+
+   <target name="configure" unless="configure.disable">
+
+      <!-- =================== -->
+      <!-- Basic Configuration -->
+      <!-- =================== -->
+
+      <!-- Module name(s) & version -->
+      <property name="module.name" value="embedded"/>
+      <property name="module.Name" value="JBoss Embedded"/>
+      <property name="module.version" value="DEV"/>
+
+      <!-- ========= -->
+      <!-- Libraries -->
+      <!-- ========= -->
+      &libraries;
+      <!-- The combined library classpath -->
+      <path id="library.classpath">
+         <path refid="sun.jaf.classpath"/>
+         <path refid="jboss.web.classpath"/>
+         <path refid="javassist.classpath"/>
+         <path refid="qdox.classpath"/>
+         <path refid="jgroups.jgroups.classpath"/>
+         <path refid="hibernate3.classpath"/>
+         <path refid="ejb3-persistence.classpath"/>
+         <path refid="javassist.classpath"/>
+         <path refid="trove.classpath"/>
+         <path refid="xdoclet.xdoclet.classpath"/>
+         <path refid="apache.ant.classpath"/>
+         <path refid="oswego.concurrent.classpath"/>
+         <path refid="junit.junit.classpath"/>
+         <path refid="jboss.remoting.classpath"/>
+         <path refid="apache.logging.classpath"/>
+         <path refid="jboss.serialization.classpath"/>
+         <path refid="jboss.metadata.classpath"/>         
+         <path refid="jboss.jboss.reflect.classpath"/>
+         <path refid="jboss.jboss.mdr.classpath"/>
+         <path refid="jboss.jboss.man.classpath"/>
+         <path refid="jboss.jboss.deployers.classpath"/>
+         <path refid="jboss.jboss.cl.classpath"/>
+         <path refid="jboss.microcontainer.classpath"/>
+         <path refid="quartz.quartz.classpath"/>
+         <path refid="org.jboss.ws.native.classpath"/>
+         <path refid="org.jboss.spec.javax.xml.rpc.classpath"/>
+         <path refid="saaj.api.classpath"/>
+         <path refid="jboss.jbossxb.classpath"/>
+         <path refid="jboss.jboss.vfs.classpath"/>
+         <path refid="jboss.web.classpath"/>
+         <path refid="jacorb.jacorb.classpath"/>
+         <!-- FIXME: temporary for EJBTHREE-485 -->
+         <path refid="cglib.classpath"/>
+         <path refid="jboss.integration.classpath"/>
+         <path refid="jboss.jboss.ejb3.core.classpath"/>
+         <path refid="jboss.jboss.ejb3.cache.classpath"/>
+         <path refid="jboss.jboss.ejb3.ext.api.classpath" />
+      </path>
+
+      <!-- ======= -->
+      <!-- Modules -->
+      <!-- ======= -->
+
+      &modules;
+
+      <!-- The combined dependent module classpath -->
+      <path id="dependentmodule.classpath">
+         <path refid="jboss.jboss.javaee.classpath"/>
+         <path refid="jboss.j2se.classpath"/>
+         <path refid="jboss.aop.classpath"/>
+         <path refid="jboss.cache.classpath"/>
+         <path refid="jboss.aspects.classpath"/>
+         <path refid="jboss.jboss.javaee.classpath"/>
+         <path refid="jboss.common.core.classpath"/>
+         <path refid="jboss.common.logging.spi.classpath"/>
+         <path refid="jboss.common.logging.log4j.classpath"/>
+         <path refid="jboss.common.logging.jdk.classpath"/>
+         <path refid="jboss.cluster.classpath"/>
+         <path refid="jboss.main.classpath"/>
+         <path refid="jboss.system.classpath"/>
+         <path refid="jboss.systemjmx.classpath"/>
+         <path refid="jboss.jnpserver.classpath"/>
+         <path refid="jboss.jboss.security.spi.classpath"/>
+         <path refid="jboss.jbosssx.classpath"/>
+         <path refid="jboss.server.classpath"/>
+         <path refid="jboss.mq.classpath"/>
+         <path refid="jboss.jca.classpath"/>
+         <path refid="jboss.jmx.classpath"/>
+         <path refid="jboss.iiop.classpath"/>
+         <path refid="jboss.test.classpath"/>
+         <path refid="jboss.bootstrap.classpath"/>
+
+      </path>
+
+      <!-- ===== -->
+      <!-- Tasks -->
+      <!-- ===== -->
+
+      <!-- Where source files live -->
+      <property name="source.java" value="${module.source}/main/java"/>
+      <property name="source.etc" value="${module.source}/etc"/>
+      <property name="resources" value="${module.source}/main/resources"/>
+
+      <!-- Where build generated files will go -->
+      <property name="build.reports" value="${module.output}/reports"/>
+      <property name="build.classes" value="${module.output}/classes"/>
+      <property name="build.lib" value="${module.output}/lib"/>
+      <property name="build.api" value="${module.output}/api"/>
+      <property name="build.etc" value="${module.output}/etc"/>
+
+      <!-- Install/Release structure -->
+      <property name="install.id" value="${module.name}-${module.version}"/>
+      <property name="release.id" value="${install.id}"/>
+      <property name="install.root" value="${module.output}/${install.id}"/>
+
+      <!-- The combined thirdparty classpath -->
+      <path id="thirdparty.classpath">
+         <path refid="library.classpath"/>
+         <path refid="dependentmodule.classpath"/>
+      </path>
+
+      <!-- This module is based on Java 1.2 -->
+      <property name="javac.target" value="1.2"/>
+
+      <!-- classpath and local.classpath must have a value using with a path -->
+      <property name="classpath" value=""/>
+      <property name="local.classpath" value=""/>
+
+      <!-- The classpath required to build classes. -->
+      <path id="javac.classpath">
+         <pathelement path="${classpath}"/>
+         <pathelement path="${local.classpath}"/>
+         <path refid="thirdparty.classpath"/>
+      </path>
+
+      <!-- The classpath required to build javadocs. -->
+      <path id="javadoc.classpath">
+         <path refid="javac.classpath"/>
+         <path refid="jboss.ejb3.classpath"/>
+      </path>
+
+      <!-- Packages to include when generating api documentation -->
+      <property name="javadoc.packages" value="javax.*"/>
+
+      <!-- Override JUnit defaults -->
+      <property name="junit.timeout" value="240000"/>
+      <!-- 4 minutes -->
+      <property name="junit.batchtest.todir" value="${build.reports}"/>
+      <property name="junit.jvm.options" value="-Ddummy"/>
+   </target>
+
+
+   <!-- ================================================================== -->
+   <!-- Compile                                                            -->
+   <!-- ================================================================== -->
+
+   <!--
+      | Compile everything.
+      |
+      | This target should depend on other compile-* targets for each
+      | different type of compile that needs to be performed, short of
+      | documentation compiles.
+    -->
+
+   <target name="compile"
+           description="Compile all source files."
+           depends="compile-etc, compile-classes"/>
+
+   <!-- Compile all class files -->
+   <target name="compile-classes" depends="init">
+      <mkdir dir="${build.classes}"/>
+      <javac destdir="${build.classes}"
+             optimize="${javac.optimize}"
+             debug="${javac.debug}"
+             source="1.5"
+             target="1.5"
+             depend="${javac.depend}"
+             verbose="${javac.verbose}"
+             includeAntRuntime="${javac.include.ant.runtime}"
+             includeJavaRuntime="${javac.include.java.runtime}"
+             deprecation="${javac.deprecation}"
+             failonerror="${javac.fail.onerror}">
+         <src path="${source.java}"/>
+         <classpath refid="javac.classpath"/>
+         <include name="${javac.includes}"/>
+         <exclude name="${javac.excludes}"/>
+      </javac>
+   </target>
+
+   <!-- Compile manifests -->
+   <target name="compile-etc" depends="init">
+   </target>
+
+
+   <!-- ================================================================== -->
+   <!-- Archives                                                           -->
+   <!-- ================================================================== -->
+
+   <!--
+      | Build all jar files.
+    -->
+   <target name="internal-jars"
+           depends="_buildmagic:build-bypass-check"
+           unless="build-bypass.on">
+
+      <call target="compile"/>
+
+      <!-- Update the build marker to allow bypassing -->
+      <touch file="${build-bypass.marker}"/>
+
+   </target>
+
+   <target name="jars"
+           description="Builds all jar files."
+           depends="internal-jars">
+
+      <mkdir dir="${build.lib}"/>
+
+      <mkdir dir="${build.lib}/embedded-jboss/bootstrap"/>
+      <mkdir dir="${build.lib}/embedded-jboss/lib"/>
+      <copy todir="${build.lib}/embedded-jboss/bootstrap">
+         <fileset dir="${resources}/javase">
+            <include name="**/*"/>
+            <exclude name="conf/binarybootstrap-beans.xml"/>
+         </fileset>
+      </copy>
+
+      <copy todir="${build.lib}/embedded-jboss/bootstrap/conf">
+         <fileset dir="${jboss.jbossts.resources}">
+            <include name="jbossjta-properties.xml"/>
+         </fileset>
+      </copy>
+
+      <jar jarfile="${build.lib}/jboss-local-jdbc.rar">
+         <fileset dir="../connector/src/resources/local-rar">
+            <include name="META-INF/ra.xml"/>
+         </fileset>
+      </jar>
+      <jar jarfile="${build.lib}/jboss-xa-jdbc.rar">
+         <fileset dir="../connector/src/resources/xa-rar">
+            <include name="META-INF/ra.xml"/>
+         </fileset>
+      </jar>
+
+      <jar jarfile="${build.lib}/jms-ra.rar">
+         <fileset dir="../connector/src/resources/jms-rar">
+            <include name="META-INF/ra.xml"/>
+         </fileset>
+      </jar>
+
+      <copy todir="${build.lib}/embedded-jboss/bootstrap/deploy">
+         <fileset dir="${build.lib}">
+            <include name="*.rar"/>
+         </fileset>
+      </copy>
+
+      <mkdir dir="${build.lib}/embedded-jboss/bootstrap/deploy/messaging"/>
+
+      <copy todir="${build.lib}/embedded-jboss/bootstrap/deploy/messaging">
+         <fileset dir="../messaging/output/etc/deploy/common">
+            <include name="*.xml"/>
+         </fileset>
+         <fileset dir="../messaging/output/etc/deploy/non-clustered">
+            <include name="*.xml"/>
+         </fileset>
+      </copy>
+
+      <mkdir dir="${build.lib}/embedded-jboss/bootstrap/conf/props"/>
+      <copy todir="${build.lib}/embedded-jboss/bootstrap/conf/props">
+         <fileset dir="../messaging/output/etc/deploy/common">
+            <include name="*.properties"/>
+         </fileset>
+      </copy>
+
+      <mkdir dir="${build.lib}/embedded-jboss/optional-lib"/>
+
+      <copy todir="${build.lib}/embedded-jboss/optional-lib">
+         <fileset dir="${jboss.test.lib}">
+            <include name="*.jar"/>
+         </fileset>
+         <fileset dir="${junit.junit.lib}">
+            <include name="*.jar"/>
+         </fileset>
+      </copy>
+
+      <jar jarfile="${build.lib}/embedded-jboss/lib/jboss-embedded-tomcat-bootstrap.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/embedded/tomcat/EmbeddedJBossBootstrapListener.class"/>
+            <include name="org/jboss/embedded/tomcat/WebinfScanner.class"/>
+            <include name="org/jboss/embedded/tomcat/security/*.class"/>
+         </fileset>
+      </jar>
+
+
+   	  <jar jarfile="${build.lib}/embedded-jboss/lib/jboss-embedded.jar">
+   	     <fileset dir="${build.classes}">
+   	        <include name="org/jboss/embedded/**"/>
+   	        <exclude name="org/jboss/embedded/tomcat/EmbeddedJBossBootstrapListener.class"/>
+   	        <exclude name="org/jboss/embedded/tomcat/WebinfScanner.class"/>
+   	        <exclude name="org/jboss/embedded/tomcat/security/*.class"/>
+   	     </fileset>
+   	  </jar>
+
+      <jar jarfile="${build.lib}/embedded-jboss/lib/jboss-embedded-all.jar">
+         <fileset dir="${build.classes}">
+            <exclude name="org/jboss/embedded/**"/>
+         </fileset>
+         <fileset dir="../ejb3/src/resources">
+            <include name="META-INF/persistence.properties"/>
+         </fileset>
+         <fileset dir="../server/output/etc/conf/default">
+            <include name="xmdesc/*"/>
+         </fileset>
+         <fileset dir="${resources}">
+            <include name="stylesheets/*"/>
+         </fileset>
+         <fileset dir="${jboss.system.root}/resources">
+            <include name="org/jboss/*"/>
+         </fileset>
+         <zipfileset src="${jboss.ejb3.lib}/jboss-ejb3.jar"/>
+         <zipfileset src="${jboss.ejb3.lib}/jboss-annotations-ejb3.jar"/>
+         <zipfileset src="${jboss.jboss.javaee.lib}/jboss-javaee.jar"/>
+         <zipfileset src="${jboss.integration.lib}/jboss-integration.jar"/>
+         <zipfileset src="${jboss.aop.lib}/jboss-aop-jdk50.jar"/>
+      	<zipfileset src="${jboss.aop.lib}/jboss-aop-jboss4-jdk50.jar"/>
+         <zipfileset src="${jboss.aop.lib}/jboss-aop-deployer-jdk50.jar"/>
+         <zipfileset src="${jboss.varia.lib}/hsqldb-plugin.jar"/>
+         <zipfileset src="${jboss.mq.lib}/jbossmq.jar"/>
+         <zipfileset src="${jboss.security.int.lib}/jbosssx-server.jar"/>
+         <zipfileset src="${jboss.aspects.lib}/jboss-aspect-library-jdk50.jar"/>
+         <zipfileset src="${jboss.aspects.lib}/jboss-aop-embedded.jar"/>
+         <zipfileset src="${jboss.integration.lib}/jboss-transaction-spi.jar"/>
+         <zipfileset src="${jboss.integration.lib}/jboss-classloading-spi.jar"/>
+         <zipfileset src="${jboss.jnpserver.lib}/jnpserver.jar"/>
+         <zipfileset src="${jboss.common.core.lib}/jboss-common-core.jar"/>
+         <zipfileset src="${jboss.common.logging.log4j.lib}/jboss-logging-log4j.jar"/>
+         <zipfileset src="${jboss.common.logging.spi.lib}/jboss-logging-spi.jar"/>
+         <zipfileset src="${jboss.jbossxb.lib}/jboss-xml-binding.jar"/>
+         <zipfileset src="${jboss.jbosssx.lib}/jbosssx.jar"/>
+         <zipfileset src="${jboss.jboss.security.spi.lib}/jboss-security-spi.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-kernel.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-container.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-classloader.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-dependency.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-deployers-client.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-deployers-client-spi.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-deployers-core.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-deployers-core-spi.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-deployers-impl.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-deployers-spi.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-deployers-structure-spi.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-deployers-vfs.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-deployers-vfs-spi.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-aop-mc-int.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-metatype.jar"/>
+         <zipfileset src="${jboss.microcontainer.lib}/jboss-managed.jar"/>
+         <zipfileset src="${jboss.server.lib}/jboss.jar"/>
+         <zipfileset src="${jboss.remoting.lib}/jboss-remoting.jar"/>
+         <zipfileset src="${jboss.j2se.lib}/jboss-j2se.jar"/>
+         <zipfileset src="${jboss.jca.lib}/jboss-jca.jar"/>
+         <zipfileset src="${jboss.jca.lib}/jboss-common-jdbc-wrapper.jar"/>
+         <zipfileset src="${jboss.jca.lib}/jboss-local-jdbc.jar"/>
+         <zipfileset src="${jboss.iiop.lib}/jboss-iiop.jar"/>
+         <zipfileset src="${jboss.jca.lib}/jboss-xa-jdbc.jar"/>
+         <zipfileset src="${jboss.jca.lib}/jms-ra.jar"/>
+         <zipfileset src="${jboss.jmx.lib}/jboss-jmx.jar"/>
+         <zipfileset src="${jboss.mbeans.lib}/jboss-mbeans.jar"/>
+         <zipfileset src="${jboss.main.lib}/jboss-main.jar"/>
+         <zipfileset src="${jboss.bootstrap.lib}/jboss-bootstrap.jar"/>
+         <zipfileset src="${jboss.system.lib}/jboss-system.jar"/>
+         <zipfileset src="${jboss.systemjmx.lib}/jboss-system-jmx.jar"/>
+         <zipfileset src="${jboss.serialization.lib}/jboss-serialization.jar"/>
+         <zipfileset src="${jboss.jbossts.lib}/jbossjta.jar"/>
+         <zipfileset src="${jboss.jbossts.lib}/jbossjta-integration.jar"/>
+         <zipfileset src="${jboss.jbossts.lib}/jbossts-common.jar"/>
+         <zipfileset src="${org.jboss.spec.javax.xml.rpc.lib}/jboss-jaxrpc-api_1.1_spec.jar"/>
+         <zipfileset src="${org.jboss.ws.native.lib}/jbossws-native-jaxws.jar"/>
+         <zipfileset src="${org.jboss.ws.native.lib}/jbossws-native-client.jar"/>
+         <zipfileset src="${org.jboss.ws.lib}/jbossws-spi.jar"/>
+         <zipfileset src="${jboss.jboss.vfs.lib}/jboss-vfs.jar"/>
+         <zipfileset src="${jboss.messaging.lib}/jboss-messaging.jar"/>
+         <zipfileset src="${jboss.jboss.jaspi.api.lib}/jboss-jaspi-api.jar"/>
+         <zipfileset src="${jboss.metadata.lib}/jboss-metadata.jar"/>
+         <zipfileset src="${jboss.jboss.ejb3.cache.lib}/jboss-ejb3-cache.jar"/>
+         <zipfileset src="${jboss.jboss.ejb3.ext.api.lib}/jboss-ejb3-ext-api.jar"/>
+         <zipfileset src="${jboss.jboss.ejb3.impl.lib}/jboss-ejb3-impl.jar"/>
+         <zipfileset src="${org.jboss.cluster.lib}/jboss-ha-client.jar" />
+      	 <zipfileset src="${jboss.profileservice.lib}/jboss-profileservice.jar" />
+         <zipfileset src="../messaging/output/lib/jboss-messaging-int.jar"/>
+      </jar>
+
+
+      <jar jarfile="${build.lib}/embedded-jboss/lib/hibernate-all.jar">
+         <zipfileset src="${hibernate.lib}/hibernate3.jar"/>
+         <zipfileset src="${hibernate.entitymanager.lib}/ejb3-persistence.jar"/>
+         <zipfileset src="${hibernate.entitymanager.lib}/hibernate-entitymanager.jar"/>
+         <zipfileset src="${hibernate.annotations.lib}/hibernate-annotations.jar"/>
+         <zipfileset src="${hibernate.commons.annotations.lib}/hibernate-commons-annotations.jar"/>
+         <zipfileset src="${hibernate.validator.lib}/hibernate-validator.jar" />
+      </jar>
+
+
+      <jar jarfile="${build.lib}/embedded-jboss/lib/thirdparty-all.jar">
+         <zipfileset src="${apache.log4j.lib}/log4j.jar"/>
+         <zipfileset src="${hsqldb.hsqldb.lib}/hsqldb.jar"/>
+         <zipfileset src="${antlr.antlr.lib}/antlr.jar"/>
+         <zipfileset src="${cglib.lib}/cglib.jar"/>
+         <zipfileset src="${dom4j.dom4j.lib}/dom4j.jar"/>
+         <zipfileset src="${apache.logging.lib}/commons-logging.jar"/>
+         <zipfileset src="${apache.collections.lib}/commons-collections.jar"/>
+         <zipfileset src="${oswego.concurrent.lib}/concurrent.jar"/>
+         <zipfileset src="${apache.xerces.lib}/resolver.jar"/>
+         <zipfileset src="${apache.xerces.lib}/xercesImpl.jar"/>
+         <zipfileset src="${apache.xerces.lib}/xml-apis.jar" excludes="**/license"/>
+         <zipfileset src="${javassist.lib}/javassist.jar"/>
+         <zipfileset src="${trove.lib}/trove.jar"/>
+         <zipfileset src="${quartz.quartz.lib}/quartz-all.jar"/>
+      	 <zipfileset src="${sun.jaxb.lib}/jaxb-api.jar"/>
+      	 <zipfileset src="${sun.jaxb.lib}/jaxb-impl.jar"/>
+      </jar>
+   </target>
+
+   <target name="dist" depends="init">
+      <mkdir dir="output/src"/>
+      <unzip src="${jboss.jboss.vfs.lib}/jboss-vfs-sources.jar" dest="output/src"/>
+      <delete dir="output/src/META-INF"/>
+      <javadoc
+              packagenames="org.jboss.embedded"
+              classpathref="javac.classpath"
+              destdir="output/api"
+              use="true"
+              protected="true"
+              version="true"
+              windowtitle="Embedded JBoss API Documentation"
+              doctitle="Embedded JBoss API Documentation">
+         <fileset dir="${source.java}" defaultexcludes="yes">
+            <include name="**"/>
+         </fileset>
+         <fileset dir="output/src" defaultexcludes="yes">
+            <include name="**"/>
+         </fileset>
+      </javadoc>
+      <property name="embedded.version" value="embedded-jboss-beta2"/>
+      <zip zipfile="${embedded.version}.zip">
+         <zipfileset dir="." prefix="${embedded.version}">
+            <include name="DOCUMENTATION.html"/>
+            <include name="INSTALLATION.html"/>
+            <include name="copyright.txt"/>
+            <include name="lgpl.html"/>
+         </zipfileset>
+         <zipfileset dir="." prefix="${embedded.version}">
+            <include name="install-tomcat55.xml"/>
+         </zipfileset>
+         <zipfileset dir="output/api" prefix="${embedded.version}/docs/api">
+            <include name="**"/>
+         </zipfileset>
+         <zipfileset dir="${build.lib}/embedded-jboss" prefix="${embedded.version}">
+            <include name="bootstrap/**"/>
+            <include name="lib/**"/>
+            <include name="optional-lib/**"/>
+         </zipfileset>
+         <zipfileset dir="docs" prefix="${embedded.version}/docs">
+            <include name="**"/>
+            <exclude name="**/.svn/**"/>
+            <exclude name="tutorial/junit/ide"/>
+            <exclude name="tutorial/junit/ide/**"/>
+            <exclude name="**/*.wiki"/>
+            <exclude name="**/.project"/>
+            <exclude name="**/.classpath"/>
+         </zipfileset>
+         <zipfileset dir="docs/tutorial/junit" prefix="${embedded.version}">
+            <include name=".project"/>
+            <include name=".classpath"/>
+         </zipfileset>
+         <zipfileset dir="../testsuite/src" prefix="${embedded.version}/docs/tutorial/junit/ide">
+            <include name="stylesheets/**"/>
+         </zipfileset>
+      </zip>
+   </target>
+
+
+   <!-- ================================================================== -->
+   <!-- Install & Release                                                  -->
+   <!-- ================================================================== -->
+
+   <target name="install"
+           description="Install the structure for a release."
+           depends="all, _buildmagic:install:default"/>
+
+   <target name="release" depends="install"/>
+
+   <target name="release-zip"
+           description="Builds a ZIP distribution."
+           depends="release, _buildmagic:release:zip"/>
+
+   <target name="release-tar"
+           description="Builds a TAR distribution."
+           depends="release, _buildmagic:release:tar"/>
+
+   <target name="release-tgz"
+           description="Builds a TAR-GZ distribution."
+           depends="release, _buildmagic:release:tgz"/>
+
+   <target name="release-all"
+           description="Builds a distribution for each archive type."
+           depends="release-zip, release-tgz"/>
+
+   <!-- ================================================================== -->
+   <!-- Cleaning                                                           -->
+   <!-- ================================================================== -->
+
+   <!-- Clean up all build output -->
+   <target name="clean"
+           description="Cleans up most generated files."
+           depends="_buildmagic:clean">
+   </target>
+
+   <!-- Clean up all generated files -->
+   <target name="clobber"
+           description="Cleans up all generated files."
+           depends="_buildmagic:clobber, clean">
+   </target>
+
+
+   <!-- ================================================================== -->
+   <!-- Misc.                                                              -->
+   <!-- ================================================================== -->
+
+   <target name="main"
+           description="Executes the default target (most)."
+           depends="most"/>
+
+   <target name="all"
+           description="Builds everything."
+           depends="jars, docs"/>
+
+   <target name="most"
+           description="Builds almost everything."
+           depends="jars"/>
+
+   <target name="help"
+           description="Show this help message."
+           depends="_buildmagic:help:standard"/>
+
+</project>

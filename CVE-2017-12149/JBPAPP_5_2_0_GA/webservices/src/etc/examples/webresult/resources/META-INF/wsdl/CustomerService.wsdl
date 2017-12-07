@@ -1,0 +1,53 @@
+<definitions name='CustomerServiceService' targetNamespace='http://webresult.samples.jaxws.ws.test.jboss.org/' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://webresult.samples.jaxws.ws.test.jboss.org/' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://webresult.samples.jaxws.ws.test.jboss.org/' version='1.0' xmlns:tns='http://webresult.samples.jaxws.ws.test.jboss.org/' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:complexType name='USAddress'>
+    <xs:sequence>
+     <xs:element name='address' nillable='true' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='CustomerRecord'>
+    <xs:sequence>
+     <xs:element name='firstName' nillable='true' type='xs:string'/>
+     <xs:element name='lastName' nillable='true' type='xs:string'/>
+     <xs:element name='address' nillable='true' type='tns:USAddress'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </types>
+  
+ <message name='CustomerService_locateCustomer'>
+  <part name='FirstName' type='xsd:string'/>
+  <part name='LastName' type='xsd:string'/>
+  <part name='Address' type='tns:USAddress'/>
+ </message>
+ <message name='CustomerService_locateCustomerResponse'>
+  <part name='CustomerRecord' type='tns:CustomerRecord'/>
+ </message>
+  
+ <portType name='CustomerService'>
+  <operation name='locateCustomer' parameterOrder='FirstName LastName Address'>
+   <input message='tns:CustomerService_locateCustomer'/>
+   <output message='tns:CustomerService_locateCustomerResponse'/>
+  </operation>
+ </portType>
+  
+ <binding name='CustomerServiceBinding' type='tns:CustomerService'>
+  <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='locateCustomer'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://webresult.samples.jaxws.ws.test.jboss.org/' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://webresult.samples.jaxws.ws.test.jboss.org/' use='literal'/>
+   </output>
+  </operation>
+ </binding>
+  
+ <service name='CustomerServiceService'>
+  <port binding='tns:CustomerServiceBinding' name='CustomerServicePort'>
+   <soap:address location='http://@jboss.bind.address@:8080/jaxws-samples-webresult'/>
+  </port>
+ </service>
+</definitions>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    JACC configuration
+    $Id: jacc-jboss-beans.xml 85945 2009-03-16 19:45:12Z dimitris@jboss.org $
+-->
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+    <bean name="JaccPolicyProvider"
+        class="org.jboss.test.jacc.test.allstarrole.AllStarRoleJaccPolicy">
+    </bean>
+    
+    <bean class="org.jboss.security.jacc.SecurityService"
+        name="JaccSecurityService">
+        <property name="policy"><inject bean="JaccPolicyProvider" property="policyProxy"/></property>
+    </bean>
+</deployment>

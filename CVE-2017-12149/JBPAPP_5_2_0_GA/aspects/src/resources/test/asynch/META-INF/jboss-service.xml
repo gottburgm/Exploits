@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: jboss-service.xml 77536 2008-08-27 14:05:11Z kabir.khan@jboss.com $ -->
+
+<!-- ===================================================================== -->
+<!--  JBoss Server Configuration                                           -->
+<!-- ===================================================================== -->
+
+<server>
+
+   <mbean code="org.jboss.test.asynch.Service"
+      name="jboss.aop:service=AsynchTest"/>
+
+   <mbean code="org.jboss.remoting.transport.Connector"
+      name="jboss.remoting:type=Connector,transport=socket5150">
+      <attribute name="InvokerLocator">socket://${jboss.bind.address}:5150</attribute>
+      <attribute name="Configuration">
+         <handlers>
+            <handler subsystem="AOP">org.jboss.aspects.remoting.AOPRemotingInvocationHandler</handler>
+         </handlers>
+      </attribute>
+   </mbean>
+
+</server>

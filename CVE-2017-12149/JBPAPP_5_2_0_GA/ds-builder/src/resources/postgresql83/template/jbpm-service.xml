@@ -1,0 +1,11 @@
+   <mbean code="org.jboss.internal.soa.esb.dependencies.DatabaseInitializer"
+       name="jboss.esb:service=JBPMSequenceInitializer">
+      <attribute name="Datasource">java:/JbpmDS</attribute>
+      <attribute name="ExistsSql">select nextval('hibernate_sequence')</attribute>
+      <attribute name="SqlFiles">
+      jbpm-sql/jbpm.jpdl.postgresql.sequence.sql
+      </attribute>
+      <depends>jboss.jca:service=DataSourceBinding,name=JbpmDS</depends>
+      <attribute name="UseEOL">true</attribute>
+   </mbean>
+

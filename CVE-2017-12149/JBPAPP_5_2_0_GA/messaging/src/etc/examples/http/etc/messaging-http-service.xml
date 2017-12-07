@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+     HTTP Transport Example.
+
+     $Id: messaging-http-service.xml 85945 2009-03-16 19:45:12Z dimitris@jboss.org $
+ -->
+
+<server>
+
+   <mbean code="org.jboss.jms.server.connectionfactory.ConnectionFactory"
+      name="jboss.messaging.destination:service=HttpConnectionFactory"
+      xmbean-dd="xmdesc/ConnectionFactory-xmbean.xml">
+      <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+      <depends optional-attribute-name="Connector">jboss.messaging:service=Connector,transport=http</depends>
+      <attribute name="JNDIBindings">
+         <bindings>
+            <binding>/HttpConnectionFactory</binding>
+         </bindings>
+      </attribute>
+   </mbean>
+
+</server>

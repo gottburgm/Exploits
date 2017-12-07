@@ -1,0 +1,20 @@
+<?xml version='1.0'?>
+<!-- The JAAS login configuration file for the java:/jaas/jbossweb-form-auth
+security domain used by the security-spec test case
+-->
+<policy xsi:schemaLocation="urn:jboss:security-config:5.0 resource:security-config_5_0.xsd" xmlns:jbsx="urn:jboss:security-config:5.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <application-policy name = "jbossweb-form-auth">
+       <authentication>
+          <login-module code = "org.jboss.security.auth.spi.UsersRolesLoginModule"
+             flag = "required">
+             <module-option name = "unauthenticatedIdentity">nobody</module-option>
+             <module-option name="usersProperties">form-auth-users.properties</module-option>
+             <module-option name="rolesProperties">form-auth-roles.properties</module-option>
+          </login-module>
+       </authentication>
+       <authorization>
+           <policy-module code="org.jboss.security.authorization.modules.AllPermitAuthorizationModule" flag="required"/>
+       </authorization>
+    </application-policy>
+</policy>

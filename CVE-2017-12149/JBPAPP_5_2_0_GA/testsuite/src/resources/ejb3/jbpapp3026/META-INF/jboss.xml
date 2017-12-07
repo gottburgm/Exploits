@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<jboss
+        xmlns="http://www.jboss.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.jboss.com/xml/ns/javaee
+                            http://www.jboss.org/j2ee/schema/jboss_5_0.xsd"
+        version="3.0">
+   <enterprise-beans>
+      <message-driven>
+         <ejb-name>SimpleMDBForTopicCreation</ejb-name>
+         <create-destination>true</create-destination>
+      </message-driven>
+      <message-driven>
+         <ejb-name>SimpleMDBForQueueCreation</ejb-name>
+         <create-destination>true</create-destination>
+      </message-driven>
+   </enterprise-beans>
+</jboss>

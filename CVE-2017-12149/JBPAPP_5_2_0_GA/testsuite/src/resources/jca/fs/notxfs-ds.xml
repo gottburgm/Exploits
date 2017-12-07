@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<connection-factories>
+   <no-tx-connection-factory>
+      <jndi-name>NoTransFS</jndi-name>
+      <rar-name>notxfs.rar</rar-name>
+      <connection-definition>org.jboss.test.jca.fs.DirContextFactory</connection-definition>
+      <config-property name="FileSystemRootDir" type="java.lang.String">/tmp/db/fs_store</config-property>
+   </no-tx-connection-factory>
+</connection-factories>

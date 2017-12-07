@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<connection-factories>
+
+  <tx-connection-factory>
+    <jndi-name>testdeployers/DS1</jndi-name>
+    <rar-name>unpacked-ear2.ear#unpacked-mcf1.rar</rar-name>
+    <connection-definition>org.jboss.test.deployers.rar.mcf1.MCF1ConnectionFactory</connection-definition>
+  </tx-connection-factory>
+
+</connection-factories>

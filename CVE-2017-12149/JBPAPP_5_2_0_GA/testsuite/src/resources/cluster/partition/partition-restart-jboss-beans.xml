@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+   
+   <!-- Don't inject the real AS thread pool, as it has a classloader
+         leak and we don't want to leak this classloader to it
+    -->
+    <bean name="RestartPartitionThreadPool" class="org.jboss.util.threadpool.BasicThreadPool">
+              <constructor>
+                 <parameter>RestartPartitionThreadPool</parameter>
+                 <parameter>
+                    <bean name="RestartPartitionThreadGroup" class="java.lang.ThreadGroup">
+                       <constructor>
+                          <parameter>RestartPartitionThreadGroup</parameter>
+                       </constructor>
+                    </bean>
+                 </parameter>
+              </constructor>
+    </bean>
+   
+   <!-- 
+        The HAPartitionCache instance defined here is shared by JBoss cluster services that
+        use JBossCache as their underlying data store.  Currently the services that share this 
+        cache are HAJNDI and DistributedState.  It is possible to change the cluster name but this 
+        isn't recommended since it will be more difficult for others to recognize that the renamed 
+        cluster is the one used by JBoss cluster services.  
+   -->
+   
+   <!-- First we create a Configuration object for the cache -->
+   <bean name="RestartPartition-HAPartitionCacheConfig" 
+   		class="org.jboss.cache.config.Configuration">
+      
+        <!-- When we're installed, register ourself -->
+        <install bean="CacheConfigurationRegistry" method="registerConfiguration">
+          <parameter>restart-partition</parameter>
+          <parameter><this/></parameter>
+        </install>
+      
+        <!-- When we're uninstalled, unregister ourself -->
+        <uninstall bean="CacheConfigurationRegistry" method="registerConfiguration">
+          <parameter>restart-partition</parameter>
+        </uninstall>
+        
+        <!-- The ClusterPartition beans need to wait until we are completely 
+             installed and have register ourself -->
+        <supply>RestartPartitionCacheConfigSupply</supply>
+        
+        <!-- Externally injected services -->  
+        <property name="runtimeConfig">
+           <bean name="RestartPartition-HAPartitionCacheRuntimeConfig" class="org.jboss.cache.config.RuntimeConfig">
+              <property name="transactionManager"><inject bean="jboss:service=TransactionManager" property="TransactionManager"/></property>
+           </bean>
+        </property>
+        
+        <property name="multiplexerStack">${jboss.default.jgroups.stack:udp}</property>
+
+        <!-- Valid isolation levels are 
+                              SERIALIZABLE
+                              REPEATABLE_READ (default)
+                              READ_COMMITTED
+                              READ_UNCOMMITTED
+                              NONE
+        -->
+        <property name="isolationLevelString">REPEATABLE_READ</property>
+
+        <!-- Valid modes are LOCAL, REPL_ASYNC and REPL_SYNC -->
+        <property name="cacheModeString">REPL_SYNC</property>
+
+        <!-- Name of cluster. Needs to be the same for all nodes in clusters, 
+          in order to find each other -->
+        <property name="clusterName">RestartPartition-HAPartitionCache</property>
+
+        <!-- Whether or not to fetch state on joining a cluster  -->
+        <property name="fetchInMemoryState">true</property>
+
+        <!-- The max amount of time (in milliseconds) we wait until the
+            initial state (ie. the contents of the cache) are retrieved from
+            existing members in a clustered environment -->
+        <property name="stateRetrievalTimeout">5000</property>
+
+        <!-- Number of milliseconds to wait until all responses for a
+            synchronous call have been received. -->
+        <property name="syncReplTimeout">20000</property>
+
+        <!-- Max number of milliseconds to wait for a lock acquisition -->
+        <property name="lockAcquisitionTimeout">15000</property>
+        
+        <property name="exposeManagementStatistics">true</property>
+
+    </bean>
+
+   <!-- ==================================================================== -->
+   <!-- Cluster Partition: defines cluster                                   -->
+   <!-- ==================================================================== -->
+   
+   <bean name="RestartCacheHandler"
+         class="org.jboss.ha.framework.server.HAPartitionCacheHandlerImpl">
+         <property name="cacheManager"><inject bean="CacheManager"/></property>
+         <property name="cacheConfigName">restart-partition</property>
+   </bean>
+   
+   <bean name="RestartPartition"
+   		 class="org.jboss.ha.framework.server.ClusterPartition">     
+   		 
+      <depends>jboss:service=Naming</depends>
+    	 
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=RestartPartition", exposedInterface=org.jboss.ha.framework.server.ClusterPartitionMBean.class)</annotation>
+      
+      <demand>RestartPartitionCacheConfigSupply</demand>
+      
+      <!-- ClusterPartition requires a Cache for state management -->
+      <property name="cacheHandler"><inject bean="RestartCacheHandler"/></property>
+               
+      <!-- Name of the partition being built -->
+      <property name="partitionName">RestartPartition</property>
+         
+      <!-- The address used to determine the node name -->
+      <property name="nodeAddress">${jboss.bind.address}</property>
+      
+      <!-- Max time (in ms) to wait for state transfer to complete. Increase for large states -->
+      <property name="stateTransferTimeout">30000</property>
+              
+      <!-- Max time (in ms) to wait for RPC calls to complete. -->
+      <property name="methodCallTimeout">60000</property>
+      
+      <property name="distributedStateImpl">
+		   <bean name="RestartDistributedState"
+		   		 class="org.jboss.ha.framework.server.DistributedStateImpl">		      
+		      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=DistributedState,partitionName=RestartPartition", exposedInterface=org.jboss.ha.framework.server.DistributedStateImplMBean.class, registerDirectly=true)</annotation>
+		      <property name="cacheHandler"><inject bean="RestartCacheHandler"/></property>		          
+		   </bean>		   
+      </property>
+      
+   </bean>
+   
+   <bean class="org.jboss.remoting.transport.Connector"
+          name="RestartConnector">
+
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.remoting:service=RestartConnector,transport=socket", exposedInterface=org.jboss.remoting.transport.ConnectorMBean.class, registerDirectly=true)</annotation>
+         
+      <constructor>
+          <!-- Remember that if you do use more than one param on the uri, will have to include as a CDATA, -->
+          <!-- otherwise, parser will complain. -->
+   	   <parameter><![CDATA[socket://${jboss.bind.address:localhost}:14446/?datatype=invocation&marshaller=org.jboss.invocation.unified.marshall.InvocationMarshaller&unmarshaller=org.jboss.invocation.unified.marshall.InvocationUnMarshaller&enableTcpNoDelay=true]]></parameter>
+   	   <parameter>
+   	     <map class="java.util.HashMap" keyClass="java.lang.String" valueClass="java.lang.String">
+   	     <entry><key>dataType</key><value>invocation</value></entry>
+   	     <entry><key>marshaller</key><value>org.jboss.invocation.unified.marshall.InvocationMarshaller</value></entry>
+   	     <entry><key>unmarshaller</key><value>org.jboss.invocation.unified.marshall.InvocationUnMarshaller</value></entry>
+   	     <entry><key>serverBindAddress</key><value>${jboss.bind.address:localhost}</value></entry>
+   	     <entry><key>serverBindPort</key><value>14446</value></entry>
+   	     <entry><key>enableTcpNoDelay</key><value>true</value></entry>
+   	     </map>
+   	   </parameter>
+   	 </constructor>
+   </bean>
+   
+   <bean name="RestartPartitionHAJNDI"
+         class="org.jboss.ha.jndi.HANamingService">    
+
+      <!-- The partition used for group RPCs to find locally bound objects on other nodes -->
+      <property name="HAPartition"><inject bean="RestartPartition"/></property>
+      
+      <!-- Handler for the replicated tree -->
+      <property name="distributedTreeManager">
+         <bean class="org.jboss.ha.jndi.impl.jbc.JBossCacheDistributedTreeManager">
+            <property name="cacheHandler"><inject bean="RestartCacheHandler"/></property>
+         </bean>
+      </property>
+      
+      <property name="localNamingInstance"><inject bean="jboss:service=NamingBeanImpl" property="namingInstance"/></property>
+      
+      <!-- The thread pool used to control the bootstrap and auto discovery lookups -->
+      <property name="lookupPool"><inject bean="RestartPartitionThreadPool"/></property>
+      
+      <!-- Bind address of bootstrap endpoint -->
+      <property name="bindAddress">${jboss.bind.address}</property>
+      <!-- Port on which the HA-JNDI stub is made available -->
+      <property name="port">11100</property>
+      
+      <!-- Bind address of the HA-JNDI RMI endpoint -->
+      <property name="rmiBindAddress">${jboss.bind.address}</property>
+      
+      <!-- RmiPort to be used by the HA-JNDI service once bound. 0 => auto. -->
+      <property name="rmiPort">11101</property>
+      
+      <!-- Accept backlog of the bootstrap socket -->
+      <property name="backlog">50</property>
+
+      <!-- A flag to disable the auto discovery via multicast -->
+      <property name="discoveryDisabled">false</property>
+      <!-- Set the auto-discovery bootstrap multicast bind address. If not 
+      specified and a BindAddress is specified, the BindAddress will be used. -->
+      <property name="autoDiscoveryBindAddress">${jboss.bind.address}</property>
+      <!-- Multicast Address and group port used for auto-discovery -->
+      <property name="autoDiscoveryAddress">${jboss.partition.udpGroup:230.0.0.4}</property>
+      <property name="autoDiscoveryGroup">11102</property>
+      <!-- The TTL (time-to-live) for autodiscovery IP multicast packets -->
+      <property name="autoDiscoveryTTL">16</property>
+      
+      <!-- The load balancing policy for HA-JNDI -->
+      <property name="loadBalancePolicy">org.jboss.ha.framework.interfaces.RoundRobin</property>
+
+      <!-- Client socket factory to be used for client-server
+           RMI invocations during JNDI queries
+      <property name="clientSocketFactory">custom</property>
+      -->
+      <!-- Server socket factory to be used for client-server
+           RMI invocations during JNDI queries
+      <property name="serverSocketFactory">custom</property>
+      -->
+   </bean>
+   
+   <!-- ==================================================================== -->
+   <!-- HA Detached Invoker using JBoss Remoting for transport               -->
+   <!-- ==================================================================== -->
+
+   <bean name="RestartUnifiedInvokerHA"
+         class="org.jboss.invocation.unified.server.UnifiedInvokerHA">
+      
+      <depends>jboss:service=TransactionManager</depends>       
+      <depends>RestartPartition</depends>
+      
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=invoker,type=unifiedha,partitionName=RestartPartition", exposedInterface=org.jboss.invocation.unified.server.UnifiedInvokerMBean.class, registerDirectly=true)</annotation>
+      
+      <property name="connector"><inject bean="RestartConnector"/></property>
+   </bean>
+   
+   <!-- ==================================================================== -->
+   <!-- HA Session State Service for EJB2 SFSBs                              -->
+   <!-- ==================================================================== -->
+
+   <bean name="RestartHASessionStateService"
+         class="org.jboss.ha.hasessionstate.server.HASessionStateService">
+      
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=HASessionState,partitionName=RestartPartition", exposedInterface=org.jboss.ha.hasessionstate.server.HASessionStateServiceMBean.class, registerDirectly=true)</annotation>
+      
+      <!--  Partition used for group RPCs -->
+      <property name="HAPartition"><inject bean="RestartPartition"/></property>
+      
+      <!-- JNDI name under which the service is bound -->
+      <property name="jndiName">/HASessionState/RestartPartition</property>
+      <!-- Max delay before cleaning unreclaimed state.
+           Defaults to 30*60*1000 => 30 minutes -->
+      <property name="beanCleaningDelay">0</property>
+      
+   </bean>
+
+   <!-- ==================================================================== -->
+   <!-- Distributed EJB2 entity cache invalidation                           -->
+   <!-- ==================================================================== -->
+
+   <bean name="RestartJGCacheInvalidationBridge"
+        class="org.jboss.cache.invalidation.bridges.JGCacheInvalidationBridge">
+      
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.cache:service=InvalidationBridge,type=JavaGroups,partitionName=RestartPartition", exposedInterface=org.jboss.cache.invalidation.bridges.JGCacheInvalidationBridgeMBean.class, registerDirectly=true)</annotation>
+      
+      <!--  Partition used for group RPCs -->
+      <property name="HAPartition"><inject bean="RestartPartition"/></property>
+      <property name="invalidationManager"><inject bean="jboss.cache:service=InvalidationManager"/></property>
+      <property name="bridgeName">RestartJGBridge</property>
+      
+   </bean>
+   
+</deployment>

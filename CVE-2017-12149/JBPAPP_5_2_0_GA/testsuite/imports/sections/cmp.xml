@@ -1,0 +1,584 @@
+<project name="tests-cmp2-jars">
+   <!-- cmp2 tests -->
+   <target name="_jars-cmp2">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build cmp2-batchcascadedelete.jar -->
+      <jar destfile="${build.lib}/cmp2-batchcascadedelete.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/batchcascadedelete/ejb/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/batchcascadedelete">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+
+      <!-- build cmp2-cascadedelete.jar -->
+      <jar destfile="${build.lib}/cmp2-cascadedelete.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/cascadedelete/ejb/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/cascadedelete">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      
+      <!-- build cmp2-relationship.jar -->
+      <jar destfile="${build.lib}/cmp2-relationship.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/relationship/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/relationship">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      
+      <!-- build cmp2-cacheinvalidation.jar -->
+      <copy
+         file="${build.resources}/cmp2/cacheinvalidation/META-INF/jdbcpm-jboss.xml"
+         tofile="${build.resources}/cmp2/cacheinvalidation/META-INF/jboss.xml"/>
+      <jar jarfile="${build.lib}/cmp2-cacheinvalidation.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/cacheinvalidation/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/cacheinvalidation">
+            <include name="**/*.*"/>
+            <exclude name="**/jdbc*.xml"/>
+         </fileset>
+      </jar>
+      <delete
+         file="${build.resources}/cmp2/cacheinvalidation/META-INF/jboss.xml"/>
+      <copy
+         file="${build.resources}/cmp2/cacheinvalidation/META-INF/jdbc2pm-jboss.xml"
+         tofile="${build.resources}/cmp2/cacheinvalidation/META-INF/jboss.xml"/>
+      <jar jarfile="${build.lib}/cmp2-jdbc2pm-cacheinvalidation.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/cacheinvalidation/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/cacheinvalidation">
+            <include name="**/*.*"/>
+            <exclude name="**/jdbc*.xml"/>
+         </fileset>
+      </jar>
+      <delete
+         file="${build.resources}/cmp2/cacheinvalidation/META-INF/jboss.xml"/>
+      
+      <!-- build cmp2-readonly.jar -->
+      <jar destfile="${build.lib}/cmp2-readonly.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/readonly/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/readonly">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      
+      <!-- build cmp2-ejbselect.jar -->
+      <jar destfile="${build.lib}/cmp2-ejbselect.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/ejbselect/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/ejbselect">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      <copy file="${build.resources}/cmp2/ejbselect/META-INF/jboss.xml"
+         tofile="${build.resources}/cmp2/ejbselect/META-INF/original-jboss.xml"/>
+      <copy file="${build.resources}/cmp2/ejbselect/META-INF/jdbc2pm-jboss.xml"
+         tofile="${build.resources}/cmp2/ejbselect/META-INF/jboss.xml"
+         overwrite="true"/>
+      <jar jarfile="${build.lib}/cmp2-jdbc2pm-ejbselect.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/ejbselect/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/ejbselect">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      <copy
+         file="${build.resources}/cmp2/ejbselect/META-INF/original-jboss.xml"
+         tofile="${build.resources}/cmp2/ejbselect/META-INF/jboss.xml"
+         overwrite="true"/>
+      
+      <!-- build cmp2-jdbc2pm-ageout.jar -->
+      <copy file="${build.resources}/cmp2/ejbselect/META-INF/ejb-jar.xml"
+         tofile="${build.resources}/cmp2/ageout/META-INF/ejb-jar.xml"
+         overwrite="true"/>
+      <copy file="${build.resources}/cmp2/ejbselect/META-INF/jbosscmp-jdbc.xml"
+         tofile="${build.resources}/cmp2/ageout/META-INF/jbosscmp-jdbc.xml"
+         overwrite="true"/>
+      <jar destfile="${build.lib}/cmp2-jdbc2pm-ageout.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/ageout/**"/>
+            <include name="org/jboss/test/cmp2/ejbselect/**"/>
+            <exclude
+               name="org/jboss/test/cmp2/ejbselect/**/*TestCase.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/ageout">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${junit.junit.lib}/junit.jar">
+            <patternset refid="ejbrunner.set"/>
+         </zipfileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar">
+            <patternset refid="jboss.test.set"/>
+         </zipfileset>
+      </jar>
+      
+      <!-- build cmr-postcreateswritten.jar -->
+      <jar destfile="${build.lib}/cmr-postcreateswritten.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/cmr/ejb/*"/>
+            <include name="org/jboss/test/cmp2/cmr/interfaces/*"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/cmr">
+            <include name="**/*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build cmp2-simple.jar -->
+      <jar destfile="${build.lib}/cmp2-simple.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/simple/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/simple">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      
+      <!-- build cmp2-commerce.jar -->
+      <jar destfile="${build.lib}/cmp2-commerce.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/commerce/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/commerce">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      
+      <!-- build cmp2-lob.jar -->
+      <jar destfile="${build.lib}/cmp2-lob.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/lob/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/lob">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      
+      <!-- build cmp2-optimisticlock.jar -->
+      <jar destfile="${build.lib}/cmp2-optimisticlock.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/optimisticlock/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/optimisticlock">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      
+      <!-- build cmp2-passivation.jar -->
+      <jar destfile="${build.lib}/cmp2-passivation.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/passivation/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/passivation">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      
+      <!-- build cmp2-fkmapping.jar -->
+      <jar destfile="${build.lib}/cmp2-fkmapping.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/fkmapping/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/fkmapping">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      
+      <!-- build cmp2-fkstackoverflow.jar -->
+      <jar destfile="${build.lib}/cmp2-fkstackoverflow.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/fkstackoverflow/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/fkstackoverflow">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      
+      <!-- build cmp2-audit.jar -->
+      <jar destfile="${build.lib}/cmp2-audit.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/audit/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/audit">
+            <include name="**/*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build cmp2-cmrstress.jar -->
+      <jar destfile="${build.lib}/cmp2-cmrstress.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/cmrstress/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/cmrstress">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+
+      <!-- build cmp2-distinct.jar -->
+      <jar destfile="${build.lib}/cmp2-distinct.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/distinct/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/distinct">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+
+      <!-- build cmp2-jbas1361.jar -->
+      <jar destfile="${build.lib}/cmp2-jbas1361.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/jbas1361/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/jbas1361">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+
+      <!-- build cmp2-jbas1665.jar -->
+      <jar destfile="${build.lib}/cmp2-jbas1665.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/jbas1665/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/jbas1665">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+
+      <!-- build cmp2-jbas3541.jar -->
+      <jar destfile="${build.lib}/cmp2-jbas3541.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/jbas3541/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/jbas3541">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      <copy file="${build.resources}/cmp2/jbas3541/META-INF/jboss.xml"
+         tofile="${build.resources}/cmp2/jbas3541/META-INF/original-jboss.xml"/>
+      <copy file="${build.resources}/cmp2/jbas3541/META-INF/jdbc2pm-jboss.xml"
+         tofile="${build.resources}/cmp2/jbas3541/META-INF/jboss.xml"
+         overwrite="true"/>
+      <jar jarfile="${build.lib}/cmp2-jdbc2pm-jbas3541.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/jbas3541/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/jbas3541">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      <copy
+         file="${build.resources}/cmp2/jbas3541/META-INF/original-jboss.xml"
+         tofile="${build.resources}/cmp2/jbas3541/META-INF/jboss.xml"
+         overwrite="true"/>
+
+      <!-- build cmp2-jdbc2pm-ejbstore.jar -->
+      <jar destfile="${build.lib}/cmp2-jdbc2pm-ejbstore.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/jdbc2pm/ejbstore/**/A*"/>
+            <include name="org/jboss/test/cmp2/jdbc2pm/ejbstore/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/jdbc2pm/ejbstore">
+            <include name="META-INF**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      <!-- build cmp2-jdbc2pm-ejbstoreb.jar -->
+      <jar destfile="${build.lib}/cmp2-jdbc2pm-ejbstoreb.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/cmp2/jdbc2pm/ejbstore/**/B*"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/jdbc2pm/ejbstore/b">
+            <include name="**/*.*"/>
+         </fileset>
+      </jar>
+
+      <!-- build cmp2-jbas979.jar -->
+      <jar destfile="${build.lib}/cmp2-jbas979.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/jbas979/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/jbas979">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      
+      <!-- build cmp2-keygen.jar -->
+      <jar destfile="${build.lib}/cmp2-keygen.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/keygen/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/keygen">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      
+      <jar destfile="${build.lib}/cmp2-perf.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/perf/**"/>
+         </fileset>
+         <metainf dir="${build.resources}/cmp2/perf"/>
+      </jar>
+      
+      <!-- build cmp2-dbschema.jar -->
+      <jar destfile="${build.lib}/cmp2-dbschema.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/dbschema/**"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/cmp2/relationship/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/relationship">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      
+      <jar destfile="${build.lib}/cmp2-idxandusersql.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/idxandusersql/**"/>
+         </fileset>
+         <!--
+         <fileset dir="${build.resources}/cmp2/idxandusersql">
+         <include name="**/*.*"/>
+         </fileset>
+         -->
+         <metainf
+            dir="${source.java}/org/jboss/test/cmp2/idxandusersql/META-INF"/>
+         
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      
+      <!-- build cmp2-enum.jar -->
+      <jar destfile="${build.lib}/cmp2-enum.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/enums/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/enums">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      <copy file="${build.resources}/cmp2/enums/META-INF/jboss.xml"
+         tofile="${build.resources}/cmp2/enums/META-INF/original-jboss.xml"/>
+      <copy file="${build.resources}/cmp2/enums/META-INF/jdbc2pm-jboss.xml"
+         tofile="${build.resources}/cmp2/enums/META-INF/jboss.xml"
+         overwrite="true"/>
+      <jar jarfile="${build.lib}/cmp2-jdbc2pm-enum.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/enums/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/enums">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+      <copy
+         file="${build.resources}/cmp2/enums/META-INF/original-jboss.xml"
+         tofile="${build.resources}/cmp2/enums/META-INF/jboss.xml"
+         overwrite="true"/>
+      
+      <!-- build cmp2-cmrtansaction.jar -->
+      <jar destfile="${build.lib}/cmp2-cmrtransaction.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/cmrtransaction/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/cmrtransaction">
+            <include name="**/*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build cmr-cmrtree.jar -->
+      <jar destfile="${build.lib}/cmp2-cmrtree.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/cmrtree/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/cmrtree">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar"
+            includes="junit/**/*.*"/>
+      </jar>
+
+      <!-- build cmp2-jbas3717.jar -->
+      <jar destfile="${build.lib}/cmp2-jbas3717.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/jbas3717/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/jbas3717/ejb">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar"
+            includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar" includes="junit/**/*.*"/>
+      </jar>
+      <jar destfile="${build.lib}/cmp2-jbas3717.ear">
+         <fileset dir="${build.lib}">
+            <include name="cmp2-jbas3717.jar"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/jbas3717/ear">
+            <include name="**/*.*"/>
+         </fileset>
+      </jar>
+
+      <!-- build cmp2-paritionindex.jar -->
+      <jar destfile="${build.lib}/cmp2-partitionindex.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/cmp2/partitionindex/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/cmp2/partitionindex">
+            <include name="**/*.*"/>
+         </fileset>
+         <zipfileset src="${jboss.test.lib}/jboss-test.jar" includes="org/jboss/**/*.*"/>
+         <zipfileset src="${junit.junit.lib}/junit.jar" includes="junit/**/*.*"/>
+      </jar>
+   </target>
+</project>

@@ -1,0 +1,7 @@
+<!-- $Id: jboss-service.xml 38441 2005-11-23 11:06:59Z dimitris $ -->
+<server>
+   <mbean code="org.jboss.naming.JNDIView"
+          name="jboss:service=JNDIView2"
+          xmbean-dd="META-INF/xmbean.xml">
+   </mbean>
+</server>

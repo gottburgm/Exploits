@@ -1,0 +1,29 @@
+<project name="console-component-info">
+
+   <!-- ============================================================ -->
+   <!-- Console                                                      -->
+   <!-- ============================================================ -->
+
+   <component id="console"
+              module="jboss-console"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="twiddle.jar" release="bin"/>         
+      <artifact id="twiddle.sh" release="bin"/>
+      <artifact id="twiddle.bat" release="bin"/>
+      <artifact id="jboss-console.jar"/>
+      <artifact id="console.jar"/>
+      <artifact id="console-mgr-classes.jar"/>
+      <artifact id="applet.jar"/>
+      <artifact id="jboss-console-client.jar"/>
+      <artifact id="console-mgr.sar"/>
+      <artifact id="web-console.war"/>
+                   
+      <artifact id="snmp-support.jar"/>
+      <export>
+         <include input="jboss-console.jar"/>
+      </export>
+   </component>
+
+
+</project>

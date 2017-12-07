@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: security-config_4_1.xsd 45786 2006-06-23 19:01:35Z asaldhana $ -->
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  xmlns:jaas="urn:jboss:security-config"
+  xmlns:jbxb="http://www.jboss.org/xml/ns/jbxb"
+  targetNamespace="urn:jboss:security-config">
+
+   <xsd:annotation>
+      <xsd:appinfo>
+         <jbxb:schemaBindings>
+            <jbxb:package name="org.jboss.security.config"/>
+         </jbxb:schemaBindings>
+      </xsd:appinfo>
+   </xsd:annotation>
+
+  <xsd:element name="policy">
+    <xsd:complexType>
+       <xsd:annotation>
+          <xsd:appinfo>
+             <jbxb:class impl="org.jboss.security.config.PolicyConfig"/>
+          </xsd:appinfo>
+       </xsd:annotation>
+
+      <xsd:sequence>
+        <xsd:element maxOccurs="unbounded" ref="jaas:application-policy"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="application-policy">
+    <xsd:complexType>
+       <xsd:annotation>
+         <xsd:appinfo>
+           <jbxb:class impl="org.jboss.security.config.ApplicationPolicyContainer"/>
+           <jbxb:addMethod name="add" valueType="org.jboss.security.config.ApplicationPolicy"/>
+         </xsd:appinfo>
+       </xsd:annotation>
+
+      <xsd:sequence>
+        <xsd:element ref="jaas:authentication"/>
+      </xsd:sequence>
+      <xsd:attribute name="name" use="required" type="xsd:string"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="authentication">
+    <xsd:annotation>
+       <xsd:appinfo>
+          <jbxb:skip/>
+       </xsd:appinfo>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="jaas:login-module"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="login-module">
+    <xsd:complexType>
+       <xsd:annotation>
+          <xsd:appinfo>
+             <jbxb:class impl="org.jboss.security.auth.login.AppConfigurationEntryHolder"/>
+          </xsd:appinfo>
+       </xsd:annotation>
+      <xsd:sequence>
+        <xsd:element maxOccurs="unbounded" ref="jaas:module-option"/>
+      </xsd:sequence>
+      <xsd:attribute name="code" use="required" type="xsd:string"/>
+      <xsd:attribute name="flag" use="required">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="required" />
+            <xsd:enumeration value="requisite" />
+            <xsd:enumeration value="sufficient" />
+            <xsd:enumeration value="optional" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="module-option">
+    <xsd:complexType mixed="true">
+       <xsd:annotation>
+          <xsd:appinfo>
+             <!-- ModuleOption declares a constructor that takes name as a parameter
+                  while the value should be set with the setter.
+                  This use-case is not supported out-of-the-box. So, we use this container. -->
+             <jbxb:class impl="org.jboss.security.auth.login.ModuleOptionContainer"/>
+          </xsd:appinfo>
+       </xsd:annotation>
+      <xsd:sequence>
+        <xsd:any minOccurs="0" maxOccurs="1" namespace="##other" />
+      </xsd:sequence>
+      <xsd:attribute name="name" use="required" type="xsd:string"/>
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

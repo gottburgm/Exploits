@@ -1,0 +1,19 @@
+<project name="tests-securitymgr-jars">
+
+   <target name="_jars-securitymgr">
+      <mkdir dir="${build.lib}/securitymgr"/>
+      
+      <jar destfile="${build.lib}/securitymgr/packed.war">
+        <zipfileset prefix="WEB-INF" dir="${build.resources}/securitymgr/war1">
+           <include name="web.xml" />
+           <include name="jboss-web.xml" />
+        </zipfileset>
+        <zipfileset prefix="WEB-INF/classes" dir="${build.classes}">
+           <include name="org/jboss/test/securitymgr/servlet/*"/>
+        </zipfileset>
+      </jar>
+      <unzip dest="${build.lib}/securitymgr/unpacked.war"
+         src="${build.lib}/securitymgr/packed.war" />
+
+   </target>
+</project>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://jbpm.org/examples/hello" xmlns:tns="http://jbpm.org/examples/hello" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:plt="http://schemas.xmlsoap.org/ws/2004/03/partner-link/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <message name="greetingMessage">
+    <part name="greeting" type="xsd:string"/>
+  </message>
+  <message name="nameMessage">
+    <part name="name" type="xsd:string"/>
+  </message>
+  <portType name="helloPT">
+    <operation name="sayHello">
+      <input message="tns:nameMessage"/>
+      <output message="tns:greetingMessage"/>
+    </operation>
+  </portType>
+  <plt:partnerLinkType name="helloPLT">
+    <plt:role name="service" portType="tns:helloPT"/>
+  </plt:partnerLinkType>
+</definitions>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<extended xmlns="urn:jboss:test-extended:1.0"
+        xmlns:mc="urn:jboss:bean-deployer:2.0"
+        name="TestAspect" class="TestClass">
+    <mc:property name="testProperty">testString</mc:property>
+</extended>

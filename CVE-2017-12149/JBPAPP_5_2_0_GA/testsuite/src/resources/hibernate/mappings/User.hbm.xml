@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.jboss.test.hibernate.model">
+
+	<class name="User" table="user">
+
+		<id name="id" type="long" unsaved-value="null">
+			<generator class="increment"/>
+		</id>
+
+		<!-- Use a timestamp for optimistic locking -->
+		<version name="timeOfLastUpdate" type="calendar"/>
+
+		<!-- We don't change the handle, so map it with update="false". -->
+		<property name="handle" unique="true" not-null="true" update="false"/>
+
+		<!-- password is a keyword in some databases, so quote it -->
+		<property name="password" column="`password`" not-null="true"/>
+
+		<property name="email"/>
+
+		<!-- We can't change the creation time, so map it with update="false". -->
+		<property name="timeOfCreation" update="false" not-null="true"/>
+
+		<!-- Mapping for the component class Name -->
+		<component name="name">
+			<property name="firstName"/>
+			<!-- initial is a keyword in some
+				databases, so quote it -->
+			<property name="initial" column="`initial`"/>
+			<property name="lastName"/>
+		</component>
+
+		<!-- A many-to-many association modelled using
+			a composite-element mapping (this lets us
+			keep track of the time of creation for the
+			link. We use an <idbag>, since that gives
+			us a nice surrogate key. -->
+		<idbag name="userRoles" lazy="true" table="user_role" order-by="timeOfCreation asc" cascade="save-update">
+			<!-- the surrogate primary key -->
+			<collection-id column="id" type="long">
+				<generator class="increment"/>
+			</collection-id>
+			<!-- the foreign key of the User -->
+			<key column="user"/>
+			<!-- a composite-element holding the
+				associated Role and User, and the
+				creation time of the link -->
+			<composite-element class="UserRole">
+				<!-- for convenience, a backpointer
+					to the User -->
+				<parent name="user"/>
+				<!-- an "extra" column -->
+				<property name="timeOfCreation"/>
+				<!-- the foreign key of the Role -->
+				<many-to-one name="role" cascade="save-update" outer-join="false"/>
+			    <!-- since Roles are cached, disable
+			    	outerjoining! -->
+			</composite-element>
+		</idbag>
+
+		<!-- Usually, when we access the user's roles, we don't
+			care about the creation time of the link, etc. - we
+			just want the roles themselves. So we map another
+			collection to the same table. This demonstrates how
+			inverse="true" can be used for purposes other than
+			modelling a bi-directional association!-->
+		<bag name="roles" lazy="true" table="user_role" inverse="true" order-by="timeOfCreation asc" cascade="save-update" batch-size="9">
+			<!-- we access this collection often,
+				so cache it. -->
+			<cache usage="transactional"/>
+			<!-- the foreign key of the User -->
+			<key column="user"/>
+			<!-- the foreign key of the Role -->
+			<many-to-many column="role" class="Role" outer-join="false"/>
+			<!-- since Roles are cached, disable
+				outerjoining! -->
+		</bag>
+
+		<!-- A simple collection of values. This
+			collection table has a composite primary
+			key consisting of the user and password
+			columns. -->
+		<set name="previousPasswords" table="old_passwords" lazy="true">
+			<!-- the foreign key of the User-->
+			<key column="user"/>
+			<!-- the element (of value type) -->
+			<element type="string" column="password"/>
+		</set>
+
+	</class>
+
+</hibernate-mapping>

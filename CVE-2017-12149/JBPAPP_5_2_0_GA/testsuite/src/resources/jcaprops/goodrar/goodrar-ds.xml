@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<connection-factories>
+
+   <no-tx-connection-factory>
+
+      <jndi-name>Goodrar</jndi-name>
+      <rar-name>testjcaprops-good.rar</rar-name>
+      <connection-definition>org.jboss.test.jcaprops.support.PropertyTestConnectionFactory</connection-definition>
+
+      <config-property name="stringMCF" type="java.lang.String">stringFromMCFProperties</config-property>
+      <config-property name="booleanMCF" type="java.lang.Boolean">true</config-property>
+      <config-property name="byteMCF" type="java.lang.Byte">21</config-property>
+      <config-property name="characterMCF" type="java.lang.Character">c</config-property>
+      <config-property name="shortMCF" type="java.lang.Short">22</config-property>
+      <config-property name="integerMCF" type="java.lang.Integer">23</config-property>
+      <config-property name="longMCF" type="java.lang.Long">24</config-property>
+      <config-property name="floatMCF" type="java.lang.Float">5e26</config-property>
+      <config-property name="doubleMCF" type="java.lang.Double">7e28</config-property>
+
+   </no-tx-connection-factory>
+   
+   <mbean code="org.jboss.resource.deployment.AdminObject"
+          name="jcaprops.test:name=AdminObject">
+      <attribute name="JNDIName">GoodrarAO</attribute>
+      <depends optional-attribute-name="RARName">jboss.jca:service=RARDeployment,name='testjcaprops-good.rar'</depends>
+      <attribute name="Type">org.jboss.test.jcaprops.support.PropertyTestAdminObject</attribute>
+      <attribute name="Properties">
+         stringAOMBean=stringFromAOMBeanProperties
+         booleanAOMBean=true
+         byteAOMBean=21
+         characterAOMBean=c
+         shortAOMBean=22
+         integerAOMBean=23
+         longAOMBean=24
+         floatAOMBean=5e26
+         doubleAOMBean=7e28
+      </attribute>
+   </mbean>
+   
+</connection-factories>

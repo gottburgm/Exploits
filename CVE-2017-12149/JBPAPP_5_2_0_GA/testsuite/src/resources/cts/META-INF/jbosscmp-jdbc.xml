@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE jbosscmp-jdbc PUBLIC
+   "-//JBoss//DTD JBOSSCMP-JDBC 3.2//EN"
+   "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_2.dtd">
+
+<jbosscmp-jdbc>
+   <defaults>
+      <create-table>true</create-table>
+      <remove-table>true</remove-table>
+   </defaults>
+
+   <!-- Map the AccountPK.key property -->
+   <dependent-value-classes>
+      <dependent-value-class>
+         <description>The AccountPK Mapping</description>
+         <class>org.jboss.test.cts.keys.AccountPK</class>
+         <property>
+            <property-name>key</property-name>
+            <column-name>key</column-name>
+         </property>
+      </dependent-value-class>
+   </dependent-value-classes>
+</jbosscmp-jdbc>
+

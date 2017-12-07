@@ -1,0 +1,39 @@
+<html>
+<body>
+<p>
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;aop&gt;
+
+    &lt;!-- Instrument the classes for AOP --&gt;
+   &lt;prepare expr="all(org.jboss.test.aop.bean.Temperature)"/&gt;
+   &lt;prepare expr="all(org.jboss.test.aop.bean.LogUtil)"/&gt;
+   &lt;prepare expr="all(org.jboss.test.aop.bean.ObservableTester)"/&gt;
+
+   &lt;!-- Make the Temperature POJO a Subject/Observerable --&gt;
+   &lt;bind pointcut="set(* org.jboss.test.aop.bean.Temperature-&gt;*)"&gt;
+      &lt;interceptor class="org.jboss.aop.patterns.observable.SubjectInterceptor"/&gt;
+   &lt;/bind&gt;
+   &lt;introduction class="org.jboss.test.aop.bean.Temperature"&gt;
+      &lt;mixin&gt;
+         &lt;interfaces&gt;org.jboss.aop.patterns.observable.Subject&lt;/interfaces&gt;
+         &lt;class&gt;org.jboss.aop.patterns.observable.SubjectImpl&lt;/class&gt;
+         &lt;construction&gt;new org.jboss.aop.patterns.observable.SubjectImpl(this)&lt;/construction&gt;
+      &lt;/mixin&gt;
+   &lt;/introduction&gt;
+   
+   &lt;!-- Make the LogUtil an Observer --&gt;
+   &lt;introduction class="org.jboss.test.aop.bean.LogUtil"&gt;
+      &lt;mixin&gt;
+         &lt;interfaces&gt;org.jboss.aop.patterns.observable.Observer&lt;/interfaces&gt;
+         &lt;class&gt;org.jboss.test.aop.bean.LogUtilObserver&lt;/class&gt;
+         &lt;construction&gt;new org.jboss.test.aop.bean.LogUtilObserver(this)&lt;/construction&gt;
+      &lt;/mixin&gt;
+   &lt;/introduction&gt;
+
+&lt;/aop&gt;
+</pre>
+</p>
+</body>
+</html>

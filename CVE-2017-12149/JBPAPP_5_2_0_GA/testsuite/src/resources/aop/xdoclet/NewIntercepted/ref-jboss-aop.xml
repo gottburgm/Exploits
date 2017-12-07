@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+  <advisable class="org.jboss.test.aop.xdoclet.NewIntercepted"/>
+
+  <class-pointcut class="org.jboss.test.aop.xdoclet.NewIntercepted">
+    <interceptors>
+      <interceptor class="com.test.SomeInterceptor" singleton="true">
+        <config>random</config>
+      </interceptor>
+      <interceptor-ref name="Another"/>
+      <stack-ref name="SomeStack"/>
+      <interceptor factory="com.test.SomeInterceptorFactory"/>
+    </interceptors>
+  </class-pointcut>
+  
+  <method-pointcut class="org.jboss.test.aop.xdoclet.NewIntercepted"
+                   methodName="set*">
+    <interceptors>
+      <interceptor class="com.foo.FooInterceptor"/>
+      <stack-ref name="AnotherStack"/>               
+    </interceptors>
+  </method-pointcut>
+
+  <constructor-pointcut class="org.jboss.test.aop.xdoclet.NewIntercepted">
+    <interceptors>
+      <interceptor class="com.acme.MyConstructorInterceptor"/>
+      <interceptor-ref name="CreateInterceptor"/>
+    </interceptors>
+  </constructor-pointcut>
+  
+  <field-pointcut class="org.jboss.test.aop.xdoclet.NewIntercepted"
+                  fieldName="test*">
+    <interceptors>
+      <stack-ref name="FieldStack"/>               
+    </interceptors>
+  </field-pointcut>
+
+  <field-pointcut class="org.jboss.test.aop.xdoclet.NewIntercepted"
+                  fieldName="name">
+    <interceptors>
+      <stack-ref name="FieldStack"/>               
+      <interceptor-ref name="FieldInterceptor"/>
+    </interceptors>
+  </field-pointcut>
+  
+  <method-pointcut class="org.jboss.test.aop.xdoclet.NewIntercepted"
+                   methodName="someMethod">
+    <interceptors>
+      <interceptor-ref name="SomeInterceptor"/>
+      <interceptor class="com.foo.MethodInterceptor"/>
+    </interceptors>
+  </method-pointcut>
+  
+</aop>

@@ -1,0 +1,21 @@
+<structure>
+    <context>
+        <path name=""/>
+        <metaDataPath>
+            <path name="META-INF"/>
+        </metaDataPath>
+        <classpath>
+            <!-- Include the root of the ear in the classpath -->
+            <path name=""/>
+        </classpath>
+    </context>
+    <context>
+        <path name="loading.sar"/>
+        <metaDataPath>
+            <path name="META-INF"/>
+        </metaDataPath>
+        <classpath>
+            <path name="loading.sar"/>
+        </classpath>
+    </context>
+</structure>

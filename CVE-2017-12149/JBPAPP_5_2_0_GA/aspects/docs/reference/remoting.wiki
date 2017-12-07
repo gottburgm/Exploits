@@ -1,0 +1,93 @@
+!!!Remoting
+''AOP Remoting didn't receive much TLC for the 1.0 beta release although we did fix a few critical bugs.  We'll put more TLC in the next release''
+
+The AOP framework has API's to hook up plain Java classes to JBoss Remoting. These hooks allow you to arbitrarily decide whether or not to make an object remoting. It also gives you the ability to create a reference to a remote object simply by providing a URI.
+
+Out-of-the-box, AOP remoting is easy enough to use. You can make any object remotely accessible whether it is instrumented by the AOP framework or not (see Bytocode manipulation controls). There are a couple of requirements though:
+
+* The object's class must have a default constructor.
+* Remotely invoked method parameters and return values must be Serializable. 
+
+The first thing you must do in code is register your object with an AOP specific registry, the Dispatcher.
+{{{
+import org.jboss.aop.Dispatcher;
+...
+  POJO pojo = new POJO();
+  
+  Dispatcher.singleton.registerTarget("YourOwnObjectId", pojo);
+}}}
+Next, you must create a proxy that can connect to this object. This is where you can decide what protocol is used to connect to this object. You can also decide how to make your remote object available over the network by binding it to JNDI for instance.
+{{{
+import org.jboss.aop.remoting.Remoting;
+...
+  POJO proxy = (POJO)Remoting.createRemoteProxy("YourOwnObjectId", pojo.getClass(), "socket://servername:8084");
+  new InitialContext().bind("/remote/YourOwnObjectId", proxy);
+}}}
+The last parameter of createRemoteProxy is a URI. Out of the box, here's the URI's that JBoss supports. You can configure JBoss Remoting with different ports and protocols if you like though.
+
+Valid URIs:
+
+* socket://servername:8084 Is is a custom socket based protocol.
+* soap://servername SOAP packets over HTTP. 
+
+You do not have to create a proxy at the server and register the proxy with JNDI. If the client already knows the URI and object id of the remote object, the client can call createRemoteProxy itself.
+
+Now, let's dive a little deeper. First let's look at the API for the Dispatcher
+{{{
+package org.jboss.aop;
+
+public class Dispatcher
+{
+   /**
+    * Is an object of an object id oid already registered?
+	*/
+   public boolean isRegistered(Object oid)
+
+   /**
+    * Register target invocable object with a generic key/object id, oid.
+	*/
+   public void registerTarget(Object oid, Object target)
+
+   /**
+    * 
+   */
+   public void unregisterTarget(Object oid)
+
+   /**
+    * Obtain access to an already registered object
+   */
+   public Object getRegistered(Object oid)
+}
+
+}}}
+
+Here's a look at a more in depth at the API for creating proxies.
+{{{
+package org.jboss.aop.remoting;
+
+import org.jboss.aop.Dispatcher;
+import org.jboss.aop.InstanceAdvisor;
+import org.jboss.aop.Interceptor;
+import org.jboss.aop.PayloadKey;
+import org.jboss.aop.proxy.ClassProxy;
+import org.jboss.aop.proxy.ClassProxyFactory;
+import org.jboss.remoting.InvokerLocator;
+
+public class Remoting
+{
+   public static ClassProxy createRemoteProxy(Object objectId, Class clazz, String uri)
+      throws Exception 
+
+   public static ClassProxy createRemoteProxy(Object objectId, Class clazz, String uri, String stackName) 
+      throws Exception
+
+You can pass in a stack if you have any custom interceptors you want to add to the proxy
+
+   public static ClassProxy createRemoteProxy(Object objectId, Class clazz, InvokerLocator locator)
+      throws Exception
+
+   public static ClassProxy createRemoteProxy(Object objectId, Class clazz, InvokerLocator locator, String stackName)
+      throws Exception
+}
+}}}
+If you're knowledgable about JBoss Remoting, you can pass your own InvokerLocator that you allocate yourself.

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app version="2.4"
+   xmlns="http://java.sun.com/xml/ns/j2ee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+   <description>JASPI Security Tests War</description>
+
+   <filter>
+      <description>A filter that can do JASPI programmable security</description>
+      <filter-name>JASPISecurityFilter</filter-name>
+      <filter-class>org.jboss.test.web.security.JASPISecurityFilter</filter-class>
+	  <init-param>
+         <param-name>testJASPIServerAuthContext</param-name>
+         <param-value>TRUE</param-value>
+      </init-param>
+	  <init-param>
+         <param-name>securityDomain</param-name>
+         <param-value>java:/jbsx/other</param-value>
+      </init-param>
+	  <init-param>
+         <param-name>configFile</param-name>
+         <param-value>login-config.xml</param-value>
+      </init-param>
+   </filter>
+
+   <filter-mapping>
+      <filter-name>JASPISecurityFilter</filter-name>
+      <servlet-name>DebugServlet</servlet-name>
+   </filter-mapping> 
+   
+   <!-- ### Servlets --> 
+   <servlet>
+      <servlet-name>DebugServlet</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.DebugServlet</servlet-class>
+   </servlet> 
+
+   <!-- The servlet and jsp page mappings --> 
+   <servlet-mapping>
+      <servlet-name>DebugServlet</servlet-name>
+      <url-pattern>/DebugServlet</url-pattern>
+   </servlet-mapping> 
+
+   <!-- The Welcome File List -->
+   <welcome-file-list>
+      <welcome-file>index.html</welcome-file>
+   </welcome-file-list> 
+</web-app>

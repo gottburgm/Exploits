@@ -1,0 +1,35 @@
+<project name="aspects-component-info">
+
+   <!-- ============================================================ -->
+   <!-- Aspects                                                         -->
+   <!-- ============================================================ -->
+
+   <component id="aspects"
+              module="jboss-aspects"
+              version="5.0-SNAPSHOT"
+              specTitle="JBoss AOP Aspect Library"
+              specVersion="jboss-aspect-library-1.3"
+              specVendor="JBoss (http://www.jboss.org)"
+              implTitle="JBoss AOP Aspect Library"
+              implURL="http://www.jboss.org"
+              implVersion="jboss-aspect-library-1.3"
+              implVendor="http://www.jboss.org"               
+   >
+      <artifact id="jboss-aspect-library.jar" />  
+      <artifact id="jboss-aspect-library32.jar" />
+      <artifact id="jboss-aspect-library.jar.md5" />
+      <artifact id="jboss-aspect-library32.jar.md5" />      
+      <artifact id="jboss-aop.deployer" />      
+      <artifact id="jboss-aop-jdk50.deployer"/>
+      <artifact id="jboss-aspect-library-jdk50-jb32.jar"/>      
+      <artifact id="jboss-aspect-library-jdk50.jar"/>       
+   
+      <export>
+          <include input="jboss-aspect-library.jar" />
+          <include input="jboss-aspect-library32.jar" />
+          <include input="jboss-aop.deployer" />          
+          <include input="jboss-aop-jdk50.deployer"/>
+          <include input="jboss-aspect-library-jdk50.jar"/>
+       </export>
+   </component>
+</project>

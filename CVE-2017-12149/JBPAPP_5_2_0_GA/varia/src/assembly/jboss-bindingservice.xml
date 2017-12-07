@@ -1,0 +1,16 @@
+<assembly>
+  <id>jboss-bindingservice</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/services/binding/**</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

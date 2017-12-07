@@ -1,0 +1,69 @@
+
+import javax.management.*;
+import org.jboss.system.ServiceMBeanSupport;
+import org.jboss.logging.Logger;
+
+ObjectName sp = new ObjectName("jboss:name=SystemProperties,type=Service");
+MBeanServer s = null;
+Logger l = null;
+int state = 0;
+
+public String objectName()
+{
+   return "jboss.test:service=test.bsh";
+}
+
+public String[] dependsOn()
+{
+   return new String[] { sp.toString() };
+}
+
+public void setCtx(ServiceMBeanSupport wrapper)
+{
+   s = wrapper.getServer();
+   l = wrapper.getLog();
+}
+
+public void create()
+{
+   l.info("create");
+   if (s == null) throw new IllegalStateException();
+   if (state != 0) throw new IllegalStateException();
+   state++;
+}
+
+public void start()
+{
+   l.info("start");
+   if (state != 1) throw new IllegalStateException();
+   state++;
+}
+
+public void stop()
+{
+   l.info("stop");
+   if (state != 2) throw new IllegalStateException();
+   state++;
+}
+
+public void destroy()
+{
+   l.info("destroy");
+   if (state != 3) throw new IllegalStateException();
+   state++;
+}
+
+public Class[] getInterfaces()
+{
+   return new Class[] { java.util.Comparator.class };
+}
+
+/** For testing return the state */
+public int compare(Object o1, Object o2)
+{
+   return state;
+}
+public boolean equals(Object o)
+{
+   return false;
+}

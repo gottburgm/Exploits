@@ -1,0 +1,18 @@
+<html>
+<body>
+<p>
+<h2> Using Embedded JBoss</h2>
+
+</p><p>
+This project is built using Ant and the build.xml file included in the tomcat directory.  There are a number ways to deploy things in Embedded JBoss.  There are different Ant tasks and Java files that represent some of those different ways:
+</p><p>
+<ul>
+<li> <i>run.classpath.deploy</i> target runs the <a href="src/org/jboss/embedded/tutorial/javase/ClasspathDeploy.java">ClasspathDeploy</a> class.  This class uses Bootstrap.scanClasspath() method to deploy the example EJBs and persistence units.</li>
+<li> <i>run.jar</i> target runs the <a href="src/org/jboss/embedded/tutorial/javase/DeployJarFromResourceBase.java">DeployJarFromResourceBase</a> class. This class uses the Bootstrap.deployBaseResource method to deploy the example EJBs.</li>
+<li> <i>run.virtual</i> target runs the <a href="src/org/jboss/embedded/tutorial/javase/VirtualArchiveDeploy.java">VirtualArchiveDeploy</a> class.  This class uses the VFS to create a virtual archive that you can deploy.</li>
+<li> <i>run.virtual2</i> target runs the <a href="src/org/jboss/embedded/tutorial/javase/VirtualArchiveDeploy2.java">VirtualArchiveDeploy2</a> class.  This class shows a different way of using the VFS to create a virtual archive that you can deploy.</li>
+</ul>
+</p><p>
+</p>
+</body>
+</html>

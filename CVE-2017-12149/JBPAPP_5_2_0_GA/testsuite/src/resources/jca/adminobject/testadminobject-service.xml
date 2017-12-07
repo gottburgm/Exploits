@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+
+  <mbean code="org.jboss.resource.deployment.AdminObject"
+         name="jca.test:name=TestInterface">
+     <attribute name="JNDIName">test/jca/TestInterface</attribute>
+     <depends optional-attribute-name="RARName">jboss.jca:service=RARDeployment,name='testadminobject.rar'</depends>
+     <attribute name="Type">org.jboss.test.jca.adminobject.TestInterface</attribute>
+     <attribute name="Properties">
+        StringProperty=StringValue
+        IntegerProperty=123
+     </attribute>
+  </mbean>
+
+  <mbean code="org.jboss.resource.deployment.AdminObject"
+         name="jca.test:name=TestInterface2">
+     <attribute name="JNDIName">test/jca/TestInterface2</attribute>
+     <depends optional-attribute-name="RARName">jboss.jca:service=RARDeployment,name='testadminobject.rar'</depends>
+     <attribute name="Type">org.jboss.test.jca.adminobject.TestInterface2</attribute>
+     <attribute name="Properties">
+        stringProperty=456
+     </attribute>
+  </mbean>
+
+</server>

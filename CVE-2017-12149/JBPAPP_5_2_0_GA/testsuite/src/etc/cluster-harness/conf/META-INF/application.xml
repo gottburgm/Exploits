@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application>
+   <display-name>Caller Cluster Session </display-name>
+   <!--
+          <module>
+                   <web>
+                           <web-uri>simpleClusterSession.war</web-uri>
+                           <context-root>/simpleCluster</context-root>
+                   </web>
+           </module>
+   -->
+   <module>
+      <ejb>callerClusterSession.jar</ejb>
+   </module>
+
+</application>

@@ -1,0 +1,18 @@
+<assembly>
+  <id>deployer</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/as/**</include>
+        <include>org/jboss/ejb3/deployers/**</include>
+        <include>org/jboss/ejb3/clientmodule/*</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

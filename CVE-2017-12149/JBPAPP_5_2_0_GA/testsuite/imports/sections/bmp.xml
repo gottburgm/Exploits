@@ -1,0 +1,33 @@
+<project name="tests-bmp-jars">
+   <!-- bmp test -->
+   <target name="_jars-bmp">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build bmptest.jar -->
+      <jar destfile="${build.lib}/bmptest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/bmp/interfaces/**"/>
+            <include name="org/jboss/test/bmp/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/bmp">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build bmp.jar -->
+      <jar destfile="${build.lib}/bmp.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/bmp/interfaces/**"/>
+            <include name="org/jboss/test/bmp/ejb/**"/>
+            <include name="org/jboss/test/bmp/beans/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/bmp">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+   </target>
+   
+</project>

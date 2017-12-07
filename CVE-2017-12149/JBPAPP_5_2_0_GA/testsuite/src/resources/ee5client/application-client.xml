@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application-client xmlns="http://java.sun.com/xml/ns/javaee"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                    http://java.sun.com/xml/ns/javaee/application-client_5.xsd"
+                    version="5" id="ee5client-test">
+	<description>EE5 application client unit test</description>
+	<display-name>ee5client-test-client</display-name>
+
+	<env-entry>
+		<env-entry-name>msg</env-entry-name>
+		<env-entry-type>java.lang.String</env-entry-type>
+		<env-entry-value>how are you?</env-entry-value>
+	</env-entry>
+	
+	<resource-env-ref>
+		<resource-env-ref-name>messageReplier</resource-env-ref-name>
+		<resource-env-ref-type>javax.jms.Queue</resource-env-ref-type>
+	</resource-env-ref>
+	
+	<post-construct>
+		<lifecycle-callback-method>postConstruct</lifecycle-callback-method>
+	</post-construct>
+	
+	<pre-destroy>
+		<lifecycle-callback-method>preDestroy</lifecycle-callback-method>
+	</pre-destroy>
+	
+	<callback-handler>org.jboss.test.ee5client.client.TestCallbackHandler</callback-handler>
+</application-client>

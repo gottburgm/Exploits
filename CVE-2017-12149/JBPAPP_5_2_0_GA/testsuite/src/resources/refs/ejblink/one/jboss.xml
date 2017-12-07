@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss xmlns="http://www.jboss.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.jboss.com/xml/ns/javaee http://www.jboss.org/j2ee/schema/jboss_5_0.xsd"
+    version="3.0">
+    <enterprise-beans>
+        <ejb>
+            <ejb-name>EjbLink1Bean</ejb-name>
+            <ejb-ref>
+                <ejb-ref-name>ejb/EjbLink2Bean</ejb-ref-name>
+            </ejb-ref>
+            <jndi-name>ejb3_stateless_ejblink_one_EjbLink1Bean</jndi-name>
+        </ejb>
+        
+    </enterprise-beans>
+</jboss>

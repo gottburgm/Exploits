@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<connection-factories>
+   <no-tx-connection-factory>
+
+      <jndi-name>UpperGoodrar</jndi-name>
+      <rar-name>testjcaprops-upper-good.rar</rar-name>
+      <connection-definition>org.jboss.test.jcaprops.support.PropertyTestConnectionFactory</connection-definition>
+
+      <config-property name="StringMCF" type="java.lang.String">StringFromMCFProperties</config-property>
+      <config-property name="BooleanMCF" type="java.lang.Boolean">true</config-property>
+      <config-property name="ByteMCF" type="java.lang.Byte">21</config-property>
+      <config-property name="CharacterMCF" type="java.lang.Character">C</config-property>
+      <config-property name="ShortMCF" type="java.lang.Short">22</config-property>
+      <config-property name="IntegerMCF" type="java.lang.Integer">23</config-property>
+      <config-property name="LongMCF" type="java.lang.Long">24</config-property>
+      <config-property name="FloatMCF" type="java.lang.Float">5e26</config-property>
+      <config-property name="DoubleMCF" type="java.lang.Double">7e28</config-property>
+
+   </no-tx-connection-factory>
+   
+   <mbean code="org.jboss.resource.deployment.AdminObject"
+          name="jcaprops.test:name=AdminObject">
+      <attribute name="JNDIName">UpperGoodrarAO</attribute>
+      <depends optional-attribute-name="RARName">jboss.jca:service=RARDeployment,name='testjcaprops-upper-good.rar'</depends>
+      <attribute name="Type">org.jboss.test.jcaprops.support.PropertyTestAdminObject</attribute>
+      <attribute name="Properties">
+         StringAOMBean=StringFromAOMBeanProperties
+         BooleanAOMBean=true
+         ByteAOMBean=21
+         CharacterAOMBean=C
+         ShortAOMBean=22
+         IntegerAOMBean=23
+         LongAOMBean=24
+         FloatAOMBean=5e26
+         DoubleAOMBean=7e28
+      </attribute>
+   </mbean>
+</connection-factories>

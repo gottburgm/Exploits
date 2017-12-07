@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: jaspi-config.xml 87960 2009-04-28 18:32:53Z anil.saldhana@jboss.com $ -->
+
+<jbsx:policy
+   xsi:schemaLocation="urn:jboss:security-config:5.0 security-config_5_0.xsd"
+   xmlns:jbsx="urn:jboss:security-config:5.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   >
+   <jbsx:application-policy name="conf1">
+      <jbsx:authentication>
+         <jbsx:login-module code="org.jboss.security.auth.spi.XMLLoginModule"
+            flag="required">
+            <jbsx:module-option name="userInfo">
+               <ur:users
+                  xsi:schemaLocation="urn:jboss:user-roles user-roles_1_0.xsd"
+                  xmlns:ur="urn:jboss:user-roles">
+                  <ur:user name="jduke" password="theduke">
+                     <ur:role name="Role1"/>
+                     <ur:role name="Role2"/>
+                     <ur:role name="Echo"/>
+                     <ur:role name="callerJduke" group="CallerPrincipal"/>
+                  </ur:user>
+                  <ur:user name="scott" password="echoman">
+                     <ur:role name="Echo"/>
+                     <ur:role name="ProjectUser"/>
+                     <ur:role name="callerScott" group="CallerPrincipal"/>
+                  </ur:user>
+                  <ur:user name="stark" password="javaman">
+                     <ur:role name="Java"/>
+                     <ur:role name="Coder"/>
+                     <ur:role name="callerStark" group="CallerPrincipal"/>
+                  </ur:user>
+                  <ur:user name="jdukeman" password="anotherduke">
+                     <ur:role name="Role2"/>
+                     <ur:role name="Role3"/>
+                     <ur:role name="callerJdukeman" group="CallerPrincipal"/>
+                  </ur:user>
+                  <ur:user name="invoker" password="invoker">
+                     <ur:role name="HttpInvoker"/>
+                  </ur:user>
+                  <ur:user name="admin" password="admin">
+                     <ur:role name="JBossAdmin"/>
+                  </ur:user>
+               </ur:users>
+            </jbsx:module-option>
+            <jbsx:module-option name="unauthenticatedIdentity">guest</jbsx:module-option>
+         </jbsx:login-module>
+      </jbsx:authentication>
+   </jbsx:application-policy> 
+
+   <jbsx:application-policy name="conf-jaspi"> 
+     <jbsx:authentication-jaspi>
+      <jbsx:login-module-stack name="lm-stack">
+         <jbsx:login-module
+            code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+            flag="required">
+            <jbsx:module-option name="usersProperties">props/jbossws-users.properties</jbsx:module-option>
+            <jbsx:module-option name="rolesProperties">props/jbossws-roles.properties</jbsx:module-option>
+            <jbsx:module-option name="unauthenticatedIdentity">anonymous</jbsx:module-option>
+         </jbsx:login-module>
+      </jbsx:login-module-stack>
+      <jbsx:auth-module code="auth.module1.class.name">
+         <jbsx:module-option name="usersProperties">props/jbossws-users.properties</jbsx:module-option>
+         <jbsx:module-option name="rolesProperties">props/jbossws-roles.properties</jbsx:module-option>
+         <jbsx:module-option name="unauthenticatedIdentity">anonymous</jbsx:module-option>
+      </jbsx:auth-module>
+      
+      <jbsx:auth-module code="auth.module2.class.name" login-module-stack-ref="lm-stack"/>  
+    </jbsx:authentication-jaspi> 
+   </jbsx:application-policy>
+</jbsx:policy>

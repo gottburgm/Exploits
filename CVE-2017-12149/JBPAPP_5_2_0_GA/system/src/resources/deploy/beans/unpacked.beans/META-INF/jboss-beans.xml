@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- A beans descriptor -->
+<deployment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="urn:jboss:bean-deployer:2.0 bean-deployer_2_0.xsd"
+            xmlns="urn:jboss:bean-deployer:2.0">
+   <bean name="VFSClassLoader-unpacked" class="org.jboss.virtual.classloading.VFSClassLoader">
+      <constructor factoryClass="org.jboss.virtual.classloading.VFSClassLoaderFactory"
+                   factoryMethod="newClassLoader">
+         <parameter class="java.net.URI">${jbosstest.support.dir}</parameter>
+         <parameter>
+         	<array class="[Ljava.lang.String;" elementClass="java.lang.String">
+	         	<value>org.jboss.server.support.jar</value>
+         	</array>
+         	</parameter>
+      </constructor>
+   </bean>
+   <bean name="TestBean-unpacked" class="org.jboss.test.server.support.TestBeanImpl">
+      <classloader><inject bean="VFSClassLoader"/></classloader>
+      <property name="intProperty">1234</property>
+      <property name="integerProperty">4321</property>
+      <property name="stringProperty">string-unpacked</property>
+   </bean>
+</deployment>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server
+    PUBLIC "-//JBoss//DTD MBean Service 3.2//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-service_3_2.dtd">
+
+<server>
+   <mbean code="org.jboss.test.cluster.hapartition.drm.DRMUser"
+      name="jboss.test:service=DRMTestCase">
+      
+      <attribute name="PartitionName">${jboss.partition.name:DefaultPartition}</attribute>
+      <attribute name="Category">DRMUser</attribute>
+      
+   </mbean>
+
+</server>

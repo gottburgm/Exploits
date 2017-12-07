@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <!-- The custom JAAS login configuration service that installs 
+       a Configuration capable of dynamically updating the
+       config settings
+   -->
+   <mbean code="org.jboss.security.auth.login.DynamicLoginConfig"
+         name="jboss.security.tests:service=DynamicLoginConfig">
+      <attribute name="AuthConfig">META-INF/ejb-timers-config.xml</attribute>
+      <depends optional-attribute-name="LoginConfigService">
+         jboss.security:service=XMLLoginConfig
+      </depends>
+      <depends optional-attribute-name="SecurityManagerService">
+         jboss.security:service=JaasSecurityManager
+      </depends>
+   </mbean>
+
+  <!-- Define the standard queues -->
+</server>

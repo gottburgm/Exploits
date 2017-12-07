@@ -1,0 +1,31 @@
+<!-- An ant project fragement imported into the main testsuite build that
+defines the code generation compile targets.
+$Id: code-generation.xml 54988 2006-08-01 17:47:17Z scott.stark@jboss.org $
+-->
+<project name="code-generation" default="help">
+  <target name="init-code-generation" depends="compile-resources">
+    <mkdir dir="${build.gen-src}"/>
+    <mkdir dir="${build.resources}"/>
+    <mkdir dir="${build.reports}"/>
+
+    <copy todir="${build.resources}" file="${source.resources}/log4j.xml" />
+
+  </target>
+
+  <target name="compile-bean-sources" depends="init-code-generation" unless="noxdoclet">
+  </target>
+  <target name="compile-mbean-sources" unless="noxdoclet">
+  </target>
+
+  <target name="compile-xmbean-dds" unless="noxdoclet">
+
+  </target>
+
+  <target name="compile-proxycompiler-bean-sources" unless="noxdoclet">
+  </target>
+
+  <target name="help">
+    <echo message="The project fragment which defines the jboss server configs"/>
+  </target>
+
+</project>

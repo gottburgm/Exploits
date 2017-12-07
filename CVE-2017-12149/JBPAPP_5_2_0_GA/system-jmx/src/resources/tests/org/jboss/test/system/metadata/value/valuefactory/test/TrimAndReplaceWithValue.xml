@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mbean name="jboss.test:type=BasicMBeanName" code="BasicMBeanCode">
+   <attribute name="Attribute">
+      <value-factory bean="bean" method="method" default="default">
+         <parameter><value class="java.lang.Integer"> ${valuefactory.test.property:1} </value></parameter>
+         <parameter trim="false" replace="false"><value trim="false" replace="false"> ${valuefactory.test.property:1} </value></parameter>
+      </value-factory>
+   </attribute>
+</mbean>

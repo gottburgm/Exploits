@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+   "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+   <description>Security Tests Using CLIENT-CERT Authentication</description>
+
+   <!-- ### Servlets -->
+   <servlet>
+      <servlet-name>SecureServlet</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.ssl.SecureServlet</servlet-class>
+   </servlet>
+   <servlet>
+      <servlet-name>UnsecureServlet</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.ssl.SecureServlet</servlet-class>
+   </servlet>
+
+   <!-- The servlet and jsp page mappings -->
+   <servlet-mapping>
+      <servlet-name>SecureServlet</servlet-name>
+      <url-pattern>/restricted/SecureServlet</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+      <servlet-name>UnsecureServlet</servlet-name>
+      <url-pattern>/unrestricted/SecureServlet</url-pattern>
+   </servlet-mapping>
+
+   <!-- ### Security -->
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Resources requiring authenticated access over a
+         secure transport</web-resource-name>
+         <description>Declarative security tests</description>
+         <url-pattern>/restricted/*</url-pattern>
+         <http-method>HEAD</http-method>
+         <http-method>GET</http-method>
+         <http-method>POST</http-method>
+         <http-method>PUT</http-method>
+         <http-method>DELETE</http-method>
+      </web-resource-collection>
+      <auth-constraint>
+         <description>Only authenticated users can access secure content</description>
+         <role-name>AuthorizedUser</role-name>
+      </auth-constraint>
+      <user-data-constraint>
+         <description>Require a private channel</description>
+         <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+      </user-data-constraint>
+   </security-constraint>
+
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Resources requiring access over a
+         secure transport</web-resource-name>
+         <description>Declarative security tests</description>
+         <url-pattern>/unrestricted/*</url-pattern>
+         <http-method>HEAD</http-method>
+         <http-method>GET</http-method>
+         <http-method>POST</http-method>
+         <http-method>PUT</http-method>
+         <http-method>DELETE</http-method>
+      </web-resource-collection>
+      <auth-constraint>
+         <role-name>*</role-name>
+      </auth-constraint>
+      <user-data-constraint>
+         <description>Require a private channel</description>
+         <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+      </user-data-constraint>
+   </security-constraint>
+
+   <login-config>
+      <auth-method>CLIENT-CERT</auth-method>
+   </login-config>
+
+   <security-role>
+      <description>An AuthorizedUser is one with a valid username and password</description>
+      <role-name>AuthorizedUser</role-name>
+   </security-role>
+
+</web-app>

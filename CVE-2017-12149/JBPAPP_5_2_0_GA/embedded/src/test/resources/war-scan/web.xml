@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+   <description>Embedded JBoss</description>
+
+   <context-param>
+      <param-name>jboss-kernel-deployments</param-name>
+      <param-value>embedded-jboss-beans.xml, jboss-jms-beans.xml, testjms.xml</param-value>
+   </context-param>
+
+   <listener>
+      <listener-class>org.jboss.embedded.WebInfLibScanner</listener-class>
+   </listener>
+
+</web-app>

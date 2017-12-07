@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main"/>
+	<classpathentry kind="src" path="src/test"/>
+	<classpathentry exported="true" kind="src" path="/server"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/spring/lib/spring-beans.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/spring/lib/spring-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/spring/lib/spring-web.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/spring/lib/spring-webmvc.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/spring/lib/spring-aop.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/spring/lib/spring-context.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/junit/lib/junit.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/test/lib/jboss-test.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/aop/lib/jboss-aop.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/cache/jbosscache-core/lib/jbosscache-core.jar" sourcepath="/jbosscache-core/src/main/java"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/cache/jbosscache-pojo/lib/jbosscache-pojo.jar" sourcepath="/thirdparty/jboss/cache/jbosscache-pojo/lib/jbosscache-pojo-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/web/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-kernel.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-kernel-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-dependency.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-dependency-sources.jar"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

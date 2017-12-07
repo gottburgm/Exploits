@@ -1,0 +1,113 @@
+<xsd:schema xmlns="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.jboss.org/xml/ns/jca"
+    xmlns:jca="http://www.jboss.org/xml/ns/jca"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.0">
+
+    <xsd:element name="jboss-jca-deployment">
+      <complexType>
+          <sequence>            
+          </sequence>      
+      </complexType>    
+    </xsd:element>  
+  
+    <complexType name="connection-factory">
+      <sequence>
+          <element name="jndi-name" type="string" minOccurs="1" maxOccurs="1"/>
+          <element ref="jca:connection-pool" minOccurs="0" maxOccurs="1"/>
+          <element name="use-java-context" type="boolean" minOccurs="0" maxOccurs="1" default="true"/>
+          <element name="depends" type="string" minOccurs="0" maxOccurs="unbounded"/>
+          <element name="rar-name" type="string" minOccurs="1" maxOccurs="1"/>
+          <element name="connection-definition" type="string" minOccurs="1" maxOccurs="1"/>
+          <element name="transaction-type" type="jca:transaction-support" minOccurs="1" maxOccurs="1"/>      
+          <element name="track-connection-by-tx" type="boolean" minOccurs="1" maxOccurs="1"/>
+          <element ref="jca:config-property" minOccurs="0" maxOccurs="unbounded"/>
+      </sequence>    
+    </complexType>
+    
+    <complexType name="datasource">
+      <complexContent>
+        <extension base="jca:connection-factory">        
+          <sequence>
+              <element name="user-name" type="string" minOccurs="1" maxOccurs="1"/>
+              <element name="password" type="string" minOccurs="1" maxOccurs="1"/>            
+              <element ref="jca:jdbc-support" minOccurs="1" maxOccurs="1"/>
+          </sequence>
+        </extension>
+      </complexContent>
+    </complexType>  
+      
+    <xsd:element name="connection-pool">
+        <complexType>
+          <sequence>
+              <element name="min-pool-size" type="integer" minOccurs="0" maxOccurs="1" default="0"/>
+              <element name="max-pool-size" type="integer" minOccurs="0" maxOccurs="1" default="10"/>
+              <element name="blocking-timeout-milliseconds" type="long" minOccurs="0" maxOccurs="1" default="30000"/>
+              <element name="idle-timeout-minutes" type="integer" minOccurs="0" maxOccurs="1" default="30"/>          
+              <element name="background-validation" type="boolean" minOccurs="0" maxOccurs="1" default="false"/>                      
+              <element name="background-validation-minutes" type="integer" minOccurs="0" maxOccurs="1" default="30"/>                                  
+              <element name="no-tx-seperate-pool" type="boolean" minOccurs="1" maxOccurs="1" default="false"/>  
+          </sequence>
+      </complexType>
+    </xsd:element>
+    
+  <xsd:simpleType name="transaction-support">
+    <restriction base="string">
+      <enumeration value="NONE"></enumeration>
+      <enumeration value="LOCAL"></enumeration>
+      <enumeration value="XA"></enumeration>      
+     </restriction>
+  </xsd:simpleType>
+
+  <element name="config-property">
+    <complexType>
+      <attributeGroup ref="jca:config-property-attribute-group"/>
+    </complexType>
+  </element>
+  
+  <attributeGroup name="config-property-attribute-group">
+      <attribute name="name" type="string"/>
+      <!-- TODO should restrict this to Java types -->
+      <attribute name="type" type="string"/>
+  </attributeGroup>      
+  
+  <element name="connection-property">
+    <complexType>
+      <attributeGroup ref="jca:connection-property-attribute-group"/>
+    </complexType>  
+  </element>
+
+    <attributeGroup name="connection-property-attribute-group">
+    <attribute name="name" type="string"/>
+  </attributeGroup>      
+  
+  
+  <element name="jdbc-support">
+    <complexType>
+      <sequence>
+          <element name="connection-url" type="string" minOccurs="1"  maxOccurs="1"/>
+          <element name="provider-class" type="string" minOccurs="1"  maxOccurs="1"/>        
+          <element name="new-connection-sql" type="string" minOccurs="0" maxOccurs="1"/>
+          <element name="check-valid-connection-sql" type="string" minOccurs="0" maxOccurs="1"/>
+          <element name="valid-connection-checker-class-name" type="string" minOccurs="0" maxOccurs="1"/>        
+          <element name="exception-sorter-class-name" type="string" minOccurs="0" maxOccurs="1"/>        
+          <element name="track-statements" type="boolean"  minOccurs="1" maxOccurs="1" default="false"></element>        
+          <element name="prepared-statement-cache-size" type="integer" minOccurs="1" maxOccurs="1" default="0"/>
+          <element name="share-prepared-statements" type="boolean" minOccurs="1" maxOccurs="1" default="false"/>
+          <element name="set-tx-query-timeout" type="boolean" minOccurs="1" maxOccurs="1" default="false"/>
+          <element name="query-timeout" type="integer" minOccurs="0" maxOccurs="1"/>
+          <element ref="jca:metadata" minOccurs="0" maxOccurs="1"/>
+       </sequence>
+    </complexType>
+  </element>
+  
+  <element name="metadata">
+    <complexType>
+      <sequence>
+          <element name="type-mapping" type="string" minOccurs="1" maxOccurs="1"/>
+      </sequence>
+    </complexType>
+  </element>
+</xsd:schema>

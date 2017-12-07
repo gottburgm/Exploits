@@ -1,0 +1,10 @@
+!!! Documentation
+
+The bulk of the documentation for Embedded JBoss is online on our [wiki|http://wiki.jboss.org/wiki/Wiki.jsp?page=EmbeddedJBoss].  Please feel free to update, fix, or add additional documentation!  Help the community!
+
+Additionally, there are a few other resources that come with the distribution:
+* [Javadocs|docs/api/index.html]
+* [Tutorials|docs/tutorial]
+
+
+

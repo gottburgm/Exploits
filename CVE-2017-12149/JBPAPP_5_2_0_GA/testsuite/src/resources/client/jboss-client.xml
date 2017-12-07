@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE jboss-client PUBLIC
+   "-//JBoss//DTD Application Client 4.0//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss-client_4_0.dtd">
+
+<jboss-client>
+   <jndi-name>test-client</jndi-name>
+
+   <ejb-ref>
+      <ejb-ref-name>ejb/StatelessSessionBean</ejb-ref-name>
+      <jndi-name>ejbcts/StatelessSessionHome</jndi-name>
+   </ejb-ref>
+
+   <resource-ref>
+      <res-ref-name>url/JBossHome</res-ref-name>
+      <res-url>http://www.jboss.org</res-url>
+   </resource-ref>
+   <resource-ref>
+       <res-ref-name>url/IndirectURL</res-ref-name>
+       <jndi-name>SomeWebSite</jndi-name>
+   </resource-ref>
+
+   <resource-env-ref>
+      <resource-env-ref-name>jms/aQueue</resource-env-ref-name>
+      <jndi-name>queue/testQueue</jndi-name>
+   </resource-env-ref>
+   <!-- Map the message-destination-ref without a message-destination-link -->
+   <resource-env-ref>
+      <resource-env-ref-name>jms/anotherQueue</resource-env-ref-name>
+      <jndi-name>queue/A</jndi-name>
+   </resource-env-ref>
+   <!-- Map the message-destination-ref with a message-destination-link -->
+   <resource-env-ref>
+      <resource-env-ref-name>TheOtherQueue</resource-env-ref-name>
+      <jndi-name>queue/B</jndi-name>
+   </resource-env-ref>
+</jboss-client>

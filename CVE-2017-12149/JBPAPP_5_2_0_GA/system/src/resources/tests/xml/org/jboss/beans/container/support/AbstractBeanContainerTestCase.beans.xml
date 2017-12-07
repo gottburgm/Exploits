@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment>
+   <beans>
+      <bean name="SimpleBean1"
+            bean="org.jboss.test.kernel.xml.support.SimpleBeanImpl">
+         <properties>
+            <property name="aString"><value>StringValue</value></property>
+            <property name="aByte"><value>12</value></property>
+            <property name="aBoolean"><value>true</value></property>
+            <property name="aShort"><value>123</value></property>
+            <property name="anInt"><value>1234</value></property>
+            <property name="aLong"><value>12345</value></property>
+            <property name="aFloat"><value>3.14</value></property>
+            <property name="aDouble"><value>3.14e12</value></property>
+            <property name="aDate"><value>12/12/12</value></property>
+            <property name="aBigDecimal"><value>12e4</value></property>
+            <property name="aBigInteger"><value>123456</value></property>
+            <property name="abyte"><value>12</value></property>
+            <property name="aboolean"><value>true</value></property>
+            <property name="ashort"><value>123</value></property>
+            <property name="anint"><value>1234</value></property>
+            <property name="along"><value>12345</value></property>
+            <property name="afloat"><value>3.14</value></property>
+            <property name="adouble"><value>3.14e12</value></property>
+         </properties>
+      </bean>
+      <bean name="SimpleBean2"
+            bean="org.jboss.test.kernel.xml.support.SimpleBeanImpl">
+         <properties>
+            <property name="aString"><value>StringValue</value></property>
+            <property name="aByte"><value>12</value></property>
+            <property name="aBoolean"><value>true</value></property>
+            <property name="aShort"><value>123</value></property>
+            <property name="anInt"><value>1234</value></property>
+            <property name="aLong"><value>12345</value></property>
+            <property name="aFloat"><value>3.14</value></property>
+            <property name="aDouble"><value>3.14e12</value></property>
+            <property name="aDate"><value>12/12/12</value></property>
+            <property name="aBigDecimal"><value>12e4</value></property>
+            <property name="aBigInteger"><value>123456</value></property>
+            <property name="abyte"><value>12</value></property>
+            <property name="aboolean"><value>true</value></property>
+            <property name="ashort"><value>123</value></property>
+            <property name="anint"><value>1234</value></property>
+            <property name="along"><value>12345</value></property>
+            <property name="afloat"><value>3.14</value></property>
+            <property name="adouble"><value>3.14e12</value></property>
+         </properties>
+      </bean>
+   </beans>
+</deployment>

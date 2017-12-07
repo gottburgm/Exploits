@@ -1,0 +1,28 @@
+<project name="tests-mdbsessionpoolclear-jars">
+
+   <target name="_jars-mdbsessionpoolclear">
+      <mkdir dir="${build.lib}"/>
+
+      <jar destfile="${build.lib}/mdbsessionpoolcleartest.jar"
+           manifest="${build.etc}/manifest.mf">
+        <fileset dir="${build.classes}">
+          <patternset refid="common.test.client.classes"/>
+          <include name="org/jboss/test/mdbsessionpoolclear/bean/**"/>
+          <include name="org/jboss/test/mdbsessionpoolclear/test/**"/>
+        </fileset>
+        <fileset dir="${build.resources}/mdbsessionpoolclear">
+          <include name="*.*"/>
+        </fileset>
+      </jar>
+      <jar destfile="${build.lib}/mdbsessionpoolclear.jar">
+        <fileset dir="${build.classes}">
+          <patternset refid="jboss.test.util.ejb.set"/>
+          <include name="org/jboss/test/mdbsessionpoolclear/bean/**"/>
+        </fileset>
+        <fileset dir="${build.resources}/mdbsessionpoolclear">
+          <include name="**/*.xml"/>
+        </fileset>
+      </jar>
+   </target>
+
+</project>

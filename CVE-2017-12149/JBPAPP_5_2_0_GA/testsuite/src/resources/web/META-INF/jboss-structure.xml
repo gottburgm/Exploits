@@ -1,0 +1,61 @@
+<structure>
+    <context>
+        <path name=""/>
+        <metaDataPath>
+            <path name="META-INF"/>
+        </metaDataPath>
+        <classpath>
+            <path name=""/>
+            <path name="lib" suffixes=".jar"/>
+        </classpath>
+    </context>
+    <context>
+        <path name="jbosstest-web.war" />
+        <metaDataPath>
+            <path name="WEB-INF"/>
+        </metaDataPath>
+        <classpath>
+            <path name="jbosstest-web.war/WEB-INF/classes"/>
+            <path name="jbosstest-web.war/WEB-INF/lib" suffixes=".jar"/>
+        </classpath>
+    </context>
+    <context>
+        <path name="wars/notjbosstest-web.war" />
+        <metaDataPath>
+            <path name="WEB-INF"/>
+        </metaDataPath>
+        <classpath>
+            <path name="wars/notjbosstest-web.war/WEB-INF/classes"/>
+        </classpath>
+    </context>
+    <context>
+        <path name="jbosstest-web-ejbs.jar" />
+        <metaDataPath>
+            <path name="META-INF"/>
+        </metaDataPath>
+        <classpath>
+            <path name="jbosstest-web-ejbs.jar"/>
+        </classpath>
+    </context>
+    <context>
+        <path name="cts.jar" />
+        <metaDataPath>
+            <path name="META-INF"/>
+        </metaDataPath>
+        <classpath>
+            <path name="cts.jar"/>
+        </classpath>
+    </context>
+    <context>
+        <path name="websubdir/relative.jar" />
+        <metaDataPath>
+            <path name="META-INF"/>
+        </metaDataPath>
+        <classpath>
+            <path name="websubdir/relative.jar"/>
+        </classpath>
+    </context>
+    <context>
+        <path name="scripts/security-config-service.xml" />
+    </context>
+</structure>

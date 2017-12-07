@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server>
+
+<server>
+  <mbean code="org.jboss.remoting.transport.Connector"
+	 name="jboss.remoting:type=Connector,transport=socket5150">
+    <attribute name="InvokerLocator">socket://localhost:5150</attribute> 
+    <attribute name="Configuration"> 
+       <handlers>
+          <handler subsystem="AOP">org.jboss.aop.remoting.AOPRemotingInvocationHandler</handler>
+       </handlers>
+    </attribute>
+  </mbean>
+</server>

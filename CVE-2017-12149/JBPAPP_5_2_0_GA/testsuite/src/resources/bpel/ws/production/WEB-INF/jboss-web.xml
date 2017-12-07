@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE jboss-web PUBLIC "-//JBoss//DTD Web Application 2.4//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-web_4_0.dtd">
+<jboss-web>
+
+  <resource-ref>
+    <res-ref-name>jms/ConnectionFactory</res-ref-name>
+    <jndi-name>java:ConnectionFactory</jndi-name>
+  </resource-ref>
+  
+  <message-destination-ref>
+    <message-destination-ref-name>jms/callerQueue</message-destination-ref-name>
+    <jndi-name>queue/testQueue</jndi-name>
+  </message-destination-ref>
+  
+</jboss-web>

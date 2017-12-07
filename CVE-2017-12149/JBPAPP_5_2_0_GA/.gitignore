@@ -1,0 +1,17 @@
+.svn
+svn-commit.tmp
+*.iml
+/*/output
+/.idea
+/bootstrap/target
+/build/build.log
+/build/local.properties
+/jbossas/jmx-remoting/output
+/jbossas/remoting/output
+/maven-repository
+/testsuite/build.log
+/testsuite/run.tstamp
+# not really, but a temp stop-gap
+/thirdparty/*
+!/thirdparty/pom.xml
+!/thirdparty/readme.txt

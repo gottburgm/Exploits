@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  wstools.bat -config wstools-config.xml -cp ../../../../output/classes/
+-->
+
+<configuration xmlns="http://www.jboss.org/jbossws-tools"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.jboss.org/jbossws-tools http://www.jboss.org/jbossws-tools/schema/jbossws-tool_1_0.xsd">
+  <java-wsdl>
+    <service name="HelloWorldService" style="rpc" endpoint="org.jboss.test.webservice.jbas5614.HelloWorld"/>
+    <namespaces target-namespace="http://org.jboss.test.ws/jbws1121" type-namespace="http://org.jboss.test.ws/jbws1121/types"/>
+    <mapping file="jaxrpc-mapping.xml"/>
+    <webservices servlet-link="HelloWorldService"/>
+  </java-wsdl>
+</configuration>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application-client xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/application-client_1_4.xsd"
+  version="1.4">
+
+  <display-name>webservice client app</display-name>
+
+  <service-ref>
+    <service-ref-name>service/BasicSecured</service-ref-name>
+    <service-interface>javax.xml.rpc.Service</service-interface>
+    <wsdl-file>META-INF/wsdl/OrganizationService.wsdl</wsdl-file>
+    <jaxrpc-mapping-file>META-INF/jaxrpc-mapping.xml</jaxrpc-mapping-file>
+  </service-ref>
+  <service-ref>
+    <service-ref-name>service/RoleSecured</service-ref-name>
+    <service-interface>javax.xml.rpc.Service</service-interface>
+    <wsdl-file>META-INF/wsdl/OrganizationService.wsdl</wsdl-file>
+    <jaxrpc-mapping-file>META-INF/jaxrpc-mapping.xml</jaxrpc-mapping-file>
+  </service-ref>
+
+</application-client>

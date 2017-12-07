@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jbosscmp-jdbc PUBLIC "-//JBoss//DTD JBOSSCMP-JDBC 3.2//EN" "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_2.dtd">
+
+<jbosscmp-jdbc>
+   <enterprise-beans>
+      <entity>
+         <ejb-name>B</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>B</table-name>
+
+         <cmp-field>
+            <field-name>id</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>name</field-name>
+
+        </cmp-field>
+
+      </entity>
+      <entity>
+         <ejb-name>A</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <pk-constraint>true</pk-constraint>
+         <table-name>A</table-name>
+
+         <cmp-field>
+            <field-name>id</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>name</field-name>
+
+        </cmp-field>
+      </entity>
+
+   </enterprise-beans>
+
+  <relationships>
+    <ejb-relation>
+      <ejb-relation-name>A-B</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>B-has-A</ejb-relationship-role-name>
+          <fk-constraint>false</fk-constraint>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>A-has-B</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>id</field-name>
+               <column-name>a_id</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+  </relationships>
+
+</jbosscmp-jdbc>

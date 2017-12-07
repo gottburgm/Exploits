@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="org/jboss/jaxr/|org/jboss/jdo/castor/|org/jboss/tm/plugins/tyrex/|org/jboss/varia/stats/DataSourceInterceptorJDK6.java" kind="src" path="src/main"/>
+	<classpathentry kind="src" path="src/tests"/>
+	<classpathentry kind="src" path="src/resources/tests"/>
+	<classpathentry exported="true" kind="src" path="/cluster"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/thirdparty/apache-bsf/lib/bsf.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/hsqldb/lib/hsqldb.jar"/>
+	<classpathentry kind="lib" path="/tools/lib/ant.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/sun-javamail/lib/mail.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/joesnmp/lib/joesnmp.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/apache-httpclient/lib/commons-httpclient.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/sun-jaf/lib/activation.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/apache-velocity/lib/velocity.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/apache-scout/lib/scout.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/apache-xalan/lib/xalan.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/opensaml/lib/opensaml.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/org/apache/lib/xmlsec.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/juddi/lib/juddi.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/beanshell/lib/bsh.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/common-beans/lib/jboss-common-beans.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-deployers/lib/jboss-deployers-client.jar" sourcepath="/thirdparty/jboss/jboss-deployers/lib/jboss-deployers-client-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/junit/lib/junit.jar" sourcepath="/thirdparty/junit/lib/junit-src.zip"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/web/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-dependency.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-dependency-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-kernel.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-kernel-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-bootstrap/lib/jboss-bootstrap.jar"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

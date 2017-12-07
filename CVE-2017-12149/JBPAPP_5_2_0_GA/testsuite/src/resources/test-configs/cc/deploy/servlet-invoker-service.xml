@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<server>
+
+
+  <mbean code="org.jboss.remoting.transport.Connector" name="jboss.remoting:service=connector,transport=servlet"
+    display-name="Servlet transport Connector">
+    <attribute name="InvokerLocator">servlet://${jboss.bind.address}:8080/servlet-invoker/ServerInvokerServlet</attribute>
+    <attribute name="Configuration">
+      <handlers>
+        <handler subsystem="AOP">org.jboss.aspects.remoting.AOPRemotingInvocationHandler</handler>
+      </handlers>
+    </attribute>
+  </mbean>
+
+
+  <mbean code="org.jboss.remoting.transport.Connector" name="jboss.remoting:service=connector,transport=sslservlet"
+    display-name="Servlet transport Connector">
+    <attribute name="InvokerLocator">sslservlet://${jboss.bind.address}:8445/servlet-invoker/SSLServerInvokerServlet</attribute>
+    <attribute name="Configuration">
+      <handlers>
+        <handler subsystem="AOP">org.jboss.aspects.remoting.AOPRemotingInvocationHandler</handler>
+      </handlers>
+    </attribute>
+  </mbean>
+
+
+ 
+</server>

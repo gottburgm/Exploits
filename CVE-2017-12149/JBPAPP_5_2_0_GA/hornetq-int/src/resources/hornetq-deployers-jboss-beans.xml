@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+   <bean name="HornetQConfigParserDeployerFile1" class="org.jboss.as.integration.hornetq.deployers.HornetQConfigParserDeployer">
+        <constructor>
+         <parameter>hornetq-configuration.xml</parameter>
+      </constructor>
+   </bean>
+
+   <bean name="HornetQConfigParserDeployerFile2" class="org.jboss.as.integration.hornetq.deployers.HornetQConfigParserDeployer">
+        <constructor>
+         <parameter>hornetq-queues.xml</parameter>
+      </constructor>
+   </bean>
+
+   <bean name="HornetQCoreConfigRealDeployer" class="org.jboss.as.integration.hornetq.deployers.HornetQCoreConfigRealDeployer"/>
+
+   <bean name="HornetQJMSParserDeployer" class="org.jboss.as.integration.hornetq.deployers.HornetQJMSParserDeployer">
+   </bean>
+
+
+   <bean name="HornetQJMSRealDeployer" class="org.jboss.as.integration.hornetq.deployers.HornetQJMSRealDeployer">
+       <demand>HornetQDestinationCreator</demand>
+   </bean>
+
+   <!-- Destination creator for HornetQ
+        This gets "automagically" injected into CreateDestinationDeployer Bean at ejb-deployer-jboss.xml through incallback and uncallback
+    -->
+   <bean name="HornetQDestinationCreator" class="org.jboss.ejb.deployers.CreateDestination">
+      <!-- We match any jms mdb that is going to be deployed using our rar -->
+      <property name="matcher">
+         <bean class="org.jboss.ejb.deployers.SimpleCreateDestinationMatcher">
+            <property name="default">true</property>
+            <property name="messageListener">javax.jms.MessageListener</property>
+            <property name="rarName">jms-ra.rar</property>
+         </bean>
+      </property>
+      <!-- Create a destination with HornetQ -->
+      <property name="factory">
+         <bean class="org.jboss.as.integration.hornetq.deployers.DestinationFactoryDeployerPlugin"/>
+      </property>
+   </bean>
+
+   <bean name="JMSQueueManageMO" class="org.jboss.as.integration.hornetq.management.jms.QueueManageMO">
+      <constructor><parameter><inject bean="HornetQServer" /></parameter></constructor>
+      <demand>JMSServerManager</demand>
+   </bean>
+
+   <bean name="JMSTopicManageMO" class="org.jboss.as.integration.hornetq.management.jms.TopicManageMO">
+      <constructor><parameter><inject bean="HornetQServer" /></parameter></constructor>
+      <demand>JMSServerManager</demand>
+   </bean>
+
+   <bean name="JMSConnectionFactoryManageMO" class="org.jboss.as.integration.hornetq.management.jms.ConnectionFactoryManageMO">
+      <constructor><parameter><inject bean="HornetQServer" /></parameter></constructor>
+      <demand>JMSServerManager</demand>
+   </bean>
+
+   <bean name="JMSServerMO" class="org.jboss.as.integration.hornetq.management.jms.JMSServerMO">
+      <constructor><parameter><inject bean="HornetQServer" /></parameter></constructor>
+      <demand>JMSServerManager</demand>
+   </bean>
+
+</deployment>

@@ -1,0 +1,55 @@
+<project name="tests-ee5client-jars">
+<target name="_jars-ee5client">
+      <mkdir dir="${build.lib}"/>
+
+	   <!-- The app client jar -->
+      <jar jarfile="${build.lib}/ee5client-test-client.jar" manifest="${build.resources}/ee5client/Manifest">
+         <zipfileset prefix="META-INF" dir="${build.resources}/ee5client">
+            <include name="application-client.xml"/>
+            <include name="jboss-client.xml"/>
+         </zipfileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/ee5client/HelloWorldService.class"/>
+            <include name="org/jboss/test/ee5client/client/HelloWorldClient.class"/>
+         </fileset>
+      </jar>
+      <!-- The ejb jar -->
+      <jar jarfile="${build.lib}/ee5client-test.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/ee5client/ejb/*.class"/>
+         </fileset>
+      </jar>
+
+      <ear appxml="${build.resources}/ee5client/application.xml" earfile="${build.lib}/ee5client-test.ear">
+         <fileset dir="${build.lib}">
+            <include name="ee5client-test-client.jar"/>
+            <include name="ee5client-test.jar"/>
+         </fileset>
+      </ear>
+
+      <jar jarfile="${build.lib}/ee5client-simpleresource-client.jar">
+         <manifest>
+            <attribute name="Main-Class" value="org.jboss.test.ee5client.client.SimpleResourceClient"/>
+         </manifest>
+         <zipfileset prefix="META-INF" dir="${build.resources}/ee5client/simpleresource">
+            <include name="application-client.xml"/>
+         </zipfileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/ee5client/client/SimpleResourceClient.class"/>
+         </fileset>
+      </jar>
+
+      <jar jarfile="${build.lib}/ee5client-simpleresource.ear">
+         <fileset dir="${build.lib}">
+            <include name="ee5client-simpleresource-client.jar"/>
+         </fileset>
+      </jar>
+
+ 	<copy todir="${build.lib}">
+         <fileset dir="${build.resources}/ee5client">
+            <include name="ee5client-jms-service.xml"/>
+         </fileset>
+      </copy>
+   </target>
+
+</project>

@@ -1,0 +1,31 @@
+--- ./server/web/deployers/ejb-deployer-jboss-beans.xml	2010-06-08 16:17:16.000000000 -0500
++++ ./server/web/deployers/ejb-deployer-jboss-beans.xml	2010-07-26 17:06:32.000000000 -0500
+@@ -92,28 +92,4 @@
+    <bean name="StandardJBossMetaDataDeployer" class="org.jboss.ejb.deployers.StandardJBossMetaDataDeployer">
+    </bean>
+ 
+-   <!-- Deployer for automatically creating message driven destinations -->
+-   <bean name="CreateDestinationDeployer" class="org.jboss.ejb.deployers.CreateDestinationDeployer">
+-      <incallback method="addCreateDestination"/>
+-      <uncallback method="removeCreateDestination"/>
+-   </bean>
+-
+-   <!-- Destination creator for JBoss Messaging -->
+-   <bean name="JBossMessageDestinationCreator" class="org.jboss.ejb.deployers.CreateDestination">
+-      <!-- We match any jms mdb that is going to be deployed using our rar -->
+-      <property name="matcher">
+-         <bean class="org.jboss.ejb.deployers.SimpleCreateDestinationMatcher">
+-            <property name="default">true</property>
+-            <property name="messageListener">javax.jms.MessageListener</property>
+-            <property name="rarName">jms-ra.rar</property>
+-         </bean>
+-      </property>
+-      <!-- Create a destination with JBoss Messaging -->
+-      <property name="factory">
+-         <bean class="org.jboss.jms.server.destination.JBossMessagingCreateDestinationFactory">
+-            <property name="serverPeerName">jboss.messaging:service=ServerPeer</property>
+-            <property name="postOfficeName">jboss.messaging:service=PostOffice</property>
+-         </bean>
+-      </property>
+-   </bean>
+ </deployment>

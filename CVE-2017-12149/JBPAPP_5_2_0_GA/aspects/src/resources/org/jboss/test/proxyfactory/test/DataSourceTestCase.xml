@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<aop>
+   <interceptor class="org.jboss.test.proxyfactory.support.ConnectionFactoryInterceptor" scope="PER_INSTANCE"/>
+   <bind pointcut="execution(* $instanceof{javax.sql.DataSource}->*(..))">
+      <interceptor-ref name="org.jboss.test.proxyfactory.support.ConnectionFactoryInterceptor"/>
+   </bind>
+</aop>

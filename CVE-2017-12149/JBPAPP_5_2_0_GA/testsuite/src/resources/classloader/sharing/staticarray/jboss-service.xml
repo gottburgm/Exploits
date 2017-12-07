@@ -1,0 +1,5 @@
+<server>
+    <mbean code="org.jboss.test.classloader.sharing.staticarray.common.Sequencer"
+        name="jboss.test:name=Sequencer">
+    </mbean>
+</server>

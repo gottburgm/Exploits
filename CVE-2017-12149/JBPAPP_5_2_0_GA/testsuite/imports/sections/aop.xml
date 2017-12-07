@@ -1,0 +1,743 @@
+<project name="tests-aop-jars">
+   <!-- aop test -->
+   <target name="_jars-aop">
+      <mkdir dir="${build.lib}"/>
+      <taskdef name="aopc" classname="org.jboss.aop.ant.AopC"
+         classpathref="jboss.aop.classpath"/>
+      <path id="aop.task.classpath">
+         <path refid="javassist.classpath"/>
+         <path refid="qdox.classpath"/>
+         <path refid="trove.classpath"/>
+         <path refid="jboss.aop.classpath"/>
+      <path refid="jboss.common.core.classpath"/>
+      <path refid="jboss.common.logging.spi.classpath"/>
+      <path refid="jboss.common.logging.log4j.classpath"/>
+      <path refid="jboss.common.logging.jdk.classpath"/>
+      </path>
+      <antcall target="compile-aop-annotatations"/>
+      <!-- build aopest.jar -->
+      <jar destfile="${build.lib}/aoptest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/aop/test/**"/>
+            <include name="org/somepackage/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+
+      <!-- build simpleejb.jar -->
+      <jar destfile="${build.lib}/simpleejb.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/simpleejb/"/>
+         </fileset>
+         <metainf dir="${build.resources}/aop/simpleejb/META-INF/">
+            <exclude name="jboss-service.xml"/>
+         </metainf>
+      </jar>
+
+      <jar destfile="${build.lib}/aop-call-logging.aop">
+         <fileset dir="${build.classes}">
+            <include
+               name="org/jboss/test/aop/test/CallLoggingUnitTestCase.class"/>
+         </fileset>
+         <metainf dir="${build.resources}/aop/calllogging/META-INF/"/>
+      </jar>
+
+      <jar destfile="${build.lib}/aop-invocationlog.aop">
+         <fileset dir="${build.classes}">
+            <include
+               name="org/jboss/test/aop/test/InvocationLogUnitTestCase.class"/>
+            <include name="org/jboss/test/aop/bean/POJO.class"/>
+            <include name="org/jboss/test/aop/bean/SomeException.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/invocationlog">
+            <include name="META-INF/jboss-aop.xml"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/aop-invocationlog.sar">
+         <fileset dir="${build.lib}">
+            <include name="aop-invocationlog.aop"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/invocationlog">
+            <include name="META-INF/jboss-service.xml"/>
+         </fileset>
+      </jar>
+
+      <jar destfile="${build.lib}/aoptest.aop"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/bean/Implements*.class"/>
+            <include name="org/jboss/test/aop/bean/CFlowedPOJO.class"/>
+            <include
+               name="org/jboss/test/aop/bean/InstanceOfInterceptor.class"/>
+            <include
+               name="org/jboss/test/aop/bean/InterceptorCounter.class"/>
+            <include name="org/jboss/test/aop/bean/SomeInterface.class"/>
+            <include name="org/jboss/test/aop/bean/EmptyInterface.class"/>
+            <include name="org/jboss/test/aop/bean/Aspect.class"/>
+            <include name="org/jboss/test/aop/bean/Person.class"/>
+            <include name="org/jboss/test/aop/bean/Address.class"/>
+            <include
+               name="org/jboss/test/aop/bean/NoInterceptorsPOJO*.class"/>
+            <include name="org/jboss/test/aop/bean/NonadvisedPOJO.class"/>
+            <include name="org/jboss/test/aop/bean/SecuredPOJO.class"/>
+            <include name="org/jboss/test/aop/bean/SecureRunAsPOJO.class"/>
+              <include name="org/jboss/test/aop/bean/SecureInternalPOJO.class"/>            
+            <include
+               name="org/jboss/test/aop/bean/AnnotatedSecuredPOJO.class"/>
+            <include name="org/jboss/test/aop/bean/AnnotatedSecureRunAsPOJO.class"/>
+            <include name="org/jboss/test/aop/bean/AnnotatedSecureInternalPOJO.class"/>
+            <include name="org/jboss/test/aop/bean/SomeException.class"/>
+            <include name="org/jboss/test/aop/bean/POJO*.class"/>
+            <include name="org/jboss/test/aop/bean/Call*.class"/>
+            <include name="org/jboss/test/aop/bean/SomeIntroduction.class"/>
+            <include
+               name="org/jboss/test/aop/bean/SubclassIntroduction.class"/>
+            <include
+               name="org/jboss/test/aop/bean/AnotherIntroduction.class"/>
+            <include name="org/jboss/test/aop/bean/OverriddenAnnotationInterceptor.class"/>
+            <include name="org/jboss/test/aop/bean/OverriddenAnnotation.class"/>
+            <include name="org/jboss/test/aop/bean/Introduction.class"/>
+            <include name="org/jboss/test/aop/bean/Introduction2.class"/>
+            <include name="org/jboss/test/aop/bean/InterfaceMixin.class"/>
+            <include name="org/jboss/test/aop/bean/AnnotatedTxPOJO.class"/>
+            <include name="org/jboss/test/aop/bean/TxPOJO.class"/>
+            <include name="org/jboss/test/aop/bean/TxLockedPOJO.class"/>
+            <include
+               name="org/jboss/test/aop/bean/AnnotatedTxLockedPOJO.class"/>
+            <include name="org/jboss/test/aop/bean/VersionedPOJO.class"/>
+            <include name="org/jboss/test/aop/bean/SimpleInterceptor.class"/>
+            <include
+               name="org/jboss/test/aop/bean/SimpleInterceptorFactory.class"/>
+            <include
+               name="org/jboss/test/aop/bean/SimpleBeanInterceptor.class"/>
+            <include
+               name="org/jboss/test/aop/bean/SimpleBeanCallerInterceptor.class"/>
+            <include
+               name="org/jboss/test/aop/bean/SimpleBeanInterceptorFactory.class"/>
+            <include name="org/jboss/test/aop/bean/Temperature*.class"/>
+            <include name="org/jboss/test/aop/bean/Observable*.class"/>
+            <include name="org/jboss/test/aop/bean/LogUtil*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop">
+            <include name="META-INF/jboss-aop.xml"/>
+         </fileset>
+      </jar>
+
+      <jar destfile="${build.lib}/aoptest.sar">
+         <fileset dir="${build.lib}">
+            <include name="aoptest.aop"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/bean/AOPTester.class"/>
+            <include name="org/jboss/test/aop/bean/AOPTesterMBean.class"/>
+            <include name="org/jboss/test/aop/bean/RemotingTester.class"/>
+            <include
+               name="org/jboss/test/aop/bean/RemotingTesterMBean.class"/>
+            <include name="org/jboss/test/aop/bean/SecurityTester.class"/>
+            <include
+               name="org/jboss/test/aop/bean/SecurityTesterMBean.class"/>
+            <include name="org/jboss/test/aop/bean/TxTester.class"/>
+            <include name="org/jboss/test/aop/bean/TxTesterMBean.class"/>
+            <include name="org/jboss/test/aop/bean/TxLockTester*.class"/>
+            <include name="org/jboss/test/aop/bean/TxLockTesterMBean.class"/>
+            <include
+               name="org/jboss/test/aop/bean/VersionedObjectTester.class"/>
+            <include
+               name="org/jboss/test/aop/bean/VersionedObjectTesterMBean.class"/>
+            <include name="org/jboss/test/aop/bean/CacheTester.class"/>
+            <include name="org/jboss/test/aop/bean/CacheTesterMBean.class"/>
+            <include name="org/jboss/test/aop/bean/BeforeInterceptor.class"/>
+            <include name="org/jboss/test/aop/bean/AfterInterceptor.class"/>
+            <include name="org/jboss/test/aop/bean/LogUtil.class"/>
+            <include name="org/jboss/test/aop/bean/Temperature.class"/>
+            <include name="org/jboss/test/aop/bean/ObservableTester.class"/>
+            <include
+               name="org/jboss/test/aop/bean/ObservableTesterMBean.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop">
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop">
+            <include name="META-INF/jboss-service.xml"/>
+         </fileset>
+      </jar>
+
+      <jar destfile="${build.lib}/simpleejb.sar">
+         <fileset dir="${build.lib}">
+            <include name="aoptest.aop"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="simpleejb.jar"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/bean/SimpleBeanTester.class"/>
+            <include
+               name="org/jboss/test/aop/bean/SimpleBeanTesterMBean.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop">
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/simpleejb">
+            <include name="META-INF/jboss-service.xml"/>
+         </fileset>
+      </jar>
+
+      <jar destfile="${build.lib}/jmx-aoptest.sar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/jmx/*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/jmx">
+            <include name="jmx-aop.xml"/>
+            <include name="META-INF/jboss-service.xml"/>
+         </fileset>
+      </jar>
+
+      <!-- Create jars for the simple deployer test -->
+      <jar destfile="${build.lib}/aop-deployertest.sar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/deployers/*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/deployers">
+            <include name="META-INF/jboss-service.xml"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/aop-deployertest-xml.aop">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/deployers/xml/*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/deployers/xml">
+            <include name="META-INF/jboss-aop.xml"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/aop-deployertest-annotations.aop">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/deployers/annotations/*.class"/>
+         </fileset>
+      </jar>
+
+      <!-- Create jars for the aop-mc-integration test-->
+      <jar destfile="${build.lib}/aop-mc-jmxtest.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/mcjmx/*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/mcjmx">
+            <include name="META-INF/jboss-beans.xml"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/aop-mc-jmxtest-has-dependency.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/mcjmx/BeanWithDependency.class"/>
+            <include name="org/jboss/test/aop/mcjmx/InterceptorWithDependency.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/mcjmx">
+            <include name="META-INF/has-dependency-jboss-beans.xml"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/aop-mc-jmxtest-dependency.jar">
+         <fileset dir="${build.resources}/aop/mcjmx">
+            <include name="META-INF/dependency-jboss-beans.xml"/>
+         </fileset>
+      </jar>
+
+      <!-- Create jars for the default annotation test -->
+      <jar destfile="${build.lib}/aop-mc-defaultannotationtest.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/mcdefaultannotation/*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/mcdefaultannotation">
+            <include name="META-INF/jboss-beans.xml"/>
+         </fileset>
+      </jar>
+
+      <!-- Create jars for annotation tests -->
+      <jar destfile="${build.lib}/aop-annotated.aop">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/jdk15annotated/*.class"/>
+                <exclude name="org/jboss/test/aop/jdk15annotated/AnnotatedTester.class" />
+                <exclude name="org/jboss/test/aop/jdk15annotated/AnnotatedTesterMBean.class" />
+                <exclude name="org/jboss/test/aop/jdk15annotated/ScopedAnnotatedTester.class" />
+                <exclude name="org/jboss/test/aop/jdk15annotated/ScopedAnnotatedTesterMBean.class" />
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/aop-annotated.sar">
+         <fileset dir="${build.classes}">
+                <include name="org/jboss/test/aop/jdk15annotated/AnnotatedTester.class" />
+                <include name="org/jboss/test/aop/jdk15annotated/AnnotatedTesterMBean.class" />
+         </fileset>
+            <fileset dir="${build.lib}">
+              <include name="aop-annotated.aop" />
+         </fileset>
+         <fileset dir="${build.resources}/aop/jdk15annotated">
+               <include name="META-INF/jboss-service.xml"/>
+         </fileset>
+      </jar>
+
+      <!-- Create jars for scoped annotation tests -->
+      <jar destfile="${build.lib}/aop-scoped-annotated.aop">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/jdk15annotated/*.class"/>
+                <exclude name="org/jboss/test/aop/jdk15annotated/AnnotatedTester.class" />
+                <exclude name="org/jboss/test/aop/jdk15annotated/AnnotatedTesterMBean.class" />
+                <exclude name="org/jboss/test/aop/jdk15annotated/ScopedAnnotatedTester.class" />
+                <exclude name="org/jboss/test/aop/jdk15annotated/ScopedAnnotatedTesterMBean.class" />
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/aop-scoped-annotated.sar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/jdk15annotated/ScopedAnnotatedTester.class" />
+            <include name="org/jboss/test/aop/jdk15annotated/ScopedAnnotatedTesterMBean.class" />
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="aop-scoped-annotated.aop" />
+         </fileset>
+         <fileset dir="${build.resources}/aop/jdk15annotated/scoped">
+            <include name="META-INF/jboss-service.xml"/>
+         </fileset>
+      </jar>
+
+      <jar destfile="${build.lib}/aop-scoped-annotated2.aop">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/jdk15annotated/AnotherPOJO.class"/>
+            <include name="org/jboss/test/aop/jdk15annotated/AspectFromFactory.class"/>
+            <include name="org/jboss/test/aop/jdk15annotated/ComparableMixin.class"/>
+            <include name="org/jboss/test/aop/jdk15annotated/EmptyInterface.class"/>
+            <include name="org/jboss/test/aop/jdk15annotated/ExternalizableMixin.class"/>
+            <include name="org/jboss/test/aop/jdk15annotated/Interceptions.class"/>
+            <include name="org/jboss/test/aop/jdk15annotated/IntroducedAnnotationPOJO.class"/>
+            <include name="org/jboss/test/aop/jdk15annotated/MyAnnotation.class"/>
+            <include name="org/jboss/test/aop/jdk15annotated/NoInterfacesPOJO.class"/>
+            <include name="org/jboss/test/aop/jdk15annotated/NoInterfacesPOJO2.class"/>
+            <include name="org/jboss/test/aop/jdk15annotated/POJO.class"/>
+            <include name="org/jboss/test/aop/jdk15annotated/POJO2.class"/>
+            <include name="org/jboss/test/aop/jdk15annotated/PreparePOJO.class"/>
+            <include name="org/jboss/test/aop/jdk15annotated/VariaPOJO.class"/>
+         </fileset>
+         <!-- TODO remove this for JBAS-5986 -->
+         <fileset dir="${build.resources}/aop/jdk15annotated/scoped2">
+            <include name="META-INF/jboss-aop.xml"/>
+          </fileset>
+      </jar>
+      <jar destfile="${build.lib}/aop-scoped-annotated2.sar">
+         <fileset dir="${build.classes}">
+             <include name="org/jboss/test/aop/jdk15annotated/ScopedAnnotatedTester.class" />
+             <include name="org/jboss/test/aop/jdk15annotated/ScopedAnnotatedTesterMBean.class" />
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="aop-scoped-annotated2.aop" />
+         </fileset>
+         <fileset dir="${build.resources}/aop/jdk15annotated/scoped2">
+            <include name="META-INF/jboss-service.xml"/>
+         </fileset>
+      </jar>         
+
+      <!-- jars for scoped test -->
+      <jar destfile="${build.lib}/aop-scopedtest1.aop">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/scoped/*.class"/>
+            <include name="org/jboss/test/aop/scoped/excluded/**/*.class"/>
+            <exclude name="org/jboss/test/aop/scoped/ScopedTester*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/scoped/sar1">
+            <include name="META-INF/jboss-aop.xml"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/aop-scopedtest1.sar">
+         <fileset dir="${build.lib}">
+            <include name="aop-scopedtest1.aop"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/scoped/ScopedTester*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/scoped/sar1">
+            <include name="META-INF/jboss-service.xml"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/aop-scopedtest2.sar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/scoped/*.class"/>
+            <include name="org/jboss/test/aop/scoped/excluded/**/*.class"/>
+            <exclude name="org/jboss/test/aop/scoped/Annotated*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/scoped/sar2/META-INF">
+            <include name="scoped-aop.xml"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/scoped/sar2">
+            <include name="META-INF/jboss-service.xml"/>
+         </fileset>
+      </jar>
+
+      <jar destfile="${build.lib}/aop-scopedear1-ejb.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/scoped/ear/ejb/*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/scoped/ear1">
+            <include name="META-INF/ejb-jar.xml"/>
+            <include name="META-INF/jboss.xml"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/aop-scopedear1.aop">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/scoped/ear/interceptor/*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/scoped/ear1">
+            <include name="META-INF/jboss-aop.xml"/>
+         </fileset>
+      </jar>
+      <war warfile="${build.lib}/aop-scopedear1.war"
+         webxml="${build.resources}/aop/scoped/ear1/WEB-INF/web.xml">
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/aop/scoped/ear/servlet/*.class"/>
+         </classes>
+      </war>
+      <jar destfile="${build.lib}/aop-scopedear1.ear">
+         <fileset dir="${build.lib}">
+            <include name="aop-scopedear1-ejb.jar"/>
+            <include name="aop-scopedear1.aop"/>
+            <include name="aop-scopedear1.war"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/scoped/ear1">
+            <include name="META-INF/application.xml"/>
+            <include name="META-INF/jboss-app.xml"/>
+         </fileset>
+      </jar>
+
+      <jar destfile="${build.lib}/aop-scopedear2-ejb.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/scoped/ear/ejb/*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/scoped/ear2">
+            <include name="META-INF/ejb-jar.xml"/>
+            <include name="META-INF/jboss.xml"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/aop-scopedear2.aop">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/scoped/ear/interceptor/*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/scoped/ear2">
+            <include name="META-INF/jboss-aop.xml"/>
+         </fileset>
+      </jar>
+      <war warfile="${build.lib}/aop-scopedear2.war"
+         webxml="${build.resources}/aop/scoped/ear2/WEB-INF/web.xml">
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/aop/scoped/ear/servlet/*.class"/>
+         </classes>
+      </war>
+      <jar destfile="${build.lib}/aop-scopedear2.ear">
+         <fileset dir="${build.lib}">
+            <include name="aop-scopedear2-ejb.jar"/>
+            <include name="aop-scopedear2.aop"/>
+            <include name="aop-scopedear2.war"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/scoped/ear2">
+            <include name="META-INF/application.xml"/>
+            <include name="META-INF/jboss-app.xml"/>
+         </fileset>
+      </jar>
+
+
+    <!-- ************************ -->
+    <!-- jars for extender test   -->
+    <!-- ***********************  -->
+    <jar destfile="${build.lib}/aop-extendertest.aop">
+       <fileset dir="${build.classes}">
+          <include name="org/jboss/test/aop/extender/*.class"/>
+          <exclude name="org/jboss/test/aop/extender/ExtenderTester*.class"/>
+       </fileset>
+       <fileset dir="${build.resources}/aop/extender">
+          <include name="META-INF/jboss-aop.xml"/>
+       </fileset>
+    </jar>
+    <jar destfile="${build.lib}/aop-extendertest.sar">
+       <fileset dir="${build.lib}">
+          <include name="aop-extendertest.aop"/>
+       </fileset>
+       <fileset dir="${build.classes}">
+          <include name="org/jboss/test/aop/extender/ExtenderTester*.class"/>
+       </fileset>
+       <fileset dir="${build.resources}/aop/extender">
+          <include name="META-INF/jboss-service.xml"/>
+       </fileset>
+    </jar>
+
+
+     <!-- **************************** -->
+     <!-- jars for scopedextender test -->
+     <!-- **************************** -->
+     <!-- Create aop and jar for base sar-->
+     <jar destfile="${build.lib}/aop-scopedextender-base.jar">
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/aop/scopedextender/Base*.class"/>
+           <include name="org/jboss/test/aop/scopedextender/TestUtil*.class"/>
+           <exclude name="org/jboss/test/aop/scopedextender/*Tester*.class"/>
+        </fileset>
+     </jar>
+     <jar destfile="${build.lib}/aop-scopedextender-base.aop">
+        <fileset dir="${build.resources}/aop/scopedextender/base">
+             <include name="META-INF/jboss-aop.xml"/>
+        </fileset>
+     </jar>
+     <!-- Create aop and jar for child sar-->
+     <jar destfile="${build.lib}/aop-scopedextender-child.jar">
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/aop/scopedextender/Child*.class"/>
+           <include name="org/jboss/test/aop/scopedextender/ScopedChild*.class"/>
+           <exclude name="org/jboss/test/aop/scopedextender/*Tester*.class"/>
+        </fileset>
+     </jar>
+     <jar destfile="${build.lib}/aop-scopedextender-child-parentdelegation.aop">
+        <fileset dir="${build.resources}/aop/scopedextender/child/parentdelegation">
+           <include name="META-INF/jboss-aop.xml"/>
+        </fileset>
+     </jar>
+     <jar destfile="${build.lib}/aop-scopedextender-child-noparentdelegation.aop">
+        <fileset dir="${build.resources}/aop/scopedextender/child/noparentdelegation">
+           <include name="META-INF/jboss-aop.xml"/>
+        </fileset>
+     </jar>
+
+     <!-- Create base sar w/ base classes not loaded -->
+     <jar destfile="${build.lib}/aop-scopedextender-base-notloaded.sar">
+        <fileset dir="${build.lib}">
+           <include name="aop-scopedextender-base.*"/>
+        </fileset>
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/aop/scopedextender/BaseNotLoadedTester*.class"/>
+           <include name="org/jboss/test/aop/scopedextender/TesterMBean.class"/>
+           <include name="org/jboss/test/aop/scopedextender/TestUtil.class"/>
+        </fileset>
+        <fileset dir="${build.resources}/aop/scopedextender/base/notloaded">
+           <include name="META-INF/jboss-service.xml"/>
+        </fileset>
+     </jar>
+     <!-- Create base sar w/ base classes loaded -->
+     <jar destfile="${build.lib}/aop-scopedextender-base-loaded.sar">
+        <fileset dir="${build.lib}">
+           <include name="aop-scopedextender-base.*"/>
+        </fileset>
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/aop/scopedextender/BaseLoadedTester*.class"/>
+           <include name="org/jboss/test/aop/scopedextender/TesterMBean.class"/>
+           <include name="org/jboss/test/aop/scopedextender/TestUtil.class"/>
+        </fileset>
+        <fileset dir="${build.resources}/aop/scopedextender/base/loaded">
+           <include name="META-INF/jboss-service.xml"/>
+        </fileset>
+     </jar>
+     <!-- Create scoped child sar w/ parent delegation -->
+     <jar destfile="${build.lib}/aop-scopedextender-child-parentdelegation.sar">
+        <fileset dir="${build.lib}">
+           <include name="aop-scopedextender-child.jar"/>
+           <include name="aop-scopedextender-child-parentdelegation.aop"/>
+        </fileset>
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/aop/scopedextender/ScopedChildParentDelegationTester*.class"/>
+           <include name="org/jboss/test/aop/scopedextender/TesterMBean.class"/>
+           <include name="org/jboss/test/aop/scopedextender/TestUtil.class"/>
+        </fileset>
+        <fileset dir="${build.resources}/aop/scopedextender/child/parentdelegation">
+           <include name="META-INF/jboss-service.xml"/>
+        </fileset>
+     </jar>
+     <!-- Create scoped child sar w/ no parent delegation -->
+     <jar destfile="${build.lib}/aop-scopedextender-child-noparentdelegation.sar">
+        <fileset dir="${build.lib}">
+           <include name="aop-scopedextender-base.jar"/>
+           <include name="aop-scopedextender-child.jar"/>
+           <include name="aop-scopedextender-child-noparentdelegation.aop"/>
+        </fileset>
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/aop/scopedextender/ScopedChildNoParentDelegationTester*.class"/>
+           <include name="org/jboss/test/aop/scopedextender/TesterMBean.class"/>
+           <include name="org/jboss/test/aop/scopedextender/TestUtil.class"/>
+        </fileset>
+        <fileset dir="${build.resources}/aop/scopedextender/child/noparentdelegation">
+           <include name="META-INF/jboss-service.xml"/>
+        </fileset>
+    </jar>
+
+    <!-- jars for scoped attachment test -->
+    <jar destfile="${build.lib}/aop-scopedattachtest1.aop">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/test/aop/scopedattach/**/*.class"/>
+        <exclude name="org/jboss/test/aop/scopedattach/ScopedTester*.class"/>
+        <exclude name="org/jboss/test/aop/scopedattach/POJO.class"/>
+      </fileset>
+      <fileset dir="${build.resources}/aop/scoped-attach/sar1">
+        <include name="META-INF/jboss-aop.xml"/>
+      </fileset>
+    </jar>
+    <jar destfile="${build.lib}/aop-scopedattachtest1.sar">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/test/aop/scopedattach/ScopedTester*.class"/>
+        <include name="org/jboss/test/aop/scopedattach/POJO.class"/>
+      </fileset>
+      <fileset dir="${build.resources}/aop/scoped-attach/sar1">
+        <include name="META-INF/jboss-service.xml"/>
+      </fileset>
+      <fileset dir="${build.resources}/aop/scoped-attach/sar1/META-INF">
+        <include name="prepare-aop.xml"/>
+      </fileset>      
+    </jar>
+    <jar destfile="${build.lib}/aop-scopedattachtest2.aop">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/test/aop/scopedattach/**/*.class"/>
+        <exclude name="org/jboss/test/aop/scopedattach/ScopedTester*.class"/>
+        <exclude name="org/jboss/test/aop/scopedattach/POJO.class"/>
+      </fileset>
+      <fileset dir="${build.resources}/aop/scoped-attach/sar2">
+        <include name="META-INF/jboss-aop.xml"/>
+      </fileset>
+    </jar>
+    <jar destfile="${build.lib}/aop-scopedattachtest2.sar">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/test/aop/scopedattach/ScopedTester*.class"/>
+        <include name="org/jboss/test/aop/scopedattach/POJO.class"/>
+      </fileset>
+      <fileset dir="${build.resources}/aop/scoped-attach/sar2">
+        <include name="META-INF/jboss-service.xml"/>
+      </fileset>
+      <fileset dir="${build.resources}/aop/scoped-attach/sar2/META-INF">
+        <include name="prepare-aop.xml"/>
+      </fileset>      
+    </jar>
+    
+     <!-- Create jars for earwithwebinf test -->
+     <jar destfile="${build.lib}/aop-classesinwebinf.aop">
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/aop/earwithwebinf/interceptor/EJBInterceptor.class"/>
+           <include name="org/jboss/test/aop/earwithwebinf/interceptor/WebInterceptor.class"/>
+        </fileset>
+        <fileset dir="${build.resources}/aop/earwithwebinf/">
+           <include name="META-INF/jboss-aop.xml"/>
+        </fileset>
+     </jar>
+     <jar destfile="${build.lib}/aop-classesinwebinf-lib.jar">
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/aop/earwithwebinf/webinf/lib/*.class"/>
+        </fileset>
+     </jar>
+     <war warfile="${build.lib}/aop-classesinwebinf.war"
+          webxml="${build.resources}/aop/earwithwebinf/WEB-INF/web.xml">
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/aop/earwithwebinf/webinf/classes/*.class"/>
+            <include name="org/jboss/test/aop/earwithwebinf/servlet/*.class"/>
+         </classes>
+         <lib dir="${build.lib}">
+            <include name="aop-classesinwebinf-lib.jar"/>
+         </lib>
+     </war>
+     <jar destfile="${build.lib}/aop-classesinwebinf-ejb.jar">
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/aop/earwithwebinf/ejb/*.class"/>
+        </fileset>
+        <fileset dir="${build.resources}/aop/earwithwebinf/">
+           <include name="META-INF/ejb-jar.xml"/>
+        </fileset>
+     </jar>
+     <jar destfile="${build.lib}/aop-classesinwebinf.ear">
+        <fileset dir="${build.lib}">
+           <include name="aop-classesinwebinf.aop"/>
+           <include name="aop-classesinwebinf.war"/>
+           <include name="aop-classesinwebinf-ejb.jar"/>
+        </fileset>
+        <fileset dir="${build.resources}/aop/earwithwebinf/">
+           <include name="META-INF/application.xml"/>
+        </fileset>
+     </jar>
+      
+     
+
+     <!-- create jars for proxycache test -->
+
+     <jar destfile="${build.lib}/aop-proxycache.aop">
+
+        <fileset dir="${build.classes}">
+
+           <include name="org/jboss/test/aop/proxycache/NullInterceptor.class"/>
+
+        </fileset>
+
+        <fileset dir="${build.resources}/aop/proxycache/aspects">
+
+           <include name="**/*.xml"/>
+
+        </fileset>
+
+     </jar>
+
+     
+
+     <jar destfile="${build.lib}/aop-proxycache-global.sar">
+
+        <fileset dir="${build.classes}">
+
+           <include name="org/jboss/test/aop/proxycache/CreateProxyTester*.class"/>
+
+           <include name="org/jboss/test/aop/proxycache/GlobalClass.class"/>
+
+           <include name="org/jboss/test/aop/proxycache/GlobalInterface.class"/>
+
+        </fileset>
+
+        <fileset dir="${build.resources}/aop/proxycache/global">
+
+           <include name="**/*.xml"/>
+
+        </fileset>
+
+     </jar>
+
+
+      
+      <!-- ok, we have created the loadtime jars, let us now precompile the classes for standalone test  -->
+      <!--
+      <aopc compilerclasspathref="aop.task.classpath">
+      <classpath refid="thirdparty.classpath"/>
+      <classpath path="${build.classes}"/>
+      <src path="${build.classes}"/>
+      <include name="org/jboss/test/aop/bean/**"/>
+      <aoppath path="${source.resources}/aop/META-INF/jboss-aop.xml"/>
+      </aopc>
+      -->
+
+      <!-- Create jars for the scopeddependency tests -->
+      <jar destfile="${build.lib}/aop-scopeddependency-global.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/scopeddependency/GlobalDependency.class"/>
+         </fileset>
+        <fileset dir="${build.resources}/aop/scopeddependency/global">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/aop-scopeddependency-scoped.sar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/aop/scopeddependency/Scoped*.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/aop/scopeddependency/scoped">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+
+   </target>
+   <target name="compile-aop-annotatations" unless="HAVE_JDK_1.5">
+      <taskdef name="annotationc" classname="org.jboss.aop.ant.AnnotationC"
+         classpathref="jboss.aop.classpath"/>
+      <annotationc compilerclasspathref="aop.task.classpath" bytecode="true">
+         <classpath refid="thirdparty.classpath"/>
+         <classpath path="${build.classes}"/>
+         <src path="${source.java}"/>
+         <include name="org/jboss/test/aop/bean/AnnotatedSecuredPOJO.java"/>
+         <include name="org/jboss/test/aop/bean/AnnotatedTxPOJO.java"/>
+         <include name="org/jboss/test/aop/bean/AnnotatedTxLockedPOJO.java"/>
+      </annotationc>
+   </target>
+
+</project>

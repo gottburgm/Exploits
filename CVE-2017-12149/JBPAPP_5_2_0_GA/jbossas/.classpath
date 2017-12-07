@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="lib" path="/thirdparty/jboss/remoting/lib/jboss-remoting.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/server"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jbosssx/lib/jbosssx.jar" sourcepath="/thirdparty/jboss/jbosssx/lib/jbosssx-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-security-spi/lib/jboss-security-spi.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/common-core/lib/jboss-common-core.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/common-logging-spi/lib/jboss-logging-spi.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/common-logging-log4j/lib/jboss-logging-log4j.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/aop/lib/jboss-aop.jar"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

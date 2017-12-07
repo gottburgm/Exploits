@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+    <loader-repository>
+   	aop.loading:loader=scopedextender1
+      <loader-repository-config>java2ParentDelegation=false</loader-repository-config> 
+    </loader-repository>
+	<mbean code="org.jboss.test.aop.scopedextender.ScopedChildNoParentDelegationTester" name="jboss.aop:name=ChildTester"/>
+</server>

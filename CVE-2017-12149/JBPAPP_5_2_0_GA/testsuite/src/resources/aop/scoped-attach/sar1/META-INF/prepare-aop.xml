@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop xmlns="urn:jboss:aop-beans:1.0">
+   <prepare expr="all(org.jboss.test.aop.scopedattach.POJO)"/>
+</aop>

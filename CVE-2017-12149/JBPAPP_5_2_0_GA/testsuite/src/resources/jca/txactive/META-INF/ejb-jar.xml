@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar 
+   PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" 
+          "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar>
+   <enterprise-beans>
+      <session>
+         <ejb-name>TxActiveBean</ejb-name>
+         <home>org.jboss.test.jca.interfaces.TransactionActiveHome</home>
+         <remote>org.jboss.test.jca.interfaces.TransactionActiveRemote</remote>
+         <ejb-class>org.jboss.test.jca.ejb.TransactionActiveBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Bean</transaction-type>
+      </session>
+   </enterprise-beans>
+   <assembly-descriptor>
+      <container-transaction>
+         <method>
+            <ejb-name>TxActiveBean</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <trans-attribute>Required</trans-attribute>
+      </container-transaction>
+   </assembly-descriptor>
+</ejb-jar>

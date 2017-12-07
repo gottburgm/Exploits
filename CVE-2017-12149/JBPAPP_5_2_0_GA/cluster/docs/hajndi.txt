@@ -1,0 +1,68 @@
+
+// $Id: hajndi.txt 33203 2005-07-05 23:58:45Z bwang $
+
+Goal:
+  Implement JBoss HA-JNDI using JBossCache
+
+Functionality:
+  Here is the look up sequence of the client: 1) through ha-jndi, 2) 
+local jndi, 3) all the local jndi in the group.
+
+  When a cluster object is bound to ha-jndi, it is put into local jndi
+as well.
+
+Current implementation:
+  There 3 main classes: 
+  hajndi: main class but delegate to treehead
+  treehead: uses namingserver for jndi storage but also use hapartition
+            to do rpc-bind/unbind
+  namingserver: regular local jndi implementation by JBoss that uses hashtable
+                for storage
+
+Proposed solution:
+  Use JBossCache under namingserver (for ha purpose only). So bind/unbind will
+  translate to replication across the cluster (internal thru put/remove call). As
+  a result, there is no need for treehead to call hapartition for rpc calls.
+
+  The only problem is lookup where the lookup sequence step #3 to send rpc call
+  to look for global local jndi.
+
+  In order to achieve the above lookup sequence, we will need to have a backend
+  cache loader. However, this is a customized cacheloader in the sense that
+  it does not go to the persistent cache store. Instead, it will use the
+  channel (and RemoteMethodCall api) available in the treecache to perform a
+  cluster get. In other words, each local cache loader will need to implement
+  a method call, e.g., remoteGet that will hook into the local jndi tree to
+  do lookup locally in each node. So local cache loader when instantiated will 
+  need a reference of the local jndi.
+
+  You can think of the previous role of HAPartition is now fulfilled by the 
+  cache loader.
+
+Proposed solution comments:
+  My observation here is that the TreeCache based HAJNDI implementation won't operate the same as the   previous implementation as described in the clustering guide.  I understand that we can change the doc   to match the implementation so that's not my primary concern.
+
+  I know that there's already an "anomaly" when doing a HA-JNDI lookup for a locally bound variable; it     seems like we're providing a different one with the new implementation.  I don't have enough experience   doing HA-JNDI lookups to know which is preferable so I'm really just seeking confirmation that this is    how we want the implementation to work.
+
+  * Current Implementation For HA-JNDI Lookup of Locally Bound Variables *
+  If I bind a variable locally, an HA-JNDI lookup from the same node will always return the local binding   unless an explicit HA-JNDI binding has been made for the same key.  An HA-JNDI lookup from a different    node will return this binding as well, unless it has a local binding for the same key.
+
+  * New Implementation For HA-JNDI Lookup of Locally Bound Variables *
+  If I bind a variable locally, an HA-JNDI lookup will initially return the first local binding it finds    as specified above.  After that, the binding will be stored in HA-JNDI and any future lookups will     always return the HA-JNDI binding, regardless of any subsequent local bindings/rebindings.
+
+Other Design Issues:
+  Should we share the TreeCache instance with other TreeCache based services (e.g., DistributedState) or define our own instance?  It seems like the latter approach is preferable and probably essential if we use a custom cache loader.
+
+  If we initial HAJNDI with the TreeCache using the current initialization flow, we'll need to make the ClusterPartition servicd dependent on the TreeCache service to ensure that the TreeCache is available during the initialization process.  The HAJNDI class is constructed and initialized by the DetachedHANamingService.
+
+Should we provide new classes (e.g., HAJNDITreeCache = TreeCache version of HAJNDI), ClusterPartitionTreeCache = cluster partition class that's initializes TreeCache) so that the old implementations can be easily configured for use if necessary?  It looks like the initial implementation of tree cache based DistributedState is using this approach.
+
+When a remote binding is made using HAJNDI, the bound object is received as a MarshalledValuePair (e.g., instead of a String or other value object).  We need to decide whether to cache the value as a MarshalledValuePair and then extract the value from it on a lookup, or else extract the value immediately 
+and cache the underlying object (e.g., String).
+
+Do we need to treat each JNDI subcontext as a node in the tree cache?
+
+
+Note:
+  We should think about productizing ha-jndi in the future so it can be used
+  outside JBoss AS.

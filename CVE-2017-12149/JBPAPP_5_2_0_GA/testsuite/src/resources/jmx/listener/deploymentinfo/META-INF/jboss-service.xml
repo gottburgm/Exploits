@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: jboss-service.xml 33213 2005-07-06 16:11:34Z dimitris $ -->
+<!DOCTYPE server
+    PUBLIC "-//JBoss//DTD MBean Service 4.0//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-service_4_0.dtd">
+
+<server>
+   <mbean code="org.jboss.test.jmx.listener.NotificationListener"
+          name="jboss.test:service=NotificationListener">
+          
+    <attribute name="SubscriptionList">
+      <subscription-list>
+        <mbean name="jboss.system:service=ServiceDeployer">
+          <filter factory="DeploymentInfoNotificationFilterFactory">
+            <enable type="org.jboss.deployment.SubDeployer.start"/>
+            <enable type="org.jboss.deployment.SubDeployer.stop"/>
+            <enable short-name="listener-simpletest.sar"/>
+          </filter>
+        </mbean>
+      </subscription-list>
+    </attribute>
+              
+   </mbean>
+</server>

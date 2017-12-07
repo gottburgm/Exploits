@@ -1,0 +1,26 @@
+<project name="ejb3-component-info">
+   <!-- ============================================================ -->
+   <!-- ejb3                                                        -->
+   <!-- ============================================================ -->
+
+   <component id="ejb3"
+              module="jboss-ejb3"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="jboss-ejb3.jar"/>   
+      <artifact id="jboss-annotations-ejb3.jar"/>
+      <artifact id="embeddable" artifacttype="dir"/> 
+      <artifact id="ejb3.deployer" artifacttype="dir"/>             
+      <artifact id="lib" artifacttype="dir"/>             
+      <artifact id="conf" artifacttype="dir"/> 
+      <artifact id="ejb3-clustered-sfsbcache-service.xml" outputpath="resources"/>
+      <artifact id="ejb3-entity-cache-service.xml" outputpath="resources"/>
+      <artifact id="ejb3-interceptors-aop.xml" outputpath="resources"/>
+      <artifact id="persistence.properties" outputpath="resources/META-INF"/>
+      <artifact id="default.persistence.properties" outputpath="resources/META-INF"/>
+      <export>
+         <include input="jboss-ejb3.jar"/> 
+         <include input="jboss-annotations-ejb3.jar"/>
+      </export>
+   </component>
+</project>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE web-app PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+   "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+   <distributable/>
+
+   <!-- Registers an mbean the test driver can use to check the cache state -->
+   <listener>
+     <listener-class>org.jboss.test.classloader.leak.web.ClassloaderLeakContextListener</listener-class>
+   </listener>
+
+   <servlet>
+      <servlet-name>SimpleServlet</servlet-name>
+      <servlet-class>org.jboss.test.cluster.classloader.leak.web.SimpleServlet</servlet-class>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>SimpleServlet</servlet-name>
+      <url-pattern>/SimpleServlet</url-pattern>
+   </servlet-mapping>
+
+</web-app>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar >
+
+   <description>TxTimerTests</description>
+   <display-name>TxTimerTests</display-name>
+
+   <enterprise-beans>
+
+      <!-- Session Beans -->
+      <session>
+         <description><![CDATA[Session Bean Timer Test]]></description>
+         <display-name>TimerFacade Session Bean</display-name>
+
+         <ejb-name>test/txtimer/TimerFacade</ejb-name>
+
+         <home>org.jboss.test.txtimer.interfaces.TimerFacadeHome</home>
+         <remote>org.jboss.test.txtimer.interfaces.TimerFacade</remote>
+         <ejb-class>org.jboss.test.txtimer.ejb.TimerFacadeBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+
+      <session>
+         <description><![CDATA[Session Bean Timer Test]]></description>
+         <display-name>Timer in Stateless Session Bean</display-name>
+
+         <ejb-name>test/txtimer/TimerSession</ejb-name>
+
+         <home>org.jboss.test.txtimer.interfaces.TimerSessionHome</home>
+         <remote>org.jboss.test.txtimer.interfaces.TimerSession</remote>
+         <local-home>org.jboss.test.txtimer.interfaces.TimerSessionLocalHome</local-home>
+         <local>org.jboss.test.txtimer.interfaces.TimerSessionLocal</local>
+         <ejb-class>org.jboss.test.txtimer.ejb.TimerSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+
+      <session>
+         <description><![CDATA[Session Bean Timer Test]]></description>
+         <display-name>Timer Test Bean</display-name>
+
+         <ejb-name>test/txtimer/TimerTest</ejb-name>
+
+         <home>org.jboss.test.txtimer.interfaces.TimerTestHome</home>
+         <remote>org.jboss.test.txtimer.interfaces.TimerTest</remote>
+         <ejb-class>org.jboss.test.txtimer.ejb.TimerTestBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      
+      <!-- Entity Beans -->
+      <entity>
+         <description><![CDATA[Entity Bean Timer Test]]></description>
+         <display-name>Timer in Entity Bean</display-name>
+
+         <ejb-name>test/txtimer/TimerEntity</ejb-name>
+
+         <home>org.jboss.test.txtimer.interfaces.TimerEntityHome</home>
+         <remote>org.jboss.test.txtimer.interfaces.TimerEntity</remote>
+         <local-home>org.jboss.test.txtimer.interfaces.TimerEntityLocalHome</local-home>
+         <local>org.jboss.test.txtimer.interfaces.TimerEntityLocal</local>
+
+         <ejb-class>org.jboss.test.txtimer.ejb.TimerEntityBean</ejb-class>
+         <persistence-type>Bean</persistence-type>
+         <prim-key-class>java.lang.Integer</prim-key-class>
+         <reentrant>False</reentrant>
+      </entity>
+
+   </enterprise-beans>
+
+   <!-- Assembly Descriptor -->
+   <assembly-descriptor>
+
+   <!-- transactions -->
+   <container-transaction>
+      <method >
+         <ejb-name>test/txtimer/TimerFacade</ejb-name>
+          <method-name>*</method-name>
+       </method>
+       <trans-attribute>Required</trans-attribute>
+    </container-transaction>
+    
+   <container-transaction>
+      <method >
+         <ejb-name>test/txtimer/TimerSession</ejb-name>
+          <method-name>*</method-name>
+       </method>
+       <trans-attribute>Required</trans-attribute>
+    </container-transaction>
+    
+   <container-transaction>
+      <method>
+         <ejb-name>test/txtimer/TimerTest</ejb-name>
+         <method-name>startTimerInTxRequired</method-name>
+      </method>
+      <method>
+         <ejb-name>test/txtimer/TimerTest</ejb-name>
+         <method-name>cancelTimerInTxRequired</method-name>
+      </method>      
+      <trans-attribute>Required</trans-attribute>
+   </container-transaction>
+   
+   <container-transaction>
+      <method>
+         <ejb-name>test/txtimer/TimerTest</ejb-name>
+         <method-name>startTimerInTxRequiresNew</method-name>
+      </method>
+      <method>
+         <ejb-name>test/txtimer/TimerTest</ejb-name>
+         <method-name>cancelTimerInTxRequiresNew</method-name>
+      </method>      
+      <trans-attribute>RequiresNew</trans-attribute>
+   </container-transaction>
+   
+   <container-transaction>
+      <method>
+         <ejb-name>test/txtimer/TimerTest</ejb-name>
+         <method-name>startTimerInTxNever</method-name>
+      </method>
+      <method>
+         <ejb-name>test/txtimer/TimerTest</ejb-name>
+         <method-name>cancelTimerInTxNever</method-name>
+      </method>      
+      <trans-attribute>Never</trans-attribute>
+   </container-transaction>
+   
+   <container-transaction>
+      <method>
+         <ejb-name>test/txtimer/TimerTest</ejb-name>
+         <method-name>startTimerInTxNotSupported</method-name>
+      </method>
+      <method>
+         <ejb-name>test/txtimer/TimerTest</ejb-name>
+         <method-name>cancelTimerInTxNotSupported</method-name>
+      </method>      
+      <trans-attribute>NotSupported</trans-attribute>
+   </container-transaction>      
+   
+   <container-transaction>
+      <method >
+         <ejb-name>test/txtimer/TimerEntity</ejb-name>
+          <method-name>*</method-name>
+       </method>
+       <trans-attribute>Required</trans-attribute>
+    </container-transaction>
+
+   <!-- finder transactions -->
+   </assembly-descriptor>
+
+</ejb-jar>

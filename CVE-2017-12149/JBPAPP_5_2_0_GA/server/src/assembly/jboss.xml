@@ -1,0 +1,39 @@
+<assembly>
+  <id>jboss</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/**</include>
+      </includes>
+      <excludes>
+        <!-- Exclude command line utilities -->
+        <exclude>org/jboss/*</exclude>
+        <!-- Exclude JMX Connector stuff we will use the connector SAR for that -->
+        <exclude>org/jboss/jmx/**</exclude>
+        <!-- Exclude key factory stuff -->
+        <exclude>org/jboss/ejb/plugins/keygenerator/uuid/**</exclude>
+        <exclude>org/jboss/ejb/plugins/keygenerator/hilo/**</exclude>
+      </excludes>
+    </fileSet>
+    <fileSet>
+      <directory>src/resources</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/**</include>
+        <include>dtd/**</include>
+        <include>schema/**</include>
+      </includes>
+      <excludes>
+        <exclude>org/jboss/ejb/deployment/**</exclude>
+        <exclude>org/jboss/ejb/plugins/**</exclude>
+        <exclude>org/jboss/metamodel/**</exclude>
+      </excludes>
+    </fileSet>
+  </fileSets>
+</assembly>

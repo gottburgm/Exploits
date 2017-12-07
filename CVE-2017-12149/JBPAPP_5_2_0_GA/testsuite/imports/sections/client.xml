@@ -1,0 +1,30 @@
+<project name="tests-client-jars">
+   <target name="_jars-client" depends="_jars-cts">
+      <mkdir dir="${build.lib}"/>
+      
+      <jar destfile="${build.lib}/app-client.jar">
+         <metainf dir="${build.resources}/client">
+            <include name="*-client.xml"/>
+         </metainf>
+         <fileset dir="${build.classes}">
+            <include
+               name="org/jboss/test/client/test/SystemPropertyCallbackHandler.class"/>
+         </fileset>
+      </jar>
+      <ear earfile="${build.lib}/app-client.ear"
+         appxml="${build.resources}/client/application.xml">
+         <metainf dir="${build.resources}/client">
+            <include name="jboss-app.xml"/>
+         </metainf>
+         <fileset dir="${build.lib}">
+            <include name="cts.jar"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="app-client.jar"/>
+         </fileset>
+         <fileset dir="${build.resources}/client">
+            <include name="urlbinding-service.xml"/>
+         </fileset>
+      </ear>
+   </target>
+</project>

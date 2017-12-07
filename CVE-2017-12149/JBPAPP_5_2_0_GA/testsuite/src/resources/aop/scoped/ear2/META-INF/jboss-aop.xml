@@ -1,0 +1,11 @@
+<aop xmlns="urn:jboss:aop-beans:1.0">
+   <interceptor class="org.jboss.test.aop.scoped.ear.interceptor.TestInterceptor">
+      <attribute name="scope">scope2</attribute>
+   </interceptor>
+   <bind pointcut="execution(* org.jboss.test.aop.scoped.ear.ejb.ExampleSessionBean->getValue(..))">
+      <interceptor-ref name="org.jboss.test.aop.scoped.ear.interceptor.TestInterceptor"/>
+   </bind>
+   <bind pointcut="execution(* org.jboss.test.aop.scoped.ear.servlet.EarExampleServlet->testServlet())">
+      <interceptor-ref name="org.jboss.test.aop.scoped.ear.interceptor.TestInterceptor"/>
+   </bind>
+</aop>

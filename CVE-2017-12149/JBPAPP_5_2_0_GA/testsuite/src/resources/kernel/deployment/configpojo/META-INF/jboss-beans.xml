@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="urn:jboss:bean-deployer bean-deployer_1_0.xsd"
+            xmlns="urn:jboss:bean-deployer">
+
+   <bean name="ConfigPOJO" class="org.jboss.test.kernel.deployment.jboss.beans.configpojo.ConfigPOJO">
+      <constructor>
+         <parameter>joe</parameter>
+         <parameter>secret</parameter>
+         <parameter>
+            <list elementClass="java.lang.String">
+               <value>trader</value>
+               <value>manager</value>
+            </list>
+         </parameter>
+      </constructor>
+   </bean>
+   
+   <bean name="ConfigPOJOBinder" class="org.jboss.test.kernel.deployment.jboss.beans.POJOJNDIBinder">
+      <constructor><parameter>test/kernel/deployment/config/pojo</parameter></constructor>
+      <property name="pojo"><inject bean="ConfigPOJO" state="Instantiated"/></property>
+   </bean>
+      
+</deployment>

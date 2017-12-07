@@ -1,0 +1,4 @@
+<Context> 
+  <Valve className="org.jboss.web.tomcat.security.GenericHeaderAuthenticator" httpHeaderForSSOAuth="sm_ssoid,ct-remote-user,HTTP_OBLIX_UID"
+         sessionCookieForSSOAuth="SMSESSION,CTSESSION,ObSSOCookie"/> 
+</Context>

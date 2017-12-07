@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <mbean name="jboss.test:type=BrokenDynamicMBeanAttributeInfoTypeNotFound" code="org.jboss.test.system.controller.support.BrokenDynamicMBeanAttributeInfoTypeNotFound">
+      <attribute name="Name">Value</attribute>
+   </mbean>
+</server>

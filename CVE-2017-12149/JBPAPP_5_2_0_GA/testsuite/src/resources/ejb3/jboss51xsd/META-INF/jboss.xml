@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jboss xmlns="http://www.jboss.com/xml/ns/javaee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.jboss.com/xml/ns/javaee
+       http://www.jboss.org/j2ee/schema/jboss_5_1.xsd"
+             version="5.1">
+	
+	<enterprise-beans>
+		<session>
+			<ejb-name>EchoBean</ejb-name>
+			<jndi-name>JBAS-7231-BeanJNDINameFromJBossXml</jndi-name>
+		</session>
+	</enterprise-beans>
+	
+</jboss>	

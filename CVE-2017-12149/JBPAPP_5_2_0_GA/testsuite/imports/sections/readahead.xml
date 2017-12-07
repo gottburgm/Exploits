@@ -1,0 +1,31 @@
+<project name="tests-readahead-jars">
+<!-- readahead test -->
+   <target name="_jars-readahead">
+      <mkdir dir="${build.lib}"/>
+
+      <!-- build readaheadtest.jar -->
+      <jar destfile="${build.lib}/readaheadtest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/readahead/interfaces/**"/>
+            <include name="org/jboss/test/readahead/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/readahead">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+
+      <!-- build readahead.jar -->
+      <jar destfile="${build.lib}/readahead.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/readahead/interfaces/**"/>
+            <include name="org/jboss/test/readahead/ejb/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/readahead">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

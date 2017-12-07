@@ -1,0 +1,42 @@
+<project name="tests-jbpm-jars">
+   <!-- jbpm tests -->
+   <target name="_jars-jbpm">
+      
+      <!-- copy resource files, replacing the test host name where required -->
+      <copy todir="${build.resources}/bpel" filtering="yes">
+        <fileset dir="${source.resources}/bpel">
+          <include name="**/*"/>
+        </fileset>
+        <filterset>
+          <filter token="jbosstest.host.name" value="${node0}"/>
+        </filterset>
+      </copy>
+      
+      <!-- bpel ws production testcase -->
+      <jar destfile="${build.lib}/bpel-hello.par">
+         <fileset dir="${build.resources}/bpel/ws/production/definition" />
+      </jar>  
+      <war warfile="${build.lib}/bpel-hello.war" webxml="${build.resources}/bpel/ws/production/WEB-INF/web.xml">
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/bpel/ws/production/*.class"/>
+            <exclude name="org/jboss/test/bpel/ws/production/*TestCase.class"/>
+         </classes>
+         <webinf dir="${build.resources}/bpel/ws/production/WEB-INF">
+            <exclude name="web.xml"/>
+         </webinf>
+      </war>
+      <jar destfile="${build.lib}/bpel-hello.client.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/bpel/ws/production/*.class"/>
+            <exclude name="org/jboss/test/bpel/ws/production/*TestCase.class"/>
+         </fileset>
+         <metainf dir="${build.resources}/bpel/ws/production/META-INF" />
+         <metainf dir="${build.resources}/bpel/ws/production/WEB-INF">
+            <include name="jaxrpc-mapping.xml"/>
+         </metainf>
+      </jar>
+      <ear destfile="${build.lib}/bpel-hello.ear" appxml="${build.resources}/bpel/ws/production/application/application.xml">
+         <fileset dir="${build.lib}" includes="bpel-hello.war,bpel-hello.client.jar" />
+      </ear>   
+   </target>
+</project>

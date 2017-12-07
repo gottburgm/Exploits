@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="urn:jboss:bean-deployer bean-deployer_1_0.xsd"
+            xmlns="urn:jboss:bean-deployer">
+
+   <bean name="Name1" class="org.jboss.test.kernel.deployment.jboss.beans.simplepojo.SimplePOJO">
+      <property name="something">Something</property>
+   </bean>
+   
+   <bean name="Name2" class="org.jboss.test.kernel.deployment.jboss.beans.POJOJNDIBinder">
+      <constructor><parameter>test/kernel/deployment/simplepojo</parameter></constructor>
+      <property name="pojo"><inject bean="Name1" state="Configured"/></property>
+   </bean>
+
+</deployment>

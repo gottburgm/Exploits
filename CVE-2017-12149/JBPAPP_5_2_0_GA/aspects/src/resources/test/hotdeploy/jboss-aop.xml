@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<aop>
+   <interceptor class="org.jboss.test.hotdeploy.mbean.SimpleInterceptor"/>
+   <bind pointcut="execution(* org.jboss.test.hotdeploy.mbean.POJO->*(..))">
+      <interceptor-ref name="org.jboss.test.hotdeploy.mbean.SimpleInterceptor"/>
+   </bind>
+</aop>

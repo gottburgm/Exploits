@@ -1,0 +1,13 @@
+/**
+ * This interface is for use with JBPAPP-6462-based test cases...
+ *
+ * The generated classes resulting from IDL compilation are stored in the
+ * org.jboss.test.iiop.jbpapp6462.generated package. 
+ */
+interface TestServant
+{
+    /**
+     * A test method.
+     */
+    void testServantMethod();
+};

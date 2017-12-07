@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop xmlns="urn:jboss:aop-beans:1.0">
+
+   <!-- If a POJO has Replicable annotation, it will be aspectized. -->
+   <!--
+   Supports inheritance and polymorphism. It can either be a concrete class
+   or an interface. All sub-classes or interface implementors will be instrumeneted.
+   -->
+   <prepare expr="field(* $instanceof{@org.jboss.cache.pojo.annotation.Replicable}->*)" />
+   
+   <!--  Work around that ensures annotated classes which do not access fields are instrumented -->
+   <introduction expr="class($instanceof{@org.jboss.cache.pojo.annotation.Replicable})"/>
+      
+   <!-- Array support -->
+   <!-- Comment entire section to disable -->
+   <arrayreplacement expr="class($instanceof{@org.jboss.cache.pojo.annotation.Replicable})"/>
+   <interceptor name="pojocache-array" class="org.jboss.cache.pojo.interceptors.dynamic.ArrayInterceptor"/>
+   <introduction expr="class($instanceof{@org.jboss.cache.pojo.annotation.Replicable})">
+       <interfaces>org.jboss.cache.pojo.impl.ArrayInterceptable</interfaces>
+   </introduction>
+   <arraybind name="pojocache-array-binding" type="READ_WRITE">
+      <interceptor-ref name="pojocache-array"/>
+   </arraybind>
+   
+</aop>

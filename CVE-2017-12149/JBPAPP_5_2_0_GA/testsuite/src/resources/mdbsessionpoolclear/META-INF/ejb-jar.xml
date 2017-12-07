@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar>
+   <enterprise-beans>
+      <session>
+         <ejb-name>TestStatus</ejb-name>
+         <home>org.jboss.test.mdbsessionpoolclear.bean.TestStatusHome</home>
+         <remote>org.jboss.test.mdbsessionpoolclear.bean.TestStatus</remote>
+         <ejb-class>org.jboss.test.mdbsessionpoolclear.bean.TestStatusBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>        
+      </session>
+
+      <message-driven>
+         <ejb-name>Mdb</ejb-name>
+         <ejb-class>org.jboss.test.mdbsessionpoolclear.bean.Mdb</ejb-class>
+         <transaction-type>Bean</transaction-type>
+         <message-selector></message-selector>
+         <acknowledge-mode>AUTO_ACKNOWLEDGE</acknowledge-mode>
+         <message-driven-destination>
+            <destination-type>javax.jms.Queue</destination-type>
+            <subscription-durability>NonDurable</subscription-durability>
+         </message-driven-destination>
+      </message-driven>
+   </enterprise-beans>
+</ejb-jar>

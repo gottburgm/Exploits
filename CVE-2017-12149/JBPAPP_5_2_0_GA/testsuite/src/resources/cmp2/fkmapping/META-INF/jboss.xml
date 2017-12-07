@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 3.2//EN" "http://www.jboss.org/j2ee/dtd/jboss_3_2.dtd">
+
+<jboss>
+
+   <enterprise-beans>
+
+        <session>
+         <ejb-name>EJBTestRunnerEJB</ejb-name>
+         <jndi-name>ejb/EJBTestRunner</jndi-name>
+      </session>
+
+      <entity>
+         <ejb-name>Student</ejb-name>
+         <local-jndi-name>Student</local-jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+
+      </entity>
+      <entity>
+         <ejb-name>Institute</ejb-name>
+         <local-jndi-name>Institute</local-jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+
+      </entity>
+      <entity>
+         <ejb-name>ChildUPK</ejb-name>
+         <local-jndi-name>ChildUPKLocal</local-jndi-name>
+         <configuration-name>INSERT after ejbPostCreate Container</configuration-name>
+
+        <method-attributes>
+        </method-attributes>
+
+      </entity>
+      <entity>
+         <ejb-name>Examenation</ejb-name>
+         <local-jndi-name>Examenation</local-jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+
+      </entity>
+      <entity>
+         <ejb-name>Child</ejb-name>
+         <local-jndi-name>ChildLocal</local-jndi-name>
+         <configuration-name>INSERT after ejbPostCreate Container</configuration-name>
+
+        <method-attributes>
+        </method-attributes>
+
+      </entity>
+      <entity>
+         <ejb-name>Parent</ejb-name>
+         <local-jndi-name>ParentLocal</local-jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+
+      </entity>
+      <entity>
+         <ejb-name>Department</ejb-name>
+         <local-jndi-name>Department</local-jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+
+      </entity>
+      <entity>
+         <ejb-name>Group</ejb-name>
+         <local-jndi-name>Group</local-jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+
+      </entity>
+
+      <session>
+         <ejb-name>Manager</ejb-name>
+         <jndi-name>Manager</jndi-name>
+
+        <method-attributes>
+        </method-attributes>
+      </session>
+
+   </enterprise-beans>
+
+   <resource-managers>
+   </resource-managers>
+
+     <container-configurations>
+      <container-configuration extends="Standard CMP 2.x EntityBean">
+         <container-name>INSERT after ejbPostCreate Container</container-name>
+	 <insert-after-ejb-post-create>true</insert-after-ejb-post-create>
+      </container-configuration>
+   </container-configurations>
+
+</jboss>

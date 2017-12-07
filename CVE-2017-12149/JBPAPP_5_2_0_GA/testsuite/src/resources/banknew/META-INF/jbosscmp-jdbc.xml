@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jbosscmp-jdbc PUBLIC "-//JBoss//DTD JBOSSCMP-JDBC 3.0//EN" "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_0.dtd">
+
+<jbosscmp-jdbc>
+   <defaults>
+   </defaults>
+
+   <enterprise-beans>
+
+     <!--
+       To add beans that you have deployment descriptor info for, add
+       a file to your XDoclet merge directory called jbosscmp-jdbc-beans.xml
+       that contains the <entity></entity> markup for those beans.
+     -->
+
+      <entity>
+         <ejb-name>bank/Bank</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>New_Bank</table-name>
+
+         <cmp-field>
+            <field-name>id</field-name>
+            <column-name>Id</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>name</field-name>
+            <column-name>Name</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>address</field-name>
+            <column-name>Address</column-name>
+
+        </cmp-field>
+
+      </entity>
+
+      <entity>
+         <ejb-name>bank/Account</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>New_Account</table-name>
+
+         <cmp-field>
+            <field-name>id</field-name>
+            <column-name>Id</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>customerId</field-name>
+            <column-name>Customer_Id</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>type</field-name>
+            <column-name>Type</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>balance</field-name>
+            <column-name>Balance</column-name>
+
+        </cmp-field>
+
+      </entity>
+
+      <entity>
+         <ejb-name>bank/Customer</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>New_Customer</table-name>
+
+         <cmp-field>
+            <field-name>id</field-name>
+            <column-name>Id</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>bankId</field-name>
+            <column-name>Bank_Id</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>name</field-name>
+            <column-name>Name</column-name>
+
+        </cmp-field>
+
+      </entity>
+
+      <entity>
+         <ejb-name>bank/Transaction</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>New_Transaction</table-name>
+
+         <cmp-field>
+            <field-name>id</field-name>
+            <column-name>Id</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>acountId</field-name>
+            <column-name>Account_Id</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>type</field-name>
+            <column-name>Type</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>amount</field-name>
+            <column-name>Amount</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>date</field-name>
+            <column-name>Date</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>description</field-name>
+            <column-name>Description</column-name>
+
+        </cmp-field>
+
+      </entity>
+
+   </enterprise-beans>
+
+</jbosscmp-jdbc>

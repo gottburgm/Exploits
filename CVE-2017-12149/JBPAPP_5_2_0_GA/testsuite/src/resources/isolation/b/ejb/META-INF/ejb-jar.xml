@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN"
+   "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar>
+   <enterprise-beans>
+      <session>
+         <ejb-name>SessionB</ejb-name>
+         <home>org.jboss.test.isolation.interfaces.b.SessionBHome</home>
+         <remote>org.jboss.test.isolation.interfaces.b.SessionB</remote>
+         <ejb-class>org.jboss.test.isolation.ejb.b.SessionBEJB</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+   </enterprise-beans>
+</ejb-jar>

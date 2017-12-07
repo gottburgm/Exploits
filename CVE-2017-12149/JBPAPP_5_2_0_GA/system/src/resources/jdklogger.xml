@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jdk:configuration PUBLIC "urn:jboss:jdklogger.dtd" "jdklogger.dtd">
+
+<jdk:configuration debug="false">
+
+   <!-- ================================= -->
+   <!-- Preserve messages in a local file -->
+   <!-- ================================= -->
+
+   <!-- A time/date based rolling appender -->
+   <appender name="FILE" class="org.jboss.logging.jdk.handlers.FileHandler">
+      <param name="File" value="${jboss.server.log.dir}/boot.log"/>
+      <param name="Append" value="false"/>
+
+      <layout class="org.jboss.logging.jdk.format.PatternFormatter">
+         <!-- The default pattern: Date Priority [Category] Message\n -->
+         <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+      </layout>
+   </appender>
+
+   <!-- ============================== -->
+   <!-- Append messages to the console -->
+   <!-- ============================== -->
+
+   <appender name="CONSOLE" class="java.util.logging.ConsoleHandler">
+      <param name="Level" value="INFO"/>
+
+      <layout class="org.jboss.logging.jdk.format.PatternFormatter">
+         <!-- The default pattern: Date Priority [Category] Message\n -->
+         <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
+      </layout>
+   </appender>
+
+   <!-- ======================= -->
+   <!-- Setup the Root category -->
+   <!-- ======================= -->
+
+   <root>
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="FILE"/>
+   </root>
+
+</jdk:configuration>

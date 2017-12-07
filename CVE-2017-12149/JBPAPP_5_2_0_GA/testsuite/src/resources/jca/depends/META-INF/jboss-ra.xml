@@ -1,0 +1,3 @@
+<jboss-ra>
+    <depends>jboss.test:test=RaDependsOnMeMBean</depends>
+</jboss-ra>

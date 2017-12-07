@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss-client
+    PUBLIC "-//JBoss//DTD Application Client 5.0//EN" "http://www.jboss.org/j2ee/dtd/jboss-client_5_0.dtd">
+
+<jboss-client>
+    <jndi-name>refs_client</jndi-name>
+    <ejb-ref>
+        <ejb-ref-name>ejb/StatefulBean</ejb-ref-name>
+        <jndi-name>refs/StatefulBean/remote</jndi-name>
+    </ejb-ref>
+    <ejb-ref>
+        <ejb-ref-name>ejb/StatelessBean</ejb-ref-name>
+        <jndi-name>refs/StatelessBean/remote</jndi-name>
+    </ejb-ref>
+</jboss-client>

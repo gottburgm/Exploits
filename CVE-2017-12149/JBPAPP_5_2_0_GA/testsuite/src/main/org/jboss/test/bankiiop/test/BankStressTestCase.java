@@ -1,0 +1,532 @@
+/*
+ * JBoss, Home of Professional Open Source.
+ * Copyright 2008, Red Hat Middleware LLC, and individual contributors
+ * as indicated by the @author tags. See the copyright.txt file in the
+ * distribution for a full listing of individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+package org.jboss.test.bankiiop.test;
+
+import java.util.Collection;
+import java.util.Iterator;
+import javax.rmi.PortableRemoteObject;
+
+import junit.framework.Test;
+import org.jboss.logging.Logger;
+import org.jboss.test.JBossIIOPTestCase;
+import org.jboss.test.bankiiop.interfaces.Account;
+import org.jboss.test.bankiiop.interfaces.AccountData;
+import org.jboss.test.bankiiop.interfaces.AccountHome;
+import org.jboss.test.bankiiop.interfaces.Bank;
+import org.jboss.test.bankiiop.interfaces.BankHome;
+import org.jboss.test.bankiiop.interfaces.Customer;
+import org.jboss.test.bankiiop.interfaces.CustomerHome;
+import org.jboss.test.bankiiop.interfaces.Teller;
+import org.jboss.test.bankiiop.interfaces.TellerHome;
+
+/**
+ *      
+ *   @author Rickard Oberg
+ *   @author Author: d_jencks among many others
+ *   @version $Revision: 81036 $
+ */
+public class BankStressTestCase
+   extends JBossIIOPTestCase
+{
+   // Constants -----------------------------------------------------
+    
+   // Attributes ----------------------------------------------------
+   int idx = 1;
+   int iter;
+   Exception exc;
+   
+   // Static --------------------------------------------------------
+
+   // Constructors --------------------------------------------------
+   public BankStressTestCase(String name)
+   {
+      super(name);
+   }
+    
+   // Public --------------------------------------------------------
+   public void testTeller()
+      throws Exception
+   {
+      TellerHome home = (TellerHome)PortableRemoteObject.narrow(
+                             getInitialContext().lookup(TellerHome.JNDI_NAME),
+                             TellerHome.class);
+      Teller teller = home.create();
+      
+      BankHome bankHome = (BankHome)PortableRemoteObject.narrow(
+                               getInitialContext().lookup(BankHome.JNDI_NAME),
+                               BankHome.class);
+      Bank bank = bankHome.create();
+      
+      getLog().debug("Acquire customers");
+      Customer marc = teller.getCustomer("Marc");
+      Customer rickard = teller.getCustomer("Rickard");
+      
+      getLog().debug("Acquire accounts");
+      Account from = teller.getAccount(marc, 200);
+      Account to = teller.getAccount(rickard, 200);
+      
+      getLog().debug("Show balance");
+      getLog().debug(from.getPrimaryKey()+":"+from.getBalance());
+      getLog().debug(to.getPrimaryKey()+":"+to.getBalance());
+
+      getLog().debug("Transfer money");
+      
+      long start = System.currentTimeMillis();
+      int iter = 10;
+      for (int i = 0; i < iter; i++)
+         teller.transfer(from, to, 50);
+      long end = System.currentTimeMillis();
+      getLog().info("Average call time: "+((end - start) / (iter*6)));
+      
+      getLog().debug("Show balance");
+      AccountHome accountHome = (AccountHome)PortableRemoteObject.narrow(
+                            getInitialContext().lookup(AccountHome.JNDI_NAME),
+                            AccountHome.class);
+      Collection accts = accountHome.findAll();
+      Iterator i = accts.iterator();
+      while(i.hasNext())
+      {
+         Account acct = (Account)PortableRemoteObject.narrow(i.next(),
+                                                             Account.class);
+         AccountData data = acct.getData();
+         getLog().debug(data.getId()+"("+data.getOwner().getName()+"):"+data.getBalance());
+         acct.withdraw(data.getBalance()); // Clear
+      }
+      
+      teller.remove();
+   }
+   
+   public void testBank()
+      throws Exception
+   {
+      getLog().debug("Get code");
+      BankHome bankHome = (BankHome)PortableRemoteObject.narrow(
+                               getInitialContext().lookup(BankHome.JNDI_NAME),
+                               BankHome.class);
+      
+      Bank bank = bankHome.create();
+      
+      getLog().debug("Bank id="+bank.getId());
+      bank.remove();
+   }
+   
+/*   public void testCustomer()
+      throws Exception
+   {
+      getLog().debug("Customer test----------------------------------");
+      
+      getLog().debug("Create Customer");
+      CustomerHome customerHome = (CustomerHome)getInitialContext().lookup("Customer");
+      Account from, to;
+      try
+      {
+         from = accountHome.findByPrimaryKey("Marc");
+         from.deposit(200);
+      } catch (FinderException e)
+      {
+         from = accountHome.create("Marc", 200);
+      }
+      
+      try
+      {
+         to = accountHome.findByPrimaryKey("Rickard");
+      } catch (FinderException e)
+      {
+         to = accountHome.create("Rickard", 0);
+      }
+      
+      getLog().debug("Show balance");
+      getLog().debug(from.getPrimaryKey()+":"+from.getBalance());
+      getLog().debug(to.getPrimaryKey()+":"+to.getBalance());
+
+      getLog().debug("Transfer money");
+      TellerHome home = (TellerHome)getInitialContext().lookup("Teller");
+      Teller teller = home.create();
+      
+      long start = System.currentTimeMillis();
+      for (int i = 0; i < 100; i++)
+         teller.transfer(from, to, 50);
+      teller.remove();
+      
+      getLog().debug("Show balance");
+      Iterator enum = accountHome.findAll();
+      while(enum.hasNext())
+      {
+         Account acct = (Account)enum.next();
+         getLog().debug(acct.getPrimaryKey()+":"+acct.getBalance());
+         acct.withdraw(acct.getBalance()); // Clear
+      }
+      getLog().debug("Teller test done----------------------------------");
+   }
+*/
+
+   public void testMultiThread()
+      throws Exception
+   {
+      TellerHome home = (TellerHome)PortableRemoteObject.narrow(
+                             getInitialContext().lookup(TellerHome.JNDI_NAME),
+                             TellerHome.class);
+      final Teller teller = home.create();
+      
+      getLog().debug("Acquire customers");
+      Customer marc = teller.getCustomer("Marc");
+      Customer rickard = teller.getCustomer("Rickard");
+      
+      getLog().debug("Acquire accounts");
+      final Account from = teller.getAccount(marc, 50);
+      final Account to = teller.getAccount(rickard, 0);
+      
+      final Object lock = new Object();
+   
+     
+      iter = getThreadCount();
+      final int iterationCount = getIterationCount();
+      getLog().info("Start test. "+getThreadCount()+ " threads, "+getIterationCount()+" iterations");
+      long start = System.currentTimeMillis();
+
+      for (int i = 0; i < getThreadCount(); i++)
+      {
+         Thread.sleep(50);
+         new Thread(new Runnable()
+         {
+            public void run()
+            {
+               Logger log = Logger.getLogger(getClass().getName());
+
+               try
+               {
+                  
+                  for (int j = 0; j < iterationCount; j++)
+                  {
+                     if (exc != null) break;
+                     
+                     teller.transfer(from,to,50);
+                     teller.transfer(from,to,-50);
+//                     Thread.currentThread().yield();
+//                     logdebug(idx++);
+                  }
+               } catch (Exception e) 
+               {
+                  exc = e;
+               }
+               
+               synchronized(lock)
+               {
+                  iter--;
+                  log.info("Only "+iter+" left");
+                  lock.notifyAll();
+               }
+            }
+         }).start();
+      }
+      
+      synchronized(lock)
+      {
+         while(iter>0)
+         {
+            lock.wait();
+         }
+      }
+      
+      if (exc != null) throw exc;
+      
+      long end = System.currentTimeMillis();
+      
+      getLog().info("Show balance");
+      getLog().info(from.getPrimaryKey()+":"+from.getBalance());
+      getLog().info(to.getPrimaryKey()+":"+to.getBalance());
+      getLog().info("Time:"+(end-start));
+      getLog().info("Avg. time/call(ms):"+((end-start)/(getThreadCount()*getIterationCount()*6)));
+   }
+
+   /*--- commented out until I understant why this test fails with jdk 1.4 ----
+
+   public void testMultiThread2()
+      throws Exception
+   {
+      TellerHome home = (TellerHome)PortableRemoteObject.narrow(
+                             getInitialContext().lookup(TellerHome.JNDI_NAME),
+                             TellerHome.class);
+      final Teller teller = home.create();
+      
+      getLog().debug("Acquire customers");
+
+      final Customer marc = teller.getCustomer("Marc");
+      final Customer rickard = teller.getCustomer("Rickard");
+      
+      final Object lock = new Object();
+   
+      
+      iter = getThreadCount();
+      final int iterationCount = getIterationCount();
+      getLog().info("Start test. "+getThreadCount()+ " threads, "+getIterationCount()+" iterations");
+      long start = System.currentTimeMillis();
+
+      for (int i = 0; i < getThreadCount(); i++)
+      {
+         Thread.sleep(500); // Wait between each client
+         new Thread(new Runnable()
+         {
+            Logger log = Logger.getLogger(getClass().getName());
+
+            public void run()
+            {
+               try
+               {
+                  
+                  Account from = teller.createAccount(marc, 50);
+                  Account to = teller.createAccount(rickard, 0);
+                  
+                  for (int j = 0; j < iterationCount; j++)
+                  {
+                     if (exc != null) break;
+                     
+                     teller.transfer(from,to,50);
+                     teller.transfer(from,to,-50);
+//                     Thread.currentThread().yield();
+//                     log.debug(idx++);
+                  }
+               } catch (Exception e) 
+               {
+                  exc = e;
+               }
+               
+               synchronized(lock)
+               {
+                  iter--;
+                  log.info("Only "+iter+" left");
+                  lock.notifyAll();
+               }
+            }
+         }).start();
+      }
+      
+      synchronized(lock)
+      {
+         while(iter>0)
+         {
+            lock.wait();
+         }
+      }
+      
+      if (exc != null) throw exc;
+      
+      long end = System.currentTimeMillis();
+      
+      getLog().info("Time:"+(end-start));
+      getLog().info("Avg. time/call(ms):"+((end-start)/(getThreadCount()*getIterationCount()*6)));
+   }
+   --------------------------------------------------------------------------*/
+   
+   public void testTransaction()
+      throws Exception
+   {
+      TellerHome home = (TellerHome)PortableRemoteObject.narrow(
+                             getInitialContext().lookup(TellerHome.JNDI_NAME),
+                             TellerHome.class);
+      Teller teller = home.create();
+      
+      getLog().debug("Acquire customers");
+      Customer marc = teller.getCustomer("Marc");
+      getLog().debug("Marc acquired");
+      Customer rickard = teller.getCustomer("Rickard");
+      getLog().debug("Rickard acquired");
+      
+      getLog().debug("Acquire accounts");
+      Account from = teller.getAccount(marc, 50);
+      Account to = teller.getAccount(rickard, 0);
+      
+      getLog().debug("Show balance");
+      getLog().debug(from.getPrimaryKey()+":"+from.getBalance());
+      getLog().debug(to.getPrimaryKey()+":"+to.getBalance());
+
+      getLog().debug("Transfer money");
+      teller.transfer(from, to, 50);
+      getLog().debug("Transfer done");
+      
+      getLog().debug("Show balance");
+      getLog().debug(from.getPrimaryKey()+"("+from.getOwner().getName()+"):"+from.getBalance());
+      getLog().debug(to.getPrimaryKey()+"("+to.getOwner().getName()+"):"+to.getBalance());
+      
+      teller.remove();
+      
+   }
+
+   public void testTransfer()
+      throws Exception
+   {
+         
+      TellerHome home = (TellerHome)PortableRemoteObject.narrow(
+                             getInitialContext().lookup(TellerHome.JNDI_NAME),
+                             TellerHome.class);
+      Teller teller = home.create();
+      
+      getLog().debug("Acquire customers");
+      Customer marc = teller.getCustomer("Marc");
+      getLog().debug("Marc acquired");
+      Customer rickard = teller.getCustomer("Rickard");
+      getLog().debug("Rickard acquired");
+      
+      getLog().debug("Acquire accounts");
+      Account from = teller.getAccount(marc, 50*getIterationCount());
+      Account to = teller.getAccount(rickard, 0);
+      
+      getLog().debug("Show balance");
+      getLog().debug(from.getPrimaryKey()+":"+from.getBalance());
+      getLog().debug(to.getPrimaryKey()+":"+to.getBalance());
+
+      getLog().info("Transfer money");
+      long start = System.currentTimeMillis();
+      teller.transferTest(from, to, 50, getIterationCount());
+      long end = System.currentTimeMillis();
+      getLog().info("Transfer done");
+      getLog().info("Total time(ms):"+(end-start));
+      getLog().info("Avg. time/call(ms):"+((end-start)/(getIterationCount()*2)));
+      
+      getLog().debug("Show balance");
+      getLog().debug(from.getPrimaryKey()+":"+from.getBalance());
+      getLog().debug(to.getPrimaryKey()+":"+to.getBalance());
+      
+      teller.remove();
+   }
+   
+   public void testReadOnly()
+      throws Exception
+   {
+         
+      TellerHome home = (TellerHome)PortableRemoteObject.narrow(
+                             getInitialContext().lookup(TellerHome.JNDI_NAME),
+                             TellerHome.class);
+      Teller teller = home.create();
+      
+      getLog().debug("Acquire customers");
+      Customer marc = teller.getCustomer("Marc");
+      getLog().debug("Marc acquired");
+      Customer rickard = teller.getCustomer("Rickard");
+      getLog().debug("Rickard acquired");
+      
+      getLog().debug("Acquire accounts");
+      Account from = teller.getAccount(marc, 50*getIterationCount());
+      Account to = teller.getAccount(rickard, 0);
+      
+      getLog().info("Do read calls");
+      long start = System.currentTimeMillis();
+      for (int i = 0; i < getIterationCount(); i++)
+      {
+         marc.getName();
+         from.getBalance();
+         rickard.getName();
+         to.getBalance();
+      }
+      long end = System.currentTimeMillis();
+      
+      getLog().info("Calls done");
+      getLog().info("Total time(ms):"+(end-start));
+      getLog().info("Avg. time/call(ms):"+((end-start)/(getIterationCount()*4)));
+      
+      teller.remove();
+   }
+   
+   public void testPassivation()
+      throws Exception
+   {
+      // Create a bunch of customers, to test passivation
+         
+      CustomerHome home = (CustomerHome)PortableRemoteObject.narrow(
+                           getInitialContext().lookup(CustomerHome.JNDI_NAME),
+                           CustomerHome.class);
+      
+      getLog().info("Create customers");
+      
+      for (int i = 0; i < getIterationCount(); i++)
+         home.create(i+"", "Smith_"+i);
+      getLog().debug("Customers created");
+      
+   }
+   
+   public void testFinder()
+      throws Exception
+   {
+      //create some accounts
+      testPassivation();
+      AccountHome home = (AccountHome)PortableRemoteObject.narrow(
+                            getInitialContext().lookup(AccountHome.JNDI_NAME),
+                            AccountHome.class);
+      
+      getLog().info("Get large accounts");
+      Iterator i = home.findLargeAccounts(-1).iterator();
+      while (i.hasNext())
+      {
+         Account acct = (Account)PortableRemoteObject.narrow(i.next(),
+                                                             Account.class);
+         getLog().debug(acct.getOwner().getName()+":"+acct.getBalance());
+      }
+   }
+
+   protected void setUp()
+      throws Exception
+   {
+      super.setUp();
+      if (System.getSecurityManager() == null) 
+         System.setSecurityManager(new java.rmi.RMISecurityManager());
+      getLog().info("Remove accounts");
+      {
+         AccountHome home = (AccountHome)PortableRemoteObject.narrow(
+                            getInitialContext().lookup(AccountHome.JNDI_NAME),
+                            AccountHome.class);
+         Collection accounts = home.findAll();
+         Iterator i = accounts.iterator();
+         while(i.hasNext())
+         {
+            Account acct = (Account)PortableRemoteObject.narrow(i.next(),
+                                                                Account.class);
+            getLog().debug("Removing "+acct.getPrimaryKey());
+            acct.remove();
+         }
+      }
+      getLog().info("Remove customers");
+      {
+         CustomerHome home = (CustomerHome)PortableRemoteObject.narrow(
+                           getInitialContext().lookup(CustomerHome.JNDI_NAME),
+                           CustomerHome.class);
+         Collection customers = home.findAll();
+         Iterator i = customers.iterator();
+         while(i.hasNext())
+         {
+            Customer cust = 
+               (Customer)PortableRemoteObject.narrow(i.next(),
+                                                     Customer.class);
+            getLog().debug("Removing "+cust.getPrimaryKey());
+            cust.remove();
+         }
+      }
+   }
+
+
+   public static Test suite() throws Exception
+   {
+      return getDeploySetup(BankStressTestCase.class, "bankiiop.jar");
+   }
+
+
+
+}

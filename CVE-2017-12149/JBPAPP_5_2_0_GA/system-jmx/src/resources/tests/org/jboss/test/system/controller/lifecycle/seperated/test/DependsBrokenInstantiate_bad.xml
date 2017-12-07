@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <mbean name="test:name=1" code="org.jboss.test.system.controller.support.Simple">
+      <constructor>
+         <arg type="java.lang.String" value="error"/>
+      </constructor>
+   </mbean>
+</server>

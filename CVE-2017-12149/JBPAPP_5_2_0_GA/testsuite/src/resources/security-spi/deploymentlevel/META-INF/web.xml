@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+   xmlns="http://java.sun.com/xml/ns/j2ee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+   version="2.4">
+
+   <description>Security Test for role mapping at deployment level logic</description>
+
+   <servlet>
+      <servlet-name>RequestInfoServlet</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.RequestInfoServlet</servlet-class>
+   </servlet>
+
+   <!-- The servlet and jsp page mappings -->
+   <servlet-mapping>
+      <servlet-name>RequestInfoServlet</servlet-name>
+      <url-pattern>/RequestInfoServlet</url-pattern>
+   </servlet-mapping>
+
+   <!-- ### Security -->
+   <security-constraint>
+      <display-name>JBoss Realm</display-name> 
+      <web-resource-collection>
+         <web-resource-name>Restricted</web-resource-name>
+         <description>Declarative security tests</description>
+         <url-pattern>/*</url-pattern>
+         <http-method>GET</http-method>
+         <http-method>POST</http-method>
+      </web-resource-collection>
+      <auth-constraint>
+         <description>Only authenticated users can access secure content</description>
+         <role-name>AuthorizedUser</role-name>
+      </auth-constraint>
+
+      <user-data-constraint>
+         <description>no description</description>
+         <transport-guarantee>NONE</transport-guarantee>
+      </user-data-constraint>
+   </security-constraint>
+
+   <login-config>
+      <auth-method>BASIC</auth-method>  
+      <realm-name>JBoss Realm</realm-name> 
+   </login-config>
+
+   <security-role>
+      <description>An AuthorizedUser is one with a valid username and password</description>
+      <role-name>AuthorizedUser</role-name>
+   </security-role>
+
+</web-app>

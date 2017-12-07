@@ -1,0 +1,18 @@
+<project name="jbossas-jmx-remoting-component-info">
+   <!-- ============================================================ -->
+   <!-- jbossas-jmx-remoting                                         -->
+   <!-- ============================================================ -->
+
+   <component id="jbossas/jmx-remoting"
+              module="jbossas/jmx-remoting"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="jbossas-jmx-remoting.jar"/>   
+      <artifact id="jmx-remoting.sar"/>  
+      <artifact id="jbossas-jmx-remoting-jboss-service.xml" filename="jboss-service.xml" outputpath="etc"/>
+
+      <export>
+         <include input="jbossas-jmx-remoting.jar"/> 
+      </export>
+   </component>
+</project>

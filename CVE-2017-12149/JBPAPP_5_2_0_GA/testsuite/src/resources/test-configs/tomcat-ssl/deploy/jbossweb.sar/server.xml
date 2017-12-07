@@ -1,0 +1,63 @@
+<Server>
+
+   <!-- Use a custom version of StandardService that allows the
+   connectors to be started independent of the normal lifecycle
+   start to allow web apps to be deployed before starting the
+   connectors.
+   -->
+   <Service name="jboss.web">
+
+      <!-- A HTTP/1.1 Connector on port 8080 which redirects to 8443 for https -->
+      <Connector port="8080" address="${jboss.bind.address}"
+         maxThreads="150" minSpareThreads="25" maxSpareThreads="75"
+         enableLookups="false" redirectPort="8443" acceptCount="100"
+         connectionTimeout="20000" disableUploadTimeout="true"/>
+
+      <!-- SSL/TLS Connector configuration  -->
+      <Connector port="8443" address="${jboss.bind.address}"
+           maxThreads="100" minSpareThreads="5" maxSpareThreads="15"
+           scheme="https" secure="true" clientAuth="true"
+           SSLEnabled="true"
+           truststoreFile="${jboss.server.home.dir}/conf/localhost.keystore"
+           truststorePass="unit-tests-server"
+           keystoreFile="${jboss.server.home.dir}/conf/localhost.keystore"
+           keystorePass="unit-tests-server" sslProtocol = "TLS" />
+
+      <!-- A HTTP/1.1 Connector on port 9080 which redirects to 9443 for https -->
+      <Connector port="9080" address="${jboss.bind.address}"
+         maxThreads="150" minSpareThreads="25" maxSpareThreads="75"
+         enableLookups="false" redirectPort="9443" acceptCount="100"
+         connectionTimeout="20000" disableUploadTimeout="true"/>
+      <!-- SSL/TLS Connector configuration  -->
+      <Connector port="9443" address="${jboss.bind.address}"
+           maxThreads="100" minSpareThreads="5" maxSpareThreads="15"
+           scheme="https" secure="true" clientAuth="true"
+           SSLEnabled="true"
+         sslProtocol = "TLS" securityDomain="java:/jaas/jbosstest-ssl"
+         SSLImplementation="org.jboss.net.ssl.JBossImplementation" />
+
+      <!-- SSL/TLS Connector with encrypted keystore password configuration  -->
+      <Connector port="9943" address="${jboss.bind.address}"
+           maxThreads="100" minSpareThreads="5" maxSpareThreads="15"
+           scheme="https" secure="true" clientAuth="true"
+           sslProtocol = "TLS" 
+           SSLEnabled="true"
+         securityDomain="java:/jaas/encrypt-keystore-password"
+         SSLImplementation="org.jboss.net.ssl.JBossImplementation" />
+
+      <Engine name="jboss.web" defaultHost="localhost">
+
+         <Realm className="org.jboss.web.tomcat.security.JBossSecurityMgrRealm"
+            certificatePrincipal="org.jboss.security.auth.certs.SubjectDNMapping"
+            />
+
+         <Host name="localhost"
+            autoDeploy="false" deployOnStartup="false" deployXML="false">
+
+         </Host>
+
+      </Engine>
+
+   </Service>
+
+</Server>

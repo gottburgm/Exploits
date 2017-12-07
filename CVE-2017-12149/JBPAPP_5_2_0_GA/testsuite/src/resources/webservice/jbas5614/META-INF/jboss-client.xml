@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!DOCTYPE jboss-client PUBLIC "-//JBoss//DTD Application Client 4.0//EN" "http://www.jboss.org/j2ee/dtd/jboss-client_4_0.dtd">
+
+<jboss-client>
+  <jndi-name>jbossws-client</jndi-name>
+
+  <service-ref>
+    <service-ref-name>service/HelloWorldService</service-ref-name>
+    <!--config-name>Standard WSSecurity Client</config-name-->
+    <wsdl-override>http://@jbosstest.host.name@:8080/webservice-jbas5614?wsdl</wsdl-override>
+  </service-ref>
+
+</jboss-client>

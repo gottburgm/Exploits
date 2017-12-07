@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ejb-jar xmlns="http://java.sun.com/xml/ns/j2ee" id="ejb-jar_ID"
+   version="2.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd">
+  <display-name>Generated descriptor Mon Dec 12 14:46:07 CET 2005</display-name>
+  <enterprise-beans>
+    <session id="RunAs">
+      <ejb-name>MissingMethodBean</ejb-name>
+      <home>org.jboss.test.security.interfaces.CalledSessionHome</home>
+      <remote>org.jboss.test.security.interfaces.CalledSession</remote>
+      <ejb-class>org.jboss.test.security.ejb.MissingMethodBean</ejb-class>
+      <session-type>Stateless</session-type>
+      <transaction-type>Container</transaction-type>
+    </session>
+
+  </enterprise-beans>
+
+  <assembly-descriptor>
+    <security-role>
+      <role-name>allAuthCaller</role-name>
+    </security-role>
+     <method-permission>
+       <role-name>invokeEcho</role-name>
+        <method>
+           <ejb-name>MissingMethodBean</ejb-name>
+           <method-intf>Home</method-intf>
+           <method-name>*</method-name>
+        </method>
+       <method>
+         <ejb-name>MissingMethodBean</ejb-name>
+          <method-intf>Remote</method-intf>
+         <method-name>invokeEcho</method-name>
+       </method>
+        <method>
+          <ejb-name>MissingMethodBean</ejb-name>
+          <method-name>remove</method-name>
+        </method>
+     </method-permission>
+     <!-- The callEcho method has no permission specified to test the
+     behavior of the jboss/missing-method-permissions-excluded-mode
+     <method-permission>
+       <role-name>callEcho</role-name>
+       <method>
+         <ejb-name>MissingMethodBean</ejb-name>
+         <method-name>callEcho</method-name>
+       </method>
+     </method-permission>
+     -->
+     <method-permission>
+       <unchecked />
+       <method>
+         <ejb-name>MissingMethodBean</ejb-name>
+         <method-name>noop</method-name>
+       </method>
+     </method-permission>
+  </assembly-descriptor>
+</ejb-jar>

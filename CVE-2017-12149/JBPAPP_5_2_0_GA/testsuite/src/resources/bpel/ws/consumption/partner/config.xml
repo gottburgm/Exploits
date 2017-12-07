@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+   wscompile -d  ../../../../../../output/classes -s ../../../../../main -import -keep -f:norpcstructures -f:wsi -mapping WEB-INF/jaxrpc-mapping.xml config.xml
+-->
+
+<configuration xmlns="http://java.sun.com/xml/ns/jax-rpc/ri/config">
+  <wsdl location="WEB-INF/wsdl/translator.wsdl" packageName="org.jboss.test.bpel.ws.consumption.partner">
+    <namespaceMappingRegistry>
+      <namespaceMapping namespace="http://example.com/translator/types" 
+        packageName="org.jboss.test.bpel.ws.consumption.partner.types"/>
+    </namespaceMappingRegistry>
+  </wsdl>
+</configuration>

@@ -1,0 +1,97 @@
+<html>
+<body>
+<p>
+<h2>Transaction Injections</h2>
+
+</p><p>
+If you are a framework developer, you may have the need to gain access easily to the current transaction, or to the TransactionManager.  Since J2EE does not define a standard way of accessing either of the interfaces at runtime, the JBoss AOP framework provides some very simple aspects that you can use that abstract out how these interfaces are acquired.
+</p><p>
+</p><p>
+<h4>TransactionManager Injection</h4>
+
+If you want to get access to the JTA TransactionManager, you can have it injected into a variable via a annotation or you can call a setter method depending on your preferences. Using this with JDK 1.4 requires our AnnotationCompiler.
+</p><p>
+<b>JDK 1.4</b>
+<pre>
+import javax.transaction.*;
+
+public class POJO
+{
+   /**
+    * @@org.jboss.aspects.Injected
+    */
+   TransactionManager injectedTm;
+
+   TransactionManager tm;
+
+   /**
+    * @@org.jboss.aspects.Injected
+    */
+   public void setTransactionManager(TransactionManager tm)
+   {
+      this.tm = tm;
+   }
+}
+</pre>
+</p><p>
+</p><p>
+<b>JDK 5.0</b>
+<pre>
+import javax.transaction.*;
+import org.jboss.aspects.Injected;
+
+public class POJO
+{
+   @Injected TransactionManager injectedTm;
+
+   TransactionManager tm;
+
+   @Injected
+   public void setTransactionManager(TransactionManager tm)
+   {
+      this.tm = tm;
+   }
+}
+</pre>
+</p><p>
+</p><p>
+<h4>Transaction Injection</h4>
+
+If you want to get the current active transaction, then you can annotate a fieldand accessing that field will give you a reference to the current <tt>javax.transaction.Transaction</tt>.  Using this with JDK 1.4 requires our AnnotationCompiler.
+</p><p>
+<b>JDK 1.4</b>
+<pre>
+import javax.transaction.Transaction;
+
+public class POJO
+{
+   /**
+    * @@org.jboss.aspects.Current 
+    */
+   static Transaction currentTx;
+
+   public static void someMethod()
+   {
+      currentTx.setRollbackOnly();
+   }
+}
+</pre>
+</p><p>
+<b>JDK 5.0</b>
+<pre>
+import javax.transaction.Transaction;
+import org.jboss.aspects.Current;
+
+public class POJO
+{
+   @Current static Transaction currentTx;
+
+   public static void someMethod()
+   {
+      currentTx.setRollbackOnly();
+   }
+}
+</pre>
+</p>
+</body>
+</html>

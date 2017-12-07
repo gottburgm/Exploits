@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE ejb-jar PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN"
+   "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar>
+   <enterprise-beans>
+      <session>
+         <description>JUnit Session Bean Test Runner</description>
+         <ejb-name>EJBTestRunnerEJB</ejb-name>
+         <home>org.jboss.test.util.ejb.EJBTestRunnerHome</home>
+         <remote>org.jboss.test.util.ejb.EJBTestRunner</remote>
+         <ejb-class>org.jboss.test.util.ejb.EJBTestRunnerBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Bean</transaction-type>
+         <env-entry>
+            <env-entry-name>NO_USER_TRANSACTION</env-entry-name>
+            <env-entry-type>java.lang.String</env-entry-type>
+            <env-entry-value>true</env-entry-value>
+         </env-entry>
+      </session>
+   </enterprise-beans>
+</ejb-jar>

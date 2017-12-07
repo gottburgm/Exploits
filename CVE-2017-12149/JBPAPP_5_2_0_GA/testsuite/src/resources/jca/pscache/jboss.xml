@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC
+   "-//JBoss//DTD JBOSS 3.2//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_3_2.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <entity>
+         <ejb-name>PreparedStatementBean</ejb-name>
+         <resource-ref>
+            <res-ref-name>jdbc/DataSource</res-ref-name>
+            <jndi-name>java:/CachedPSDS</jndi-name>
+         </resource-ref>
+      </entity>
+   </enterprise-beans>
+
+</jboss>

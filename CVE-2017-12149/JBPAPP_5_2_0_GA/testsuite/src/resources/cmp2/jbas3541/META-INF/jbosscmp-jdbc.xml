@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jbosscmp-jdbc PUBLIC
+   "-//JBoss//DTD JBOSSCMP-JDBC 3.2//EN"
+   "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_2.dtd">
+<jbosscmp-jdbc>
+   <defaults>
+      <remove-table>true</remove-table>
+   </defaults>
+   <enterprise-beans>
+      <entity>
+         <ejb-name>A</ejb-name>
+         <datasource>java:/DefaultDS</datasource>
+         <datasource-mapping>Custom Hypersonic SQL</datasource-mapping>
+         <query>
+            <query-method>
+               <method-name>findByIntField</method-name>
+               <method-params>
+                  <method-param>int</method-param>
+               </method-params>
+            </query-method>
+            <jboss-ql><![CDATA[select object(o) from A o where o.intField=?1]]></jboss-ql>
+         </query>
+      </entity>
+   </enterprise-beans>
+
+   <type-mappings>
+      <type-mapping>
+         <name>Custom Hypersonic SQL</name>
+         <row-locking-template/>
+         <pk-constraint-template>CONSTRAINT ?1 PRIMARY KEY (?2)</pk-constraint-template>
+         <fk-constraint-template>ALTER TABLE ?1 ADD CONSTRAINT ?2 FOREIGN KEY (?3) REFERENCES ?4 (?5)</fk-constraint-template>
+         <auto-increment-template>?1 IDENTITY</auto-increment-template>
+         <add-column-template>ALTER TABLE ?1 ADD COLUMN ?2 ?3</add-column-template>
+         <drop-column-template>ALTER TABLE ?1 DROP COLUMN ?2</drop-column-template>
+         <alias-header-prefix>t</alias-header-prefix>
+         <alias-header-suffix>_</alias-header-suffix>
+         <alias-max-length>32</alias-max-length>
+         <subquery-supported>true</subquery-supported>
+         <true-mapping>(1=1)</true-mapping>
+         <false-mapping>(1=0)</false-mapping>
+
+         <function-mapping>
+            <function-name>concat</function-name>
+            <function-sql>(?1 || ?2)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>substring</function-name>
+            <function-sql>SUBSTRING(?1, ?2, ?3)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>lcase</function-name>
+            <function-sql>lcase(?1)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>length</function-name>
+            <function-sql>LENGTH(?1)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>locate</function-name>
+            <function-sql>LOCATE(?1, ?2, ?3)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>abs</function-name>
+            <function-sql>ABS(?1)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>sqrt</function-name>
+            <function-sql>SQRT(?1)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>ucase</function-name>
+            <function-sql>ucase(?1)</function-sql>
+         </function-mapping>
+         <function-mapping>
+            <function-name>count</function-name>
+            <function-sql>count(?1)</function-sql>
+         </function-mapping>
+
+         <mapping>
+            <java-type>java.lang.Byte</java-type>
+            <jdbc-type>SMALLINT</jdbc-type>
+            <sql-type>SMALLINT</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.util.Date</java-type>
+            <jdbc-type>TIMESTAMP</jdbc-type>
+            <sql-type>TIMESTAMP</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Boolean</java-type>
+            <jdbc-type>BIT</jdbc-type>
+            <sql-type>BIT</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Integer</java-type>
+            <jdbc-type>INTEGER</jdbc-type>
+            <sql-type>INTEGER</sql-type>
+            <param-setter>org.jboss.test.cmp2.jbas3541.IntJDBCAdaptor</param-setter>
+            <result-reader>org.jboss.test.cmp2.jbas3541.IntJDBCAdaptor</result-reader>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Object</java-type>
+            <!-- hsqldb only supports directly serializable objects for sql type OBJECT -->
+            <jdbc-type>VARBINARY</jdbc-type>
+            <sql-type>VARBINARY</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Short</java-type>
+            <jdbc-type>SMALLINT</jdbc-type>
+            <sql-type>SMALLINT</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Character</java-type>
+            <jdbc-type>CHAR</jdbc-type>
+            <sql-type>CHAR</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.String</java-type>
+            <jdbc-type>VARCHAR</jdbc-type>
+            <sql-type>VARCHAR(256)</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.sql.Date</java-type>
+            <jdbc-type>DATE</jdbc-type>
+            <sql-type>DATE</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.sql.Time</java-type>
+            <jdbc-type>TIME</jdbc-type>
+            <sql-type>TIME</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.sql.Timestamp</java-type>
+            <jdbc-type>TIMESTAMP</jdbc-type>
+            <sql-type>TIMESTAMP</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Float</java-type>
+            <jdbc-type>REAL</jdbc-type>
+            <sql-type>REAL</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Long</java-type>
+            <jdbc-type>BIGINT</jdbc-type>
+            <sql-type>BIGINT</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.lang.Double</java-type>
+            <jdbc-type>DOUBLE</jdbc-type>
+            <sql-type>DOUBLE</sql-type>
+         </mapping>
+         <mapping>
+            <java-type>java.math.BigDecimal</java-type>
+            <jdbc-type>DECIMAL</jdbc-type>
+            <sql-type>DECIMAL</sql-type>
+         </mapping>
+      </type-mapping>
+   </type-mappings>
+</jbosscmp-jdbc>

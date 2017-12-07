@@ -1,0 +1,57 @@
+<html>
+<body>
+<p>
+<h2>Clustered Remoting</h2>
+
+<i>Clustered AOP Remoting didn't receive much TLC for the 1.0 beta release although we did fix a few critical bugs.  We'll put more TLC in the next release</i>
+</p><p>
+Clustered remoting works a little differently than regular AOP remoting. It leverages the clustering framework implemented for EJBs.
+<pre>
+import org.jboss.ha.framework.interfaces.RoundRobin;
+...
+   POJO remote = new POJO("hello");
+   return (POJO)ClusteredRemoting.registerClusteredObject("clusteredobj", remote,
+                                                          "DefaultPartition", new RoundRobin(),
+                                                          "socket://servername:8084");
+</pre>
+Unlike regular AOP remoting, clients cannot independently connect to a clustered object. Here's a look at the API.
+<pre>
+package org.jboss.aop.remoting;
+
+import javax.naming.InitialContext;
+
+import org.jboss.aop.Advised;
+import org.jboss.aop.InstanceAdvised;
+import org.jboss.aop.InstanceAdvisor;
+import org.jboss.aop.PayloadKey;
+import org.jboss.aop.proxy.ClassProxy;
+import org.jboss.aop.proxy.ClassProxyFactory;
+import org.jboss.ha.framework.server.HATarget;
+import org.jboss.ha.framework.interfaces.HAPartition;
+import org.jboss.ha.framework.interfaces.LoadBalancePolicy;
+import org.jboss.ha.framework.interfaces.GenericClusteringException;
+import org.jboss.ha.framework.interfaces.ClusteringTargetsRepository;
+import org.jboss.ha.framework.interfaces.FamilyClusterInfo;
+import org.jboss.logging.Logger;
+import org.jboss.remoting.InvokerLocator;
+import org.jboss.aop.Dispatcher;
+
+public class ClusteredRemoting implements ClusterConstants
+{
+   public static ClassProxy registerClusteredObject(Object objectId, Object obj, 
+                                                    String partitionName, 
+                                                    LoadBalancePolicy lb, String uri)
+      throws Exception
+
+   public static ClassProxy registerClusteredObject(Object objectId, Object obj, 
+                                                    String partitionName, LoadBalancePolicy lb,
+                                                    InvokerLocator locator) throws Exception
+
+}
+
+</pre>
+</p><p>
+The ClusteredRemoting static methods register with the Dispatcher for you. The partitionName corresponds to the Cluster Partition you want the object to be used with. Pre-implemented load balance policies are RoundRobin and FirstAvailable. See the EJB clustering docs for more information.
+</p>
+</body>
+</html>

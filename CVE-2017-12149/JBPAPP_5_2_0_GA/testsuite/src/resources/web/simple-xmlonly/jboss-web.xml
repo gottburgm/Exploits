@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss-web
+    PUBLIC "-//JBoss//DTD Web Application 2.4//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-web_4_0.dtd">
+
+<jboss-web>
+    <resource-ref>
+        <res-ref-name>jdbc/DefaultDS</res-ref-name>
+        <jndi-name>java:/MockDS</jndi-name>
+    </resource-ref>
+    <resource-ref>
+        <res-ref-name>mail/DefaultMail</res-ref-name>
+        <jndi-name>java:/Mail</jndi-name>
+    </resource-ref>
+    <resource-ref>
+        <res-ref-name>jms/QueFactory</res-ref-name>
+        <jndi-name>ConnectionFactory</jndi-name>
+    </resource-ref>
+    <resource-ref>
+        <res-ref-name>url/JBossHome</res-ref-name>
+        <res-url>http://www.jboss.org</res-url>
+    </resource-ref>
+   <resource-ref>
+       <res-ref-name>url/IndirectURL</res-ref-name>
+       <jndi-name>java:SomeWebSite</jndi-name>
+   </resource-ref>
+
+   <security-role>
+      <role-name>ExtraRole1</role-name>
+      <principal-name>UnsecureRunAsServletWithPrincipalNameAndRolesPrincipal</principal-name>
+   </security-role>
+   <security-role>
+      <role-name>ExtraRole2</role-name>
+      <principal-name>UnsecureRunAsServletWithPrincipalNameAndRolesPrincipal</principal-name>
+   </security-role>
+
+   <ejb-ref>
+      <ejb-ref-name>ejb/bean3</ejb-ref-name>
+      <jndi-name>jbosstest/ejbs/UnsecuredEJB</jndi-name>
+   </ejb-ref>
+   <ejb-ref>
+      <ejb-ref-name>ejb/CtsBmp</ejb-ref-name>
+      <jndi-name>jbosstest/ejbs/CtsBmp</jndi-name>
+   </ejb-ref>
+   
+   <ejb-local-ref>
+      <ejb-ref-name>ejb/local/bean3</ejb-ref-name>
+      <local-jndi-name>jbosstest/ejbs/local/ENCBean1</local-jndi-name>
+   </ejb-local-ref>
+
+   <message-destination-ref>
+      <message-destination-ref-name>mdr/ConsumesProducesJNDIName</message-destination-ref-name>
+      <jndi-name>MockQueueA</jndi-name>
+   </message-destination-ref>
+
+   <message-destination>
+      <message-destination-name>TestQueue</message-destination-name>
+      <jndi-name>MockQueueB</jndi-name>
+   </message-destination>
+   <message-destination>
+      <message-destination-name>TestTopic</message-destination-name>
+      <jndi-name>MockTopicA</jndi-name>
+   </message-destination>
+</jboss-web>

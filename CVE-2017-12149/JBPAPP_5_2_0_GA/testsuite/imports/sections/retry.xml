@@ -1,0 +1,31 @@
+<project name="tests-retry-jars">
+   <!-- retry test -->
+   <target name="_jars-retry">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build retry.jar -->
+      <jar destfile="${build.lib}/retrytest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/retry/interfaces/**"/>
+            <include name="org/jboss/test/retry/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/retry">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build retry.jar -->
+      <jar destfile="${build.lib}/retry.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/retry/interfaces/**"/>
+            <include name="org/jboss/test/retry/bean/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/retry">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

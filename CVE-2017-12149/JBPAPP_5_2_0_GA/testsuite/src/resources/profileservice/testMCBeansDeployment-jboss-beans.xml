@@ -1,0 +1,5 @@
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+    <bean name="testMCBeansDeployment-Bean1"
+        class="org.jboss.test.profileservice.mcbeans.Bean1">
+    </bean>
+</deployment>

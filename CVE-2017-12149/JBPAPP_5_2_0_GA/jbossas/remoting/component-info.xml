@@ -1,0 +1,17 @@
+<project name="jbossas/remoting-component-info">
+   <!-- ============================================================ -->
+   <!-- ejb3                                                        -->
+   <!-- ============================================================ -->
+
+   <component id="jbossas/remoting"
+              module="jbossas/remoting"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="jbossas-remoting.jar"/>   
+
+      <export>
+         <include input="jbossas-remoting.jar"/> 
+         <include input="jbossas-remoting"/>
+      </export>
+   </component>
+</project>

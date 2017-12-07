@@ -1,0 +1,27 @@
+<assembly>
+  <id>testsuite-support</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/deployment/**</include>
+        <include>org/jboss/system/Service.class</include>
+        <include>org/jboss/system/ServiceMBean.class</include>
+        <include>org/jboss/system/*MBeanSupport.class</include>
+        <include>org/jboss/system/MBeanClassLoader*.class</include>
+        <include>org/jboss/system/UnifiedClassLoader*.class</include>
+        <include>org/jboss/system/ServiceLibraries*.class</include>
+        <include>org/jboss/system/server/*MBean.class</include>
+        <include>org/jboss/system/server/ServerConfigLocator.class</include>
+        <include>org/jboss/system/server/ServerConfigLocator.class</include>
+        <include>org/jboss/system/server/ServerConfig.class</include>
+        <include>org/jboss/system/server/Server.class</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

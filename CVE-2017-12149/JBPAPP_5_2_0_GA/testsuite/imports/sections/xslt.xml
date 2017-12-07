@@ -1,0 +1,25 @@
+<project name="tests-xslt-jars">
+<!-- xslt test -->
+  <target name="_jars-xslt">
+    <mkdir dir="${build.lib}"/>
+    
+    <!-- build xalan-check-default.sar -->
+    <jar destfile="${build.lib}/xalan-check-default.sar">
+      <metainf dir="${build.resources}/xslt/xalan-check-default/META-INF"/>
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/test/xslt/support/**"/>
+      </fileset>
+    </jar>
+    
+    <!-- build xalan-check-scoped.sar -->
+    <jar destfile="${build.lib}/xalan-check-scoped.sar">
+      <metainf dir="${build.resources}/xslt/xalan-check-scoped/META-INF"/>
+      <fileset dir="${build.resources}/xslt/xalan-check-scoped">
+        <include name="xalan-2.5.2.jar"/>
+      </fileset>
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/test/xslt/support/**"/>
+      </fileset>
+    </jar>    
+  </target>
+</project>

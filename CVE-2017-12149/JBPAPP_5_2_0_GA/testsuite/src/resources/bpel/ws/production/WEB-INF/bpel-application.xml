@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpelApplication name="helloWorld" xmlns="http://jbpm.org/bpel"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jbpm.org/bpel
+                      http://jbpm.org/bpel/bpel_application_1_0.xsd">
+
+  <partnerLinks>
+
+    <partnerLink name="caller">
+      <!-- name bound to the queue assigned to this partner link -->
+      <myRole destination="jms/callerQueue" />
+    </partnerLink>
+
+  </partnerLinks>
+
+</bpelApplication>

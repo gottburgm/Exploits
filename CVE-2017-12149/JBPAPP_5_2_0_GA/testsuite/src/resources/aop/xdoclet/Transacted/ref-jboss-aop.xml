@@ -1,0 +1,32 @@
+<aop>
+  <advisable class="org.jboss.test.aop.xdoclet.Transacted"/>
+  
+  <class-metadata group="transaction" class="org.jboss.test.aop.xdoclet.Transacted">
+    <default>
+      <trans-attribute>Required</trans-attribute>
+    </default>
+    <method name="get*">
+      <trans-attribute>Supports</trans-attribute>
+    </method>
+    <method name="someMethod">
+      <method-params/>
+      <trans-attribute>RequiresNew</trans-attribute>
+    </method>
+    <method name="anotherMethod">
+      <method-params>
+        <method-param>int</method-param>
+        <method-param>org.jboss.test.aop.xdoclet.Secured</method-param>
+      </method-params>
+      <trans-attribute>Mandatory</trans-attribute>
+    </method>
+    <field name="name">
+      <trans-attribute>NotSupported</trans-attribute>
+    </field>
+    <field name="test*">
+      <trans-attribute>RequiresNew</trans-attribute>
+    </field>
+  </class-metadata>
+  
+</aop>
+
+

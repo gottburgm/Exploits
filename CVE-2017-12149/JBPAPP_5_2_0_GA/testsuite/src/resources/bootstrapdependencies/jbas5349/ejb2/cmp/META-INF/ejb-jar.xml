@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE ejb-jar PUBLIC
+      "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN"
+      "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar>
+   <enterprise-beans>
+      <entity>
+         <ejb-name>SimpleEntityEJB</ejb-name>
+         <home>org.jboss.test.bootstrapdependencies.jbas5349.ejb2.SimpleEntityHome</home>
+         <remote>org.jboss.test.bootstrapdependencies.jbas5349.ejb2.SimpleEntity</remote>
+         <ejb-class>org.jboss.test.bootstrapdependencies.jbas5349.ejb2.SimpleEntityBean</ejb-class>
+         <persistence-type>Container</persistence-type>
+         <prim-key-class>java.lang.Long</prim-key-class>
+         <reentrant>False</reentrant>
+         <cmp-version>2.x</cmp-version>
+         <abstract-schema-name>simple</abstract-schema-name>
+         <cmp-field><field-name>id</field-name></cmp-field>
+         <primkey-field>id</primkey-field>
+      </entity>
+   </enterprise-beans>
+
+   <assembly-descriptor>
+      <container-transaction>
+         <method>
+            <ejb-name>SimpleEntityEJB</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <trans-attribute>Required</trans-attribute>
+      </container-transaction>
+   </assembly-descriptor>
+</ejb-jar>
+
+

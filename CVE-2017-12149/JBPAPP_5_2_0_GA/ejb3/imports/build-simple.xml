@@ -1,0 +1,37 @@
+<!-- some build simple macros -->
+<project name="build-simple">
+   <target name="_build-simple-check-resources">
+      <available property="${jarname}-resources-available" file="${resources}/test/${jarname}"/>
+   </target>
+   
+   <target name="_build-simple-jar-with-resources" if="${jarname}-resources-available">
+      <jar jarfile="${build.lib}/${jarname}.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/ejb3/test/${jarname}/*.class"/>
+         </fileset>
+         <fileset dir="${resources}/test/${jarname}" includes="META-INF/*"/>
+      </jar>
+   </target>
+   
+   <target name="_build-simple-jar-without-resources" unless="${jarname}-resources-available">
+      <jar jarfile="${build.lib}/${jarname}.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/ejb3/test/${jarname}/*.class"/>
+         </fileset>
+      </jar>
+   </target>
+   
+   <target name="_build-simple-jar" depends="_build-simple-check-resources,_build-simple-jar-with-resources,_build-simple-jar-without-resources"/>
+   
+   <macrodef name="build-simple-jar"
+      description="build a simple test jar for deployment">
+      <attribute name="name" description="the name of the test"/>
+      <sequential>
+         <mkdir dir="${build.lib}"/>
+         
+         <antcall target="_build-simple-jar">
+            <param name="jarname" value="@{name}"/>
+         </antcall>
+      </sequential>
+   </macrodef>
+</project>

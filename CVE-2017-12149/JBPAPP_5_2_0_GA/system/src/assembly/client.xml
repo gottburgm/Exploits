@@ -1,0 +1,20 @@
+<assembly>
+  <id>client</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/deployment/DeploymentException*</include>
+        <include>org/jboss/deployment/IncompleteDeploymentException*</include>
+        <include>org/jboss/deployment/Deployer*</include>
+        <include>org/jboss/system/Service.class</include>
+        <include>**/*MBean.class</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

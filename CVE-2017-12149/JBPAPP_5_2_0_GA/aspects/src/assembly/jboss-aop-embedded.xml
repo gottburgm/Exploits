@@ -1,0 +1,16 @@
+<assembly>
+  <id>jboss-aop-embedded</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/aop/asintegration/embedded/**</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

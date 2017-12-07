@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: mbean-service_1_0.xsd 32861 2005-06-24 05:26:29Z starksm $ -->
+
+<xsd:schema
+   xmlns="http://www.w3.org/2001/XMLSchema"
+   targetNamespace="urn:jboss:mbean-service"
+   xmlns:mbean="urn:jboss:mbean-service"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+   xmlns:jbxb="http://www.jboss.org/xml/ns/jbxb"
+   elementFormDefault="qualified"
+   attributeFormDefault="unqualified"
+   version="1.0">
+
+   <xsd:annotation>
+      <xsd:appinfo>
+         <jaxb:schemaBindings>
+            <jaxb:package name="org.jboss.test.xml.mbeanserver"/>
+         </jaxb:schemaBindings>
+      </xsd:appinfo>
+   </xsd:annotation>
+
+   <xsd:element name="server">
+      <xsd:complexType>
+         <xsd:annotation>
+            <xsd:appinfo>
+               <jbxb:class impl="org.jboss.test.xml.mbeanserver.Services"/>
+            </xsd:appinfo>
+         </xsd:annotation>
+
+         <xsd:sequence>
+            <xsd:element ref="mbean:mbean">
+               <!--
+               Annotations in element ref are ignored by xerces.
+               So, they are moved to the element declaration.
+               This is really bad. Because, we don't want to bind a global element to a fixed property.
+                              <xsd:annotation>
+                                 <xsd:appinfo>
+                                    <jaxb:class implClass="org.jboss.test.xml.mbeanserver.MBeanData"/>
+                                    <jaxb:property name="MBeans" collectionType="java.util.ArrayList"/>
+                                 </xsd:appinfo>
+                              </xsd:annotation>
+               -->
+            </xsd:element>
+         </xsd:sequence>
+      </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="mbean">
+      <xsd:annotation>
+         <xsd:appinfo>
+            <jaxb:class implClass="org.jboss.test.xml.mbeanserver.MBeanData"/>
+            <jaxb:property name="MBeans" collectionType="java.util.ArrayList"/>
+         </xsd:appinfo>
+      </xsd:annotation>
+      <xsd:complexType>
+         <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" ref="mbean:attribute">
+            </xsd:element>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" ref="mbean:depends">
+            </xsd:element>
+
+         </xsd:sequence>
+         <xsd:attribute name="code" use="required" type="xsd:string"/>
+         <xsd:attribute name="name" use="required" type="xsd:string"/>
+      </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="attribute">
+      <xsd:annotation>
+         <xsd:appinfo>
+            <jaxb:property name="attributes" collectionType="java.util.ArrayList"/>
+         </xsd:appinfo>
+      </xsd:annotation>
+      <xsd:complexType mixed="true">
+         <xsd:annotation>
+            <xsd:appinfo>
+               <jbxb:class impl="org.jboss.test.xml.mbeanserver.MBeanAttribute"/>
+               <jbxb:characters>
+                  <jbxb:property name="text"/>
+                  <jbxb:value unmarshalMethod="org.jboss.test.xml.mbeanserver.MBeanAttribute.unmarshalStringValue"/>
+               </jbxb:characters>
+            </xsd:appinfo>
+         </xsd:annotation>
+         <xsd:sequence>
+            <xsd:any minOccurs="0" maxOccurs="1" namespace="##other">
+               <xsd:annotation>
+                  <xsd:appinfo>
+                     <jbxb:property name="value"/>
+                  </xsd:appinfo>
+               </xsd:annotation>
+            </xsd:any>
+         </xsd:sequence>
+         <xsd:attribute name="name" use="required" type="xsd:NCName"/>
+         <xsd:attribute name="replace" use="optional" type="boolean"/>
+      </xsd:complexType>
+   </xsd:element>
+
+   <xsd:element name="depends">
+
+      <xsd:complexType>
+         <xsd:annotation>
+            <xsd:appinfo>
+               <jbxb:class impl="org.jboss.test.xml.mbeanserver.MBeanDepends"/>
+               <jbxb:characters>
+                  <jbxb:property name="targetName"/>
+                  <jbxb:value unmarshalMethod="org.jboss.test.xml.mbeanserver.MBeanDepends.unmarshalStringValue"/>
+               </jbxb:characters>
+               <jaxb:property name="depends" collectionType="java.util.ArrayList"/>
+            </xsd:appinfo>
+         </xsd:annotation>
+
+         <xsd:simpleContent>
+            <xsd:extension base="xsd:anyURI">
+               <xsd:attribute name="optional-attribute-name" use="required" type="xsd:NCName"/>
+            </xsd:extension>
+         </xsd:simpleContent>
+      </xsd:complexType>
+   </xsd:element>
+</xsd:schema>

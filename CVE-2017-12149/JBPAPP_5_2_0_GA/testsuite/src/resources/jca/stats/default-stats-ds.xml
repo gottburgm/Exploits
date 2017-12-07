@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The Hypersonic embedded database JCA connection factory config
+$Id: default-stats-ds.xml 44977 2006-05-16 21:44:51Z wprice $ -->
+
+<datasources>
+   <local-tx-datasource>
+      <jndi-name>StatsDS</jndi-name>
+      <use-java-context>false</use-java-context>
+      <connection-url>jdbc:hsqldb:mem:RemoteDSDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <application-managed-security />
+      <metadata>
+         <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+      <use-java-context>false</use-java-context>
+   </local-tx-datasource>
+</datasources>

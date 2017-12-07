@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: testObjFactory.xml 32860 2005-06-24 05:12:52Z starksm $ -->
+
+<server
+   xmlns="urn:jboss:mbean-service"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="urn:jboss:mbean-service mbean-service_1_0.xsd">
+   <!-- A self-contained dynamic login configuration deployment
+   -->
+   <mbean code="org.jboss.security.auth.login.DynamicLoginConfig"
+         name="jboss.security.tests:service=DynamicLoginConfig">
+      <attribute name="PolicyConfig" replace="true">
+         <jaas:policy
+            xsi:schemaLocation="urn:jboss:login-config2 login-config2.xsd"
+            xmlns:jaas="urn:jboss:login-config2"
+            >
+             <jaas:application-policy name = "conf1">
+                <jaas:authentication>
+                   <jaas:login-module code = "org.jboss.security.auth.spi.IdentityLoginModule"
+                      flag = "required">
+                     <jaas:module-option name="userInfo">
+                        <ur:users
+                           xsi:schemaLocation="urn:jboss:user-roles user-roles.xsd"
+                           xmlns:ur="urn:jboss:user-roles">
+                           <ur:user name="jduke" password="theduke">
+                              <ur:role name="Role1"/>
+                              <ur:role name="Role2"/>
+                              <ur:role name="Echo"/>
+                              <ur:role name="callerJduke" group="CallerPrincipal" />
+                           </ur:user>
+                           <ur:user name="scott" password="echoman">
+                              <ur:role name="Echo"/>
+                              <ur:role name="ProjectUser"/>
+                              <ur:role name="callerScott" group="CallerPrincipal" />
+                           </ur:user>
+                           <ur:user name="stark" password="javaman">
+                              <ur:role name="Java"/>
+                              <ur:role name="Coder"/>
+                              <ur:role name="callerStark" group="CallerPrincipal" />
+                           </ur:user>
+                           <ur:user name="jdukeman" password="anotherduke">
+                              <ur:role name="Role2"/>
+                              <ur:role name="Role3"/>
+                              <ur:role name="callerJdukeman" group="CallerPrincipal" />
+                           </ur:user>
+                           <ur:user name="invoker" password="invoker">
+                              <ur:role name="HttpInvoker"/>
+                           </ur:user>
+                           <ur:user name="admin" password="admin">
+                              <ur:role name="JBossAdmin"/>
+                           </ur:user>
+                        </ur:users>
+                     </jaas:module-option>
+                     <jaas:module-option name="unauthenticatedIdentity">guest</jaas:module-option>
+                   </jaas:login-module>
+                </jaas:authentication>
+             </jaas:application-policy>
+         </jaas:policy>
+      </attribute>
+      <attribute name="UserHome" replace="true">
+         ${user.home}
+      </attribute>
+      <depends optional-attribute-name="LoginConfigService">
+         jboss.security:service=XMLLoginConfig
+      </depends>
+      <depends optional-attribute-name="SecurityManagerService">
+         jboss.security:service=JaasSecurityManager
+      </depends>
+   </mbean>
+
+</server>

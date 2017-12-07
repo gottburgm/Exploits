@@ -1,0 +1,25 @@
+<project name="cluster-component-info">
+   <!-- ============================================================ -->
+   <!-- Cluster                                                      -->
+   <!-- ============================================================ -->
+
+   <component id="cluster"
+              module="jbossmx"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="jbossha.jar"/>
+      <artifact id="jbossha-client.jar" />
+      <artifact id="cluster-service.xml" outputpath="etc"/>
+      <artifact id="deploy-hasingleton-service.xml" outputpath="etc"/>
+      <artifact id="farm-service.xml" outputpath="etc"/>
+      <artifact id="cluster-examples-service.xml" outputpath="etc"/>
+      <artifact id="diststate-service.xml" outputpath="etc"/>
+      <artifact id="ClusteredHttpSessionEB.jar" artifacttype="dir"/>
+      <artifact id="jbossha-httpsession.sar" artifacttype="dir"/>  
+      <artifact id="hajndi-service.xml"/>
+      <export>
+         <include input="jbossha.jar"/>
+         <include input="jbossha-httpsession.sar"/>
+      </export>
+   </component>
+</project>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns="http://www.jboss.org/jbossws-tools" 
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+     xsi:schemaLocation="http://www.jboss.org/jbossws-tools http://www.jboss.org/jbossws-tools/schema/jbossws-tool_1_0.xsd">
+   <java-wsdl>
+     <service name="HelloService" 
+              endpoint="org.jboss.test.webservice.admindevel.Hello"
+              style="rpc">
+     </service>
+     <namespaces target-namespace="http://org.jboss.webservice/example"
+                 type-namespace="http://org.jboss.webservice/example/types"/>
+     <mapping file="jaxrpc-mapping.xml"/>
+     <webservices  ejb-link="HelloBean"/>
+   </java-wsdl>  
+</configuration>

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java-wsdl-mapping xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee    http://www.ibm.com/webservices/xsd/j2ee_jaxrpc_mapping_1_1.xsd">
+<package-mapping>
+<package-type>org.jboss.test.bpel.ws.consumption.partner</package-type>
+<namespaceURI>http://example.com/translator</namespaceURI>
+</package-mapping>
+<package-mapping>
+<package-type>org.jboss.test.bpel.ws.consumption.partner.types</package-type>
+<namespaceURI>http://example.com/translator/types</namespaceURI>
+</package-mapping>
+<package-mapping>
+<package-type>org.jboss.test.bpel.ws.consumption.partner.types</package-type>
+<namespaceURI>http://example.com/translator/types</namespaceURI>
+</package-mapping>
+<java-xml-type-mapping>
+<java-type>org.jboss.test.bpel.ws.consumption.partner.types.TQuotationRequest</java-type>
+<root-type-qname xmlns:typeNS="http://example.com/translator/types">typeNS:tQuotationRequest</root-type-qname>
+<qname-scope>complexType</qname-scope>
+<variable-mapping>
+<java-variable-name>clientName</java-variable-name>
+<xml-attribute-name>clientName</xml-attribute-name>
+</variable-mapping>
+<variable-mapping>
+<java-variable-name>targetLanguage</java-variable-name>
+<xml-attribute-name>targetLanguage</xml-attribute-name>
+</variable-mapping>
+<variable-mapping>
+<java-variable-name>document</java-variable-name>
+<xml-element-name>document</xml-element-name>
+</variable-mapping>
+</java-xml-type-mapping>
+<java-xml-type-mapping>
+<java-type>org.jboss.test.bpel.ws.consumption.partner.types.TDocumentHead</java-type>
+<root-type-qname xmlns:typeNS="http://example.com/translator/types">typeNS:tDocumentHead</root-type-qname>
+<qname-scope>complexType</qname-scope>
+<variable-mapping>
+<java-variable-name>title</java-variable-name>
+<xml-attribute-name>title</xml-attribute-name>
+</variable-mapping>
+<variable-mapping>
+<java-variable-name>language</java-variable-name>
+<xml-attribute-name>language</xml-attribute-name>
+</variable-mapping>
+</java-xml-type-mapping>
+<java-xml-type-mapping>
+<java-type>org.jboss.test.bpel.ws.consumption.partner.types.TDocumentBody</java-type>
+<root-type-qname xmlns:typeNS="http://example.com/translator/types">typeNS:tDocumentBody</root-type-qname>
+<qname-scope>complexType</qname-scope>
+<variable-mapping>
+<java-variable-name>paragraph</java-variable-name>
+<xml-element-name>paragraph</xml-element-name>
+</variable-mapping>
+</java-xml-type-mapping>
+<java-xml-type-mapping>
+<java-type>org.jboss.test.bpel.ws.consumption.partner.types.TStatusRequest</java-type>
+<root-type-qname xmlns:typeNS="http://example.com/translator/types">typeNS:tStatusRequest</root-type-qname>
+<qname-scope>complexType</qname-scope>
+<variable-mapping>
+<java-variable-name>clientName</java-variable-name>
+<xml-attribute-name>clientName</xml-attribute-name>
+</variable-mapping>
+</java-xml-type-mapping>
+<java-xml-type-mapping>
+<java-type>org.jboss.test.bpel.ws.consumption.partner.types.TTranslationRequest</java-type>
+<root-type-qname xmlns:typeNS="http://example.com/translator/types">typeNS:tTranslationRequest</root-type-qname>
+<qname-scope>complexType</qname-scope>
+<variable-mapping>
+<java-variable-name>targetLanguage</java-variable-name>
+<xml-attribute-name>targetLanguage</xml-attribute-name>
+</variable-mapping>
+<variable-mapping>
+<java-variable-name>document</java-variable-name>
+<xml-element-name>document</xml-element-name>
+</variable-mapping>
+</java-xml-type-mapping>
+<java-xml-type-mapping>
+<java-type>org.jboss.test.bpel.ws.consumption.partner.types.TTextNotTranslatable</java-type>
+<root-type-qname xmlns:typeNS="http://example.com/translator/types">typeNS:tTextNotTranslatable</root-type-qname>
+<qname-scope>complexType</qname-scope>
+<variable-mapping>
+<java-variable-name>text</java-variable-name>
+<xml-element-name>text</xml-element-name>
+</variable-mapping>
+</java-xml-type-mapping>
+<java-xml-type-mapping>
+<java-type>org.jboss.test.bpel.ws.consumption.partner.types.TStatusResponse</java-type>
+<root-type-qname xmlns:typeNS="http://example.com/translator/types">typeNS:tStatusResponse</root-type-qname>
+<qname-scope>complexType</qname-scope>
+<variable-mapping>
+<java-variable-name>status</java-variable-name>
+<xml-attribute-name>status</xml-attribute-name>
+</variable-mapping>
+</java-xml-type-mapping>
+<java-xml-type-mapping>
+<java-type>org.jboss.test.bpel.ws.consumption.partner.types.TDocument</java-type>
+<root-type-qname xmlns:typeNS="http://example.com/translator/types">typeNS:tDocument</root-type-qname>
+<qname-scope>complexType</qname-scope>
+<variable-mapping>
+<java-variable-name>head</java-variable-name>
+<xml-element-name>head</xml-element-name>
+</variable-mapping>
+<variable-mapping>
+<java-variable-name>body</java-variable-name>
+<xml-element-name>body</xml-element-name>
+</variable-mapping>
+</java-xml-type-mapping>
+<java-xml-type-mapping>
+<java-type>org.jboss.test.bpel.ws.consumption.partner.types.TDictionaryNotAvailable</java-type>
+<root-type-qname xmlns:typeNS="http://example.com/translator/types">typeNS:tDictionaryNotAvailable</root-type-qname>
+<qname-scope>complexType</qname-scope>
+</java-xml-type-mapping>
+<java-xml-type-mapping>
+<java-type>java.lang.String[]</java-type>
+<anonymous-type-qname>http://example.com/translator/types:tDocumentBody&gt;paragraph[1,unbounded]</anonymous-type-qname>
+<qname-scope>complexType</qname-scope>
+</java-xml-type-mapping>
+<java-xml-type-mapping>
+<java-type>org.jboss.test.bpel.ws.consumption.partner.types.TQuoteStatus</java-type>
+<root-type-qname xmlns:typeNS="http://example.com/translator/types">typeNS:tQuoteStatus</root-type-qname>
+<qname-scope>simpleType</qname-scope>
+</java-xml-type-mapping>
+<exception-mapping>
+<exception-type>org.jboss.test.bpel.ws.consumption.partner.types.TTextNotTranslatable</exception-type>
+<wsdl-message xmlns:exMsgNS="http://example.com/translator">exMsgNS:textNotTranslatableFault</wsdl-message>
+<constructor-parameter-order>
+<element-name>text</element-name>
+</constructor-parameter-order>
+</exception-mapping>
+<exception-mapping>
+<exception-type>org.jboss.test.bpel.ws.consumption.partner.types.TDictionaryNotAvailable</exception-type>
+<wsdl-message xmlns:exMsgNS="http://example.com/translator">exMsgNS:dictionaryNotAvailableFault</wsdl-message>
+</exception-mapping>
+<service-interface-mapping>
+<service-interface>org.jboss.test.bpel.ws.consumption.partner.TranslatorService</service-interface>
+<wsdl-service-name xmlns:serviceNS="http://example.com/translator">serviceNS:translatorService</wsdl-service-name>
+<port-mapping>
+<port-name>textTranslatorPort</port-name>
+<java-port-name>textTranslatorPort</java-port-name>
+</port-mapping>
+<port-mapping>
+<port-name>documentTranslatorPort</port-name>
+<java-port-name>documentTranslatorPort</java-port-name>
+</port-mapping>
+</service-interface-mapping>
+<service-endpoint-interface-mapping>
+<service-endpoint-interface>org.jboss.test.bpel.ws.consumption.partner.TextTranslator</service-endpoint-interface>
+<wsdl-port-type xmlns:portTypeNS="http://example.com/translator">portTypeNS:textTranslator</wsdl-port-type>
+<wsdl-binding xmlns:bindingNS="http://example.com/translator">bindingNS:textTranslatorBind</wsdl-binding>
+<service-endpoint-method-mapping>
+<java-method-name>translate</java-method-name>
+<wsdl-operation>translate</wsdl-operation>
+<method-param-parts-mapping>
+<param-position>0</param-position>
+<param-type>java.lang.String</param-type>
+<wsdl-message-mapping>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:translateTextInput</wsdl-message>
+<wsdl-message-part-name>text</wsdl-message-part-name>
+<parameter-mode>IN</parameter-mode>
+</wsdl-message-mapping>
+</method-param-parts-mapping>
+<method-param-parts-mapping>
+<param-position>1</param-position>
+<param-type>java.lang.String</param-type>
+<wsdl-message-mapping>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:translateTextInput</wsdl-message>
+<wsdl-message-part-name>sourceLanguage</wsdl-message-part-name>
+<parameter-mode>IN</parameter-mode>
+</wsdl-message-mapping>
+</method-param-parts-mapping>
+<method-param-parts-mapping>
+<param-position>2</param-position>
+<param-type>java.lang.String</param-type>
+<wsdl-message-mapping>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:translateTextInput</wsdl-message>
+<wsdl-message-part-name>targetLanguage</wsdl-message-part-name>
+<parameter-mode>IN</parameter-mode>
+</wsdl-message-mapping>
+</method-param-parts-mapping>
+<wsdl-return-value-mapping>
+<method-return-value>java.lang.String</method-return-value>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:translateTextOutput</wsdl-message>
+<wsdl-message-part-name>translatedText</wsdl-message-part-name>
+</wsdl-return-value-mapping>
+</service-endpoint-method-mapping>
+<service-endpoint-method-mapping>
+<java-method-name>quoteTranslation</java-method-name>
+<wsdl-operation>quoteTranslation</wsdl-operation>
+<method-param-parts-mapping>
+<param-position>0</param-position>
+<param-type>java.lang.String</param-type>
+<wsdl-message-mapping>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:quoteTextInput</wsdl-message>
+<wsdl-message-part-name>clientName</wsdl-message-part-name>
+<parameter-mode>IN</parameter-mode>
+</wsdl-message-mapping>
+</method-param-parts-mapping>
+<method-param-parts-mapping>
+<param-position>1</param-position>
+<param-type>java.lang.String</param-type>
+<wsdl-message-mapping>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:quoteTextInput</wsdl-message>
+<wsdl-message-part-name>text</wsdl-message-part-name>
+<parameter-mode>IN</parameter-mode>
+</wsdl-message-mapping>
+</method-param-parts-mapping>
+<method-param-parts-mapping>
+<param-position>2</param-position>
+<param-type>java.lang.String</param-type>
+<wsdl-message-mapping>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:quoteTextInput</wsdl-message>
+<wsdl-message-part-name>sourceLanguage</wsdl-message-part-name>
+<parameter-mode>IN</parameter-mode>
+</wsdl-message-mapping>
+</method-param-parts-mapping>
+<method-param-parts-mapping>
+<param-position>3</param-position>
+<param-type>java.lang.String</param-type>
+<wsdl-message-mapping>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:quoteTextInput</wsdl-message>
+<wsdl-message-part-name>targetLanguage</wsdl-message-part-name>
+<parameter-mode>IN</parameter-mode>
+</wsdl-message-mapping>
+</method-param-parts-mapping>
+</service-endpoint-method-mapping>
+<service-endpoint-method-mapping>
+<java-method-name>getQuotationStatus</java-method-name>
+<wsdl-operation>getQuotationStatus</wsdl-operation>
+<method-param-parts-mapping>
+<param-position>0</param-position>
+<param-type>java.lang.String</param-type>
+<wsdl-message-mapping>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:statusTextInput</wsdl-message>
+<wsdl-message-part-name>clientName</wsdl-message-part-name>
+<parameter-mode>IN</parameter-mode>
+</wsdl-message-mapping>
+</method-param-parts-mapping>
+<wsdl-return-value-mapping>
+<method-return-value>org.jboss.test.bpel.ws.consumption.partner.types.TQuoteStatus</method-return-value>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:statusTextOutput</wsdl-message>
+<wsdl-message-part-name>status</wsdl-message-part-name>
+</wsdl-return-value-mapping>
+</service-endpoint-method-mapping>
+</service-endpoint-interface-mapping>
+<service-endpoint-interface-mapping>
+<service-endpoint-interface>org.jboss.test.bpel.ws.consumption.partner.DocumentTranslator</service-endpoint-interface>
+<wsdl-port-type xmlns:portTypeNS="http://example.com/translator">portTypeNS:documentTranslator</wsdl-port-type>
+<wsdl-binding xmlns:bindingNS="http://example.com/translator">bindingNS:documentTranslatorBind</wsdl-binding>
+<service-endpoint-method-mapping>
+<java-method-name>translate</java-method-name>
+<wsdl-operation>translate</wsdl-operation>
+<method-param-parts-mapping>
+<param-position>0</param-position>
+<param-type>org.jboss.test.bpel.ws.consumption.partner.types.TTranslationRequest</param-type>
+<wsdl-message-mapping>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:translateDocInput</wsdl-message>
+<wsdl-message-part-name>translationRequest</wsdl-message-part-name>
+<parameter-mode>IN</parameter-mode>
+</wsdl-message-mapping>
+</method-param-parts-mapping>
+<wsdl-return-value-mapping>
+<method-return-value>org.jboss.test.bpel.ws.consumption.partner.types.TDocument</method-return-value>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:translateDocOutput</wsdl-message>
+<wsdl-message-part-name>document</wsdl-message-part-name>
+</wsdl-return-value-mapping>
+</service-endpoint-method-mapping>
+<service-endpoint-method-mapping>
+<java-method-name>quoteTranslation</java-method-name>
+<wsdl-operation>quoteTranslation</wsdl-operation>
+<method-param-parts-mapping>
+<param-position>0</param-position>
+<param-type>org.jboss.test.bpel.ws.consumption.partner.types.TQuotationRequest</param-type>
+<wsdl-message-mapping>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:quoteDocInput</wsdl-message>
+<wsdl-message-part-name>quotationRequest</wsdl-message-part-name>
+<parameter-mode>IN</parameter-mode>
+</wsdl-message-mapping>
+</method-param-parts-mapping>
+</service-endpoint-method-mapping>
+<service-endpoint-method-mapping>
+<java-method-name>getQuotationStatus</java-method-name>
+<wsdl-operation>getQuotationStatus</wsdl-operation>
+<method-param-parts-mapping>
+<param-position>0</param-position>
+<param-type>org.jboss.test.bpel.ws.consumption.partner.types.TStatusRequest</param-type>
+<wsdl-message-mapping>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:statusDocInput</wsdl-message>
+<wsdl-message-part-name>statusRequest</wsdl-message-part-name>
+<parameter-mode>IN</parameter-mode>
+</wsdl-message-mapping>
+</method-param-parts-mapping>
+<wsdl-return-value-mapping>
+<method-return-value>org.jboss.test.bpel.ws.consumption.partner.types.TStatusResponse</method-return-value>
+<wsdl-message xmlns:wsdlMsgNS="http://example.com/translator">wsdlMsgNS:statusDocOutput</wsdl-message>
+<wsdl-message-part-name>statusResponse</wsdl-message-part-name>
+</wsdl-return-value-mapping>
+</service-endpoint-method-mapping>
+</service-endpoint-interface-mapping>
+</java-wsdl-mapping>

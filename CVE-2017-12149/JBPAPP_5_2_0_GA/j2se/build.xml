@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+   <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
+   <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+   <!ENTITY targets SYSTEM "../tools/etc/buildmagic/targets.ent">
+]>
+
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--  JBoss, the OpenSource J2EE webOS                                      -->
+<!--                                                                        -->
+<!--  Distributable under LGPL license.                                     -->
+<!--  See terms of license at http://www.gnu.org.                           -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<!-- $Id: build.xml 113110 2012-06-21 16:00:27Z baranowb $ -->
+
+<project default="main" name="JBoss/J2SE">
+
+  <!-- ================================================================== -->
+  <!-- Setup                                                              -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Include the common Buildmagic elements.
+     |
+     | This defines several different targets, properties and paths.
+     | It also sets up the basic extention tasks amoung other things.
+   -->
+
+  &buildmagic;
+
+  <!--
+     | Include the normal targets.
+   -->
+  &targets;
+
+  <!-- ================================================================== -->
+  <!-- Configuration                                                      -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Configure the build system.  
+     |
+     | This target is invoked by the Buildmagic initialization logic and 
+     | should contain module specific configuration elements.
+   -->
+
+  <target name="configure" unless="configure.disable">
+
+    <!-- =================== -->
+    <!-- Basic Configuration -->
+    <!-- =================== -->
+
+    <!-- Module name(s) & version -->
+    <property name="module.name" value="j2se"/>
+    <property name="module.Name" value="JBoss/J2SE"/>
+    <property name="module.version" value="DEV"/>
+
+    <!-- ========= -->
+    <!-- Libraries -->
+    <!-- ========= -->
+    &libraries;
+
+    <!-- The combined library classpath -->
+    <path id="library.classpath">
+      <path refid="oswego.concurrent.classpath"/>
+      <path refid="dom4j.dom4j.classpath"/>
+      <path refid="junit.junit.classpath"/>
+      <path refid="jboss.integration.classpath"/>
+      <path refid="jboss.common.beans.classpath"/>
+    </path>
+
+    <!-- ======= -->
+    <!-- Modules -->
+    <!-- ======= -->
+    &modules;
+
+    <!-- The combined dependent module classpath -->
+    <path id="dependentmodule.classpath">
+      <path refid="jboss.common.core.classpath"/>
+      <path refid="jboss.common.logging.spi.classpath"/>
+      <path refid="jboss.common.logging.log4j.classpath"/>
+      <path refid="jboss.common.logging.jdk.classpath"/>
+    	<path refid="jboss.microcontainer.classpath"/>
+    </path>
+
+    <!-- ===== -->
+    <!-- Tasks -->
+    <!-- ===== -->
+    <property name="javac.target" value="1.5"/>
+    <property name="javac.source" value="1.5"/>
+    <property name="source.java" value="${module.source}/main"/>
+    <property name="source.tests" value="${module.source}/tests"/>
+    <call target="_default:task-init"/>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- Compile                                                            -->
+  <!-- ================================================================== -->
+
+  <!-- 
+     | Compile everything.
+     |
+     | This target should depend on other compile-* targets for each 
+     | different type of compile that needs to be performed, short of
+     | documentation compiles.
+   -->
+
+  <target name="compile"
+    description="Compile all source files."
+    depends="compile-classes, _default:compile-etc"/>
+
+   <!-- Compile all class files -->
+   <target name="compile-classes" depends="init" unless="compile.disable">
+     <mkdir dir="${build.classes}"/>
+
+     <!-- Hack, required to avoid duplicate javac targets -->
+     <mkdir dir="${build.gen-src}"/>
+
+     <!-- Remove classes which depend on changed files, so they will rebuild. -->
+     <depend srcdir="${source.java}:${source.tests}"
+       destdir="${build.classes}"
+       dump="${javac.depend.dump}"
+       closure="${javac.depend.closure}">
+       <include name="${javac.includes}"/>
+       <exclude name="${javac.excludes}"/>
+     </depend>
+
+     <javac destdir="${build.classes}"
+       optimize="${javac.optimize}"
+       target="${javac.target}"
+       source="${javac.source}"
+       debug="${javac.debug}"
+       depend="${javac.depend}"
+       verbose="${javac.verbose}"
+       deprecation="${javac.deprecation}"
+       includeAntRuntime="${javac.include.ant.runtime}"
+       includeJavaRuntime="${javac.include.java.runtime}"
+       includes="${javac.includes}"
+       excludes="${javac.excludes}"
+       failonerror="${javac.fail.onerror}">
+       <bootclasspath>
+         <path refid="javac.bootclasspath"/>
+       </bootclasspath>
+       <src path="${source.java}:${source.tests}"/>
+       <classpath refid="javac.classpath"/>
+     </javac>
+   </target>
+
+  <!-- ================================================================== -->
+  <!-- Archives                                                           -->
+  <!-- ================================================================== -->
+
+  <!-- 
+     | Build all jar files.
+   -->
+  <target name="module-jars">
+
+    <!-- Build jboss-j2se.jar -->
+    <jar jarfile="${build.lib}/${jar.server.name}"
+      manifest="${build.etc}/default.mf">
+      <fileset dir="${build.classes}">
+         <exclude name="org/jboss/test/**"/>
+      </fileset>
+    </jar>
+
+    <!-- Build jboss-jmx-compliance.jar -->
+    <jar jarfile="${build.lib}/jboss-jmx-compliance.jar"
+      manifest="${build.etc}/default.mf">
+      <fileset dir="${build.classes}">
+         <include name="org/jboss/test/**"/>
+         <exclude name="org/jboss/test/jmx/compliance/loading/support/*.class"/>
+         <exclude name="org/jboss/test/jmx/compliance/server/support/AClass.*"/>
+      </fileset>
+    </jar>
+
+    <jar jarfile="${build.lib}/jmxcompliance-MyMBeans.jar">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/test/jmx/compliance/loading/support/Trivial.class"/>
+        <include name="org/jboss/test/jmx/compliance/loading/support/Trivial2.class"/>
+        <include name="org/jboss/test/jmx/compliance/loading/support/TrivialMBean.class"/>
+        <include name="org/jboss/test/jmx/compliance/loading/support/Trivial2MBean.class"/>
+        <include name="org/jboss/test/jmx/compliance/loading/support/Another*.class"/>
+      </fileset>
+    </jar>
+
+    <jar jarfile="${build.lib}/jmxcompliance-MyMBeans2.jar">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/test/jmx/compliance/loading/support/Trivial*.class"/>
+      </fileset>
+    </jar>
+
+    <jar jarfile="${build.lib}/jmxcompliance-MoreMBeans.jar">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/test/jmx/compliance/loading/support/AClass.class"/>
+      </fileset>
+    </jar>
+
+    <jar jarfile="${build.lib}/jmxcompliance-Test.jar">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/test/jmx/compliance/server/support/AClass.class"/>
+      </fileset>
+    </jar>
+  </target>
+
+</project>

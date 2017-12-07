@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mbean name="jboss.test:type=BasicMBeanName" code="BasicMBeanCode">
+   <depends-list optional-attribute-name="Attribute">
+      <depends-list-element>test:test=1</depends-list-element>
+      <depends-list-element>test:test=2</depends-list-element>
+   </depends-list>
+</mbean>

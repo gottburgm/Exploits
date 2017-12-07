@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC
+ "-//JBoss//DTD JBOSS 4.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <session>
+         <ejb-name>Bank</ejb-name>
+         <jndi-name>bank-iiop/Bank</jndi-name>
+         <configuration-name>Standard Stateless SessionBean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>iiop</invoker-proxy-binding-name>
+            </invoker>
+         </invoker-bindings>
+      </session>
+      <session>
+         <ejb-name>Teller</ejb-name>
+         <jndi-name>bank-iiop/Teller</jndi-name>
+         <configuration-name>Standard Stateless SessionBean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>iiop</invoker-proxy-binding-name>
+               <ejb-ref>
+                  <ejb-ref-name>ejb/Customer</ejb-ref-name>
+                  <jndi-name>iiop/bank-iiop/Customer</jndi-name>
+               </ejb-ref>
+               <ejb-ref>
+                  <ejb-ref-name>ejb/Account</ejb-ref-name>
+                  <jndi-name>iiop/bank-iiop/Account</jndi-name>
+               </ejb-ref>
+               <ejb-ref>
+                  <ejb-ref-name>ejb/Bank</ejb-ref-name>
+                  <jndi-name>iiop/bank-iiop/Bank</jndi-name>
+               </ejb-ref>
+            </invoker>
+         </invoker-bindings>
+      </session>
+      <entity>
+      <ejb-name>Account</ejb-name>
+         <jndi-name>bank-iiop/Account</jndi-name>
+         <configuration-name>Standard CMP EntityBean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>iiop</invoker-proxy-binding-name>
+               <ejb-ref>
+                  <ejb-ref-name>ejb/Customer</ejb-ref-name>
+                  <jndi-name>iiop/bank/Customer</jndi-name>
+               </ejb-ref>
+            </invoker>
+         </invoker-bindings>
+      </entity>
+      <entity>
+         <ejb-name>Customer</ejb-name>
+         <jndi-name>bank-iiop/Customer</jndi-name>
+         <configuration-name>Standard CMP EntityBean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>iiop</invoker-proxy-binding-name>
+               <ejb-ref>
+                  <ejb-ref-name>ejb/Account</ejb-ref-name>
+                  <jndi-name>iiop/bank/Account</jndi-name>
+               </ejb-ref>
+            </invoker>
+         </invoker-bindings>
+      </entity>
+   </enterprise-beans>
+   <resource-managers />
+</jboss>

@@ -1,0 +1,25 @@
+<project name="j2se-component-info">
+
+   <!-- ============================================================ -->
+   <!-- J2SE                                                         -->
+   <!-- ============================================================ -->
+
+   <component id="j2se"
+              module="jboss-j2se"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="jboss-j2se.jar"/>
+      <artifact id="jboss-jmx-compliance.jar"/>
+      <artifact id="jmxcompliance-MyMBeans.jar"/>
+      <artifact id="jmxcompliance-MyMBeans2.jar"/>
+      <artifact id="jmxcompliance-MoreMBeans.jar"/>
+      <artifact id="jmxcompliance-Test.jar"/>
+      <export>
+         <include input="jboss-j2se.jar"/>
+      </export>
+   </component>
+
+   <includes id="j2se-jmx-compliance">
+      <include input="jboss-jmx-compliance.jar"/>
+   </includes>
+</project>

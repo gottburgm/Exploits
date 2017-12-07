@@ -1,0 +1,12 @@
+<aop xmlns="urn:jboss:aop-beans:1.0">
+   <interceptor class="org.jboss.test.aop.earwithwebinf.interceptor.EJBInterceptor"/>
+   <interceptor class="org.jboss.test.aop.earwithwebinf.interceptor.WebInterceptor"/>
+   
+   <bind pointcut="all(org.jboss.test.aop.earwithwebinf.webinf.*)">
+	   <interceptor-ref name="org.jboss.test.aop.earwithwebinf.interceptor.WebInterceptor"/>
+   </bind>
+   
+   <bind pointcut="all(org.jboss.test.aop.earwithwebinf.ejb.*)">
+	   <interceptor-ref name="org.jboss.test.aop.earwithwebinf.interceptor.EJBInterceptor"/>
+   </bind>
+</aop>

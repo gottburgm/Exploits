@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.jboss.test.hibernate.model">
+
+	<!-- there is no "Edit Role" function, so map Role as an immutable class -->
+	<class name="Role" table="role" mutable="false">
+
+		<!-- there are few roles, and they are not updated so cache them -->
+		<cache usage="read-only"/>
+
+		<id name="id" type="long" unsaved-value="null">
+			<generator class="increment"/>
+		</id>
+
+		<property name="name"
+			unique="true"
+			not-null="true"
+			update="false"
+			length="25"/>
+		<property name="description"
+			length="150"/>
+		<property name="timeOfCreation"
+			update="false"
+			not-null="true"/>
+
+		<!-- this is the "inverse" association of
+			the User.userRoles collection. This
+			mapping demonstrates that an "inverse"
+			end of a many-to-many does not need
+			to be the same type of collection
+			mapping as the other end! -->
+		<bag name="users"
+			lazy="true"
+			table="user_role"
+			inverse="true"
+			order-by="timeOfCreation asc">
+			<!-- the foreign key of the Role -->
+			<key column="role"/>
+			<!-- the foreign key of the User -->
+			<many-to-many column="user"
+				class="User"
+				outer-join="true"/>
+			<!-- Since Users are not cached, make sure
+				we use an outer join! -->
+		</bag>
+
+	</class>
+
+
+
+	<!-- A named HQL query. This uses a subquery, so it won't
+		work on MySQL! -->
+
+	<query name="unassignedRolesByUser.HQL"><![CDATA[
+		from Role role
+		where not :user in ( select u.id from role.users u )
+		order by role.name desc
+	]]></query>
+
+
+	<!-- For MySQL 4.0, which has no support for subselects, we
+		need to use an ON-clause condition which is not provided
+		by HQL. So we will use a named SQL query instead. -->
+
+	<sql-query name="unassignedRolesByUser.MySQL">
+		<![CDATA[
+			select {rol.*}
+			from role rol
+				left join user_role ur
+					on ur.role = rol.id and ur.user = :user
+			where ur.id is null
+			order by rol.name desc
+		]]>
+		<return alias="rol" class="Role"/>
+		<synchronize table="user_role"/>
+	</sql-query>
+
+
+</hibernate-mapping>

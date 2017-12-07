@@ -1,0 +1,45 @@
+!!!What is JBossCache
+
+JBossCache consists of two modules: 
+*[TreeCache|http://docs.jboss.org/jbcache/TreeCache.html]--a replicated transactional tree-structured cache 
+*[TreeCacheAop|http://docs.jboss.org/jbcache/TreeCacheAop.html]--an 'object-oriented' cache using AOP to dynamically manage Plain Old Java Objects (POJOs).
+\\
+A [tutorial|http://docs.jboss.org/jbcache/Tutorial.html] and [faq|http://docs.jboss.org/jbcache/FAQ.html] for both TreeCache and TreeCacheAop are also provided. JBossCache can be used either inside JBoss or as a standalone. 
+
+!! News
+* 05-01-2004 JBossCache 1.01 has been released. This release includes a new version of JGroups, docs update, and some important bug fixes. Please see the accompanying release note and change log for details. 
+
+!! Download
+* The code for the standalone JBossCache package can be [downloaded|http://sourceforge.net/project/showfiles.php?group_id=22866&package_id=102339] from here (JBossCache-1.*.zip).
+
+!! Features
+* TreeCache (tree structured node based cache)
+** cache mode. Supports local, synchronous replication,
+     and asynchronous replication
+** transaction. Works with JTA transaction manager. Support transaction
+     isolation levels.
+** eviction policy. User can write its own eviction policy via a plugin.
+     There is a org.jboss.cache.eviction.LRUPolicy class as an implementation
+     of [LRU] algorithm.
+** Run under JBoss4.0 and 3.2.4 (and up) as a MBean service
+
+* TreecacheAop ('object-oriented' cache)
+** Provides same features as TreeCache: cache mode, transaction, and eviction
+     policy
+** Run under JBoss4.0 as a MBean service
+** eviction policy. Provides an aop-specific policy implementation,
+     org.jboss.cache.eviction.AopLRUPolicy
+** 'object-oriented' features (in replication mode as well):
+*** inheritance
+*** aggregation
+*** object graph handling
+
+!! Forums
+
+* [The development forum|http://www.jboss.org/index.html?module=bb&op=viewforum&f=157] is for the discussion of changes to the implementation and also user questions (for now).
+
+!! Authors
+
+* Bela Ban (BelaAtJBoss.com)
+* Ben Wang (Ben.WangAtJBoss.com)
+* Harald Gliebe

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connector xmlns="http://java.sun.com/xml/ns/j2ee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+   http://java.sun.com/xml/ns/j2ee/connector_1_5.xsd"
+   version="1.5">
+
+   <description>A file system based 1.5 JCA adaptor supporting the JNDI DirContext</description>
+   <display-name>File System DirContext Adatpor</display-name>
+   <vendor-name>JBoss, Inc</vendor-name>
+   <eis-type>JBoss QA</eis-type>
+   <resourceadapter-version>4.0</resourceadapter-version>
+
+   <license>
+      <description>
+      COPYRIGHT AND PERMISSION NOTICE
+      Copyright (c) 2005 JBoss, Inc
+      This is released under the terms of the LGPL.
+      See gnu.org for details.
+      </description>
+      <license-required>true</license-required>
+   </license>
+
+   <resourceadapter>
+      <resourceadapter-class>org.jboss.test.jca.fs.FSDirContextAdaptor</resourceadapter-class>
+
+      <outbound-resourceadapter>
+         <connection-definition>
+            <managedconnectionfactory-class>org.jboss.test.jca.fs.FSMangedConnectionFactory</managedconnectionfactory-class>
+            <config-property>
+               <description>The file system path used as the root</description>
+               <config-property-name>FileSystemRootDir</config-property-name>
+               <config-property-type>java.lang.String</config-property-type>
+               <config-property-value>/tmp/db/fs_store</config-property-value>
+            </config-property>
+            <config-property>
+               <description></description>
+               <config-property-name>UserName</config-property-name>
+               <config-property-type>java.lang.String</config-property-type>
+               <config-property-value></config-property-value>
+            </config-property>
+            <config-property>
+               <config-property-name>Password</config-property-name>
+               <config-property-type>java.lang.String</config-property-type>
+               <config-property-value></config-property-value>
+            </config-property>
+            <config-property>
+               <config-property-name>Roles</config-property-name>
+               <config-property-type>java.lang.String</config-property-type>
+               <config-property-value></config-property-value>
+            </config-property>
+            <connectionfactory-interface>org.jboss.test.jca.fs.DirContextFactory</connectionfactory-interface>
+            <connectionfactory-impl-class>org.jboss.test.jca.fs.DirContextFactoryImpl</connectionfactory-impl-class>
+            <connection-interface>javax.naming.directory.DirContext</connection-interface>
+            <connection-impl-class>org.jboss.test.jca.fs.FSDirContext</connection-impl-class>
+         </connection-definition>
+         <transaction-support>NoTransaction</transaction-support>
+         <authentication-mechanism>
+            <authentication-mechanism-type>BasicPassword</authentication-mechanism-type>
+            <credential-interface>javax.resource.spi.security.PasswordCredential</credential-interface>
+         </authentication-mechanism>
+         <reauthentication-support>true</reauthentication-support>
+      </outbound-resourceadapter>
+
+   </resourceadapter>
+</connector>

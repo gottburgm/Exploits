@@ -1,0 +1,1988 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Test Case Mapping for EAP 5.1 Common Criteria Certification
+  ===========================================================
+  
+  Note: 
+  - TSFi master data can be fund in latest version of CC_Test_Plan_EAP_5.1.pdf in chapter "3.1 TSFI Id Master Data"
+
+-->
+<cc:testCaseMapping xmlns:cc="http://www.redhat.com/CcTsfiMap"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://www.redhat.com/CcTsfiMap ccTsfiMap.xsd"
+>
+
+  <!-- Standard EAP testsuite to TOE Security Functionality Interface mapping -->
+  <testSuite name="EAP">
+    <testCase name="org.jboss.test.deployers.web.test.WEBDeploymentUnitTestCase">
+      <desc></desc>
+      <test name="testWEBDeployment">
+        <TSFI>tsfi.app.web.xml</TSFI>
+      </test>
+    </testCase>
+    <testCase name="org.jboss.test.security.test.SubjectContextUnitTestCase">
+      <desc>Tests of the JACC subject policy context handler state and consistency with the container caller principal, isCallerInRole methods.</desc>
+      <test name="testUserMethodViaServlet">
+        <desc>Test Objective: Test if calling userMethod via servlet has caller principal equal to one we called the method with.
+                              Test if caller has proper roles assigned.
+                              Tests if policy subject contains proper roles.
+                              Tests if run as identity works for subsequent call to session bean. 
+              Expected Result: Run without exceptions and http request finishes with HTTP_OK status. 
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+     </test>
+    </testCase>
+    <testCase name="org.jboss.test.security.test.DeepCopySubjectUnitTestCase">
+      <desc>JBAS-2657: Add option to deep copy the authenticated subject sets
+    
+    Testcase that unit tests the cloneability of various JBossSX 
+    Principal/Groups
+    Also does a test of the serverside Subject deep copy via a mutable
+    Principal</desc>
+      <test name="testSubjectCloning">
+        <desc>Test Objective: Test the Deep Copy of Subjects by the JaasSecurityManager via a test servlet deployed.
+              Expected Result: Run without exceptions and with proper HTTP result after each of three different calls.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+    </testCase>
+    <testCase name="org.jboss.test.security.test.EJB3SpecUnitTestCase">
+    	<desc></desc>
+    	<test name="testAdministratorMethodAccess">
+    		<desc></desc>
+    		<TSFI>tsfi.ann.DenyAll</TSFI>
+    		<TSFI>tsfi.ann.PermitAll</TSFI>
+    		<TSFI>tsfi.ann.RolesAllowed</TSFI>
+    		<TSFI>tsfi.cfg.deploy.security.security-policies-jboss-beans.xml</TSFI>
+    	</test>
+    	<test name="testRegularUserMethodAccess">
+    		<desc></desc>
+    		<TSFI>tsfi.ann.DenyAll</TSFI>
+    		<TSFI>tsfi.ann.PermitAll</TSFI>
+    		<TSFI>tsfi.ann.RolesAllowed</TSFI>
+    		<TSFI>tsfi.cfg.deploy.security.security-policies-jboss-beans.xml</TSFI>
+    	</test>
+    	<test name="testGuestMethodAccess">
+    		<desc></desc>
+    		<TSFI>tsfi.ann.DenyAll</TSFI>
+    		<TSFI>tsfi.ann.PermitAll</TSFI>
+    		<TSFI>tsfi.ann.RolesAllowed</TSFI>
+    		<TSFI>tsfi.cfg.deploy.security.security-policies-jboss-beans.xml</TSFI>
+    	</test>
+    	<test name="testUnauthenticatedMethodAccess">
+    		<desc></desc>
+    		<TSFI>tsfi.ann.DenyAll</TSFI>
+    		<TSFI>tsfi.ann.PermitAll</TSFI>
+    		<TSFI>tsfi.ann.RolesAllowed</TSFI>
+    		<TSFI>tsfi.cfg.deploy.security.security-policies-jboss-beans.xml</TSFI>
+    	</test>
+    	<test name="testRunAsMethodAccess">
+    		<desc></desc>
+    		<TSFI>tsfi.ann.RunAs</TSFI>
+    		<TSFI>tsfi.ann.RolesAllowed</TSFI>
+    		<TSFI>tsfi.cfg.deploy.security.security-policies-jboss-beans.xml</TSFI>
+    	</test>
+    	<test name="testDeclareRoles">
+    		<desc></desc>
+    		<TSFI>tsfi.ann.DeclareRoles</TSFI>
+    		<TSFI>tsfi.cfg.deploy.security.security-policies-jboss-beans.xml</TSFI>
+    	</test>
+    </testCase>
+    <testCase name="org.jboss.test.ejb3.jbpapp2473.unit.RunAsUnitTestCase">
+      <desc></desc>
+      <test name="testRole1">
+        <desc></desc>
+        <TSFI>tsfi.ann.SecurityDomain</TSFI>
+  		<TSFI>tsfi.cfg.deploy.security.security-policies-jboss-beans.xml</TSFI>
+      </test>
+      <test name="testRole2">
+        <desc></desc>
+        <TSFI>tsfi.ann.RunAsPrincipal</TSFI>
+        <TSFI>tsfi.ann.SecurityDomain</TSFI>
+      </test>
+      <test name="testRunAsManager">
+        <desc></desc>
+        <TSFI>tsfi.ann.SecurityDomain</TSFI>
+      </test>
+      <test name="testRunAsPrincipal">
+        <desc></desc>
+        <TSFI>tsfi.ann.RunAsPrincipal</TSFI>
+        <TSFI>tsfi.ann.SecurityDomain</TSFI>
+  		<TSFI>tsfi.cfg.deploy.security.security-policies-jboss-beans.xml</TSFI>
+      </test>
+    </testCase>
+    <testCase name="org.jboss.test.security.test.EJBSpecUnitTestCase">
+      <desc>Test of EJB spec conformace using the security-spec.jar deployment unit. These test the basic role based access model.</desc>
+      <test name="testStatefulCreateCaller">
+        <desc>Test Objective: Test the use of getCallerPrincipal from within the ejbCreate in a stateful session bean.
+              Expected Result: Finish the test without exceptions indicating successful use of getCallerPrincipal. 
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testGetCallerPrincipal">
+        <desc>Test Objective:
+    1. SecureBean returns a non-null principal when getCallerPrincipal
+       is called with a security context and that this is propagated
+       to its Entity bean ref.
+    
+    2. UnsecureBean throws an IllegalStateException when getCallerPrincipal
+       is called without a security context.
+              Expected Result: 1. Return caller principal which is equal to the one of callee.  
+                               2. Throw RemoteException on unsecured session bean which. 
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testDomainInteraction">
+        <desc>Test Objective: Test that a call interacting with different security domains does not change the roles it had before the call.
+              Expected Result: Test has to finish without any exception.       
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testPrincipalPropagation">
+        <desc>Test Objective: Test that the calling principal is propagated across bean calls.
+              Expected Result: Test has to finish without any exception.       
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testMethodAccess">
+        <desc>Test Objective: Test that the echo method is accessible by an Echo
+                              role. Since the noop() method of the StatelessSession
+                              bean was not assigned any permissions it should be unchecked.
+              Expected Result: Test has to finish without any exception.       
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testDomainMethodAccess">
+        <desc>Test Objective: Test that the echo method is accessible by an Echo
+                              role. Since the excluded() method of the StatelessSession
+                              bean has been placed into the excluded set it should not
+                              accessible by any user. This uses the security domain of the
+                              JaasSecurityDomain service to test its use as an authentication mgr.
+              Expected Result: Test has to finish without any exception.       
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testMethodAccess2">
+        <desc>Test Objective: Test that the permissions assigned to the stateless session bean:
+                              with ejb-name=org/jboss/test/security/ejb/StatelessSession_test
+                              are read correctly.
+              Expected Result: Test has to finish without any exception.       
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testLocalMethodAccess">
+        <desc>Test Objective: Test a user with Echo and EchoLocal roles can access the CalleeBean
+                              through its local interface by calling the CallerBean and that a user
+                              with only a EchoLocal cannot call the CallerBean.
+              Expected Result: Test has to finish without any exception.       
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testUncheckedRemote">
+        <desc>Test Objective: Test access to a bean with a mix of remote interface permissions and unchecked permissions with the unchecked permissions declared first.
+              Expected Result: Unchecked remote access has to pass without exception and exluded() method call should throw RemoteException. 
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testRemoteUnchecked">
+        <desc>Test Objective: Test access to a bean with a mix of remote interface permissions and unchecked permissions with the unchecked permissions declared last.
+              Expected Result: Unchecked remote access has to pass without exception and exluded() method call should throw RemoteException. 
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testUnchecked">
+        <desc>Test Objective: Test that a user with a role that has not been assigned any
+                              method permissions in the ejb-jar descriptor is able to access a
+                              method that has been marked as unchecked.
+              Expected Result: Test has to finish without any exception.       
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testUncheckedWithLogin">
+        <desc>Test Objective: Test that a user with a valid role is able to access a
+                              bean for which all methods have been marked as unchecked.
+              Expected Result: Test has to finish without any exception.       
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testExcluded">
+        <desc>Test Objective: Test that user scott who has the Echo role is not able to
+                              access the StatelessSession2.excluded method even though
+                              the Echo role has been granted access to all methods of
+                              StatelessSession2 to test that the excluded-list takes
+                              precendence over the method-permissions.
+              Expected Result: Test has to finish without any exception.       
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testRunAs">
+        <desc>Test Objective: This method tests the following call chains:
+                               1. RunAsStatelessSession.echo() -> PrivateEntity.echo()
+                               2. RunAsStatelessSession.noop() -> RunAsStatelessSession.excluded()
+                               3. RunAsStatelessSession.forward() -> StatelessSession.echo()
+              Expected Result: 1. Should succeed because the run-as identity of RunAsStatelessSession
+                                  is valid for accessing PrivateEntity.
+                               2. Should succeed because the run-as identity of RunAsStatelessSession
+                                  is valid for accessing RunAsStatelessSession.excluded().
+                               3. Should fail because the run-as identity of RunAsStatelessSession is not Echo.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testDeepRunAs">
+        <desc>Test Objective: This method tests the following call chain:
+                              Level1CallerBean.callEcho() -> Level2CallerBean.invokeEcho() -> Level3CalleeBean.echo()
+                              The Level1CallerBean uses a run-as of InternalRole and the Level2CallerBean
+                              and Level3CalleeBean are only accessible by InternalRole.
+              Expected Result: Test has to finished without any exception.
+                               Test makes sure we cannot access Level2CallerBean remotely, therefore the call have to throw an Exception. 
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testRunAsSFSB">
+        <desc>Test Objective: Test RunAs for proper role propagation on stateful session beans. 
+              Expected Result: Test should finish without any exceptions thrown.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testJBAS1852">
+        <desc>Test Objective: Test the run-as side-effects raised in http://jira.jboss.com/jira/browse/JBAS-1852
+                              (Unexpected Principal (Security Identity) Propagation Switch). 
+              Expected Result: Test has to finish without any exception.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testMDBRunAs">
+        <desc>Test Objective: Test that an MDB with a run-as identity is able to access secure EJBs that require the identity.
+              Expected Result: Message sent to QueueA has to come through to QueueB with not set to Failed.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testMDBDeepRunAs">
+        <desc>Test Objective: Test that an MDB with a run-as identity is able to access secure EJBs
+                              that require the identity. DeepRunAsMDB -> Level1MDBCallerBean.callEcho() ->
+                              Level2CallerBean.invokeEcho() -> Level3CalleeBean.echo()
+                              The MDB uses a run-as of InternalRole and the Level2CallerBean
+                              and Level3CalleeBean are only accessible by InternalRole.
+              Expected Result: Message sent to QueueD has to come through to QueueB with not set to Failed.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testRunAsWithRoles">
+        <desc>Test Objective: This method tests that the RunAsWithRolesMDB is assigned multiple roles
+                              within its onMessage so that it can call into the ProjRepository session
+                              bean's methods that required ProjectAdmin, CreateFolder and DeleteFolder roles.
+              Expected Result: Message sent to QueueD has to come through to QueueB with not set to Failed.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testHandle">
+        <desc>Test Objective: Test the security behavior of handles. To obtain secured bean from a handle that the handle be logged in and not logged in.
+              Expected Result: Tests has to pass sections when logged in and throw the exception when not logged in.       
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testStatefulHandle">
+        <desc>Test Objective: Test the security behavior of stateful handles. To obtain secured bean
+                              from a handle requires that there be a security context to obtain the ejb.
+              Expected Result: Tests has to pass sections when logged in and throw the exception when not logged in.       
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testStress">
+        <desc>Test Objective: Stress test declarative security. Using number of threads.
+              Expected Result: Test has to finish without any exception.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+      <test name="testStressNoJaasCache">
+        <desc>Test Objective: Stress test declarative security with the JAAS cache disabled. Using testStress test.
+              Expected Result: Test has to finish without any exception.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.app.ejb-jar.xml</TSFI>
+      </test>
+    </testCase>
+    <testCase name="org.jboss.test.security.test.LoginContextUnitTestCase">
+      <desc>A JUnit TestCase for the JAAS LoginContext usage.</desc>
+      <test name="testLogin1">
+        <desc>Test objective:  Test whether Subject object put to login context is the same after login() method call.
+              Expected result: Subject obtained by getSubject() call has to point to the same Subject object used while creatig login object. 
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>  
+      <test name="testLogin2">
+        <desc>Test objective:  Creating login context with the same name as login context in previous test (testLogin1).
+                               We want to show that subject returned atfer login is the one used in login lcontext creation
+                               and not the one from testLogin1 test.
+              Expected result: Subject obtained by getSubject() call has to point to the same Subject object used while creatig login object. 
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>  
+    </testCase>
+    <testCase name="org.jboss.test.security.test.NamespacePermissionsUnitTestCase">
+      <desc>A JUnit TestCase for the NamespacePermissions and NamespacePermission classes.</desc>
+      <test name="testImplied">
+        <desc>Test objective: Test the NamespacePermissionCollection implies method for various permissions that should be implied by the setup PermissionCollection.
+                              For more detaile see test source code.
+              Expected result: All PermissionCollection calls to implies has to return value of true.                
+        </desc>
+        <TSFI>tsfi.ann.Permissions</TSFI>
+      </test>  
+      <test name="testNotImplied">
+        <desc>Test objective:  Test the NamespacePermissionCollection implies method for various permission that should NOT be implied by the setup PermissionCollection.
+                               For more detaile see test source code.
+              Expected result: All PermissionCollection calls to implies has to return value of false.                
+        </desc>
+        <TSFI>tsfi.ann.Permissions</TSFI>
+      </test>  
+    </testCase>
+    <testCase name="org.jboss.test.security.test.PermissionNameUnitTestCase">
+      <desc>A JUnit TestCase for the PermissionNames class.</desc>
+      <test name="testOrdering">
+        <desc>Test objective:  Test of correct behaviour of class PermissionNames.
+                               Aspects tested: conversion to string, correct entries creation, comparision.
+              Expected result: Test assertions has to be fultilled. 
+        </desc>
+        <TSFI>tsfi.ann.Permissions</TSFI>
+      </test>  
+    </testCase>
+    <testCase name="org.jboss.test.security.test.WebConstraintsUnitTestCase">
+      <desc>Tests of the web declarative security model</desc>
+      <test name="testUnchecked">
+        <desc>Test objective:  Test URLs that should require no authentication for any method.
+              Expected result: All attepmts to call URL has to pass witout any exception. 
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>  
+      <test name="testGetAccess">
+        <desc>Test objective:  Test GETs against URLs that only allows the GET method and required the GetRole role.
+              Expected result: All calls to GET URLs using GET method should pass OK those using POST method has to generate HTTP_FORBIDDEN.
+                               When chanaged to user without permissions all GET/POST URLs has to generate HTTP_FORBIDDEN.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testExcludedAccess">
+        <desc>Test objective:  Test that the excluded paths are not accessible by anyone.
+              Expected results: All calls to excluded URLs has to generate HTTP_FORBIDDEN.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testPostAccess">
+        <desc>Test objective:  Test POSTs against URLs that only allows the POST method and required the PostRole role.
+              Expected result: All calls to POST URLs using POST method should pass OK those using GET method has to generate HTTP_FORBIDDEN.
+                               When chanaged to user without permissions all GET/POST URLs has to generate HTTP_FORBIDDEN.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+    </testCase>
+    <testCase name="org.jboss.test.security.test.WebResourcePermissionUnitTestCase">
+      <desc>Tests of the JAAC WebResourcePermission</desc>
+      <test name="testCtor2">
+        <desc>Test objective: This is a unit test of WebResourcePermission to make sure it works as expected.
+              Expected result: All combination of calls and setups has to fultill all assertions.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testImpliesPermission">
+        <desc>Test objective:  Test whether WebResourcePermission implies correctly all given usage combinations. 
+              Expected result: All combination of calls and setups has to fultill all assertions.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+     </test>
+      <test name="testNotImpliesPermission">
+        <desc>Test objective:  Test whether WebResourcePermission doesn't implies correctly all given usage combinations. 
+              Expected result: All combination of calls and setups has to fultill all assertions.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+     </test>
+      <test name="testBestMatch">
+        <desc>Test objective:  Test whether WebResourcePermission implies correctly all given permission combinations. 
+              Expected result: All calls and setups has to fultill all assertions.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+     </test>
+      <test name="testQualifiedMatch">
+        <desc>Test objective:  Test whether WebResourcePermission /restricted/not GET is NOT implied. 
+              Expected result: Assertion has to be fultilled.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+     </test>
+      <test name="testQualifiedPatterns">
+        <desc>Test objective:  Test whether all given patterns are prohibited.
+              Expected result: Test should pass without generating an Exception.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+     </test>
+    </testCase>
+    <testCase name="org.jboss.test.security.test.WebUserDataPermissionUnitTestCase">
+      <desc>Tests of the JAAC WebUserDataPermission</desc>
+      <test name="testCtor2">
+        <desc>Test objective: This is a unit test of WebUserDataPermission to make sure it works as expected.
+              Expected result: All combination of calls and setups has to fultill all assertions.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testImpliesPermission">
+        <desc>Test objective:  Test whether WebUserDataPermission implies correctly all given usage combinations. 
+              Expected result: All combination of calls and setups has to fultill all assertions.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testNotImpliesPermission">
+        <desc>Test objective:  Test whether WebUserDataPermission doesn't implies correctly all given usage combinations. 
+              Expected result: All combination of calls and setups has to fultill all assertions.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testMatch">
+        <desc>Test objective:  Test whether WebUserDataPermission implies correctly all given permission combinations. 
+              Expected result: All calls and setups has to fultill all assertions.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testQualifiedPatterns">
+        <desc>Test objective:  Test whether all given patterns are prohibited.
+              Expected result: Test should pass without generating an Exception.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+    </testCase> 
+    <testCase name="org.jboss.test.security.test.auth.AppCallbackHandlerUnitTestCase">
+      <desc>Unit Tests the AppCallbackHandler</desc>
+      <test name="testUserNamePassword">
+        <desc>Test objective:  Make sure that AppCallbackHandlers puts the same username and password values pass to callback data as passed to it. 
+              Expected result: Data have to match.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testMapCallback">
+        <desc>Test objective:  Make sure that AppCallbackHandlers puts the same data to Map structure as passed to it. 
+              Expected result: Data have to match.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testByteArrayCallback">
+        <desc>Test objective:  Make sure that AppCallbackHandlers puts the same data to ByteArray structure as passed to it. 
+              Expected result: Data have to match.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+    </testCase>
+<!-- 
+    <testCase name="org.jboss.test.jca.test.SecurityContextUnitTestCase">
+      <desc>Tests of how security context interact with the JCA layer.</desc>
+      <test name="testCallerIdentityPropagation">
+        <desc></desc>
+        <TSFI>tsfi.jdbc</TSFI>
+      </test>
+      <test name="testConfiguredIdentityPropagation">
+        <desc></desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testRunAsIdentityPropagationFS">
+        <desc></desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testRunAsIdentityPropagationDS">
+        <desc></desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+    </testCase>
+-->    
+    <testCase name="org.jboss.test.jmx.test.RMIAdaptorAuthorizationUnitTestCase">
+      <desc>Authorization of the RMI Adaptor
+ *  Especially tests the usage of the authorization delegate
+ *  called as org.jboss.jmx.connector.invoker.ExternalizableRolesAuthorization</desc>
+      <test name="testConfigurableRolesAuthorizedAccess">
+        <desc>Test objective:  Test that a valid jmx-console domain user can invoke operations through the jmx/invoker/AuthenticatedRMIAdaptor
+              Expected result: Calls have to pass without any exception.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.cfg.conf.props.jmx-console-users.properties</TSFI>
+        <TSFI>tsfi.cfg.conf.props.jmx-console-roles.properties</TSFI>
+        <TSFI>tsfi.cfg.deploy.jmx-invoker-service.xml</TSFI>
+      </test>
+      <test name="testUnAuthorizedAccess">
+        <desc>Test objective:  Test unauthorized access.
+              Expected result: Call should generate exception which is caught by the test code.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.cfg.deploy.jmx-invoker-service.xml</TSFI>
+      </test>
+    </testCase>
+    <testCase name="org.jboss.test.jmx.test.RMIAdaptorUnitTestCase">
+      <desc>Tests over the RMIAdaptor</desc>
+      <test name="testMBeanInfoMarshalling">
+        <desc>Test objective:  Test that we can iterate and retrieve MBeanInfo for all registered MBeans
+              Expected result: Test should pass without any exception thrown.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.cfg.deploy.jmx-invoker-service.xml</TSFI>
+      </test>
+    </testCase>
+    <testCase name="org.jboss.test.web.test.ssl.SSLUnitTestCase">
+      <desc>Tests of ssl and CLIENT-CERT auth. No basic auth.</desc>
+      <test name="testHttps">
+        <desc>Test objective:  Test that access of the transport constrained
+              Expected result: Call should pass without any exception thrown. 
+        </desc>
+        <TSFI>tsfi.port.web.https</TSFI>
+     </test>
+      <test name="testHttpsSecurityDomain">
+        <desc>Test objective:  Test whether https can pass through unrestricted secure servlet using client cert auth.
+              Expected result: Test has to pass without any exception.
+        </desc>
+        <TSFI>tsfi.port.web.https</TSFI>
+        <TSFI>tsfi.cfg.conf.login-config.xml</TSFI>
+     </test>
+    </testCase>
+    
+    <testCase name="org.jboss.test.security.test.ClientLoginModuleEJBUnitTestCase">
+      <desc></desc>
+      <test name="testClientLoginModule">
+        <desc>Test objective:  Call BeanA using jduke/theduke
+                               +-- call BeanB switching idenity using ClientLoginModule
+                               +---- call BeanC switching idenity using ClientLoginModule
+                               validing the expected caller principal with different ejb method permissions
+              Expected resutl: Assertion to correctenss of return value has to be fulfilled.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.cfg.conf.login-config.xml</TSFI>
+     </test>
+    </testCase>
+    <testCase name="org.jboss.test.security.test.ClientLoginModuleUnitTestCase">
+      <desc>ClientLoginModuleUnitTestCase/SecurityAssociation interaction tests</desc>
+      <test name="testSingleThreaded">
+        <desc>Test objective:  Tests whether server gets correct current principal in single thread.
+              Expected result: Assertion of returned principal has to be fulfilled.    
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+     </test>
+      <test name="testSingleThreadedRestoreIdentity">
+        <desc>Test objective:  Test whether identity of caller is returned back to original status aftert logout in single thread.
+              Expected result: All assertions has to be fulfilled.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+     </test>
+      <test name="testSingleThreadedRestoreStack">
+        <desc>Test objective:  Test whether whole stack of identities are returned back to state before login in single thread.
+              Expected result: All assertions has to be fulfilled.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.cfg.conf.login-config.xml</TSFI>
+     </test>
+      <test name="testMultiThreaded">
+        <desc>Test objective:  Test mutithreaded login using two threads.
+              Expected result: Test has to pass without any exception.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+     </test>
+      <test name="testMultiThreadedRestoreIdentity">
+        <desc>Test objective:  Test whether identity of caller is returned back to original status aftert logout in multiple threads.
+              Expected result: All assertions has to be fulfilled.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.cfg.conf.login-config.xml</TSFI>
+     </test>
+    </testCase>
+    <testCase name="org.jboss.test.security.test.CustomPrincipalPropagationUnitTestCase">
+      <desc>Test propagation of Custom Principal</desc>
+      <test name="testCustomPrincipalTransmission">
+        <desc>Test objective:  Custom Principal from outside the Application Server VM
+              Expected result: Prinipal returned from validateCallerPrincipal of remote bean has to be of the same type.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testCustomPrincipalTransmissionInVM">
+        <desc>Test objective:  A web-app has a welcome jsp (called as index.jsp). Inside this jsp, there is a call made out to an ejb.
+              Expected result: Custom principal has to propagated accross calls and assertion at the and has to pass.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+    </testCase>
+    <!-- 
+    <testCase name="org.jboss.test.security.test.CustomSecurityManagerTestCase">
+      <desc>JBAS-2703 : Create a AuthenticationManager/AuthorizationManager 
+ *  plugin testcase
+ *  
+ *  This testcase overrides test methods from EJBSpecUnitTestCase (that
+ *  should not be tested) with noop implementation.
+ *  
+ *  Also tests the interaction of the web layer with the EJB layer, with
+ *  a custom security manager plugin installed.</desc>
+      <test name="testWebLayer">
+        <desc>Tests the access of a BASIC secured servlet that internally 
+    * accesses a secured EJB</desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+    </testCase>
+    -->
+    <testCase name="org.jboss.test.security.test.DynamicLoginConfigServiceUnitTestCase">
+      <desc>Unit tests for the Dynamic Login Config Service</desc>
+      <test name="testAbsoluteLoginConfigURL">
+        <desc>Test objective:  DynamicLoginConfig service fails absolute login-config.xml url.
+              Expected result: Series of asserions has to be fulfiled.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testAuthConf">
+        <desc>Test objective:  Do not allow Null AuthConfig or login-config.xml
+              Expected result: Both calls has to generate exception since they are not allowed.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.security.test.EJBPermissionUnitTestCase">
+      <desc>Tests of the JAAC EJB*Permissions</desc>
+      <test name="testCtor1">
+        <desc>Test objective:  Tests of the EJBMethodPermission(String name, String actions).
+              Expected result: All assertions of call has to pass.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testCtor2">
+        <desc>Test objective:  Tests of EJBMethodPermission(String ejbName, String methodInterface, Method method).
+              Expected result: All assertions of call has to pass.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testCtor3">
+        <desc>Test objective:  Tests of EJBMethodPermission(String ejbName, String methodName, String methodInterface, String[] methodParams).
+              Expected result: All assertions of call has to pass.
+        </desc>      
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+    </testCase>
+    <testCase name="org.jboss.test.security.test.JaasSecurityDomainUnitTestCase">
+      <desc>Tests of the JaasSecurityDomain service.</desc>
+      <test name="testTmpFilePassword">
+        <desc>Test objective:  Tests whether pasword returned from service "jboss.security:service=JaasSecurityDomain,domain=testTmpFilePassword" is valid.
+              Expected result: Password has to be as expexted.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testFilePassword">
+        <desc>Test objective:  Tests whether pasword returned from service "jboss.security:service=JaasSecurityDomain,domain=testFilePassword" is valid.
+              Expected result: Password has to be as expexted.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testEncodeDecode">
+        <desc>Test objective:  Test if encode/decode produces correct results.
+              Expected result: Both methods has to produce expected results. 
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testEncodeDecode64">
+        <desc>Test objective:  Test if encode64/decode64 produces correct results.
+              Expected result: Both methods has to produce expected results. 
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.security.test.LoginModulesUnitTestCase">
+      <desc>Tests of the LoginModule classes.</desc>
+      <test name="testClientLogin">
+        <desc>Test objectve:  Test correct functioning of client login module with username password handler.
+              Expected resut: Assertions has to be fulfilled.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testUsernamePassword">
+        <desc>Test objectve:  Test username passwornd and roles associacions.
+              Expected resut: Assertions has to be fulfilled.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.cfg.conf.props.messaging-roles.properties</TSFI>
+        <TSFI>tsfi.cfg.conf.props.messaging-users.properties</TSFI>
+      </test>
+      <test name="testUsernamePasswordHash">
+        <desc>Test objectve:  Test username passwornd and roles associacions using hashed paswords.
+              Expected resut: Assertions has to be fulfilled.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testUsernamePasswordHashWithDigestCallback">
+        <desc>Test objectve:  Test username passwornd and roles associacions using hashed paswords with digest callback.
+              Expected resut: Assertions has to be fulfilled.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testUsersRoles">
+        <desc>Test objectve:  Test series usernam/passwornd couples whether they have associated proper roles and not associated certain ones.
+              Expected resut: Assertions has to be fulfilled.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+	    <TSFI>tsfi.app.roles.properties</TSFI>
+	    <TSFI>tsfi.app.users.properties</TSFI>
+        <TSFI>tsfi.cfg.conf.props.messaging-roles.properties</TSFI>
+        <TSFI>tsfi.cfg.conf.props.messaging-users.properties</TSFI>
+      </test>
+      <test name="testUsersRolesHash">
+        <desc>Test objectve:  Test series usernam/passwornd couples whether they have associated proper roles and not associated certain ones using hashed passwords.
+              Expected resut: Assertions has to be fulfilled.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testAnonUsersRoles">
+        <desc>Test objective: Tests whether password handler with null user and password have proper anonymous principal associated.
+                              This pricipal has no roles attached except Roles.
+              Expected resut: Assertions has to be fulfilled.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testAnon">
+        <desc>Test objective: Tests whether password handler with null user and password have proper anonymous principal associated.
+                              This pricipal has no roles attached except Roles.
+              Expected resut: Assertions has to be fulfilled.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testNull">
+        <desc>Test objective:  Using "testNull" login context there should be no way to log with null user and password.
+              Expected result: User cannot log in with null/null username and password.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testIdentity">
+        <desc>Test objective:  Test whether login context "testIdentity" contains proper roles and users.
+              Expected result: All assertions of users and roles has to pass.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testJCACallerIdentity">
+        <desc>Test objective:  Test whether login context "testJCACallerIdentity" contains users jduke and jduke2 with expected private credencials. 
+              Expected result: All assertions of users has to pass.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testJaasSecurityDomainIdentityLoginModule">
+        <desc>Test objective:  Test JAAS security identity login module to access principal and his password credencial.
+              Expected result: Password and username has to to be equal to the ones expected. 
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testSimple">
+        <desc>Test objective:   Tests simple file login module.
+              Expected result: All assertions of users and roles has to pass.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testJdbc">
+        <desc>Test objective:   Tests DB login module.
+              Expected result: All assertions of users and roles has to pass.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+	    <TSFI>tsfi.db.roles</TSFI>
+	    <TSFI>tsfi.db.users</TSFI>
+      </test>
+      <test name="testControlFlags">
+        <desc>Test objective:  Test control flags of application on login module.
+              Expected result: All "testControlFlags" has to return SUFFICIENT status. 
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testCertLogin">
+        <desc>Test objective:  Tests whether cert login module works correctly.
+              Expected result: Subject has to contain principal with name "unit-tests" and proper X509 certificate.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testCertRoles">
+        <desc>Test objective:  Tests proper role assignment to principal named "unit-tests".  
+              Expected result: The principal has to have all expected roles. 
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.security.test.MissingMethodUnitTestCase">
+      <desc>Tests missing-method-permissions-excluded-mode</desc>
+      <test name="testMissingIsUnchecked">
+        <desc>Test objective:  Test that methods without a method-permission behave as unchecked.
+              Expected result: Test has to pass without any exception.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testMissingIsExcluded">
+        <desc>Test objective:  Test that methods without a method-permission behave as excluded.
+              Expected result: Call to bean.invokeEcho should pass and bean.callEcho should fail.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.security.test.RoleMappingModuleUnitTestCase">
+      <desc>JBAS-3323: Role Mapping Login Module that maps application role to declarative role</desc>
+      <test name="testRoleMappingModule">
+        <desc>Test objective:  Test the RoleMappingLoginModule with no option to replace the role.
+              Expected result: All assertions regardig roles have to pass.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testRoleMappingModuleWithReplace">
+        <desc>Test objective:  Test the RoleMappingLoginModule with an option to replace the role.
+              Expected result: All assertions regardig roles have to pass.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.security.test.SAInheritableThreadLocalUnitTestCase">
+      <desc>Test that the security context thread locals propagate to child threads</desc>
+      <test name="testSecurityContext">
+        <desc>Test objective:  Test the expected security context exists via the SecurityAssociation accessors.
+              Expected result: Subject and principal have to be as expected.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testInheritableThreadLocal">
+        <desc>Test objective:  Validate that a child thread sees its parent.
+              Expected result: Subject and principal have to be as expected.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.security.test.SAThreadLocalUnitTestCase">
+      <desc>Test that the security context thread locals do NOT propagate to child threads</desc>
+      <test name="testSecurityContext">
+        <desc>Test objective:  Test the order of PermissionNames.
+              Expected result: Subject and principal have to be as expected.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testThreadLocal">
+        <desc>Test objective:  Validate that a thread sees its subject and principal from SecurityAssociation.
+              Expected result: Subject and principal have to be as expected.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.security.test.SecurityDomainLoginModuleOptionUnitTestCase">
+      <desc>For changes made on JBAS-1477, the security domain name is added to every login
+            module option map by the ApplicationInfo object.  When TRACE logging is enable,
+            a login module will then display this option value for trouble shooting.  The
+            first part of test, displays how the security domain option is properly set
+            in a security domain that exists in Configuration.  The second test shows
+            how the "other" security domain is displayed when the original domain does not
+            exist in Configuration.</desc>
+      <test name="testSecurityDomainLoginModuleOption">
+        <desc>Test objective:  The security domain name is added to every login module option map by the ApplicationInfo object.  When TRACE logging is enable,
+                               a login module will then display this option value for trouble shooting.  The
+                               first part of test, displays how the security domain option is properly set
+                               in a security domain that exists in Configuration. The second test shows
+                               how the "other" security domain is displayed when the original domain does not
+                               exist in Configuration.
+              Expected result: Security domain option should be equal to SecurityConstants.DEFAULT_APPLICATION_POLICY. 
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.security.test.SecurityMgrStressTestCase">
+      <desc>Stress testing of the JaasSecurityManager</desc>
+      <test name="testMTAuthentication">
+        <desc>Test objective:  Test concurrent access to the isValid and doesUserHaveRole securitymgr methods.
+              Expected result: All threads have to finish without an exception.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.security.test.SecurityProxyUnitTestCase">
+      <desc>Tests of the EJB security proxy.</desc>
+      <test name="testMethodAccess">
+        <desc>Test objective: Test that the echo method is accessible by an Echo
+                              role. Since the noop() method of the StatelessSession
+                              bean was not assigned any permissions it should not be
+                              accessible by any user.
+              Expected result: Calls to bean methods should fail on all occurences.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.security.test.XMLLoginModulesUnitTestCase">
+      <desc>Tests of the LoginModule classes using the XMLLoginConfigImpl implementation of the JAAS login module configuration.</desc>
+      <test name="testGargantusRealm">
+        <desc>Test objective:  Test the correct functioning of XML login module.
+              Expected result: Principal, username, password and managedConnectionFactoryName have to be as expected by setup.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testPropertyReplacement">
+        <desc>Test objective:  Test whether property replacement works fine.
+              Expected result: Properties should have values as expected by setup.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testPBEIdentityLoginModule">
+        <desc>Test objective:  Test whether PBEIdentityLoginModule works fine. 
+              Expected result: All assertions have to be fulfilled.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testPBEIdentityLoginModuleTmpFilePassword">
+        <desc>Test objective:  Test whether the login module can use tmp password file.
+              Expected result: Returned username and password have to be as expected.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+      <test name="testXMLLoginModule">
+        <desc>Test objective:  Test whether XMLIdentityLoginModule works fine. 
+              Expected result: All assertions have to be fulfilled.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+      </test>
+    </testCase>  
+    <testCase name="org.jboss.test.web.test.WebIntegrationUnitTestCase">
+      <desc>Tests of servlet container integration into the JBoss server. This test
+ requires than a web container be integrated into the JBoss server. The tests
+ currently do NOT use the java.net.HttpURLConnection and associated http client
+ and  these do not return valid HTTP error codes so if a failure occurs it
+ is best to connect the webserver using a browser to look for additional error
+ info.
+
+ The secure access tests require a user named 'jduke' with a password of 'theduke'
+ with a role of 'AuthorizedUser' in the servlet container.</desc>
+      <test name="testClientLoginServlet">
+        <desc>Test objective:  Access the http://{host}/jbosstest/ClientLoginServlet
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testUserInRoleServlet">
+        <desc>Test objective:  Access the http://{host}/jbosstest/restricted/UserInRoleServlet to test isUserInRole.
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+        <TSFI>tsfi.cfg.conf.login-config.xml</TSFI>
+      </test>
+      <test name="testSecureServlet">
+        <desc>Test objective: Access the http://{host}/jbosstest/restricted/SecureServlet
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+        <TSFI>tsfi.cfg.conf.login-config.xml</TSFI>
+      </test>
+      <test name="testSecureServlet2">
+        <desc>Test objective: Access the http://{host}/jbosstest/restricted2/SecureServlet.
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+        <TSFI>tsfi.cfg.conf.login-config.xml</TSFI>
+      </test>
+      <test name="testSubjectServlet">
+        <desc>Test objective:  Access the http://{host}/jbosstest/restricted/SubjectServlet.
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+        <TSFI>tsfi.cfg.conf.login-config.xml</TSFI>
+      </test>
+      <test name="testSecureServletAndUnsecureAccess">
+        <desc>Test objecive:  Access the http://{host}/jbosstest/restricted/SecureServlet
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testSecureServletWithBadPass">
+        <desc>Access the http://{host}/jbosstest/restricted/SecureServlet
+              Expected result: URL cannot be accessible.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+        <TSFI>tsfi.cfg.conf.login-config.xml</TSFI>
+      </test>
+      <test name="testSecureServletWithNoLogin">
+        <desc>Test objective:  Access the http://{host}/jbosstest/restricted/SecureServlet
+              Expected result: URL cannot be accessible.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testNotJbosstest">
+        <desc>Test objective:  Access the http://{host}/jbosstest-not/unrestricted/SecureServlet
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testSecuredEntityFacadeServlet">
+        <desc>Test objective:  Access the http://{host}/jbosstest/restricted/SecuredEntityFacadeServlet
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testSecureEJBAccess">
+        <desc>Test objective:  Access the http://{host}/jbosstest/restricted/SecureEJBAccess
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+
+      </test>
+      <test name="testIncludeEJB">
+        <desc>Test objective:  Access the http://{host}/jbosstest/restricted/include_ejb.jsp
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+        <TSFI>tsfi.cfg.conf.login-config.xml</TSFI>
+      </test>
+      <test name="testUnsecureEJBAccess">
+        <desc>Test objective:  Access the http://{host}/jbosstest/UnsecureEJBAccess with method=echo
+                               to test that an unsecured servlet cannot access a secured EJB method
+                               that requires a valid permission.
+              Expected result: URL cannot be accessible. This should fail.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testUnsecureAnonEJBAccess">
+        <desc>Test objective:  Access the http://{host}/jbosstest/UnsecureEJBAccess with method=unchecked
+                               to test that an unsecured servlet can access a secured EJB method that
+                               only requires an authenticated user. This requires unauthenticated
+                               identity support by the web security domain.
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testUnsecureRunAsServlet">
+        <desc>Test objective:  Access the baseURLNoAuth+"jbosstest/UnsecureEJBAccess?method=echo"
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testUnsecureRunAsServletWithPrincipalName">
+        <desc>Test objective:  Access the http://{host}/jbosstest/UnsecureRunAsServletWithPrincipalName
+                               to test that an unsecured servlet can access a secured EJB method by using
+                               a run-as role. This should also have a custom run-as principal name.
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testUnsecureRunAsServletWithPrincipalNameAndRoles">
+        <desc>Test objective:  Access the http://{host}/jbosstest/UnsecureRunAsServletWithPrincipalNameAndRoles
+                               to test that an unsecured servlet can access a secured EJB method by using
+                               a run-as role. This should also have a custom run-as principal name and
+                               additional roles.
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testNotJbosstest2">
+        <desc>Test objective:  Deploy a second ear that include a notjbosstest-web.war to test ears
+                               with the same war names conflicting.
+                               Access the http://{host}/jbosstest-not2/unrestricted/SecureServlet
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testUnauthorizedAccess">
+        <desc>Test objective:  JBAS-3279: Authenticated user can bypass declarative role checks for servlets
+              Expected result: Users cannot bypass the role checks. 
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.web.security.CustomHeaderAuthTestCase">
+      <desc>JBAS-2283: Custom Header based authentication</desc>
+      <test name="testRegularFormAuth">
+        <desc>Test objective:  Ensure that in the absence of headers, there is regular form based authentication.
+              Expected result: Test should pass without any exception.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+    </testCase>     
+    <testCase name="org.jboss.test.web.test.ssl.ClientCertJaspiWebUnitTestCase">
+    	<desc>Tests the CLIENT-CERT JASPI integration.
+    	</desc>
+    	<test name="ClientCertJaspiWebUnitTestCase">
+    		<TSFI>tsfi.keystore.usercerts</TSFI>
+    		<TSFI>tsfi.app.jboss-beans.xml</TSFI>
+    	</test>
+    </testCase>
+    <testCase name="org.jboss.test.pooled.test.BeanStressTestCase">
+    	<desc>Stress tests for pooled invoker</desc>
+    	<test name="testNewProxy">
+    	  <TSFI>tsfi.port.rmi.pooled</TSFI>
+    	</test>
+    	<test name="testOldProxy">
+    	  <TSFI>tsfi.port.rmi.pooled</TSFI>
+    	</test>
+    </testCase>
+    <testCase name="org.jboss.test.web.test.FormAuthUnitTestCase">
+      <desc>Tests of form authentication</desc>
+      <test name="testFormAuth">
+        <desc>Test objective:  Test form authentication of a secured servlet.
+              Expected result: Access the resuorce with proper login. 
+                               Access the resource without attempting a login to validate that the
+                               session is valid and that any caching on the server is working as expected.
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+        <TSFI>tsfi.app.jboss-web.xml</TSFI>
+        <TSFI>tsfi.app.web.xml</TSFI>
+        <TSFI>tsfi.app.jboss.xml</TSFI>
+        <TSFI>tsfi.cfg.juddi.jboss-web.xml</TSFI>
+        <TSFI>tsfi.cfg.juddi.web.xml</TSFI>
+      </test>
+      <test name="testFormAuthException">
+        <desc>Test objective:  Test that a bad login is redirected to the errors.jsp and that the
+                               session j_exception is not null.
+              Expected result: All assertions on returned content have to pass.                
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+        <TSFI>tsfi.app.jboss-web.xml</TSFI>
+        <TSFI>tsfi.app.web.xml</TSFI>
+        <TSFI>tsfi.app.jboss.xml</TSFI>
+        <TSFI>tsfi.cfg.juddi.jboss-web.xml</TSFI>
+        <TSFI>tsfi.cfg.juddi.web.xml</TSFI>
+      </test>
+      <test name="testFormAuthSubject">
+        <desc>Test objective:  Test form authentication of a secured servlet and validate that there is
+                               a SecurityAssociation setting Subject. 
+              Expected result: All assertions on returned content have to pass.                
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+        <TSFI>tsfi.app.jboss-web.xml</TSFI>
+        <TSFI>tsfi.app.web.xml</TSFI>
+        <TSFI>tsfi.app.jboss.xml</TSFI>
+        <TSFI>tsfi.cfg.juddi.jboss-web.xml</TSFI>
+        <TSFI>tsfi.cfg.juddi.web.xml</TSFI>
+      </test>
+      <test name="testPostDataFormAuth">
+        <desc>Test objective:  Test that a post from an unsecured form to a secured servlet does not
+                               loose its data during the redirct to the form login.
+              Expected result: All assertions on returned content have to pass.                
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+        <TSFI>tsfi.app.jboss-web.xml</TSFI>
+        <TSFI>tsfi.app.web.xml</TSFI>
+        <TSFI>tsfi.app.jboss.xml</TSFI>
+        <TSFI>tsfi.cfg.juddi.jboss-web.xml</TSFI>
+        <TSFI>tsfi.cfg.juddi.web.xml</TSFI>
+      </test>
+      <test name="testFlushOnSessionInvalidation">
+        <desc>Test objective:  Test that the war which use &lt;security-domain flushOnSessionInvalidation="true"&gt;
+                               in the jboss-web.xml does not have any jaas security domain cache entries
+                               after the web session has been invalidated.
+              Expected result: All assertions have to pass to ensure there are not leftovers.                
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+        <TSFI>tsfi.app.jboss-web.xml</TSFI>
+        <TSFI>tsfi.app.web.xml</TSFI>
+        <TSFI>tsfi.app.jboss.xml</TSFI>
+        <TSFI>tsfi.cfg.juddi.jboss-web.xml</TSFI>
+        <TSFI>tsfi.cfg.juddi.web.xml</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.web.test.SingleSignOnUnitTestCase">
+      <desc>Tests of web app single sign-on</desc>
+      <test name="testFormAuthSingleSignOn">
+        <desc>Test objective:  Test single sign-on across two web apps using form based auth.
+              Expected result: All assertions have to pass.                
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testNoAuthSingleSignOn">
+        <desc>Test objective:  Test single sign-on across two web apps using form based auth
+              Expected result: All assertions have to pass.                
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.web.test.UserInRoleUnitTestCase">
+      <desc>Tests of the servlet request isUserInRole call.</desc>
+      <test name="testRoleWithLink">
+        <desc>Test objective:  Access to baseURL+"userinrole/testRoleWithLink"
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testRoleWithoutLink">
+        <desc>Test objective:  Access to baseURL+"userinrole/testUnreferencedRole"
+              Expected result: URL has to be accessible (pass without exception).
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testConflictingUserInRole">
+        <desc>Test objective:  Test that two wars from different security domains with common principal
+                               names do not conflict in terms of isUserInRole results.
+     
+                               This is the non-jacc version where the programmatic security of isUserInRole
+                               will work off of the roles populated in the subject, irrespective of whether
+                               the roles are fully defined in the web.xml
+              Expected result: All assertions on returned content have to pass.                
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testConflictingUserInRoleJaccVersion">
+        <desc>Test objective:  Test that two wars from different security domains with common principal
+                               names do not conflict in terms of isUserInRole results.
+
+                               This is the jacc version where the programmatic security of isUserInRole
+                               will work only of the roles are fully defined in the web.xml
+              Expected result: All assertions on returned content have to pass.                
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.web.test.WebProgrammaticLoginTestCase">
+      <desc>JBAS-4077: Web Programmatic Login </desc>
+      <test name="testUnsuccessfulLogin">
+        <desc>Test objective:  Test unsuccessful login
+              Expected result: All assertions on access allowed/denied have to pass.                
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+      <test name="testSuccessfulLogin">
+        <desc>Test objective:  Test Successful programmatic login in a servlet
+              Expected result: All assertions on access allowed/denied have to pass.                
+        </desc>
+        <TSFI>tsfi.port.web.http</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.jmx.test.SecureRMIAdaptorUnitTestCase">
+      <desc>Tests for a secured deployment of the jmx invoker adaptor</desc>
+      <test name="testAuthenticatedAccess">
+        <desc>Test objective:  Test that a valid jmx-console domain user can invoke operations
+                               through the jmx/invoker/AuthenticatedRMIAdaptor.
+              Expected result: Test has to pass without exception which means access was granted.
+        </desc>
+        <TSFI>tsfi.port.rmi.jrmp</TSFI>
+        <TSFI>tsfi.cfg.conf.props.jmx-console-users.properties</TSFI>
+        <TSFI>tsfi.cfg.conf.props.jmx-console-roles.properties</TSFI>
+      </test>
+      <test name="testUnauthenticatedAccess">
+        <desc>Test objective:  Test that a valid jmx-console domain user can NOT invoke operations
+                               through the jmx/invoker/AuthenticatedRMIAdaptor
+              Expected result: Call to getAttribute should fail and exception has to be caught.
+        </desc>
+        <TSFI>tsfi.cfg.conf.props.jmx-console-users.properties</TSFI>
+        <TSFI>tsfi.cfg.conf.props.jmx-console-roles.properties</TSFI>
+      </test>
+      <test name="testAuthorizedAccess">
+        <desc>Test objective:  Test that a valid jmx-console domain user can invoke operations
+                               through the jmx/invoker/AuthenticatedRMIAdaptor.
+              Expected result: Test has to pass without exception which means authorization to call operations was granted.
+        </desc>
+        <TSFI>tsfi.cfg.conf.props.jmx-console-users.properties</TSFI>
+        <TSFI>tsfi.cfg.conf.props.jmx-console-roles.properties</TSFI>
+      </test>
+      <test name="testUnauthorizedAccess">
+        <desc>Test objective:  Test that a valid jmx-console domain user can NOT invoke operations
+                               through the jmx/invoker/AuthenticatedRMIAdaptor
+              Expected result: Call to getAttribute should fail and exception has to be caught.
+        </desc>
+        <TSFI>tsfi.cfg.conf.props.jmx-console-users.properties</TSFI>
+        <TSFI>tsfi.cfg.conf.props.jmx-console-roles.properties</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.security.rmi.test.RMIOverHttpsTestCase">
+    	<desc>Tests whether server can handle RMI over HTTPS calls to EJB3.</desc>
+    	<test name="testCallingEJB3OverHttps">
+    		<desc>Test objective:  To test calls to EJB3 over HTTPS transport protocol.
+	              Expected resutl: Test has to pass without any exception. Which means all calls return expected values.
+    		</desc>
+    		<TSFI>tsfi.port.rmi.https</TSFI>
+    		<TSFI>tsfi.cfg.hi.jboss-web.xml</TSFI>
+    		<TSFI>tsfi.cfg.hi.web.xml</TSFI>
+    	</test>
+    	<test name="testCallingEJB3OverHttp">
+    		<desc>Test objective:  To test calls to EJB3 over HTTP transport protocol.
+	              Expected resutl: Test has to pass without any exception. Which means all calls return expected values.
+    		</desc>
+    		<TSFI>tsfi.port.rmi.http</TSFI>
+    		<TSFI>tsfi.cfg.hi.jboss-web.xml</TSFI>
+    		<TSFI>tsfi.cfg.hi.web.xml</TSFI>
+    	</test>
+    </testCase>
+    <testCase name="org.jboss.test.naming.test.SecurityUnitTestCase">
+      <desc>Tests of secured access to the JNDI naming service. This testsuite will be run with the standard security resources available via the classpath.</desc>
+      <test name="testSecureHttpInvokerFailure">
+        <desc>Test objective:  Test access to the security http InitialContext without a login.
+              Expected result: "jmx" shoudn't have to be able to lookup.
+        </desc>
+        <TSFI>tsfi.port.rmi.http</TSFI>
+      </test>
+      <test name="testSecureHttpInvoker">
+        <desc>Test objective:  Test access to the JNDI naming service over a restricted http URL.
+              Expected result: Test has to pass without exception and after logout principal has to be equal to null. 
+        </desc>
+        <TSFI>tsfi.port.rmi.http</TSFI>
+      </test>
+      <test name="testHttpReadonlyLookup">
+        <desc>Test objective:  Test access of the readonly context without a login.
+              Expected result: Lookup to readonly data has to be possible, but attaching data into readonly subtree is denied.
+        </desc>
+        <TSFI>tsfi.port.rmi.http</TSFI>
+      </test>
+      <test name="testHttpReadonlyContextLookup">
+        <desc>Test objective:  Test access of the readonly context without a login.
+              Expected result: Readonly stuff has to be accessed, but not bindable. Context not under readonly should not be accessed.
+        </desc>
+        <TSFI>tsfi.port.rmi.http</TSFI>
+      </test>
+    </testCase>    
+    <testCase name="org.jboss.test.aop.test.SecurityUnitTestCase">
+      <desc></desc>
+      <test name="testAnnotated">
+        <desc>Test objective:  Test all annotated aspects.
+              Expected result: All AOP tests has to finish without exception.
+        </desc>
+        <TSFI>tsfi.ann.Permissions</TSFI>
+        <TSFI>tsfi.ann.Unchecked</TSFI>
+        <TSFI>tsfi.ann.Exclude</TSFI>
+      </test>
+	</testCase>
+    <testCase name="org.jboss.test.jbossts.ASCrashRecovery01.TestWithJPA">
+      <desc></desc>
+      <test name="testAction">
+        <desc>Test objective:  
+              Expected result: 
+        </desc>
+        <TSFI>tsfi.api.jta</TSFI>
+        <TSFI>tsfi.ann.TransactionAttribute</TSFI>
+        <TSFI>tsfi.ann.TransactionManagement</TSFI>
+		<TSFI>tsfi.cfg.conf.jbossts-properties.xml</TSFI>
+      </test>
+	</testCase>
+	<testCase name="org.jboss.test.tm.test.TxTimeoutAnnotUnitTestCase">
+		<desc>Tests for transaction timeout annotation EJB3 version of TxTimeoutUnitTestCase.</desc>
+		<test name="testOverriddenTimeoutExpires">
+			<desc>Tests if @TransactionTimeout expires system sends EJBTransactionRolledbackException and transaction is rolled back.</desc>
+			<TSFI>tsfi.ann.TransactionTimeout</TSFI>
+			<TSFI>tsfi.cfg.conf.jbossts-properties.xml</TSFI>
+		</test>
+		<test name="testOverriddenTimeoutDoesNotExpire">
+			<desc>Tests whether @TransactionTimeout expires greater that wait time of doesn't make transaction to roll back or stay in different status that STATUS_ACTIVE.</desc>
+			<TSFI>tsfi.ann.TransactionTimeout</TSFI>
+			<TSFI>tsfi.cfg.conf.jbossts-properties.xml</TSFI>
+		</test>
+	</testCase>
+	<testCase name="org.jboss.test.invokers.test.MultiInvokersUnitTestCase">
+	  <desc>Test use of multiple invokers per container</desc>
+	  <test name="testMultiInvokers">
+	    <desc></desc>
+	    <TSFI>tsfi.port.rmi.unifiedInvoker</TSFI>
+	  </test>
+	  <test name="testClientContainer">
+	    <desc></desc>
+	    <TSFI>tsfi.port.rmi.unifiedInvoker</TSFI>
+	  </test>
+	</testCase>
+	<testCase name="org.jboss.test.cluster.defaultcfg.test.HAInvokerUnitTestCase">
+	  <desc></desc>
+	  <test name="testJRMPHAProxyFailover">
+	    <desc></desc>
+	    <TSFI>tsfi.port.rmi.jrmpha</TSFI>
+	  </test>
+	</testCase>
+	<testCase name="org.jboss.test.ws.jaxws.ejb3Integration.injection.InjectionTestCase">
+	  <desc></desc>
+	  <test name="testEjb3Endpoint">
+	    <desc></desc>
+	    <TSFI>tsfi.ann.WebContext</TSFI>
+	    <TSFI>tsfi.api.jaxws</TSFI>
+	  </test>
+	  <test name="testPojoEndpoint">
+	    <desc></desc>
+	    <TSFI>tsfi.ann.WebContext</TSFI>
+	    <TSFI>tsfi.api.jaxws</TSFI>
+	  </test>
+	</testCase>
+	<testCase name="org.jboss.test.security.audit.test.SecurityAuditTestCase">
+	    <desc>This test case starts predefined configuration with audit logging enabled and asserts 
+              audit logfile for messages to see if successful audit.</desc>
+		<test name="testServerStartupAndShutdownAuditMessage">
+	 	    <desc>Tests if after successful startup and shutdown of server, audit log contains proper entries.</desc>
+    	    <TSFI>tsfi.cmd.start</TSFI>
+        	<TSFI>tsfi.cmd.stop</TSFI>
+    	    <TSFI>tsfi.cfg.conf.jboss-log4j.xml</TSFI>
+		</test>
+	</testCase>
+	<testCase name="org.jboss.test.security.test.authorization.secured.HttpRequestJmxAuthenticationUnitTestCase">
+		<desc></desc>
+		<test name="testGet">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.jmx-console.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.jmx-console.web.xml</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jmx-console-users.properties</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jmx-console-roles.properties</TSFI>
+		</test>
+		<test name="testPost">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.jmx-console.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.jmx-console.web.xml</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jmx-console-users.properties</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jmx-console-roles.properties</TSFI>
+		</test>
+		<test name="testHead">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.jmx-console.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.jmx-console.web.xml</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jmx-console-users.properties</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jmx-console-roles.properties</TSFI>
+		</test>
+		<test name="testOptions">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.jmx-console.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.jmx-console.web.xml</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jmx-console-users.properties</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jmx-console-roles.properties</TSFI>
+		</test>
+		<test name="testPut">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.jmx-console.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.jmx-console.web.xml</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jmx-console-users.properties</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jmx-console-roles.properties</TSFI>
+		</test>
+		<test name="testDelete">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.jmx-console.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.jmx-console.web.xml</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jmx-console-users.properties</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jmx-console-roles.properties</TSFI>
+		</test>
+		<test name="testTrace">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.jmx-console.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.jmx-console.web.xml</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jmx-console-users.properties</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jmx-console-roles.properties</TSFI>
+		</test>
+	</testCase>
+	<testCase name="org.jboss.test.security.test.authorization.secured.HttpRequestJBossWSAuthenticationUnitTestCase">
+		<desc></desc>
+		<test name="testGet">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.jbossws-management.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.jbossws-management.web.xml</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jbossws-users.properties</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jbossws-roles.properties</TSFI>
+		</test>
+		<test name="testPost">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.jbossws-management.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.jbossws-management.web.xml</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jbossws-users.properties</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jbossws-roles.properties</TSFI>
+		</test>
+		<test name="testHead">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.jbossws-management.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.jbossws-management.web.xml</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jbossws-users.properties</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jbossws-roles.properties</TSFI>
+		</test>
+		<test name="testOptions">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.jbossws-management.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.jbossws-management.web.xml</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jbossws-users.properties</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jbossws-roles.properties</TSFI>
+		</test>
+		<test name="testPut">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.jbossws-management.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.jbossws-management.web.xml</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jbossws-users.properties</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jbossws-roles.properties</TSFI>
+		</test>
+		<test name="testDelete">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.jbossws-management.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.jbossws-management.web.xml</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jbossws-users.properties</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jbossws-roles.properties</TSFI>
+		</test>
+		<test name="testTrace">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.jbossws-management.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.jbossws-management.web.xml</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jbossws-users.properties</TSFI>
+			<TSFI>tsfi.cfg.conf.props.jbossws-roles.properties</TSFI>
+		</test>
+	</testCase>
+	<testCase name="org.jboss.test.security.test.authorization.secured.HttpRequestStatusServletAuthenticationUnitTestCase">
+		<desc></desc>
+		<test name="testGet">
+			<desc></desc>
+			<TSFI>tsfi.app.jboss-web.xml</TSFI>
+			<TSFI>tsfi.app.web.xml</TSFI>
+		</test>
+		<test name="testPost">
+			<desc></desc>
+			<TSFI>tsfi.app.jboss-web.xml</TSFI>
+			<TSFI>tsfi.app.web.xml</TSFI>
+		</test>
+		<test name="testHead">
+			<desc></desc>
+			<TSFI>tsfi.app.jboss-web.xml</TSFI>
+			<TSFI>tsfi.app.web.xml</TSFI>
+		</test>
+		<test name="testOptions">
+			<desc></desc>
+			<TSFI>tsfi.app.jboss-web.xml</TSFI>
+			<TSFI>tsfi.app.web.xml</TSFI>
+		</test>
+		<test name="testPut">
+			<desc></desc>
+			<TSFI>tsfi.app.jboss-web.xml</TSFI>
+			<TSFI>tsfi.app.web.xml</TSFI>
+		</test>
+		<test name="testDelete">
+			<desc></desc>
+			<TSFI>tsfi.app.jboss-web.xml</TSFI>
+			<TSFI>tsfi.app.web.xml</TSFI>
+		</test>
+		<test name="testTrace">
+			<desc></desc>
+			<TSFI>tsfi.app.jboss-web.xml</TSFI>
+			<TSFI>tsfi.app.web.xml</TSFI>
+		</test>
+	</testCase>
+	<testCase name="org.jboss.test.security.test.authorization.secured.HttpRequestAdminConsoleAuthenticationUnitTestCase">
+		<desc></desc>
+		<test name="testGet">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.admin.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.admin.web.xml</TSFI>
+		</test>
+		<test name="testPost">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.admin.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.admin.web.xml</TSFI>
+		</test>
+		<test name="testHead">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.admin.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.admin.web.xml</TSFI>
+		</test>
+		<test name="testOptions">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.admin.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.admin.web.xml</TSFI>
+		</test>
+		<test name="testPut">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.admin.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.admin.web.xml</TSFI>
+		</test>
+		<test name="testDelete">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.admin.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.admin.web.xml</TSFI>
+		</test>
+		<test name="testTrace">
+			<desc></desc>
+			<TSFI>tsfi.cfg.deploy.admin.jboss-web.xml</TSFI>
+			<TSFI>tsfi.cfg.deploy.admin.web.xml</TSFI>
+		</test>
+	</testCase>
+	<testCase name="org.jboss.test.ann.clustered.test.Ejb3ClusteredAnnTestCase">
+		<desc></desc>
+		<test name="testAppSetup">
+			<desc></desc>
+			<TSFI>tsfi.ann.Clustered</TSFI>
+			<TSFI>tsfi.cfg.deploy.cluster.hapartition-jboss-beans.xml</TSFI>
+		</test>
+		<test name="testOneNodeFail">
+			<desc></desc>
+			<TSFI>tsfi.ann.Clustered</TSFI>
+			<TSFI>tsfi.cfg.deploy.cluster.hapartition-jboss-beans.xml</TSFI>
+		</test>
+	</testCase>
+	<testCase name="org.jboss.test.jbossmessaging.test.SecurityUnitTestCase">
+		<desc></desc>
+		<test name="testLoginTest">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testLoginNoCred">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testLoginValidCred">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testLoginInvalidPwd">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testLoginInvalidCred">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testClientIDPreconfTest">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testClientIDSetTest">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testClientIDSetAfterInvoke">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzValidTopicPublisher">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzValidTopicPublisherTransaction">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzInvalidTopicPublisher">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzInvalidTopicPublisherTransaction">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzValidTopicSubscriber">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzValidTopicSubscriberTransaction">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzInvalidTopicSubscriber">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzInvalidTopicSubscriberTransaction">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzValidQueueSender">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzValidQueueSenderTransaction">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzInvalidQueueSender">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzInvalidQueueSenderTransaction">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzValidQueueReceiver">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzValidQueueReceiverTransaction">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzInvalidQueueReceiver">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzInvalidQueueReceiverTransaction">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzValidQueueBrowser">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testAuzInvalidQueueBrowser">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testValidPreconfDurSub">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testInvalidPreconfDurSub">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testValidDynDurSub">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testInvalidDynDurSub">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+	</testCase>
+	<testCase name="org.jboss.test.jbossmessaging.test.Jms11UnitTest">
+		<desc></desc>
+		<test name="testQueueMessageOrder">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testTemporaryQueueDelete">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testTemporaryTopicDelete">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testInvalidDestinationQueueBrowse">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testErrorsTopicSubscribe">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testCreateQueue">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testMessageListener">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testApplicationServerStuff">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testTopics">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testTopicNoLocal">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testTopicNoLocalBounce">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testTopicSelectorChange">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testTopicSelectorNullOrEmpty">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testSendReceiveOutdated">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testSendReceiveExpired">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+		<test name="testSendListenOutdated">
+			<desc></desc>
+			<TSFI>tsfi.cfg.jms.jboss-beans.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.destinations-service.xml</TSFI>
+			<TSFI>tsfi.cfg.jms.messaging-service.xml</TSFI>
+		</test>
+	</testCase>
+	<testCase name="org.jboss.test.webservice.endpoint.EndpointTestCase">
+		<desc>Test JAXWS Endpoint deployment</desc>
+		<test name="testWSDLAccess">
+			<desc></desc>
+			<TSFI>tsfi.api.jaxws</TSFI>
+		</test>
+		<test name="testClientAccess">
+			<desc></desc>
+			<TSFI>tsfi.api.jaxws</TSFI>
+		</test>
+		<test name="testServletAccess">
+			<desc></desc>
+			<TSFI>tsfi.api.jaxws</TSFI>
+		</test>
+	</testCase>
+	<testCase name="org.jboss.test.webservice.admindevel.ExampleTestCase">
+		<desc>A test for the examples from the JBoss Admin Devel book</desc>
+		<test name="testHelloString">
+			<desc></desc>
+			<TSFI>tsfi.api.ws</TSFI>
+		</test>
+		<test name="testHelloBean">
+			<desc></desc>
+			<TSFI>tsfi.api.ws</TSFI>
+		</test>
+		<test name="testHelloArray">
+			<desc></desc>
+			<TSFI>tsfi.api.ws</TSFI>
+		</test>
+	</testCase>
+  </testSuite>
+
+  <!--  
+    |============================================================================================
+    | jbossws-cxf specific testsuite to TOE Security Functionality Interface mapping.
+    | Note: this testsuite is used only when profile is using CXF webservices implementation.
+    |============================================================================================
+  -->
+  <testSuite name="JBWS-CXF">
+  	<testCase name="org.jboss.test.ws.jaxws.cxf.descriptor.DescriptorJSETestCase">
+  		<desc>Test a CXF endpoint with provided jbossws-cxf.xml</desc>
+  		<test name="testLegalAccess">
+  			<desc></desc>
+  			<TSFI>tsfi.app.jboss-cxf.xml</TSFI>
+  		</test>
+  	</testCase>
+  	<testCase name="org.jboss.test.ws.jaxws.samples.wsse.SignEncryptTestCase">
+  		<desc>WS-Security sign and encrypt test case</desc>
+  		<test name="test">
+  			<desc></desc>
+  			<TSFI>tsfi.api.jaxws</TSFI>
+  			<TSFI>tsfi.api.ws</TSFI>
+  		</test>
+  	</testCase>
+  	<testCase name="org.jboss.test.ws.jaxws.samples.wsse.SignTestCase">
+  		<desc>WS-Security sign test case</desc>
+  		<test name="test">
+  			<desc></desc>
+  			<TSFI>tsfi.api.jaxws</TSFI>
+  			<TSFI>tsfi.api.ws</TSFI>
+  		</test>
+  	</testCase>
+  	<testCase name="org.jboss.test.ws.jaxws.samples.wsse.UsernameTestCase">
+  		<desc>WS-Security username test case</desc>
+  		<test name="test">
+  			<desc></desc>
+  			<TSFI>tsfi.api.jaxws</TSFI>
+  			<TSFI>tsfi.api.ws</TSFI>
+  		</test>
+  		<test name="testWrongPassword">
+  			<desc></desc>
+  			<TSFI>tsfi.api.jaxws</TSFI>
+  		</test>
+  	</testCase>
+  	<testCase name="org.jboss.test.ws.jaxws.complex.ComplexTestCase">
+  		<desc>A complex JAX-WS test</desc>
+  		<test name="testRegistration">
+  			<desc></desc>
+  			<TSFI>tsfi.api.jaxws</TSFI>
+  			<TSFI>tsfi.api.ws</TSFI>
+  		</test>
+  		<test name="testInvoiceRegistration">
+  			<desc></desc>
+  			<TSFI>tsfi.api.jaxws</TSFI>
+  			<TSFI>tsfi.api.ws</TSFI>
+  		</test>
+  		<test name="testOtherPackage">
+  			<desc></desc>
+  			<TSFI>tsfi.api.jaxws</TSFI>
+  			<TSFI>tsfi.api.ws</TSFI>
+  		</test>
+  		<test name="testBulkRegistration">
+  			<desc></desc>
+  			<TSFI>tsfi.api.jaxws</TSFI>
+  			<TSFI>tsfi.api.ws</TSFI>
+  		</test>
+  	</testCase>
+  </testSuite>
+</cc:testCaseMapping>

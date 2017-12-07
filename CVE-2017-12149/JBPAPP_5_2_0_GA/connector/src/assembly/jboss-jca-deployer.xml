@@ -1,0 +1,18 @@
+<assembly>
+  <id>jboss-jca-deployer</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/resource/deployers/**</include>
+        <include>org/jboss/resource/deployment/**</include>
+        <include>org/jboss/resource/metadata/repository/**</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

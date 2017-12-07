@@ -1,0 +1,190 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  
+  <parent>
+    <groupId>org.jboss.jbossas</groupId>
+    <artifactId>jboss-as-parent</artifactId>
+    <version>6.0.0-SNAPSHOT</version>
+  </parent>
+  
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.jboss.jbossas</groupId>
+  <artifactId>jboss-as-hornetq-int</artifactId>
+  <packaging>jar</packaging>
+  <name>JBoss Application Server HornetQ Integration</name>
+  <url>http://www.jboss.org/jbossas</url>
+  <description>JBoss Application Server (messaging module)</description>
+  
+  <build>
+    <finalName>${artifactId}</finalName>
+    <resources>
+      <resource>
+        <directory>src/resources</directory>
+      </resource>
+    </resources>
+    <plugins>
+       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <excludes>
+             <exclude>org/jboss/as/integration/hornetq/jopr/**</exclude>
+             <exclude>**/rhq-plugin.xml</exclude>
+             <exclude>**/hornetq-deployers-beans.xml</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>create-output</id>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <phase>package</phase>
+             <configuration>
+              <tasks>
+
+                <mkdir dir="target/resources"/>
+                <copy todir="target/resources" filtering="yes">
+                  <fileset dir="src/resources">
+                    <include name="**"/>
+                  </fileset>
+                </copy>
+             </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <dependencies>
+    <!-- Compile (global dependencies) -->
+    <dependency>
+      <groupId>org.jboss.mx</groupId>
+      <artifactId>jboss-j2se</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.jbossas</groupId>
+      <artifactId>jboss-as-system-jmx</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.metadata</groupId>
+      <artifactId>jboss-metadata-common</artifactId>
+      <exclusions>
+         <exclusion>
+            <groupId>org.jboss.javaee</groupId>
+            <artifactId>jboss-ejb-api</artifactId>
+         </exclusion>
+         <exclusion>
+            <groupId>org.jboss.javaee</groupId>
+            <artifactId>jboss-transaction-api</artifactId>
+         </exclusion>
+         <exclusion>
+            <groupId>org.jboss.javaee</groupId>
+            <artifactId>jboss-jms-api</artifactId>
+         </exclusion>
+       </exclusions>
+
+    </dependency>
+
+     <dependency>
+       <groupId>org.jboss.integration</groupId>
+       <artifactId>jboss-transaction-spi</artifactId>
+     </dependency>
+    <dependency>
+      <groupId>org.jboss.metadata</groupId>
+      <artifactId>jboss-metadata-client</artifactId>
+      <exclusions>
+         <exclusion>
+            <groupId>org.jboss.javaee</groupId>
+            <artifactId>jboss-ejb-api</artifactId>
+         </exclusion>
+         <exclusion>
+            <groupId>org.jboss.javaee</groupId>
+            <artifactId>jboss-transaction-api</artifactId>
+         </exclusion>
+         <exclusion>
+            <groupId>org.jboss.javaee</groupId>
+            <artifactId>jboss-jms-api</artifactId>
+         </exclusion>
+       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.metadata</groupId>
+      <artifactId>jboss-metadata-ejb</artifactId>
+      <exclusions>
+         <exclusion>
+            <groupId>org.jboss.javaee</groupId>
+            <artifactId>jboss-ejb-api</artifactId>
+         </exclusion>
+         <exclusion>
+            <groupId>org.jboss.javaee</groupId>
+            <artifactId>jboss-transaction-api</artifactId>
+         </exclusion>
+         <exclusion>
+            <groupId>org.jboss.javaee</groupId>
+            <artifactId>jboss-jms-api</artifactId>
+         </exclusion>
+       </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.jbossas</groupId>
+      <artifactId>jboss-as-ejb3</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hornetq</groupId>
+      <artifactId>hornetq-resources</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.hornetq</groupId>
+      <artifactId>hornetq-core</artifactId>
+    </dependency>
+    <dependency>
+       <groupId>org.hornetq</groupId>
+      <artifactId>hornetq-jms</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>apache-xerces</groupId>
+      <artifactId>xml-apis</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.spec.javax.jms</groupId>
+      <artifactId>jboss-jms-api_1.1_spec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.security</groupId>
+      <artifactId>jboss-security-spi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.security</groupId>
+      <artifactId>jbosssx-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.rhq</groupId>
+      <artifactId>rhq-core-domain</artifactId>
+       <scope>compile</scope>
+     </dependency>
+     <dependency>
+      <groupId>org.rhq</groupId>
+      <artifactId>rhq-core-plugin-api</artifactId>
+      <scope>compile</scope>
+     </dependency>
+      <dependency>
+         <groupId>org.rhq</groupId>
+         <artifactId>rhq-jmx-plugin</artifactId>
+         <scope>provided</scope>
+      </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  
+</project>

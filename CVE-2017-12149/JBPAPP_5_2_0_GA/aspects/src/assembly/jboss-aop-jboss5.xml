@@ -1,0 +1,16 @@
+<assembly>
+  <id>jboss-aop-jboss5</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/aop/asintegration/jboss5/**</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

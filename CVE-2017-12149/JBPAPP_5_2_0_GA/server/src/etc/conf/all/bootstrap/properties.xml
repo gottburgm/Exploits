@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+   <classloader><inject bean="propertyeditors-classloader:0.0.0"/></classloader>
+
+   <classloader name="propertyeditors-classloader" xmlns="urn:jboss:classloader:1.0" export-all="NON_EMPTY" import-all="true">
+      <root>${jboss.lib.url}jboss-system.jar</root>
+   </classloader>
+
+   <bean name="PropertyEditorManager" class="org.jboss.system.property.PropertyEditorManagerService">
+      <property name="editors">
+         <map keyClass="java.lang.Class" valueClass="java.lang.Class">
+            <entry>
+               <key>java.util.Properties</key>
+               <value>org.jboss.util.propertyeditor.PropertiesEditor</value>
+            </entry>
+         </map>
+      </property>
+   </bean>
+</deployment>

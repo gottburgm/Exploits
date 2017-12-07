@@ -1,0 +1,965 @@
+<project name="tests-web-jars">
+<!-- web test -->
+   <target name="_jars-web">
+      <mkdir dir="${build.lib}"/>
+
+      <!-- The mcaware.war -->
+      <war warfile="${build.lib}/mcaware.war"
+         webxml="${build.resources}/web/mcaware/web.xml">
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/MCAwareServlet.class"/>
+         </classes>
+      </war>
+
+      <!-- The altdd.war/altddweb.ear -->
+      <war warfile="${build.lib}/altdd.war"
+         webxml="${build.resources}/web/altdd/web.xml">
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/RequestInfoServlet.class"/>
+         </classes>
+      </war>
+      <ear earfile="${build.lib}/altdd-web.ear"
+         appxml="${build.resources}/web/altdd/application.xml">
+         <fileset dir="${build.lib}">
+            <include name="altdd.war"/>
+         </fileset>
+         <zipfileset dir="${build.resources}/web/altdd" prefix="alt">
+            <include name="altdd-web.xml" />
+         </zipfileset>
+      </ear>
+      
+      <!-- build jbosstest-web-ejbs.jar -->
+      <jar destfile="${build.lib}/jbosstest-web-ejbs.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/web/interfaces/**"/>
+            <include name="org/jboss/test/web/ejb/**"/>
+            <include name="org/jboss/test/web/mock/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/web">
+            <include name="META-INF/ejb-jar.xml"/>
+            <include name="META-INF/jboss.xml"/>
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </fileset>
+      </jar>
+      
+      <!-- build jbosstest-web-util2.jar -->
+      <jar destfile="${build.lib}/jbosstest-web-util2.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/web/util2/**"/>
+         </fileset>
+      </jar>
+      <!-- build jbosstest-web-util.jar -->
+      <jar destfile="${build.lib}/jbosstest-web-util.jar">
+         <!-- Cascade reference to jbosstest-web-util2.jar -->
+         <manifest>
+            <attribute name="Class-Path" value="jbosstest-web-util2.jar"/>
+         </manifest>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/web/util/**"/>
+            <exclude name="org/jboss/test/web/util/ClassInClasses.class"/>
+            <exclude name="org/jboss/test/web/util/EJBManifestClass.class"/>
+         </fileset>
+      </jar>
+      <mkdir dir="${build.lib}/lib"/>
+      <jar destfile="${build.lib}/lib/util.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/util/Debug.class"/>
+            <include name="org/jboss/test/web/util/EJBManifestClass.class"/>
+         </fileset>
+      </jar>
+
+      <!-- build websubdir/relative.jar -->
+      <mkdir dir="${build.lib}/websubdir"/>
+      <jar destfile="${build.lib}/websubdir/relative.jar">
+         <fileset dir="${build.resources}/web/websubdir">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/web/ejb/StatelessSessionBean.class"/>
+            <include name="org/jboss/test/web/interfaces/StatelessSession*.class"/>
+         </fileset>
+      </jar>
+
+      <!-- build root-web.war -->
+      <war warfile="${build.lib}/root-web.war"
+         webxml="${build.resources}/web/WEB-INF/root-web.xml">
+         <fileset dir="${build.resources}/web/html/root">
+            <include name="**/*.html"/>
+         </fileset>
+      </war>
+
+      <!-- build notjbosstest-web.war -->
+      <mkdir dir="${build.lib}/wars"/>
+      <war warfile="${build.lib}/wars/notjbosstest-web.war"
+         webxml="${build.resources}/web/WEB-INF/notjbosstest-web.xml">
+         <webinf dir="${build.resources}/web/html/other/WEB-INF">
+            <include name="*"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/SecureServlet.class"/>
+         </classes>
+         <fileset dir="${build.resources}/web">
+            <include name="*.properties"/>
+         </fileset>
+         <fileset dir="${build.resources}/web/html/other">
+            <include name="**/*.html"/>
+         </fileset>
+      </war>
+
+      <jar destfile="${build.lib}/jbosstest-web-libservlet.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/lib/SimpleServlet.class"/>
+         </fileset>
+      </jar>
+
+      <jar destfile="${build.lib}/resources.jar">
+         <zipfileset dir="${build.resources}/web/html/jbosstest"
+            prefix="org/jboss/resources" includes="JBoss.properties"/>
+      </jar>
+
+      <!-- Build manifest-web.war -->
+      <manifest file="${build.resources}/manifest-web.mf">
+         <attribute name="Class-Path" value="jbosstest-web-util.jar"/>
+      </manifest>
+      <war warfile="${build.lib}/manifest-web.war"
+         manifest="${build.resources}/manifest-web.mf"
+         webxml="${build.resources}/web/WEB-INF/manifest-web.xml">
+         <fileset dir="${build.resources}/web/html/manifest">
+            <include name="**/*.jsp"/>
+         </fileset>
+      	<classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/ClasspathServlet2.class"/>
+            <include name="org/jboss/test/util/Debug.class"/>
+      	</classes>
+         <lib dir="${build.lib}">
+            <include name="jbosstest-web-libservlet.jar"/>
+            <include name="resources.jar"/>
+         </lib>
+      </war>
+      <ear earfile="${build.lib}/manifest-web.ear"
+         appxml="${build.resources}/web/META-INF/application-mf.xml">
+         <fileset dir="${build.lib}">
+            <include name="manifest-web.war"/>
+            <include name="jbosstest-web-util.jar"/>
+            <include name="jbosstest-web-util2.jar"/>
+         </fileset>
+      </ear>
+
+      <!-- build jbosstest-web.war -->
+      <war warfile="${build.lib}/jbosstest-web.war"
+         webxml="${build.resources}/web/WEB-INF/jbosstest-web.xml">
+         <webinf dir="${build.resources}/web/WEB-INF">
+            <include name="context.xml"/>
+         </webinf>
+         <webinf dir="${build.resources}/web/html/jbosstest/WEB-INF">
+            <include name="*"/>
+         </webinf>
+         <lib dir="${build.lib}">
+            <include name="jbosstest-web-libservlet.jar"/>
+            <include name="jbosstest-web-util.jar"/>
+            <include name="resources.jar"/>
+         </lib>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/**"/>
+            <exclude name="org/jboss/test/web/servlets/lib/**"/>
+            <include name="org/jboss/test/web/util/ClassInClasses.class"/>
+         </classes>
+         <fileset dir="${build.resources}/web/html/jbosstest">
+            <include name="**/*.jsp"/>
+            <include name="**/*.html"/>
+         </fileset>
+      </war>
+     
+     <!-- JBAS-850:Tomcat contextDestroyed not called on JBoss Shutdown -->
+      <war warfile="${build.lib}/jbosstest-ctx-destroy.war"
+         webxml="${build.resources}/web/WEB-INF/jbosstest-ctx-destroy-web.xml">
+         <classes dir="${build.classes}">
+           <include name="org/jboss/test/web/servlets/ContextDestroyed**"/>
+           <include name="org/jboss/test/web/servlets/TextFile**"/>
+         </classes>
+      </war>
+      
+     <!-- JBAS-2538:The war WebCtxLoader is not limiting WEB-INF/lib classpath contents to jars -->
+      <copy file="${build.lib}/lib/util.jar" tofile="${build.lib}/lib/util.jar.bak"/>
+      <war warfile="${build.lib}/jbosstest-webctx.war"
+        webxml="${build.resources}/web/WEB-INF/jbosstest-webctx-web.xml">
+         <classes dir="${build.classes}">
+           <include name="org/jboss/test/web/servlets/WebCtxLoaderTest**"/>
+         </classes>
+           <lib dir="${build.lib}/lib">
+           <include name="util.jar.bak"/> 
+         </lib>
+       </war>
+   
+      <!-- Create a war with a bad web.xml descriptor to test redeployment
+      of a failed war. The good-web.war is the same war with the web.xml
+      descriptor fixed. Both use a context-root of /redeploy
+      -->
+      <war warfile="${build.lib}/bad-web.war"
+         webxml="${build.resources}/web/WEB-INF/bad-web.xml">
+         <webinf dir="${build.resources}/web/html/bad/WEB-INF">
+            <include name="*"/>
+         </webinf>
+         <fileset dir="${build.resources}/web/html/bad">
+            <include name="**/*.html"/>
+         </fileset>
+      </war>
+      <war warfile="${build.lib}/good-web.war"
+         webxml="${build.resources}/web/WEB-INF/good-web.xml">
+         <webinf dir="${build.resources}/web/html/bad/WEB-INF">
+            <include name="*"/>
+         </webinf>
+         <fileset dir="${build.resources}/web/html/bad">
+            <include name="**/*.html"/>
+         </fileset>
+      </war>
+
+      <!-- build jbosstest-web.ear -->
+      <ear earfile="${build.lib}/jbosstest-web.ear"
+         appxml="${build.resources}/web/META-INF/application.xml">
+         <metainf dir="${build.resources}/web/META-INF">
+            <include name="jboss-app.xml"/>
+            <include name="jboss-structure.xml"/>
+         </metainf>
+         <fileset dir="${build.lib}">
+            <include name="jbosstest-web-ejbs.jar"/>
+            <include name="jbosstest-web.war"/>
+            <include name="wars/notjbosstest-web.war"/>
+            <include name="lib/util.jar"/>
+            <include name="websubdir/relative.jar"/>
+         </fileset>
+         <fileset dir="${build.lib}">
+            <include name="cts.jar"/>
+         </fileset>
+         <fileset dir="${build.resources}/web">
+            <include name="scripts/*"/>
+         </fileset>
+      </ear>
+
+      <!-- Create an ear with the same war as the jbosstest-web.ear to test
+      conflicts with unpackaging ear content
+      -->
+      <ear earfile="${build.lib}/jbosstest-web2.ear"
+         appxml="${build.resources}/web/META-INF/application2.xml">
+         <fileset dir="${build.lib}">
+            <include name="wars/notjbosstest-web.war"/>
+         </fileset>
+      </ear>
+
+      <ear earfile="${build.lib}/jbosstest-bad.ear"
+         appxml="${build.resources}/web/META-INF/application-bad.xml">
+         <fileset dir="${build.lib}">
+            <include name="bad-web.war"/>
+         </fileset>
+      </ear>
+      <ear earfile="${build.lib}/jbosstest-good.ear"
+         appxml="${build.resources}/web/META-INF/application-good.xml">
+         <fileset dir="${build.lib}">
+            <include name="good-web.war"/>
+         </fileset>
+      </ear>
+
+      <!-- war to test DIGEST auth
+      <war warfile="${build.lib}/digest-auth.war"
+        webxml="${build.resources}/web/WEB-INF/digest-auth-web.xml">
+        <webinf dir="${build.resources}/web/html/other/WEB-INF">
+          <include name="jboss-web.xml"/>
+        </webinf>
+        <fileset dir="${build.resources}/web/html/root">
+          <include name="**/*.html"/>
+        </fileset>
+      </war>
+  -->
+
+      <ear earfile="${build.lib}/root-web.ear"
+         appxml="${build.resources}/web/META-INF/application-root.xml">
+         <fileset dir="${build.lib}">
+            <include name="root-web.war"/>
+         </fileset>
+      </ear>
+
+      <!-- war to test FORM auth -->
+      <war destfile="${build.lib}/form-auth.war"
+         webxml="${build.resources}/web/form-auth/form-auth-web.xml">
+         <webinf dir="${build.resources}/web/form-auth">
+            <include name="context.xml"/>
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/SecureServlet.class"/>
+            <include name="org/jboss/test/web/servlets/SecuredPostServlet.class"/>
+            <include name="org/jboss/test/web/servlets/LogoutServlet.class"/>
+         </classes>
+         <classes dir="${build.resources}/web/form-auth">
+            <include name="form-auth-users.properties"/>
+            <include name="form-auth-roles.properties"/>
+            <include name="security-config.xml"/>
+         </classes>
+         <fileset dir="${build.resources}/web/form-auth">
+            <include name="**/*.html"/>
+            <include name="**/*.jsp"/>
+         </fileset>
+      </war>
+       <!-- Package the dependencies as a jar -->
+       <jar destfile="${build.lib}/form-auth-resources.jar">
+         <fileset dir="${build.resources}/web/form-auth">
+            <include name="form-auth-users.properties"/>
+            <include name="form-auth-roles.properties"/>
+            <include name="security-config.xml"/>
+         </fileset>
+       </jar>
+      <zip destfile="${build.lib}/form-auth.ear">
+         <zipfileset dir="${build.resources}/web/form-auth" prefix="META-INF">
+            <include name="application.xml"/>
+            <include name="jboss-app.xml"/>
+         </zipfileset>
+         <zipfileset dir="${build.lib}" includes="form-auth.war"/>
+         <zipfileset dir="${build.lib}" includes="form-auth-resources.jar" prefix="lib"/>
+         <zipfileset dir="${build.resources}/web/form-auth" includes="jboss-service.xml"/>
+      </zip>
+	   
+	   <!-- war to test JASPI FORM auth -->
+      <war destfile="${build.lib}/jaspi-form-auth.war"
+         webxml="${build.resources}/web/jaspi-form-auth/form-auth-web.xml">
+         <webinf dir="${build.resources}/web/jaspi-form-auth">
+            <include name="context.xml"/>
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/SecureServlet.class"/>
+            <include name="org/jboss/test/web/servlets/SecuredPostServlet.class"/>
+            <include name="org/jboss/test/web/servlets/LogoutServlet.class"/>
+         </classes>
+         <fileset dir="${build.resources}/web/jaspi-form-auth">
+            <include name="**/*.html"/>
+            <include name="**/*.jsp"/>
+         </fileset>
+      </war>
+      <zip destfile="${build.lib}/jaspi-form-auth.ear">
+         <zipfileset dir="${build.resources}/web/jaspi-form-auth" prefix="META-INF">
+            <include name="application.xml"/>
+            <include name="jboss-app.xml"/>
+         </zipfileset>
+         <zipfileset dir="${build.lib}" includes="jaspi-form-auth.war"/>
+      	 <zipfileset dir="${build.lib}" includes="form-auth-resources.jar" fullpath="lib/form-auth-resources.jar"/>
+      	 <zipfileset dir="${build.resources}/web/jaspi-form-auth" includes="jboss-service.xml"/>
+      </zip>
+
+      <!-- war to test CLIENT-CERT auth using JASPI-->
+      <war warfile="${build.lib}/clientcert-jaspi.war"
+         webxml="${build.resources}/web/WEB-INF/clientcert-auth-web.xml">
+         <webinf dir="${build.resources}/security/jaspi/jaspi-web-form.war/WEB-INF">
+            <include name="jboss-web.xml"/>
+            <include name="context.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/ssl/*"/>
+         </classes>
+         <fileset dir="${build.resources}/web/html/ssl">
+            <include name="**/*.html"/>
+         </fileset>
+      </war>
+
+      <!-- war to test SSL and CLIENT-CERT auth -->
+      <war warfile="${build.lib}/clientcert-auth.war"
+         webxml="${build.resources}/web/WEB-INF/clientcert-auth-web.xml">
+         <webinf dir="${build.resources}/web/html/ssl">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/ssl/*"/>
+         </classes>
+         <fileset dir="${build.resources}/web/html/ssl">
+            <include name="**/*.html"/>
+         </fileset>
+      </war>
+
+      <!-- Create an sso.ear to test single sign-on between web apps
+      -->
+      <war destfile="${build.lib}/sso-form-auth.war"
+         webxml="${build.resources}/web/sso/war/web-form-auth.xml">
+         <webinf dir="${build.resources}/web/sso/war">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/EJBServlet.class"/>
+            <include name="org/jboss/test/web/servlets/LogoutServlet.class"/>
+            <include name="org/jboss/test/web/util/Util*"/>
+         </classes>
+         <fileset dir="${build.resources}/web/sso/war">
+            <include name="**/*.html"/>
+            <include name="**/*.jsp"/>
+         </fileset>
+      </war>
+      <war destfile="${build.lib}/sso-form-auth-clustered.war"
+         webxml="${build.resources}/web/sso/war/web-form-auth-clustered.xml">
+         <webinf dir="${build.resources}/web/sso/war">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/EJBServlet.class"/>
+            <include name="org/jboss/test/web/servlets/LogoutServlet.class"/>
+            <include name="org/jboss/test/web/util/Util*"/>
+         </classes>
+         <fileset dir="${build.resources}/web/sso/war">
+            <include name="**/*.html"/>
+            <include name="**/*.jsp"/>
+         </fileset>
+      </war>
+      <war destfile="${build.lib}/sso-expire.war"
+         webxml="${build.resources}/web/sso/war/web-sso-expire.xml">
+         <webinf dir="${build.resources}/web/sso/war">
+           <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+           <include name="org/jboss/test/web/servlets/LogoutServlet.class"/>
+           <include name="org/jboss/test/web/util/Util*"/>
+            <include name="org/jboss/test/cluster/web/CacheHelper*"/>
+         </classes>
+         <fileset dir="${build.resources}/web/sso/war">
+           <include name="**/*.html"/>
+           <include name="**/*.jsp"/>
+         </fileset>
+      </war>
+      <war destfile="${build.lib}/sso-with-no-auth.war"
+         webxml="${build.resources}/web/sso/war/web-form-auth.xml">
+<!-- Exclude jboss-web.xml so the war will not have an authenticator          
+         <webinf dir="${build.resources}/web/sso/war">
+            <include name="jboss-web.xml"/>
+         </webinf>
+-->         
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/EJBServlet.class"/>
+            <include name="org/jboss/test/web/servlets/LogoutServlet.class"/>
+            <include name="org/jboss/test/web/util/Util*"/>
+         </classes>
+         <fileset dir="${build.resources}/web/sso/war">
+            <include name="**/*.html"/>
+            <include name="**/*.jsp"/>
+         </fileset>
+      </war>
+      <ear earfile="${build.lib}/web-sso.ear"
+      	   appxml="${build.resources}/web/sso/application.xml">
+         <zipfileset dir="${build.resources}/web">
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </zipfileset>
+         <zipfileset dir="${build.lib}" includes="sso-form-auth.war"
+            fullpath="sso-form-auth1.war"/>
+         <zipfileset dir="${build.lib}" includes="sso-form-auth.war"
+            fullpath="sso-form-auth2.war"/>
+         <zipfileset dir="${build.lib}" includes="sso-with-no-auth.war"
+            fullpath="sso-with-no-auth.war"/>
+         <zipfileset dir="${build.lib}" includes="jbosstest-web-ejbs.jar"/>
+      </ear>
+      <ear earfile="${build.lib}/web-sso-clustered.ear"
+   	       appxml="${build.resources}/web/sso/clustered-application.xml">
+         <zipfileset dir="${build.resources}/web">
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </zipfileset>
+         <zipfileset dir="${build.lib}" includes="sso-form-auth-clustered.war"
+            fullpath="sso-form-auth1.war"/>
+         <zipfileset dir="${build.lib}" includes="sso-form-auth-clustered.war"
+            fullpath="sso-form-auth2.war"/>
+         <zipfileset dir="${build.lib}" includes="sso-expire.war"/>
+        <zipfileset dir="${build.lib}" includes="sso-form-auth.war"
+           fullpath="sso-form-auth4.war"/>
+        <zipfileset dir="${build.lib}" includes="sso-form-auth.war"
+           fullpath="sso-form-auth5.war"/>
+         <zipfileset dir="${build.lib}" includes="sso-with-no-auth.war"
+            fullpath="sso-with-no-auth.war"/>
+         <zipfileset dir="${build.lib}" includes="jbosstest-web-ejbs.jar"/>
+      </ear>
+
+      <war destfile="${build.lib}/custom-errors.war"
+         webxml="${build.resources}/web/custom-errors/web.xml">
+         <fileset dir="${build.resources}/web/custom-errors">
+            <include name="*.jsp"/>
+         </fileset>
+      </war>
+      <war destfile="${build.lib}/error-producer.war"
+         webxml="${build.resources}/web/error-producer/web.xml">
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/ErrorGeneratorServlet.class"/>
+         </classes>
+      </war>
+
+      <war destfile="${build.lib}/userinrole.war"
+         webxml="${build.resources}/web/userinrole/web.xml">
+         <webinf dir="${build.resources}/web/userinrole">
+            <include name="jboss-web.xml" />
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/UserInRoleServlet.class"/>
+         </classes>
+      </war>
+     <war destfile="${build.lib}/userinrole1.war"
+        webxml="${build.resources}/web/userinrole/web1/web.xml">
+        <webinf dir="${build.resources}/web/userinrole/web1">
+           <include name="jboss-web.xml" />
+        </webinf>
+       <fileset dir="${build.resources}/web/userinrole/web1">
+         <include name="*.jsp" />
+       </fileset>
+     </war>
+     <war destfile="${build.lib}/userinrole2.war"
+        webxml="${build.resources}/web/userinrole/web2/web.xml">
+        <webinf dir="${build.resources}/web/userinrole/web2">
+           <include name="jboss-web.xml" />
+        </webinf>
+       <fileset dir="${build.resources}/web/userinrole/web2">
+         <include name="*.jsp" />
+       </fileset>
+     </war>
+      <zip destfile="${build.lib}/userinrole.ear">
+        <zipfileset dir="${build.resources}/web/userinrole" prefix="META-INF">
+          <include name="application.xml"/>
+          <include name="jboss-app.xml"/>
+        </zipfileset>
+        <zipfileset dir="${build.lib}">
+          <include name="userinrole.war"/>
+          <include name="userinrole1.war"/>
+          <include name="userinrole2.war"/>
+        </zipfileset>
+        <zipfileset dir="${build.resources}/web/userinrole">
+          <include name="security-service.xml"/>
+        </zipfileset>
+      </zip>
+
+      <!-- Tomcat Federation Tests-->
+       <jar destfile="${build.lib}/header-auth.jar">
+         <fileset dir="${build.classes}">
+           <include name="org/jboss/test/web/security/authenticators/**"/>
+         </fileset>
+       </jar>
+     
+      <!-- JASPI Stuff-->
+      <war warfile="${build.lib}/jbosssx-jaspi-web.war"
+         webxml="${build.resources}/web/jaspi/jaspi-test/jbosssx-jaspi-web.xml"> 
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/Debug*"/> 
+            <include name="org/jboss/test/web/security/JASPI*"/>
+         </classes> 
+         <webinf dir="${build.resources}/security">
+            <include name="login-config.xml"/> 
+         </webinf> 
+         <fileset dir="${build.resources}/web">
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </fileset>
+      </war>
+	  
+      <!--XACML Integration Tests -->
+      <war warfile="${build.lib}/xacml-requestattrib.war"
+         webxml="${build.resources}/web/xacml/requestAttrib/WEB-INF/web.xml"> 
+         <webinf dir="${build.resources}/web/xacml/requestAttrib/WEB-INF/">
+           <include name="jbossxacml-config.xml"/> 
+           <include name="jboss-web.xml"/>
+         </webinf> 
+         <zipfileset dir="${build.resources}/web" prefix="WEB-INF/classes">
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </zipfileset>
+         <zipfileset dir="${build.resources}/web/xacml/requestAttrib/WEB-INF" prefix="WEB-INF/classes">
+            <include name="jboss-xacml-policy.xml"/>
+         </zipfileset>
+         <fileset dir="${build.resources}/web/xacml/requestAttrib">
+            <include name="**/*.html"/>
+            <include name="**/*.jsp"/>
+         </fileset>
+      </war>	  
+      <war warfile="${build.lib}/xacml-subjectrole.war"
+         webxml="${build.resources}/web/xacml/requestAttrib/WEB-INF/web.xml"> 
+         <webinf dir="${build.resources}/web/xacml/requestAttrib/WEB-INF/">
+           <include name="jbossxacml-config.xml"/>
+           <include name="jboss-web.xml"/>
+         </webinf> 
+         <zipfileset dir="${build.resources}/web" prefix="WEB-INF/classes">
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </zipfileset>
+         <zipfileset dir="${build.resources}/web/xacml/subjectRole/WEB-INF" prefix="WEB-INF/classes">
+            <include name="jboss-xacml-policy.xml"/>
+         </zipfileset>
+         <fileset dir="${build.resources}/web/xacml/requestAttrib">
+            <include name="**/*.html"/>
+            <include name="**/*.jsp"/>
+         </fileset>
+      </war>
+
+      <!--JBAS-2283: Custom Header Based Auth -->
+      <war destfile="${build.lib}/header-form-auth.war"
+         webxml="${build.resources}/web/form-auth/form-auth-web.xml">
+         <webinf dir="${build.resources}/web/form-auth">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/SecureServlet.class"/>
+            <include
+               name="org/jboss/test/web/servlets/SecuredPostServlet.class"/>
+            <include name="org/jboss/test/web/servlets/LogoutServlet.class"/>
+         </classes>
+         <fileset dir="${build.resources}/web/form-auth">
+            <include name="**/*.html"/>
+            <include name="**/*.jsp"/>
+         </fileset>
+      </war>
+      <!--jar destfile="${build.lib}/security_config.jar">
+         <zipfileset dir="${build.resources}/web" fullpath="form-auth-users.properties" includes="users.properties"/>
+         <zipfileset dir="${build.resources}/web" fullpath="form-auth-roles.properties" includes="roles.properties"/>
+         <zipfileset dir="${build.resources}/web/form-auth">
+            <include name="security-config.xml"/>
+         </zipfileset>
+      </jar-->
+      <zip destfile="${build.lib}/header-form-auth.ear">
+         <zipfileset dir="${build.resources}/web/form-auth" prefix="META-INF">
+            <include name="jboss-app.xml"/>
+         </zipfileset>
+         <zipfileset dir="${build.resources}/web/federation/customheader" prefix="META-INF">
+            <include name="application.xml"/>
+         </zipfileset>
+         <zipfileset dir="${build.lib}" includes="header-form-auth.war"/>
+         <zipfileset dir="${build.lib}" includes="form-auth-resources.jar" fullpath="lib/form-auth-resources.jar"/>
+         <zipfileset dir="${build.resources}/web/form-auth" includes="jboss-service.xml"/>
+      </zip>
+
+      <!--JBAS-4804: Generic Header Based Auth -->
+      <war destfile="${build.lib}/generic-header-auth.war"
+         webxml="${build.resources}/web/federation/genericheader/header-auth-web.xml">
+         <webinf dir="${build.resources}/web/federation/genericheader">
+            <include name="jboss-web.xml"/>
+            <include name="context.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/SecureServlet.class"/>
+         </classes>
+         <fileset dir="${build.resources}/web/form-auth">
+            <include name="**/*.html"/>
+            <include name="**/*.jsp"/>
+         </fileset>
+      </war>
+      <zip destfile="${build.lib}/generic-header-auth.ear">
+         <zipfileset dir="${build.resources}/web/form-auth" prefix="META-INF">
+            <include name="jboss-app.xml"/>
+         </zipfileset>
+         <zipfileset dir="${build.resources}/web/federation/genericheader" prefix="META-INF">
+            <include name="application.xml"/>
+         </zipfileset>
+         <zipfileset dir="${build.lib}" includes="generic-header-auth.war"/>
+         <zipfileset dir="${build.lib}" includes="form-auth-resources.jar" fullpath="lib/form-auth-resources.jar"/>
+         <zipfileset dir="${build.resources}/web/form-auth"
+            includes="jboss-service.xml"/>
+      </zip>
+
+      <!-- Authenticator Externalization -->
+      <war warfile="${build.lib}/auth-ext-header-web.war"
+        webxml="${build.resources}/web/federation/authext/header-auth/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/web/federation/authext/header-auth/WEB-INF">
+            <include name="jboss-web.xml" />
+         </webinf> 
+         <fileset dir="${build.resources}/web/federation/authext/header-auth">
+            <include name="*.jsp"/>
+         </fileset>
+      </war>
+      <zip destfile="${build.lib}/auth-ext-header-web.ear">
+         <zipfileset dir="${build.resources}/web/form-auth" prefix="META-INF">
+            <include name="jboss-app.xml"/>
+         </zipfileset>
+         <zipfileset dir="${build.resources}/web/federation/authext" prefix="META-INF">
+            <include name="application.xml"/>
+         </zipfileset>
+         <zipfileset dir="${build.lib}" includes="auth-ext-header-web.war"/>
+         <zipfileset dir="${build.lib}" includes="form-auth-resources.jar" fullpath="lib/form-auth-resources.jar"/>
+         <zipfileset dir="${build.resources}/web/form-auth"
+            includes="jboss-service.xml"/>
+      </zip>
+
+      <!-- Simple war for testing web app enc setup using descriptors -->
+      <war destfile="${build.lib}/simple-xmlonly.war"
+         webxml="${build.resources}/web/simple-xmlonly/web.xml">
+         <webinf dir="${build.resources}/web/simple-xmlonly">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/ENCTester.class"/>
+            <include name="org/jboss/test/web/servlets/StandaloneENCServlet.class"/>
+         </classes>         
+      </war>
+      <!-- Simple war for testing web app enc setup using jsp annotations only -->
+      <war destfile="${build.lib}/simple-jsponly.war"
+         webxml="${build.resources}/web/jspinjection/WEB-INF/web.xml">
+        <fileset dir="${build.resources}/web/jspinjection">
+          <include name="**/*.jsp"/>
+        </fileset>
+      </war>
+    <ear earfile="${build.lib}/jbosstest-jsp-injection.ear"
+       appxml="${build.resources}/web/jspinjection/META-INF/application.xml">
+       <fileset dir="${build.lib}">
+          <include name="jbosstest-jsf-ejbs.jar"/>
+       	  <include name="simple-jsponly.war"/>
+       </fileset>
+    </ear>
+      <!-- Simple war for testing web app enc setup using annotations -->
+      <war destfile="${build.lib}/simple-annonly.war"
+         webxml="${build.resources}/web/simple-xmlonly/annotated-web.xml">
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/StandaloneENCAnnotationsServlet.class"/>
+            <include name="org/jboss/test/web/servlets/ENCTester.class"/>
+         </classes>         
+      </war>
+      <jar destfile="${build.lib}/simple-mock.beans">
+         <zipfileset dir="${build.resources}/web/simple-xmlonly"
+            fullpath="META-INF/jboss-beans.xml">
+            <include name="encbinding-jboss-beans.xml"/>            
+         </zipfileset>
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/web/mock/**"/>
+         </fileset>         
+      </jar>
+
+      <!-- JBAS-3162 Root Context Tests -->
+      <war destfile="${build.lib}/root-context.war"
+         webxml="${build.resources}/web/WEB-INF/root-web.xml">
+         <webinf dir="${build.resources}/web/root-context">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <fileset dir="${build.resources}/web/html/root">
+            <include name="index.html"/>
+         </fileset>
+      </war>
+     
+      <!-- JBAS-4077: Programmatic Web Login -->
+      <war destfile="${build.lib}/programmaticweblogin.war"
+         webxml="${build.resources}/web/programmatic/WEB-INF/jbosstest-web.xml">
+         <webinf dir="${build.resources}/web/programmatic/WEB-INF">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/Programm*Servlet.class"/>
+         </classes>
+        <fileset dir="${build.resources}/web/programmatic">
+            <include name="restricted/*.html"/>
+            <include name="*.html"/>
+         </fileset>
+      </war>
+      <zip destfile="${build.lib}/programmaticweblogin.ear">
+         <zipfileset dir="${build.resources}/web/programmatic" prefix="META-INF">
+            <include name="application.xml"/>
+         </zipfileset>
+         <zipfileset dir="${build.resources}/web">
+            <include name="users.properties"/>
+            <include name="roles.properties"/>
+         </zipfileset>
+         <zipfileset dir="${build.lib}" includes="programmaticweblogin.war"/>
+         <zipfileset dir="${build.lib}" includes="sso-form-auth.war"/>
+         <zipfileset dir="${build.lib}" includes="jbosstest-web-ejbs.jar"/>
+      </zip>
+      	
+      <!-- War java2ClassLoadingCompliance=true test  -->
+      <war destfile="${build.lib}/class-loading.war"
+         webxml="${build.resources}/web/class-loading/web.xml">
+         <webinf dir="${build.resources}/web/class-loading">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <lib dir="${apache.log4j.lib}">
+            <include name="log4j.jar" />
+         </lib>
+         <lib dir="${build.lib}">
+            <include name="jbosstest-web-util.jar"/>
+            <include name="resources.jar"/>
+         </lib>
+         
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/ClasspathServlet2.class"/>
+            <include name="org/jboss/test/util/Debug.class"/>
+         </classes>
+      </war>
+      	
+      <!-- WAR with servlet classes  -->
+      <war destfile="${build.lib}/servlet-classes.war"
+         webxml="${build.resources}/web/servlet-classes/web.xml">
+         <lib dir="${jboss.web.lib}">
+            <include name="servlet-api.jar" />
+         </lib>
+         <lib dir="${build.lib}">
+            <include name="jbosstest-web-util.jar"/>
+            <include name="resources.jar"/>
+         </lib>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/ClasspathServlet2.class"/>
+            <include name="org/jboss/test/util/Debug.class"/>
+         </classes>
+      </war>
+
+       <!-- Legacy classloader tests -->
+       <jar destfile="${build.lib}/jbossweb-legacy-classloader-fromdd.sar">
+         <fileset dir="${build.resources}/web/classloader/fromdd">
+           <include name="**"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+           <include name="org/jboss/test/web/classloader/*.class"/>
+           <include name="org/jboss/test/web/classloader/fromdd/**"/>
+         </fileset>
+       </jar>
+       <jar destfile="${build.lib}/jbossweb-legacy-classloader-fromod.sar">
+         <fileset dir="${build.resources}/web/classloader/fromod">
+           <include name="**"/>
+         </fileset>
+         <fileset dir="${build.classes}">
+           <include name="org/jboss/test/web/classloader/Test.class"/>
+           <include name="org/jboss/test/web/classloader/fromod/**"/>
+         </fileset>
+       </jar>
+      <war destfile="${build.lib}/jbossweb-legacy-classloader-CaseA.war"
+             webxml="${build.resources}/web/classloader/casea/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/web/classloader/casea/WEB-INF">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+           <include name="org/jboss/test/web/classloader/Test.class"/>
+           <include name="org/jboss/test/web/classloader/fromwar/**"/>
+           <include name="org/jboss/test/web/classloader/casea/**"/>
+         </classes>
+      </war>
+      <war destfile="${build.lib}/jbossweb-legacy-classloader-CaseB.war"
+             webxml="${build.resources}/web/classloader/caseb/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/web/classloader/caseb/WEB-INF">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+           <include name="org/jboss/test/web/classloader/Test.class"/>
+           <include name="org/jboss/test/web/classloader/fromwar/**"/>
+           <include name="org/jboss/test/web/classloader/caseb/**"/>
+         </classes>
+      </war>
+      <war destfile="${build.lib}/jbossweb-legacy-classloader-CaseC.war"
+             webxml="${build.resources}/web/classloader/casec/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/web/classloader/casec/WEB-INF">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+           <include name="org/jboss/test/web/classloader/Test.class"/>
+           <include name="org/jboss/test/web/classloader/fromwar/**"/>
+           <include name="org/jboss/test/web/classloader/casec/**"/>
+         </classes>
+      </war>
+      <war destfile="${build.lib}/jbossweb-legacy-classloader-CaseD.war"
+             webxml="${build.resources}/web/classloader/cased/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/web/classloader/cased/WEB-INF">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+           <include name="org/jboss/test/web/classloader/Test.class"/>
+           <include name="org/jboss/test/web/classloader/fromwar/**"/>
+           <include name="org/jboss/test/web/classloader/cased/**"/>
+         </classes>
+      </war>
+      <war destfile="${build.lib}/jbossweb-legacy-classloader-CaseE.war"
+             webxml="${build.resources}/web/classloader/casee/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/web/classloader/casee/WEB-INF">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+           <include name="org/jboss/test/web/classloader/Test.class"/>
+           <include name="org/jboss/test/web/classloader/fromwar/**"/>
+           <include name="org/jboss/test/web/classloader/casee/**"/>
+         </classes>
+      </war>
+      <war destfile="${build.lib}/jbossweb-legacy-classloader-CaseF.war"
+             webxml="${build.resources}/web/classloader/casef/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/web/classloader/casef/WEB-INF">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+           <include name="org/jboss/test/web/classloader/Test.class"/>
+           <include name="org/jboss/test/web/classloader/fromwar/**"/>
+           <include name="org/jboss/test/web/classloader/casef/**"/>
+         </classes>
+      </war>
+      <war destfile="${build.lib}/jbossweb-legacy-classloader-CaseG.war"
+             webxml="${build.resources}/web/classloader/caseg/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/web/classloader/caseg/WEB-INF">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+           <include name="org/jboss/test/web/classloader/Test.class"/>
+           <include name="org/jboss/test/web/classloader/fromwar/**"/>
+           <include name="org/jboss/test/web/classloader/caseg/**"/>
+         </classes>
+      </war>
+      <war destfile="${build.lib}/jbossweb-virtual-host.war"
+             webxml="${build.resources}/web/virtual/web.xml">
+         <webinf dir="${build.resources}/web/virtual/">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <fileset dir="${build.resources}/web/virtual">
+            <include name="**/*.html"/>
+         </fileset>
+      </war>
+
+      <!-- war to test ACL integration -->
+      <war destfile="${build.lib}/acl-integration.war"
+         webxml="${build.resources}/web/acl/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/web/acl/WEB-INF/">
+            <include name="jboss-acl-policy.xml"/>
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/ACLServlet.class"/>
+            <include name="org/jboss/test/security/resources/TestResource.class"/>
+         </classes>
+      </war>
+   	
+   	  <!-- war to test the valve for active request/response caching at engine level -->
+   	  <jar destfile="${build.lib}/valve-requestcaching.war">
+   	 	 <fileset dir="${build.resources}/web/valve-requestcaching">
+   		   <include name="**"/>
+   	 	 </fileset>
+   	  </jar>
+
+      <jar destfile="${build.lib}/jbas-8318-jsf-beans.jar">
+        <fileset dir="${build.classes}">
+          <include name="org/jboss/test/web/jbas8318/JSFManagedBeanInLibJarMetaInf.class"/>
+        </fileset>
+        <fileset dir="${build.resources}/web/jbas-8318/jar">
+           <include name="META-INF/*.xml"/>
+        </fileset>
+      </jar>
+
+      <war destfile="${build.lib}/jbas-8318.war"
+             webxml="${build.resources}/web/jbas-8318/WEB-INF/web.xml">
+
+         <webinf dir="${build.resources}/web/jbas-8318/WEB-INF">
+            <include name="*"/>
+         </webinf>
+
+         <classes dir="${build.classes}">
+           <include name="org/jboss/test/web/jbas8318/*.class"/>
+         </classes>
+
+         <fileset dir="${build.resources}/web/jbas-8318">
+            <include name="**/*.jsp"/>
+         </fileset>
+
+         <fileset dir="${build.resources}/web/jbas-8318">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+
+         <lib dir="${build.lib}">
+            <include name="jbas-8318-jsf-beans.jar"/>
+         </lib>
+
+      </war>
+
+      <!-- JBPAPP-6414 -->
+      <jar destfile="${build.lib}/jbpapp6414-xerces-2.9.0.war">
+         <fileset dir="${build.resources}/org/jboss/test/web/jbpapp6414/jbpapp6414-xerces-2.9.0.war">
+            <include name="**/*"/>
+         </fileset>
+      </jar>
+
+   </target>
+</project>

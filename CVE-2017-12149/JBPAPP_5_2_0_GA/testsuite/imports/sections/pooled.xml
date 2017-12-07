@@ -1,0 +1,37 @@
+<project name="tests-pooled-jars">
+   
+   <!-- pooled test -->
+   <target name="_jars-pooled">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build pooledtest.jar -->
+      <jar destfile="${build.lib}/pooledtest.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/pooled/interfaces/**"/>
+            <include name="org/jboss/test/pooled/test/**"/>
+            <include name="org/somepackage/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/pooled">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build pooled.jar -->
+      <jar destfile="${build.lib}/pooled.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/pooled/interfaces/**"/>
+            <include name="org/jboss/test/pooled/bean/**"/>
+            <include name="org/somepackage/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/pooled">
+            <include name="**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.resources}/test-configs/tomcat-ssl/conf">
+            <include name="localhost.keystore"/>
+         </fileset>
+      </jar>
+      
+   </target>
+</project>

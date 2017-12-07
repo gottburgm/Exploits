@@ -1,0 +1,7 @@
+<datasources>   
+   <tx-connection-factory>
+      <jndi-name>XAWithInterleaving</jndi-name>		
+      <xa-transaction/>
+      <interleaving/>
+   </tx-connection-factory>
+</datasources>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop>
+
+   <aspect class="org.jboss.aspects.dbc.DesignByContractAspect" scope="PER_JOINPOINT">
+      <attribute name="verbose">false</attribute>
+   </aspect>
+      
+   <bind pointcut="execution(* $instanceof{@org.jboss.aspects.dbc.Dbc}->*(..)) OR execution($instanceof{@org.jboss.aspects.dbc.Dbc}->new(..))">
+      <advice aspect="org.jboss.aspects.dbc.DesignByContractAspect" name="invoke"/>
+   </bind>  
+</aop>

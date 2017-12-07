@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Test creation .	-->
+
+<server>
+
+  <mbean code="org.jboss.test.jmx.standard.TestClass"
+	      name="test:name=TestStandardService1"
+	      interface="org.jboss.test.jmx.standard.TestInterface"/>
+
+</server>

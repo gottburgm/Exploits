@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions name="EndpointService" targetNamespace="http://org.jboss.ws/jaxws/endpoint" xmlns:tns="http://org.jboss.ws/jaxws/endpoint" 
+  xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <types/>
+  <message name="EndpointInterface_echo">
+    <part name="String_1" type="xsd:string"/>
+  </message>
+  <message name="EndpointInterface_echoResponse">
+    <part name="result" type="xsd:string"/>
+  </message>
+  <portType name="EndpointInterface">
+    <operation name="echo" parameterOrder="String_1">
+      <input message="tns:EndpointInterface_echo"/>
+      <output message="tns:EndpointInterface_echoResponse"/>
+    </operation>
+  </portType>
+  <binding name="EndpointInterfaceBinding" type="tns:EndpointInterface">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc"/>
+    <operation name="echo">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal" namespace="http://org.jboss.ws/jaxws/endpoint"/>
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://org.jboss.ws/jaxws/endpoint"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="EndpointService">
+    <port name="EndpointInterfacePort" binding="tns:EndpointInterfaceBinding">
+      <soap:address location="http://@jbosstest.host.name@:8080/jaxws-endpoint"/>
+    </port>
+  </service>
+</definitions>

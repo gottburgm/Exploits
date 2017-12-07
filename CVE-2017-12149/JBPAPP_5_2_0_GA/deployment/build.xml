@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+   <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
+   <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+   <!ENTITY targets SYSTEM "../tools/etc/buildmagic/targets.ent">
+]>
+
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--  JBoss, the OpenSource J2EE webOS                                      -->
+<!--                                                                        -->
+<!--  Distributable under LGPL license.                                     -->
+<!--  See terms of license at http://www.gnu.org.                           -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<!-- $Id: build.xml 71164 2008-03-21 21:44:39Z adrian@jboss.org $ -->
+
+<project default="main" name="JBoss/Deployment">
+
+  <!-- ================================================================== -->
+  <!-- Setup                                                              -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Include the common Buildmagic elements.
+     |
+     | This defines several different targets, properties and paths.
+     | It also sets up the basic extention tasks amoung other things.
+   -->
+
+  &buildmagic;
+
+  <!--
+     | Include the normal targets.
+   -->
+  &targets;
+  <property name="javac.target" value="1.5"/>
+  <property name="javac.source" value="1.5"/>
+
+  <!-- ================================================================== -->
+  <!-- Configuration                                                      -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Configure the build system.
+     |
+     | This target is invoked by the Buildmagic initialization logic and
+     | should contain module specific configuration elements.
+   -->
+
+  <target name="configure" unless="configure.disable">
+
+    <!-- =================== -->
+    <!-- Basic Configuration -->
+    <!-- =================== -->
+
+    <!-- Module name(s) & version -->
+    <property name="module.name" value="deployment"/>
+    <property name="module.Name" value="JBoss JSR-88 Deployment"/>
+
+    <!-- ========= -->
+    <!-- Libraries -->
+    <!-- ========= -->
+
+    &libraries;
+
+    <!-- The combined library classpath -->
+    <path id="library.classpath">
+      <path refid="dom4j.dom4j.classpath"/>
+      <path refid="jboss.jboss.deployers.classpath"/>
+      <path refid="jboss.jboss.man.classpath"/>
+      <path refid="jboss.microcontainer.classpath"/>
+      <path refid="jboss.jboss.vfs.classpath"/>
+    </path>
+
+    <!-- ======= -->
+    <!-- Modules -->
+    <!-- ======= -->
+
+    &modules;
+
+    <!-- The combined dependant module classpath -->
+    <path id="dependentmodule.classpath">
+      <path refid="jboss.common.core.classpath"/>
+      <path refid="jboss.common.logging.spi.classpath"/>
+      <path refid="jboss.common.logging.log4j.classpath"/>
+      <path refid="jboss.common.logging.jdk.classpath"/>
+      <path refid="jboss.jboss.javaee.classpath"/>
+      <path refid="jboss.j2se.classpath"/>
+      <path refid="jboss.system.classpath"/>
+      <path refid="jboss.systemjmx.classpath"/>
+      <path refid="jboss.remoting.classpath"/>
+    </path>
+
+    <!-- ===== -->
+    <!-- Tasks -->
+    <!-- ===== -->
+
+    <call target="_default:task-init"/>
+
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- Compile                                                            -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Compile everything.
+     |
+     | This target should depend on other compile-* targets for each
+     | different type of compile that needs to be performed, short of
+     | documentation compiles.
+   -->
+
+  <target name="compile"
+    description="Compile all source files."
+    depends="compile-resources, _default:compile-classes">
+  </target>
+
+   <target name="compile-resources" depends="init">
+     <mkdir dir="${build.etc}"/>
+     <copy todir="${build.etc}" filtering="yes">
+       <fileset dir="${source.etc}">
+         <include name="**/*"/>
+       </fileset>
+     </copy>
+   </target>
+
+  <!-- ================================================================== -->
+  <!-- Archives                                                           -->
+  <!-- ================================================================== -->
+
+  <!--
+     |  Build all jar files.
+    -->
+  <target name="module-jars">
+
+    <!-- Build jboss-deployment.jar -->
+    <jar jarfile="${build.lib}/jboss-deployment.jar" manifest="${source.etc}/default.mf">
+      <fileset dir="${build.classes}">
+        <include name="org/jboss/deployment/spi/**"/>
+      </fileset>
+    </jar>
+     <!-- Build jboss-jsr88.jar -->
+     <jar jarfile="${build.lib}/jboss-jsr88.jar">
+       <fileset dir="${build.classes}">
+         <include name="org/jboss/deployment/**"/>
+       </fileset>
+     </jar>
+
+  </target>
+
+</project>

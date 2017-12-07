@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- JaasSecurityDomain Microcontainer Beans -->
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <!-- Test a plaintext password -->
+   <bean name="JaasSecurityDomain:encode-decode2" class="org.jboss.security.plugins.JaasSecurityDomain">
+      <constructor>
+         <parameter>encode-decode2</parameter>
+      </constructor>
+      <property name="keyStorePass">unit-tests</property>
+      <property name="salt">abcdefgh</property>
+      <property name="iterationCount">13</property>
+      <!-- introduce a JMX annotation to export this bean as an MBean -->
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.security:service=JaasSecurityDomain,domain=encode-decode2",exposedInterface=org.jboss.security.plugins.JaasSecurityDomainMBean.class)</annotation>
+   </bean>
+
+   <!-- Test a password obtained from a class using a tmp file -->
+   <bean name="JaasSecurityDomain:testTmpFilePassword2" class="org.jboss.security.plugins.JaasSecurityDomain">
+      <constructor>
+         <parameter>testTmpFilePassword2</parameter>
+      </constructor>
+      <property name="keyStorePass">{CLASS}org.jboss.security.plugins.TmpFilePassword:${java.io.tmpdir}/tmp.password2</property>
+      <property name="salt">abcdefgh</property>
+      <property name="iterationCount">13</property>
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.security:service=JaasSecurityDomain,domain=testTmpFilePassword2",exposedInterface=org.jboss.security.plugins.JaasSecurityDomainMBean.class)</annotation>
+   </bean>
+
+   <!-- Test a password obtained from a class using an opaqued file -->
+   <bean name="JaasSecurityDomain:testFilePassword2" class="org.jboss.security.plugins.JaasSecurityDomain">
+      <constructor>
+         <parameter>testFilePassword2</parameter>
+      </constructor>
+      <property name="keyStorePass">{CLASS}org.jboss.security.plugins.FilePassword:${java.io.tmpdir}/tst.password</property>
+      <property name="salt">abcdefgh</property>
+      <property name="iterationCount">13</property>
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.security:service=JaasSecurityDomain,domain=testFilePassword2",exposedInterface=org.jboss.security.plugins.JaasSecurityDomainMBean.class)</annotation>
+   </bean>
+
+</deployment>

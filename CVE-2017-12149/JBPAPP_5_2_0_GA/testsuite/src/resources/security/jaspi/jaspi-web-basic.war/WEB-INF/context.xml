@@ -1,0 +1,5 @@
+<Context>
+<Valve
+className="org.jboss.web.tomcat.security.jaspi.TomcatJASPIAuthenticator"
+/>
+</Context>

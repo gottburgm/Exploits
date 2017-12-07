@@ -1,0 +1,35 @@
+<project name="tests-deadlock-jars">
+   <!-- deadlock test -->
+   <target name="_jars-deadlock">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build deadlocktest.jar -->
+      <jar destfile="${build.lib}/deadlocktest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/deadlock/interfaces/**"/>
+            <include name="org/jboss/test/deadlock/test/**"/>
+            <include name="org/somepackage/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/deadlock">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build deadlock.jar -->
+      <jar destfile="${build.lib}/deadlock.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/deadlock/interfaces/**"/>
+            <include name="org/jboss/test/deadlock/bean/**"/>
+            <include name="org/somepackage/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/deadlock">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+      
+   </target>
+   
+</project>

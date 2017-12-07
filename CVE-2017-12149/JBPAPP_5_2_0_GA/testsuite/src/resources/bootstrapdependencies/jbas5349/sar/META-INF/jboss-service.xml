@@ -1,0 +1,3 @@
+<mbean code="org.jboss.test.bootstrapdependencies.jbas5349.sar.BootstrapDependenciesTest"
+   name="org.jboss.test.bootstrapdependencies.jbas5349.sar.bootstrap.dependencies.test:service=BootstrapDependenciesTest">
+</mbean>

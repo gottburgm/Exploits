@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <mbean code="org.jboss.test.aop.jmx.IntrospectedMBean"
+      name="jboss.aop:name=JMXIntrospectedTester">
+      <attribute name="Value">hello</attribute>
+      <attribute name="Flag">false</attribute>
+   </mbean>
+</server>

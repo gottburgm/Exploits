@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 4.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <entity>
+         <ejb-name>test/txtimer/TimerEntity</ejb-name>
+         <jndi-name>test/txtimer/TimerEntity</jndi-name>
+         <local-jndi-name>test/txtimer/TimerEntityLocal</local-jndi-name>
+         <timer-persistence>false</timer-persistence>
+         <configuration-name>TestEntity Container Configuration</configuration-name>
+      </entity>
+
+      <session>
+         <ejb-name>test/txtimer/TimerFacade</ejb-name>
+         <jndi-name>test/txtimer/TimerFacade</jndi-name>
+      </session>
+      
+      <session>
+         <ejb-name>test/txtimer/TimerSession</ejb-name>
+         <jndi-name>test/txtimer/TimerSession</jndi-name>
+         <local-jndi-name>test/txtimer/TimerSessionLocal</local-jndi-name>
+      </session>
+      
+      <session>
+         <ejb-name>test/txtimer/TimerTest</ejb-name>
+         <jndi-name>test/txtimer/TimerTest</jndi-name>
+      </session>
+   </enterprise-beans>
+
+   <container-configurations>
+   <!-- Standard BPM Entity Bean, using commit-option A -->
+   <container-configuration extends="Standard BMP EntityBean">
+      <container-name>TestEntity Container Configuration</container-name>
+         <commit-option>B</commit-option>
+      </container-configuration>
+   </container-configurations>
+</jboss>

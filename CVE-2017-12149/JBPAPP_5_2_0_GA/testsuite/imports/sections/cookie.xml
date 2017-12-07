@@ -1,0 +1,15 @@
+<project name="tests-cookie-jars">
+   <!-- cookie test -->
+   <target name="_jars-cookie">
+      <mkdir dir="${build.lib}"/>            
+      <!-- build jbosstest-cookie.war -->            
+      <war warfile="${build.lib}/jbosstest-cookie.war"
+         webxml="${build.resources}/web/WEB-INF/cookie-web.xml">
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/web/servlets/CookieServlet.class"/>
+            <include name="org/jboss/test/web/servlets/CookieReadServlet.class"/>
+         </classes>
+      </war>
+   </target>
+</project>
+

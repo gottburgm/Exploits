@@ -1,0 +1,171 @@
+<?xml version='1.0'?> 
+
+<!-- $Id: login-config-jaspi.xml 58101 2006-11-04 02:55:49Z scott.stark@jboss.org $ -->
+
+<!-- The XML based JAAS login configuration read by the
+org.jboss.security.auth.login.XMLLoginConfig mbean. Add
+an application-policy element for each security domain.
+
+The outline of the application-policy is:
+<application-policy name="security-domain-name">
+  <authentication>
+    <login-module code="login.module1.class.name" flag="control_flag">
+      <module-option name = "option1-name">option1-value</module-option>
+      <module-option name = "option2-name">option2-value</module-option>
+      ...
+    </login-module>
+
+    <login-module code="login.module2.class.name" flag="control_flag">
+      ...
+    </login-module>
+    ...
+  </authentication>
+</application-policy>
+
+$Revision: 58101 $
+-->
+
+<policy xmlns="http://www.jboss.org/j2ee/schema/jbsx"
+	      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+          targetNamespace="urn:jboss:security-config:5.0"
+	      xsi:schemaLocation="urn:jboss:security-config:5.0"
+	      version="5.0">
+  <!-- Used by clients within the application server VM such as
+  mbeans and servlets that access EJBs.
+  -->
+  <application-policy name="client-login">
+    <authentication>
+      <login-module code="org.jboss.security.ClientLoginModule"
+        flag="required">
+      </login-module>
+    </authentication>
+  </application-policy>
+
+  <!-- Security domain for JBossMQ -->
+  <application-policy name="jbossmq">
+    <authentication>
+      <login-module code="org.jboss.security.auth.spi.DatabaseServerLoginModule"
+        flag="required">
+        <module-option name="unauthenticatedIdentity">guest</module-option>
+        <module-option name="dsJndiName">java:/DefaultDS</module-option>
+        <module-option name="principalsQuery">SELECT PASSWD FROM JMS_USERS WHERE USERID=?</module-option>
+        <module-option name="rolesQuery">SELECT ROLEID, 'Roles' FROM JMS_ROLES WHERE USERID=?</module-option>
+      </login-module>
+    </authentication>
+  </application-policy>
+
+  <!-- Security domains for testing new jca framework -->
+  <application-policy name="HsqlDbRealm">
+    <authentication>
+      <login-module code="org.jboss.resource.security.ConfiguredIdentityLoginModule"
+        flag="required">
+        <module-option name="principal">sa</module-option>
+        <module-option name="userName">sa</module-option>
+        <module-option name="password"></module-option>
+        <module-option name="managedConnectionFactoryName">jboss.jca:service=LocalTxCM,name=DefaultDS</module-option>
+      </login-module>
+    </authentication>
+  </application-policy>
+
+  <application-policy name="JmsXARealm">
+    <authentication>
+      <login-module code="org.jboss.resource.security.ConfiguredIdentityLoginModule"
+        flag="required">
+        <module-option name="principal">guest</module-option>
+        <module-option name="userName">guest</module-option>
+        <module-option name="password">guest</module-option>
+        <module-option name="managedConnectionFactoryName">jboss.jca:service=TxCM,name=JmsXA</module-option>
+      </login-module>
+    </authentication>
+  </application-policy>
+
+  <!-- A template configuration for the jmx-console web application. This
+    defaults to the UsersRolesLoginModule the same as other and should be
+    changed to a stronger authentication mechanism as required.
+  -->
+  <application-policy name="jmx-console">
+    <authentication>
+      <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+        flag="required">
+        <module-option name="usersProperties">props/jmx-console-users.properties</module-option>
+        <module-option name="rolesProperties">props/jmx-console-roles.properties</module-option>
+      </login-module>
+    </authentication>
+  </application-policy>
+
+  <!-- A template configuration for the web-console web application. This
+    defaults to the UsersRolesLoginModule the same as other and should be
+    changed to a stronger authentication mechanism as required.
+  -->
+  <application-policy name="web-console">
+    <authentication>
+      <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+        flag="required">
+        <module-option name="usersProperties">web-console-users.properties</module-option>
+        <module-option name="rolesProperties">web-console-roles.properties</module-option>
+      </login-module>
+    </authentication>
+  </application-policy>
+
+  <!-- A template configuration for the JBossWS web application (and transport layer!).
+    This defaults to the UsersRolesLoginModule the same as other and should be
+    changed to a stronger authentication mechanism as required.
+  -->
+  <application-policy name="JBossWS">
+    <authentication>
+      <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+        flag="required">
+        <module-option name="usersProperties">props/jbossws-users.properties</module-option>
+        <module-option name="rolesProperties">props/jbossws-roles.properties</module-option>
+        <module-option name="unauthenticatedIdentity">anonymous</module-option>
+      </login-module>
+    </authentication>
+  </application-policy>
+
+   <!-- A template configuration for the JSR196 Implementation (for testing). 
+  -->
+	<application-policy name="jaspi">
+	  <authentication-jaspi>
+		<login-module-stack name="lm-stack">
+			<login-module
+				code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+				flag="required">
+				<module-option name="usersProperties">props/jbossws-users.properties</module-option>
+				<module-option name="rolesProperties">props/jbossws-roles.properties</module-option>
+				<module-option name="unauthenticatedIdentity">anonymous</module-option>
+			</login-module>
+		</login-module-stack>
+		<auth-module code="auth.module1.class.name">
+			<module-option name="usersProperties">props/jbossws-users.properties</module-option>
+			<module-option name="rolesProperties">props/jbossws-roles.properties</module-option>
+			<module-option name="unauthenticatedIdentity">anonymous</module-option>
+		</auth-module>
+		
+		<auth-module code="auth.module2.class.name" login-module-stack-ref="lm-stack"/>  
+	 </authentication-jaspi>
+	</application-policy>
+
+
+  <!-- The default login configuration used by any security domain that
+  does not have a application-policy entry with a matching name
+  -->
+  <application-policy name="other">
+    <!-- A simple server login module, which can be used when the number
+    of users is relatively small. It uses two properties files:
+    users.properties, which holds users (key) and their password (value).
+    roles.properties, which holds users (key) and a comma-separated list of
+    their roles (value).
+    The unauthenticatedIdentity property defines the name of the principal
+    that will be used when a null username and password are presented as is
+    the case for an unuathenticated web client or MDB. If you want to
+    allow such users to be authenticated add the property, e.g.,
+    unauthenticatedIdentity="nobody"
+    -->
+    <authentication>
+      <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+        flag="required"/>
+    </authentication>
+  </application-policy>
+
+</policy>
+

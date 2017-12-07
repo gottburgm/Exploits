@@ -1,0 +1,91 @@
+<?xml version='1.0'?> 
+
+<!-- $Id: rolemapping-config.xml 85945 2009-03-16 19:45:12Z dimitris@jboss.org $ -->
+
+<!-- The XML based JAAS login configuration read by the
+org.jboss.security.auth.login.XMLLoginConfig mbean. Add
+an application-policy element for each security domain.
+
+The outline of the application-policy is:
+<application-policy name="security-domain-name">
+  <authentication>
+    <login-module code="login.module1.class.name" flag="control_flag">
+      <module-option name = "option1-name">option1-value</module-option>
+      <module-option name = "option2-name">option2-value</module-option>
+      ...
+    </login-module>
+
+    <login-module code="login.module2.class.name" flag="control_flag">
+      ...
+    </login-module>
+    ...
+  </authentication>
+</application-policy>
+
+$Revision: 85945 $
+-->
+
+<policy xmlns="http://www.jboss.org/j2ee/schema/jbsx"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+          targetNamespace="urn:jboss:security-config:5.0"
+         xsi:schemaLocation="urn:jboss:security-config:5.0"
+         version="5.0">
+  <!-- Used by clients within the application server VM such as
+  mbeans and servlets that access EJBs.
+  -->
+   
+
+  <!-- Tests both authentication and rolemapping config -->
+  <application-policy name="TestRoleMapping">
+     <authentication-jaspi>
+      <login-module-stack name="lm-stack">
+         <login-module
+            code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+            flag="required">
+            <module-option name="usersProperties">props/jbossws-users.properties</module-option>
+            <module-option name="rolesProperties">props/jbossws-roles.properties</module-option>
+            <module-option name="unauthenticatedIdentity">anonymous</module-option>
+         </login-module>
+      </login-module-stack>
+      <auth-module code="auth.module1.class.name">
+         <module-option name="usersProperties">props/jbossws-users.properties</module-option>
+         <module-option name="rolesProperties">props/jbossws-roles.properties</module-option>
+         <module-option name="unauthenticatedIdentity">anonymous</module-option>
+      </auth-module>
+      
+      <auth-module code="auth.module2.class.name" login-module-stack-ref="lm-stack"/>  
+    </authentication-jaspi>
+    <rolemapping>
+      <mapping-module code="policy.module1.class.name"
+        flag="required">
+        <module-option name="usersProperties">props/jbossws-users.properties</module-option>
+        <module-option name="rolesProperties">props/jbossws-roles.properties</module-option>
+        <module-option name="unauthenticatedIdentity">anonymous</module-option>
+      </mapping-module>
+    </rolemapping>
+  </application-policy>
+
+
+  <!-- The default login configuration used by any security domain that
+  does not have a application-policy entry with a matching name
+  -->
+  <application-policy name="other">
+    <!-- A simple server login module, which can be used when the number
+    of users is relatively small. It uses two properties files:
+    users.properties, which holds users (key) and their password (value).
+    roles.properties, which holds users (key) and a comma-separated list of
+    their roles (value).
+    The unauthenticatedIdentity property defines the name of the principal
+    that will be used when a null username and password are presented as is
+    the case for an unuathenticated web client or MDB. If you want to
+    allow such users to be authenticated add the property, e.g.,
+    unauthenticatedIdentity="nobody"
+    -->
+    <authentication>
+      <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+        flag="required"/>
+    </authentication>
+  </application-policy>
+
+</policy>
+

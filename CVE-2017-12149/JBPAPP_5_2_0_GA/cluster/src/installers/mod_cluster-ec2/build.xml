@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2009 Red Hat, Inc.
+  ~ Red Hat licenses this file to you under the Apache License, version
+  ~ 2.0 (the "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~    http://www.apache.org/licenses/LICENSE-2.0
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  ~ implied.  See the License for the specific language governing
+  ~ permissions and limitations under the License.
+  -->
+<project default="install" name="mod_cluster EC2 Installer" basedir=".">
+
+   <property name="ec2.profile" value="mod_cluster-ec2"/>
+   <property name="install.root" value="../.."/>
+
+   <property name="install.server" value="${install.root}/server"/>
+   <property name="install.production" value="${install.server}/production"/>
+   <property name="install.ec2" value="${install.server}/${ec2.profile}"/>
+   <property name="install.ec2.deploy" value="${install.ec2}/deploy"/>
+   
+   <target name="install">
+
+      <!-- Build ec2 based on production -->
+      <!-- Copy server/production to server/ec2 -->
+      <copy todir="${install.ec2}">
+         <fileset dir="${install.production}">
+            <exclude name="deploy/cluster/jgroups-channelfactory.sar/META-INF/jgroups-channelfactory-stacks.xml"/>
+            <exclude name="deploy/cluster/jboss-cache-manager.sar/**"/>
+            <exclude name="deploy/jbossweb.sar/server.xml"/>
+            <exclude name="deploy/jbossweb.sar/META-INF/jboss-beans.xml"/>
+         </fileset>
+      </copy>
+      
+      <!-- Add in the modified-for-ec2 content -->
+      <copy file="${basedir}/resources/jgroups/jgroups-channelfactory-stacks.xml"
+         todir="${install.ec2.deploy}/cluster/jgroups-channelfactory.sar/META-INF/"/>
+      
+      <mkdir dir="${install.ec2.deploy}/cluster/jboss-cache-manager.sar/META-INF"/>
+      <copy file="${basedir}/resources/jboss-cache/jboss-cache-configs.xml" 
+         todir="${install.ec2.deploy}/cluster/jboss-cache-manager.sar/META-INF/"/>  
+      <copy file="${basedir}/resources/jboss-cache/jboss-cache-manager-jboss-beans.xml" 
+         todir="${install.ec2.deploy}/cluster/jboss-cache-manager.sar/META-INF/"/>
+
+      <!-- Add mod-cluster.sar -->
+      <copy todir="${install.ec2.deploy}">
+        <fileset dir="${install.root}/../mod_cluster">
+          <include name="mod-cluster.sar/**"/>
+        </fileset>
+      </copy>
+      
+      <!-- Add in the modified-for-mod_cluster content -->
+      <copy file="${basedir}/resources/jbossweb/server.xml"
+         todir="${install.ec2.deploy}/jbossweb.sar/"/>
+      <copy file="${basedir}/resources/jbossweb/jboss-beans.xml"
+         todir="${install.ec2.deploy}/jbossweb.sar/META-INF"/>
+   </target>
+   
+</project>

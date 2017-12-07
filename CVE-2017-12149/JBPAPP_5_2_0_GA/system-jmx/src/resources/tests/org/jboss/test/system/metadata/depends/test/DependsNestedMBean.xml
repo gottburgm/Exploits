@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mbean name="jboss.test:type=BasicMBeanName" code="BasicMBeanCode">
+   <depends>
+      <mbean name="test:test=1" code="NestedMBeanCode"/>
+   </depends>
+</mbean>

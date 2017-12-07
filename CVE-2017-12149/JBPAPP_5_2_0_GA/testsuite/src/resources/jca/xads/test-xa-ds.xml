@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: test-xa-ds.xml 111182 2011-04-15 07:49:33Z jcosta@redhat.com $ -->
+
+<datasources>
+
+   <mbean code="org.jboss.test.jca.xads.Test" name="jboss.test.jca:name=Tester"/>
+
+   <xa-datasource>
+     <jndi-name>TestXADS</jndi-name>
+     <xa-datasource-class>org.jboss.test.jca.xads.TestXADataSource</xa-datasource-class>
+     <xa-datasource-property name="SomeProperty">${org.jboss.test.jca.xads.SomeProperty}</xa-datasource-property>
+     <xa-datasource-property name="BackSlash">${org.jboss.test.jca.xads.BackSlash}</xa-datasource-property>
+     <xa-datasource-property name="Flag">true</xa-datasource-property>
+   </xa-datasource>
+</datasources>

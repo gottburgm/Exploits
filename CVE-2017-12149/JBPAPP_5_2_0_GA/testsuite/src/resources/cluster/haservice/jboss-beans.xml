@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <bean name="EchoHAService" class="org.jboss.test.cluster.haservice.EchoHAService">
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.ha:service=EchoHAService", exposedInterface=org.jboss.test.cluster.haservice.EchoHAServiceMBean.class, registerDirectly=true)</annotation>
+      <property name="clusterPartition"><inject bean="HAPartition"/></property>
+   </bean>
+
+   <bean name="EchoHASingleton" class="org.jboss.test.cluster.haservice.EchoHASingleton">
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.ha:service=EchoHASingleton", exposedInterface=org.jboss.test.cluster.haservice.EchoHASingletonMBean.class, registerDirectly=true)</annotation>
+      <property name="clusterPartition"><inject bean="HAPartition"/></property>
+   </bean>
+   
+</deployment>

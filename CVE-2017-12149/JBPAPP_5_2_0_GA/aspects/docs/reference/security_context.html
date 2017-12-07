@@ -1,0 +1,32 @@
+<html>
+<body>
+<p>
+<h2>SecurityContext</h2>
+
+</p><p>
+JBoss AOP security has a programmtic interface through the <tt>org.jboss.aspects.security.SecurityContext</tt> class.  It has two static methods that are pretty self explanatory: <tt>getCallerPrincipal()</tt> and <tt>isCallerInRole</tt>.
+</p><p>
+<h4>Example</h4>
+
+<pre>
+import java.security.Principal;
+import org.jboss.aspects.security.SecurityContext;
+
+public class POJO
+{
+  public void someMethod() 
+  {
+    Principal p = SecurityContext.getCallerPrincipal();
+
+    if (!SecurityContext.isCallerInRole("root"))
+    {
+       throw new SecurityException("not root");
+    }
+  }
+}
+</pre>
+</p><p>
+<tt>isCallerInRole()</tt> works off of the currently active security domain.  The current security domain is set by the last piece of logic that tried authorization.
+</p>
+</body>
+</html>

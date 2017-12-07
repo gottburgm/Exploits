@@ -1,0 +1,102 @@
+<project name="tests-hello-jars">
+   <!-- hello test -->
+   <target name="_jars-hello">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build hellotest.jar -->
+      <jar destfile="${build.lib}/hellotest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/hello/interfaces/**"/>
+            <include name="org/jboss/test/hello/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/hello">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build hello.jar -->
+      <jar destfile="${build.lib}/hello.jar">
+         <metainf dir="${build.resources}/hello/META-INF">
+            <include name="ejb-jar.xml"/>
+            <include name="jboss.xml"/>
+            <include name="jbosscmp-jdbc.xml"/>
+         </metainf>
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/hello/interfaces/**"/>
+            <include name="org/jboss/test/hello/ejb/**"/>
+         </fileset>
+      </jar>
+      
+      <!-- build hello-ha.jar -->
+      <jar destfile="${build.lib}/hello-ha.jar">
+         <zipfileset dir="${build.resources}/hello/META-INF"
+            includes="ejb-jar-ha.xml" fullpath="META-INF/ejb-jar.xml"/>
+         <zipfileset dir="${build.resources}/hello/META-INF"
+            includes="jboss-ha.xml" fullpath="META-INF/jboss.xml"/>
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/hello/interfaces/**"/>
+            <include name="org/jboss/test/hello/ejb/**"/>
+         </fileset>
+      </jar>
+   </target>
+   
+   <!-- helloiiop test -->
+   <target name="_jars-helloiiop">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build helloiioptest.jar -->
+      <jar destfile="${build.lib}/helloiioptest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/helloiiop/interfaces/**"/>
+            <include name="org/jboss/test/helloiiop/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/helloiiop">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build helloiiop.jar -->
+      <jar destfile="${build.lib}/helloiiop.jar">
+         <metainf dir="${build.resources}/helloiiop/META-INF"/>
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/helloiiop/interfaces/**"/>
+            <include name="org/jboss/test/helloiiop/ejb/**"/>
+         </fileset>
+      </jar>
+   </target>
+   
+   <!-- hellojrmpiiop test -->
+   <target name="_jars-hellojrmpiiop">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build hellojrmpiioptest.jar -->
+      <jar destfile="${build.lib}/hellojrmpiioptest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/hellojrmpiiop/interfaces/**"/>
+            <include name="org/jboss/test/hellojrmpiiop/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/hellojrmpiiop">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build hellojrmpiiop.jar -->
+      <jar destfile="${build.lib}/hellojrmpiiop.jar">
+         <metainf dir="${build.resources}/hellojrmpiiop/META-INF"/>
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/hellojrmpiiop/interfaces/**"/>
+            <include name="org/jboss/test/hellojrmpiiop/ejb/**"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

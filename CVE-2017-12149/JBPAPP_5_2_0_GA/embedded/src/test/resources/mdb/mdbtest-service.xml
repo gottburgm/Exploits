@@ -1,0 +1,17 @@
+<server>
+   <mbean code="org.jboss.mq.server.jmx.Queue"
+      name="jboss.mq.destination:service=Queue,name=example">
+      <attribute name="JNDIName">queue/example</attribute>
+      <depends optional-attribute-name="DestinationManager">jboss.mq:service=DestinationManager</depends>
+   </mbean>
+
+<!--
+   <mbean code="org.jboss.jms.server.destination.QueueService"
+      name="jboss.messaging.destination:service=Queue,name=example"
+      xmbean-dd="xmdesc/Queue-xmbean.xml">
+      <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+      <depends>jboss.messaging:service=PostOffice</depends>
+   </mbean>
+   -->
+
+</server>

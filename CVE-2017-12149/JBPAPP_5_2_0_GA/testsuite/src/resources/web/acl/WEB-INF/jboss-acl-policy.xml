@@ -1,0 +1,30 @@
+<jboss-acl xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="urn:jboss:jboss-acl-config:1.0"
+         xmlns="urn:jboss:jboss-acl-config:1.0"
+         xmlns:jbxb="urn:jboss:jboss-acl-config:1.0">
+         
+  <acl-definition resource="org.jboss.test.security.resources.TestResource:1">
+     <entry>
+        <identity-name>Administrator</identity-name>
+        <permissions>CREATE,READ,UPDATE,DELETE</permissions>
+     </entry>
+     <entry>
+        <identity-name>Guest</identity-name>
+        <permissions>READ</permissions>
+     </entry>
+  </acl-definition>
+  
+  <!-- An extends attribute allows an ACL to inherit all the entries from its parent ACL -->
+  <acl-definition resource="org.jboss.test.security.resources.TestResource:2" extends="org.jboss.test.security.resources.TestResource:1">
+     <entry>
+        <identity-name>Regular_User</identity-name>
+        <permissions>READ,UPDATE</permissions>
+     </entry>
+     <!-- This overrides the definition from the parent ACL -->
+     <entry>
+        <identity-name>Guest</identity-name>
+        <permissions>READ,UPDATE</permissions>
+     </entry>
+  </acl-definition>
+
+</jboss-acl>

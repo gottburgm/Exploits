@@ -1,0 +1,78 @@
+!!! JBoss + Spring + EJB 3.0 Integration
+This distribution contains a JBoss Deployer that supports Spring packaging in
+JBoss.  What this means is that you can create JAR archives with a
+''META-INF/jboss-spring.xml'' file and your Spring bean factories will
+automatically be deployed.  Also supported in this distribution is EJB 3.0
+integration.  You can deploy Spring archives and be able to inject beans
+created in these deployment directly into an EJB using a @Spring annotation.
+
+!!! Installation
+If you are using EJB 3.0 and JDK 5 integration, copy the
+jboss-spring-jdk5.deployer directory into the JBoss deploy/ directory.  If you
+are using JDK 1.4, then copy the jboss-spring.deployer/ into the deploy
+directory.  If you look inside these ''.deployer'' deployments you will see
+that only a partial Spring distribution is contained.  If you need a full
+Spring distribution, then copy those jars into the  ''.deployer'' directory or
+into the lib/ directory of your JBoss configuration.
+
+!!! Spring deployments
+You can create Spring deployments that work much in the same way .sar's, .war's,
+.ear's, .har's, and .rar's work.  Using the JBoss Spring deployer you can
+create Spring jars:
+
+{{{
+my-app.spring/
+   org/
+      acme/
+          MyBean.class
+          MyBean2.class
+   META-INF/
+           jboss-spring.xml
+}}}
+
+So, my-app.spring is a jar that contains classes, like any other JAR and a
+jboss-spring.xml file in the META-INF/ of the jar.  This jboss-spring.xml file
+is like any other Spring xml file.  By default, the JBoss Spring Deployer will
+register this bean factory defined in the XML file into JNDI.  It will be
+registered in a non-serialized form so you don't have to worry about JNDI
+serialization!  The default JNDI name will be the short name of the deployment
+file.  So in this example, the bean factory described in the
+''META-INF/jboss-spring.xml'' file will be registered under the "my-app"
+JNDI name.
+
+Alternatively, you do not have to create an archive.  You can put your jar
+libraries under server/<config-name>/lib and just put an XML file of the form:
+<name>-spring.xml into the JBoss deploy directory.  For example,
+my-app-spring.xml.  Again, the JNDI name will be by default, the short name of
+the XML file, in the case my-app-spring.xml will produce a JNDI binding of
+"my-app".
+
+!!! Deployment
+Once you have created a ''.spring'' archive or a ''-spring.xml'' file, all you have to do is put it in the JBoss
+deploy/ directory and it will be deployed into the JBoss runtime.  You can
+also embed these deployments inside an EAR, EJB-JAR, SAR, etc. as JBoss
+supports nested archives.
+
+!!! Defining the JNDI name
+You can specify the JNDI name explicitly by putting it in the description
+element of the Spring XML.
+
+{{{
+  <beans>
+    <description>BeanFactory=(MyApp)</description>
+}}}
+
+MyApp will be used as the JNDI name in this example.
+
+
+!!! Parent Bean factories
+Sometimes you want your deployed Spring bean factory to be able to reference
+beans deployed in another Spring deployment.  You can do this by declaring a
+parent bean factory in the description element in the Spring XML.
+
+{{{
+  <beans>
+    <description>BeanFactory=(AnotherApp) ParentBeanFactory=(MyApp)</description>
+}}}
+
+

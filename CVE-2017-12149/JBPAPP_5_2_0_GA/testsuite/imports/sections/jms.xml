@@ -1,0 +1,16 @@
+<project name="tests-jms-jars">
+   
+   <!-- jms tests -->
+   <target name="_jars-jms">
+      <mkdir dir="${build.lib}"/>
+      
+      <jar destfile="${build.lib}/jms-xawrapper-smoke.sar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/jms/mbeans/XAResourceWrapperSmokeTester*"/>
+         </fileset>
+         <fileset dir="${build.resources}/jms/xawrapper">
+            <include name="META-INF/jboss-service.xml"/>		
+         </fileset>
+      </jar>	
+   </target>
+</project>

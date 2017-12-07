@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop  xmlns="urn:jboss:aop-beans:1.0">
+   <interceptor class="org.jboss.test.aop.proxycache.NullInterceptor"/>
+   
+   <bind pointcut="execution(* java.util.ArrayList->*(..))">
+      <interceptor-ref name="org.jboss.test.aop.proxycache.NullInterceptor"/>
+   </bind>
+</aop>

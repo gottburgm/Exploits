@@ -1,0 +1,91 @@
+<project name="tests-scoped-jars">
+   <!-- isolation test -->
+   <target name="_jars-scoped">
+      <mkdir dir="${build.lib}"/>
+
+      <mkdir dir="${build.lib}/scopedA.ear"/>
+      <mkdir dir="${build.lib}/scopedA.ear/scopedA.jar"/>
+      <copy todir="${build.lib}/scopedA.ear/scopedA.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/scoped/ejb/a/**"/>
+            <include name="org/jboss/test/scoped/interfaces/**"/>
+            <include name="org/jboss/test/util/Debug.class"/>
+            <exclude name="**/SimpleResponseDTO*"/>
+         </fileset>
+         <fileset dir="${build.resources}/scoped/a/ejb">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </copy>
+
+      <copy todir="${build.lib}/scopedA.ear">
+         <fileset dir="${build.resources}/scoped/a/ear">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </copy>
+
+      <mkdir dir="${build.lib}/scopedB.ear"/>
+      <mkdir dir="${build.lib}/scopedB.ear/scopedB.jar"/>
+      <copy todir="${build.lib}/scopedB.ear/scopedB.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/scoped/ejb/b/**"/>
+            <include name="org/jboss/test/scoped/interfaces/**"/>
+            <include name="org/jboss/test/util/Debug.class"/>
+            <exclude name="**/SimpleResponseDTO*"/>
+         </fileset>
+         <fileset dir="${build.resources}/scoped/b/ejb">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </copy>
+
+      <copy todir="${build.lib}/scopedB.ear">
+         <fileset dir="${build.resources}/scoped/b/ear">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </copy>
+
+      <!-- build scopedA.jar -->
+      <!--<jar destfile="${build.lib}/scopedA.jar">-->
+         <!--<fileset dir="${build.classes}">-->
+            <!--<include name="org/jboss/test/scoped/ejb/a/**"/>-->
+            <!--<include name="org/jboss/test/scoped/interfaces/**"/>-->
+            <!--<include name="org/jboss/test/util/Debug.class"/>-->
+         <!--</fileset>-->
+         <!--<fileset dir="${build.resources}/scoped/a/ejb">-->
+            <!--<include name="META-INF/*.xml"/>-->
+         <!--</fileset>-->
+      <!--</jar>-->
+
+      <!-- build scopedB.jar -->
+      <!--<jar destfile="${build.lib}/scopedB.jar">-->
+         <!--<fileset dir="${build.classes}">-->
+            <!--<include name="org/jboss/test/scoped/ejb/b/**"/>-->
+            <!--<include name="org/jboss/test/scoped/interfaces/**"/>-->
+            <!--<include name="org/jboss/test/util/Debug.class"/>-->
+         <!--</fileset>-->
+         <!--<fileset dir="${build.resources}/scoped/b/ejb">-->
+            <!--<include name="META-INF/*.xml"/>-->
+         <!--</fileset>-->
+      <!--</jar>-->
+
+      <!-- build scopedA.ear -->
+      <!--<jar destfile="${build.lib}/scopedA.ear">-->
+         <!--<fileset dir="${build.lib}">-->
+            <!--<include name="scopedA.jar"/>-->
+         <!--</fileset>-->
+         <!--<fileset dir="${build.resources}/scoped/a/ear">-->
+            <!--<include name="META-INF/*.xml"/>-->
+         <!--</fileset>-->
+      <!--</jar>-->
+
+      <!-- build scopedB.ear -->
+      <!--<jar destfile="${build.lib}/scopedB.ear">-->
+         <!--<fileset dir="${build.lib}">-->
+            <!--<include name="scopedB.jar"/>-->
+         <!--</fileset>-->
+         <!--<fileset dir="${build.resources}/scoped/b/ear">-->
+            <!--<include name="META-INF/*.xml"/>-->
+         <!--</fileset>-->
+      <!--</jar>-->
+
+   </target>
+</project>

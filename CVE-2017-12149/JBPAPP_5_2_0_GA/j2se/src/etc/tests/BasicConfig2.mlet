@@ -1,0 +1,13 @@
+
+<MLET CODE=org.jboss.test.jmx.compliance.loading.support.Trivial3
+      NAME=test:name=Trivial
+      ARCHIVE=../../lib/jmxcompliance-MyMBeans2.jar
+>
+</MLET>
+
+<MLET CODE=org.jboss.test.jmx.compliance.loading.support.Trivial4
+      NAME=test:name=Trivial2
+      ARCHIVE=../../lib/jmxcompliance-MyMBeans2.jar
+>
+  <ARG TYPE=java.lang.String VALUE=foo>
+</MLET>

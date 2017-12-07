@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 3.2//EN" "http://www.jboss.org/j2ee/dtd/jboss_3_2.dtd">
+
+<jboss>
+
+   <enterprise-beans>
+
+        <session>
+         <ejb-name>EJBTestRunnerEJB</ejb-name>
+         <jndi-name>ejb/EJBTestRunner</jndi-name>
+      </session>
+
+      <entity>
+         <ejb-name>B</ejb-name>
+         <local-jndi-name>BLocal</local-jndi-name>
+         <configuration-name>cmp2.x jdbc2 pm</configuration-name>
+      </entity>
+      <entity>
+         <ejb-name>A</ejb-name>
+         <local-jndi-name>ALocal</local-jndi-name>
+         <configuration-name>cmp2.x jdbc2 pm with overager</configuration-name>
+      </entity>
+   </enterprise-beans>
+
+   <container-configurations>
+    <container-configuration extends="cmp2.x jdbc2 pm">
+      <container-name>cmp2.x jdbc2 pm with overager</container-name>
+      <container-cache-conf>
+         <cache-policy-conf>
+            <min-capacity>500</min-capacity>
+            <max-capacity>10000</max-capacity>
+            <overager-period>1</overager-period>
+            <max-bean-age>3</max-bean-age>
+         </cache-policy-conf>
+         <cache-policy-conf-other>
+            <partitions>10</partitions>
+         </cache-policy-conf-other>
+      </container-cache-conf>
+    </container-configuration>
+   </container-configurations>
+</jboss>

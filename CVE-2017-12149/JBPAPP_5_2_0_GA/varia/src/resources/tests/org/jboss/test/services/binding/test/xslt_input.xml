@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Connector>
+  <attribute name="host">123</attribute>
+  <attribute name="other">456</attribute>
+  <attribute name="port">789</attribute>
+</Connector>

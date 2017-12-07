@@ -1,0 +1,165 @@
+// The Java2 security policy for EAP5 with signed jars
+// Install with -Djava.security.policy==server.policy.cert
+// and -Djboss.home.dir=path_to_jboss_distribution
+
+//Following two lines have to be changed according to your keystore and keystore password 
+//keystore "file:${jboss.server.home.dir}/cc.keystore";
+//keystorePasswordURL "file:${jboss.server.home.dir}/cc.password";
+
+// ***************************************
+// Trusted core Java code
+//***************************************
+grant codeBase "file:${java.home}/lib/ext/-" {
+   permission java.security.AllPermission;
+};
+grant codeBase "file:${java.home}/lib/*" {
+   permission java.security.AllPermission;
+};
+// For java.home pointing to the JDK jre directory
+grant codeBase "file:${java.home}/../lib/*" {
+   permission java.security.AllPermission;
+};
+
+
+// ***************************************
+// Trusted core JBoss code
+//***************************************
+grant codeBase "file:${jboss.home.dir}/bin/run.jar" {
+   permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jboss.home.dir}/common/lib/cglib.jar" {
+   permission java.security.AllPermission;
+};
+
+grant signedBy "jboss" {
+   permission java.security.AllPermission;
+};
+
+//grant codeBase "file:${jboss.server.home.dir}/deploy/quartz-ra.rar/-" {
+// permission java.security.AllPermission;
+//};
+
+grant codeBase "file:${jboss.server.home.dir}/deploy/uuid-key-generator.sar/-" {
+   permission javax.management.MBeanTrustPermission "register";
+   permission javax.management.MBeanPermission "*", "getAttribute";
+   permission org.jboss.naming.JndiPermission "<<ALL BINDINGS>>","lookup,rebind,unbind";
+   permission java.lang.RuntimePermission "getClassLoader";
+   permission java.net.SocketPermission "*", "connect";
+   permission java.net.SocketPermission "*", "resolve";
+};
+
+grant codeBase "file:${jboss.server.home.dir}/deploy/http-invoker.sar/invoker.war/-" {
+   permission javax.management.MBeanPermission "*", "addNotificationListener,getAttribute";
+   permission javax.management.MBeanServerPermission "findMBeanServer";
+   permission java.lang.RuntimePermission "getClassLoader";
+   permission org.jboss.naming.JndiPermission "<<ALL BINDINGS>>","lookup,rebind,unbind";
+};
+
+grant codeBase "file:${jboss.server.home.dir}/deploy/httpha-invoker.sar/invoker.war/-" {
+   permission javax.management.MBeanPermission "*", "addNotificationListener,getAttribute";
+   permission javax.management.MBeanServerPermission "findMBeanServer";
+   permission java.lang.RuntimePermission "getClassLoader";
+   permission org.jboss.naming.JndiPermission "<<ALL BINDINGS>>","lookup,rebind,unbind";
+};
+
+grant codeBase "file:${jboss.server.home.dir}/deploy/admin-console.war/-" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jboss.server.home.dir}/deploy/jmx-console.war/-" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jboss.server.home.dir}/work/jboss.web/localhost/admin-console/-" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jboss.server.home.dir}/work/jboss.web/localhost/invoker/-" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jboss.server.home.dir}/work/jboss.web/localhost/jbossws/-" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jboss.server.home.dir}/work/jboss.web/localhost/juddi/-" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jboss.server.home.dir}/work/jboss.web/localhost/web-console/-" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jboss.server.home.dir}/tmp/embjopr/-" {
+  permission javax.management.MBeanServerPermission "findMBeanServer";
+  permission javax.management.MBeanPermission "*", "queryNames";
+  permission java.lang.RuntimePermission "getClassLoader";
+  permission java.lang.RuntimePermission "accessDeclaredMembers";
+};
+
+
+//****************************************************************
+//  Default block of permissions
+//  Minimal permissions are allowed to everyone else
+//****************************************************************
+grant {
+   permission java.io.FilePermission "${jboss.server.home.dir}/tmp/-", "read";
+   permission java.io.FilePermission "${jboss.home.dir}/common/lib/quartz.jar/org/quartz/quartz.properties", "read";
+   permission java.io.FilePermission "${jboss.home.dir}/common/lib/quartz.jar", "read";
+   permission java.io.FilePermission "${jboss.home.dir}/common/lib", "read";
+   permission org.jboss.naming.JndiPermission "<<ALL BINDINGS>>","lookup";
+   permission java.io.FilePermission "quartz.properties", "read";
+   permission java.util.PropertyPermission "*", "read";
+   permission java.lang.RuntimePermission "queuePrintJob";
+};
+
+// ***************************************************************
+// testsuite permissions ... DO NOT USE IN PRODUCTION
+// ***************************************************************
+grant codeBase "file:${jboss.test.deploy.dir}/-" {
+  permission java.security.AllPermission;
+};
+
+grant signedBy "testsuite" {
+   permission java.security.AllPermission;
+};
+
+// granting all permissions to JDBC driver for testing purpose
+// in production check your specific driver and add only needed permissions
+grant codeBase "file:${jboss.server.home.dir}/lib/${cc.jdbc.driver}" {
+  permission java.security.AllPermission;
+};
+
+
+grant codeBase "file:${jboss.server.home.dir}/deploy/httpha-invoker.sar/invoker.war/-" {
+   permission java.lang.RuntimePermission "org.jboss.security.SecurityAssociation.getPrincipalInfo";
+   permission java.lang.RuntimePermission "org.jboss.security.getSecurityContext";
+   permission java.lang.RuntimePermission "org.jboss.security.plugins.JBossSecurityContext.getSubjectInfo";
+   permission javax.management.MBeanServerPermission "findMBeanServer";
+   permission javax.management.MBeanPermission "*", "queryNames";
+   permission javax.management.MBeanPermission "*", "invoke";
+};
+
+grant codeBase "file:${jboss.server.home.dir}/deploy/http-invoker.sar/invoker.war/-" {
+   permission java.lang.RuntimePermission "org.jboss.security.SecurityAssociation.getPrincipalInfo";
+   permission java.lang.RuntimePermission "org.jboss.security.getSecurityContext";
+   permission java.lang.RuntimePermission "org.jboss.security.plugins.JBossSecurityContext.getSubjectInfo";
+   permission javax.management.MBeanServerPermission "findMBeanServer";
+   permission javax.management.MBeanPermission "*", "queryNames";
+   permission javax.management.MBeanPermission "*", "invoke";
+};
+
+
+grant codeBase "file:${jboss.server.home.dir}/work/jboss.web/localhost/jbosstest/-" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "file:${jboss.server.home.dir}/work/jboss.web/localhost/manifest/-" {
+  permission java.security.AllPermission;
+};
+
+grant codeBase "vfsmemory://*" {
+  permission java.security.AllPermission;
+};
+

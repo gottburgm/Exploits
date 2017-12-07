@@ -1,0 +1,13 @@
+<project name="tests-marathon-jars">
+  <!-- marathon test -->
+   <target name="_jars-marathon">
+      <mkdir dir="${build.lib}"/>
+
+      <!-- build marathon.jar -->
+      <jar destfile="${build.lib}/marathon.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/marathon/**"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

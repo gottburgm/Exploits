@@ -1,0 +1,306 @@
+<project name="tests-ejb3-jars">
+	<target name="ejb3iiop"
+      description="Builds iiop.jar."
+      depends="compile">
+
+		<mkdir dir="${build.lib}"/>
+
+		<jar jarfile="${build.lib}/ejb3iiop.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/ejb3/iiop/*.class"/>
+			</fileset>
+			<fileset dir="${source.resources}/ejb3/iiop">
+				<include name="users.properties"/>
+				<include name="roles.properties"/>
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="jbas5713" depends="compile">
+		<mkdir dir="${build.lib}" />
+
+		<jar destfile="${build.lib}/jbas5713-ejb1.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/ejb3/jbas5713/ejb1/**" />
+			</fileset>
+		</jar>
+
+		<jar destfile="${build.lib}/jbas5713-ejb2.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/ejb3/jbas5713/ejb2/**" />
+			</fileset>
+		</jar>
+
+		<jar destfile="${build.lib}/jbas5713.ear">
+			<fileset dir="${build.lib}" includes="jbas5713-*.jar"/>
+		</jar>
+	</target>
+
+	<target name="jbas6161" depends="compile">
+		<mkdir dir="${build.lib}" />
+
+		<jar destfile="${build.lib}/jbas6161.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/ejb3/jbas6161/**" />
+			</fileset>
+		</jar>
+
+		<jar destfile="${build.lib}/jbas6161-A.ear">
+			<fileset dir="${build.lib}" includes="jbas6161.jar"/>
+		</jar>
+
+		<jar destfile="${build.lib}/jbas6161-B.ear">
+			<fileset dir="${build.lib}" includes="jbas6161.jar"/>
+		</jar>
+	</target>
+
+	<target name="jbas6239" depends="compile">
+		<mkdir dir="${build.lib}" />
+
+		<jar destfile="${build.lib}/jbas6239.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/ejb3/jbas6239/**" />
+			</fileset>
+			<fileset dir="${source.resources}/ejb3/jbas6239" includes="**">
+			</fileset>
+		</jar>
+		<jar destfile="${build.lib}/jbas6239hornetq.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/ejb3/jbas6239hornetq/**" />
+			</fileset>
+			<fileset dir="${source.resources}/ejb3/jbas6239hornetq" includes="**">
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="jbas7883" depends="compile">
+		<mkdir dir="${build.lib}" />
+		<jar destfile="${build.lib}/jbas7883.jar">
+			<fileset dir="${build.classes}" includes="org/jboss/test/ejb3/jbas7883/*"/>
+		</jar>
+		<copy file="${source.resources}/ejb3/jbas7883/jbas7883-service.xml" todir="${build.lib}" />
+	</target>
+
+    <target name="jbpapp923" depends="compile">
+        <mkdir dir="${build.lib}" />
+
+        <jar destfile="${build.lib}/jbpapp923.jar">
+            <fileset dir="${build.classes}">
+                <include name="org/jboss/test/ejb3/jbpapp923/**" />
+            </fileset>
+            <fileset dir="${source.resources}/ejb3/jbpapp923" includes="**" />
+        </jar>
+    </target>
+
+	<target name="jbpapp2260" depends="compile">
+		<mkdir dir="${build.lib}" />
+
+		<jar destfile="${build.lib}/jbpapp2260.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/ejb3/common/**" />
+				<include name="org/jboss/test/ejb3/jbpapp2260/**" />
+			</fileset>
+			<fileset dir="${source.resources}/ejb3/jbpapp2260" includes="**" />
+		</jar>
+	</target>
+
+	<target name="jbpapp2473" depends="compile">
+		<mkdir dir="${build.lib}" />
+
+		<jar destfile="${build.lib}/jbpapp2473.jar">
+			<fileset dir="${build.classes}">
+				<!-- include name="org/jboss/test/ejb3/common/**" / -->
+				<include name="org/jboss/test/ejb3/jbpapp2473/**" />
+			</fileset>
+
+			<fileset dir="${source.resources}/ejb3/jbpapp2473" includes="**"/>
+
+		</jar>
+	</target>
+
+	<target name="jbpapp3026" depends="compile">
+		<mkdir dir="${build.lib}" />
+
+		<jar destfile="${build.lib}/createdestination-mdb.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/ejb3/jbpapp3026/**" />
+			</fileset>
+			<fileset dir="${build.resources}/ejb3/jbpapp3026" includes="**"/>
+		</jar>
+	</target>
+
+	<!-- This issue affected the ejb3 AS module -->
+	<target name="ejbthree1597" depends="compile">
+		<mkdir dir="${build.lib}"/>
+		<jar destfile="${build.lib}/ejbthree1597.jar">
+			<fileset dir="${build.classes}" includes="org/jboss/test/ejb3/ejbthree1597/*.class">
+			</fileset>
+			<fileset dir="${source.resources}/ejb3/ejbthree1597" includes="**">
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="ejb3-servlet" depends="compile"
+      description="Builds all jar files."
+      >
+
+		<mkdir dir="${build.lib}"/>
+
+		<jar jarfile="${build.lib}/ejb3-servlet-ejbs.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/ejb3/servlet/*.class"/>
+				<exclude name="org/jboss/test/ejb3/servlet/War*.class"/>
+			</fileset>
+			<fileset dir="${source.resources}/ejb3/servlet">
+				<include name="*.properties"/>
+				<include name="META-INF/jboss.xml"/>
+			</fileset>
+		</jar>
+
+		<jar jarfile="${build.lib}/ejb3-servlet-client.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/ejb3/servlet/War*.class"/>
+			</fileset>
+		</jar>
+
+		<war warfile="${build.lib}/ejb3-servlet.war"
+         webxml="${source.resources}/ejb3/servlet/WEB-INF/test-web.xml">
+			<webinf dir="${source.resources}/ejb3/servlet/WEB-INF">
+				<include name="jboss-web.xml"/>
+			</webinf>
+			<classes dir="${build.classes}">
+				<include name="org/jboss/test/ejb3/servlet/servlets/**"/>
+			</classes>
+		</war>
+
+		<ear earfile="${build.lib}/ejb3-servlet.ear"
+         appxml="${source.resources}/ejb3/servlet/META-INF/application.xml"
+         manifest="${source.resources}/ejb3/servlet/META-INF/MANIFEST.MF">
+			<fileset dir="${build.lib}">
+				<include name="ejb3-servlet-ejbs.jar"/>
+				<include name="ejb3-servlet.war"/>
+				<include name="ejb3-servlet-client.jar"/>
+			</fileset>
+			<fileset dir="${source.resources}/ejb3/servlet">
+				<include name="META-INF/jboss-app.xml"/>
+				<include name="servlet-security-service.xml"/>
+			</fileset>
+		</ear>
+
+		<copy todir="${build.lib}">
+			<fileset dir="${source.resources}/ejb3/servlet">
+				<include name="servlet-security-service.xml"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="ejb3-webservice" depends="compile">
+		<mkdir dir="${build.lib}" />
+
+		<!-- A bit fragile, because token replacement can happen only once -->
+		<replace file="${build.resources}/ejb3/webservice/META-INF/wsdl/WebServiceContextEndpointBean.wsdl"
+         token="@jboss.bind.address@"
+         value="${node0}"/>
+
+		<jar destfile="${build.lib}/ejb3-webservice.jar">
+			<fileset dir="${build.classes}">
+				<!-- include name="org/jboss/test/ejb3/common/**" / -->
+				<include name="org/jboss/test/ejb3/webservice/**" />
+			</fileset>
+			<fileset dir="${build.resources}/ejb3/webservice" includes="**"/>
+		</jar>
+	</target>
+
+	<target name="jbpapp4681" depends="compile">
+		<mkdir dir="${build.lib}" />
+
+		<jar destfile="${build.lib}/jbpapp4681.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/ejb3/jbpapp4681/**" />
+			</fileset>
+		</jar>
+	</target>
+
+	<target name="jboss51xsd" depends="compile">
+		<mkdir dir="${build.lib}" />
+
+		<jar destfile="${build.lib}/jboss51xsd.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/ejb3/jboss51xsd/**" />
+			</fileset>
+			<fileset dir="${source.resources}/ejb3/jboss51xsd" includes="**">
+			</fileset>
+		</jar>
+	</target>
+
+   <target name="jbpapp-6855" depends="compile">
+      <mkdir dir="${build.lib}" />
+
+      <jar destfile="${build.lib}/jbpapp-6855.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/ejb3/jbpapp6855/**" />
+         </fileset>
+         <fileset dir="${build.resources}/ejb3/jbpapp6855" includes="**"/>
+      </jar>
+   </target>
+
+   <target name="jbpapp6953" depends="compile">
+      <mkdir dir="${build.lib}"/>
+
+      <jar destfile="${build.lib}/jbpapp6953-ejb2.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/ejb3/jbpapp6953/**"/>
+            <exclude name="org/jboss/test/ejb3/jbpapp6953/HelloBean.class"/>
+         </fileset>
+         <zipfileset prefix="META-INF" dir="${source.resources}/ejb3/jbpapp6953/ejb" includes="**"/>
+      </jar>
+
+      <jar destfile="${build.lib}/jbpapp6953-ejb.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/ejb3/jbpapp6953/**"/>
+            <exclude name="org/jboss/test/ejb3/jbpapp6953/HelloBean2.class"/>
+         </fileset>
+      </jar>
+
+      <jar destfile="${build.lib}/jbpapp6953.ear">
+         <fileset dir="${build.lib}">
+            <include name="jbpapp6953-ejb.jar"/>
+         </fileset>
+         <zipfileset prefix="META-INF" dir="${source.resources}/ejb3/jbpapp6953/ear" includes="**"/>
+      </jar>
+   </target>
+
+    <target name="jbpapp8035" depends="compile">
+        <mkdir dir="${build.lib}"/>
+
+        <jar destfile="${build.lib}/jbpapp8035.jar">
+            <fileset dir="${build.classes}">
+                <include name="org/jboss/test/ejb3/jbpapp8035/**" />
+            </fileset>
+        </jar>
+    </target>
+
+	<target name="_jars-ejb3" depends="ejb3-servlet,jbas6161,jbas6239,ejbthree1597,jbas5713,
+		    jbas7883,
+			ejb3iiop,
+			ejb3-webservice,
+			jbpapp923,
+			jbpapp2260,
+			jbpapp2473,
+			jbpapp3026,
+			jbpapp4681,
+			jbpapp6953,
+			jboss51xsd,
+			jbpapp-6855,
+            jbpapp8035">
+		<mkdir dir="${build.lib}" />
+
+		<!-- A jar with a simple ejb3 session -->
+		<jar destfile="${build.lib}/simple-session.jar">
+			<fileset dir="${build.classes}">
+				<include name="org/jboss/test/ejb3/basic/**" />
+			</fileset>
+		</jar>
+	</target>
+
+</project>

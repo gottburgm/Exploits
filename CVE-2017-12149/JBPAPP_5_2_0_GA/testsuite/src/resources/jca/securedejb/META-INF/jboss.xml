@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC
+   "-//JBoss//DTD JBOSS 4.0//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <session>
+         <ejb-name>CallerIdentity</ejb-name>
+         <jndi-name>jca-test/CallerIdentity</jndi-name>
+         <configuration-name>CallerIdentity Session</configuration-name>
+         <resource-ref>
+            <res-ref-name>jdbc/CallerIdentityDS</res-ref-name>
+            <jndi-name>CallerIdentityDS</jndi-name>
+         </resource-ref>
+         <resource-ref>
+            <res-ref-name>jdbc/ConfiguredIdentityDS</res-ref-name>
+            <jndi-name>ConfiguredIdentityDS</jndi-name>
+         </resource-ref>
+      </session>
+
+      <session>
+         <ejb-name>RunAsIdentityDS</ejb-name>
+         <jndi-name>jca-test/RunAsIdentityDS</jndi-name>
+         <configuration-name>CallerIdentity Session</configuration-name>
+         <security-identity>
+            <run-as-principal>RunAsPrincipal</run-as-principal>
+         </security-identity>
+         <resource-ref>
+            <res-ref-name>jdbc/RunAsIdentityDS</res-ref-name>
+            <jndi-name>java:/RunAsIdentityDS</jndi-name>
+         </resource-ref>
+      </session>
+      <session>
+         <ejb-name>RunAsIdentityFS</ejb-name>
+         <jndi-name>jca-test/RunAsIdentityFS</jndi-name>
+         <configuration-name>CallerIdentity Session</configuration-name>
+         <security-identity>
+            <run-as-principal>RunAsPrincipal</run-as-principal>
+         </security-identity>
+         <resource-ref>
+            <res-ref-name>jndi/RunAsIdentityFS</res-ref-name>
+            <jndi-name>java:/RunAsIdentityFS</jndi-name>
+         </resource-ref>
+      </session>
+   </enterprise-beans>
+
+   <assembly-descriptor>
+      <security-role>
+         <role-name>RunAsRole2</role-name>
+         <principal-name>RunAsPrincipal</principal-name>
+      </security-role>
+   </assembly-descriptor>
+
+   <container-configurations>
+      <container-configuration extends="Standard Stateless SessionBean">
+         <container-name>CallerIdentity Session</container-name>
+         <security-domain>java:/jaas/CallerIdentityDSRealm</security-domain>
+      </container-configuration>
+   </container-configurations>
+</jboss>

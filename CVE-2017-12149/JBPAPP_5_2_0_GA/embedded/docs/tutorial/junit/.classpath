@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="docs/tutorial/junit/src/main/java"/>
+	<classpathentry kind="src" path="bootstrap"/>
+	<classpathentry kind="src" path="docs/tutorial/junit/src/main/resources"/>
+	<classpathentry kind="src" path="docs/tutorial/junit/src/test/java"/>
+	<classpathentry kind="lib" path="lib/hibernate-all.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-embedded-all.jar"/>
+	<classpathentry kind="lib" path="lib/jboss-embedded-tomcat-bootstrap.jar"/>
+	<classpathentry kind="lib" path="lib/thirdparty-all.jar"/>
+	<classpathentry kind="lib" path="optional-lib/jboss-test.jar"/>
+	<classpathentry kind="lib" path="optional-lib/junit.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="docs/tutorial/junit/ide/output"/>
+</classpath>

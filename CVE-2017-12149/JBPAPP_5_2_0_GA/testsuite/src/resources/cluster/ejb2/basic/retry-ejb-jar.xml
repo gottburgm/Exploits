@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar
+   PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN"
+   "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar>
+   <enterprise-beans>
+
+      <session>
+         <description>Nextgen test bean stateless</description>
+         <ejb-name>nextgen_StatelessSession_Retry</ejb-name>
+         <home>org.jboss.test.cluster.ejb2.basic.interfaces.StatelessSessionHome</home>
+         <remote>org.jboss.test.cluster.ejb2.basic.interfaces.StatelessSession</remote>
+         <ejb-class>org.jboss.test.cluster.ejb2.basic.bean.StatelessSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      <session>
+         <description>Nextgen test bean stateless</description>
+         <ejb-name>nextgen_StatelessSession_SingleRetry</ejb-name>
+         <home>org.jboss.test.cluster.ejb2.basic.interfaces.StatelessSessionHome</home>
+         <remote>org.jboss.test.cluster.ejb2.basic.interfaces.StatelessSession</remote>
+         <ejb-class>org.jboss.test.cluster.ejb2.basic.bean.StatelessSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      
+      <session>
+         <description>Nextgen test bean stateful</description>
+         <ejb-name>nextgen_StatefulSession_Retry</ejb-name>
+         <home>org.jboss.test.testbean.interfaces.StatefulSessionHome</home>
+         <remote>org.jboss.test.cluster.ejb2.basic.interfaces.StatefulSession</remote>
+         <ejb-class>org.jboss.test.cluster.ejb2.basic.bean.StatefulSessionBean</ejb-class>
+         <session-type>Stateful</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      <session>
+         <description>Nextgen test bean stateful</description>
+         <ejb-name>nextgen_StatefulSession_SingleRetry</ejb-name>
+         <home>org.jboss.test.testbean.interfaces.StatefulSessionHome</home>
+         <remote>org.jboss.test.cluster.ejb2.basic.interfaces.StatefulSession</remote>
+         <ejb-class>org.jboss.test.cluster.ejb2.basic.bean.StatefulSessionBean</ejb-class>
+         <session-type>Stateful</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+      
+        <entity>
+            <description>Nextgen PK bean</description>
+            <ejb-name>nextgen_EntityPK_Retry</ejb-name>
+            <home>org.jboss.test.testbean.interfaces.EntityPKHome</home>
+            <remote>org.jboss.test.testbean.interfaces.EntityPK</remote>
+            <ejb-class>org.jboss.test.testbean.bean.EntityPKBean</ejb-class>
+            <persistence-type>Container</persistence-type>
+            <prim-key-class>org.jboss.test.testbean.interfaces.AComplexPK</prim-key-class>
+            <reentrant>False</reentrant>
+            <cmp-version>1.x</cmp-version>
+            <cmp-field>
+                <field-name>aBoolean</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>anInt</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>aLong</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>aDouble</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>aString</field-name>
+            </cmp-field>
+         <cmp-field>
+          <field-name>otherField</field-name>
+         </cmp-field>
+        </entity>
+      
+        <entity>
+            <description>Nextgen PK bean</description>
+            <ejb-name>nextgen_EntityPK_SingleRetry</ejb-name>
+            <home>org.jboss.test.testbean.interfaces.EntityPKHome</home>
+            <remote>org.jboss.test.testbean.interfaces.EntityPK</remote>
+            <ejb-class>org.jboss.test.testbean.bean.EntityPKBean</ejb-class>
+            <persistence-type>Container</persistence-type>
+            <prim-key-class>org.jboss.test.testbean.interfaces.AComplexPK</prim-key-class>
+            <reentrant>False</reentrant>
+            <cmp-version>1.x</cmp-version>
+            <cmp-field>
+                <field-name>aBoolean</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>anInt</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>aLong</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>aDouble</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>aString</field-name>
+            </cmp-field>
+         <cmp-field>
+          <field-name>otherField</field-name>
+         </cmp-field>
+        </entity>
+
+   </enterprise-beans>
+
+   <assembly-descriptor>
+   
+      <container-transaction>
+         <method>
+            <ejb-name>nextgen_StatefulSession_Retry</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>nextgen_StatefulSession_SingleRetry</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>nextgen_StatelessSession_Retry</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>nextgen_StatelessSession_SingleRetry</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>nextgen_EntityPK_Retry</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <method>
+            <ejb-name>nextgen_EntityPK_SingleRetry</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <trans-attribute>Required</trans-attribute>
+      </container-transaction>
+
+   </assembly-descriptor>
+</ejb-jar>

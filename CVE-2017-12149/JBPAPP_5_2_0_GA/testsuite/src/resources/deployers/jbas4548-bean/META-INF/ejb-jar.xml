@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ejb-jar version="2.1" 
+         xmlns="http://java.sun.com/xml/ns/j2ee" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+                             http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd"
+> 
+  <enterprise-beans>
+      
+        <entity>
+            <description>JBAS4548_EntityPK</description>
+            <ejb-name>JBAS4548_EntityPK</ejb-name>
+            <local-home>org.jboss.test.deployers.jbas4548.ejb.EntityPKHome</local-home>
+            <local>org.jboss.test.deployers.jbas4548.ejb.EntityPK</local>
+            <ejb-class>org.jboss.test.deployers.jbas4548.ejb.EntityPKBean</ejb-class>
+            <persistence-type>Container</persistence-type>
+            <prim-key-class>org.jboss.test.deployers.jbas4548.ejb.AComplexPK</prim-key-class>
+            <reentrant>false</reentrant>
+            <cmp-version>2.x</cmp-version>
+            <cmp-field>
+                <field-name>aBoolean</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>anInt</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>aLong</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>aDouble</field-name>
+            </cmp-field>
+            <cmp-field>
+                <field-name>aString</field-name>
+            </cmp-field>
+         <cmp-field>
+          <field-name>otherField</field-name>
+         </cmp-field>
+        </entity>
+  </enterprise-beans>
+
+   <assembly-descriptor>
+   
+      <container-transaction>
+         <method>
+            <ejb-name>JBAS4548_EntityPK</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <trans-attribute>Required</trans-attribute>
+      </container-transaction>
+
+   </assembly-descriptor>
+</ejb-jar>

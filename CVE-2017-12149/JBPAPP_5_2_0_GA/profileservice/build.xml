@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+   <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
+   <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+   <!ENTITY targets SYSTEM "../tools/etc/buildmagic/targets.ent">
+]>
+
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--  JBoss, the OpenSource J2EE webOS                                      -->
+<!--                                                                        -->
+<!--  Distributable under LGPL license.                                     -->
+<!--  See terms of license at http://www.gnu.org.                           -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<!-- $Id: build.xml 90913 2009-07-07 22:48:11Z scott.stark@jboss.org $ -->
+
+<project default="main" name="JBoss/ProfileService">
+
+  <!-- ================================================================== -->
+  <!-- Setup                                                              -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Include the common Buildmagic elements.
+     |
+     | This defines several different targets, properties and paths.
+     | It also sets up the basic extention tasks amoung other things.
+   -->
+
+  &buildmagic;
+
+  <!--
+     | Include the normal targets.
+   -->
+  &targets;
+
+  <!-- ================================================================== -->
+  <!-- Configuration                                                      -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Configure the build system.
+     |
+     | This target is invoked by the Buildmagic initialization logic and
+     | should contain module specific configuration elements.
+   -->
+
+  <target name="configure" unless="configure.disable">
+
+    <!-- =================== -->
+    <!-- Basic Configuration -->
+    <!-- =================== -->
+
+    <!-- Module name(s) & version -->
+    <property name="module.name" value="profileserivce"/>
+    <property name="module.Name" value="JBoss ProfileService"/>
+    <property name="module.version" value="DEV"/>
+
+    <!-- ========= -->
+    <!-- Libraries -->
+    <!-- ========= -->
+
+    &libraries;
+    &modules;
+
+    <!-- The combined library classpath -->
+    <path id="library.classpath">
+      <path refid="junit.junit.classpath"/>
+      <path refid="jboss.aop.classpath"/>
+      <path refid="jboss.aspects.classpath"/>
+      <path refid="jboss.common.core.classpath"/>
+      <path refid="jboss.common.logging.spi.classpath"/>
+      <path refid="jboss.jboss.vfs.classpath"/>
+      <path refid="jboss.jboss.deployers.classpath"/>      
+      <path refid="jboss.jboss.man.classpath"/>      
+      <path refid="jboss.jboss.mdr.classpath"/>      
+      <path refid="jboss.jboss.reflect.classpath"/>      
+      <path refid="jboss.microcontainer.classpath"/>
+      <path refid="jboss.profileservice.spi.classpath"/>
+      <path refid="jboss.remoting.classpath"/>
+      <path refid="jboss.jboss.security.spi.classpath"/>
+      <path refid="jboss.jbossxb.classpath"/>
+      <path refid="jboss.web.classpath"/>
+      <path refid="sun.jaxb.classpath"/>
+      <path refid="stax.api.classpath"/>
+      <path refid="org.jboss.aspects.classpath"/>
+      <path refid="jboss.systemjmx.classpath"/>
+      <path refid="jboss.j2se.classpath"/>
+      <path refid="jboss.jboss.ejb3.ext.api.classpath"/>
+      <path refid="jboss.jboss.javaee.classpath"/>
+    </path>
+
+    <!-- The combined dependant module classpath -->
+    <path id="dependentmodule.classpath">
+      <path refid="jboss.system.classpath"/>
+    </path>
+
+    <!-- ===== -->
+    <!-- Tasks -->
+    <!-- ===== -->
+
+    <property name="jar.prefix" value="jboss-profileservice"/>
+    <property name="javac.target" value="1.5"/>
+    <property name="javac.source" value="1.5"/>
+    <property name="jar.client.includes" 
+              value="org/jboss/profileservice/management/client/**" />
+    <call target="_default:task-init"/>
+
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- Compile                                                            -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Compile everything.
+     |
+     | This target should depend on other compile-* targets for each
+     | different type of compile that needs to be performed, short of
+     | documentation compiles.
+   -->
+
+  <target name="compile"
+	  description="Compile all source files."
+	  depends="_default:compile-classes,
+              _default:compile-resources,
+              _default:compile-etc"/>
+
+  <!-- ================================================================== -->
+  <!-- Archives                                                           -->
+  <!-- ================================================================== -->
+
+  
+  
+
+  <!-- 
+     |  Build all jar files.
+    -->
+  <target name="module-jars" >
+  
+    <!-- -->
+    <jar jarfile="${build.lib}/jboss-profileservice.jar" manifest="${build.etc}/default.mf">
+      <fileset dir="${build.classes}" />
+      <!-- Get the property-files -->
+      <fileset dir="${source.java}">
+        <include name="org/jboss/**/*.properties"/>
+      </fileset>
+      <fileset dir="${build.resources}">
+        <include name="dtd/**"/>
+      </fileset>
+    </jar>
+
+    <!-- client jar -->
+    <jar jarfile="${build.lib}/${jar.client.name}" manifest="${build.etc}/default.mf">
+       <fileset dir="${build.classes}" includes="${jar.client.includes}"/>
+    </jar>
+
+      <!-- secured ManagementView jar -->
+      <jar destfile="${build.lib}/profileservice-secured.jar">
+        <metainf dir="${build.resources}">
+           <include name="ejb-jar.xml" />
+        </metainf>
+      <fileset dir="${build.resources}">
+         <include name="profileservice-users.properties"/>
+         <include name="profileservice-roles.properties"/>
+      </fileset>
+    </jar>
+  </target>
+
+</project>

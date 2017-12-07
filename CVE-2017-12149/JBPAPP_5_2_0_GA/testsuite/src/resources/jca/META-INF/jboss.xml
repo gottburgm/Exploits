@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 3.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_3_0.dtd">
+
+<jboss>
+
+   <enterprise-beans>
+
+     <!--
+       To add beans that you have deployment descriptor info for, add
+       a file to your XDoclet merge directory called jboss-beans.xml that contains
+       the <session></session>, <entity></entity> and <message-driven></message-driven>
+       markup for those beans.
+     -->
+
+      <entity>
+         <ejb-name>Reentrant</ejb-name>
+         <jndi-name>ejb/jca/Reentrant</jndi-name>
+
+      </entity>
+
+      <session>
+         <ejb-name>LocalWrapperCleanupTestSession</ejb-name>
+         <jndi-name>LocalWrapperCleanupTestSession</jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>RollbackOnlyReleaseConnectionSession</ejb-name>
+         <jndi-name>RollbackOnlyReleaseConnectionSession</jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>HAConnectionSession</ejb-name>
+         <jndi-name>HAConnectionSession</jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>ConnectionFactorySerializationTestSession</ejb-name>
+         <jndi-name>ConnectionFactorySerializationTestSession</jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>CachedConnectionSession</ejb-name>
+         <jndi-name>CachedConnectionSession</jndi-name>
+         <local-jndi-name>CachedConnectionSessionBean</local-jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>UserTxSession</ejb-name>
+         <jndi-name>UserTxSession</jndi-name>
+         <local-jndi-name>LocalUserTxSession</local-jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>JDBCStatementTestsConnectionSession</ejb-name>
+         <jndi-name>JDBCStatementTestsConnectionSession</jndi-name>
+         <local-jndi-name>JDBCStatementTestsConnectionSessionLocal</local-jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>XAExceptionTestSession</ejb-name>
+         <jndi-name>test/XAExceptionTestSessionHome</jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>XAExceptionSession</ejb-name>
+         <jndi-name>test/XAExceptionSessionHome</jndi-name>
+         <local-jndi-name>test/XAExceptionSessionLocalHome</local-jndi-name>
+
+      </session>
+
+   </enterprise-beans>
+
+   <resource-managers>
+   </resource-managers>
+
+</jboss>

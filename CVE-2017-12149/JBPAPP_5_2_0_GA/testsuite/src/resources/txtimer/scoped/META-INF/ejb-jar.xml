@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar >
+
+   <description>TxTimerTests</description>
+   <display-name>TxTimerTests</display-name>
+
+   <enterprise-beans>
+
+      <!-- Session Beans -->
+      <session>
+         <description><![CDATA[Session Bean Timer Test]]></description>
+         <display-name>Timer in Stateless Session Bean</display-name>
+
+         <ejb-name>test/txtimer/TimerSession</ejb-name>
+
+         <home>org.jboss.test.txtimer.interfaces.TimerSessionHome</home>
+         <remote>org.jboss.test.txtimer.interfaces.TimerSession</remote>
+         <local-home>org.jboss.test.txtimer.interfaces.TimerSessionLocalHome</local-home>
+         <local>org.jboss.test.txtimer.interfaces.TimerSessionLocal</local>
+         <ejb-class>org.jboss.test.txtimer.ejb.TimerSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+
+   </enterprise-beans>
+
+   <!-- Assembly Descriptor -->
+   <assembly-descriptor>
+
+      <!-- transactions -->
+      <container-transaction>
+         <method >
+            <ejb-name>test/txtimer/TimerSession</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <trans-attribute>Required</trans-attribute>
+      </container-transaction>
+    
+   </assembly-descriptor>
+
+</ejb-jar>

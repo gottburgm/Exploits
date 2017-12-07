@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+   <!-- The custom configuration service that installs
+       a Configuration capable of dynamically updating the
+       config settings
+   -->
+   <mbean code="org.jboss.security.auth.login.DynamicLoginConfig"
+         name="jboss.security.tests:service=DynamicLoginConfig">
+    <attribute name="PolicyConfig" serialDataType="jbxb">
+         <jbsx:policy xsi:schemaLocation="urn:jboss:security-config:5.0 resource:security-config_5_0.xsd" xmlns:jbsx="urn:jboss:security-config:5.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <jbsx:application-policy name="xacml-domain">
+               <jbsx:authentication>
+                 <jbsx:login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule" flag="required"/>
+               </jbsx:authentication>
+               <jbsx:authorization>
+                 <jbsx:policy-module code="org.jboss.security.authorization.modules.XACMLAuthorizationModule" flag="required" />
+               </jbsx:authorization>
+            </jbsx:application-policy>
+         </jbsx:policy>         
+      </attribute>
+      <depends optional-attribute-name="LoginConfigService">
+         jboss.security:service=XMLLoginConfig
+      </depends>
+      <depends optional-attribute-name="SecurityManagerService">
+         jboss.security:service=JaasSecurityManager
+      </depends>
+   </mbean>
+</server>

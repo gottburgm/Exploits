@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server
+    PUBLIC "-//JBoss//DTD MBean Service 3.2//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-service_3_2.dtd">
+
+<!-- 
+     Hand generated service descriptor that allows the GossipRouter to be
+     deployed as a JBoss MBean. 
+-->
+
+<server>
+
+   <mbean code="org.jgroups.stack.GossipRouter"
+          name="jgroups:service=GossipRouter"
+          xmbean-dd="META-INF/gossiprouter-xmbean.xml">
+
+      <attribute name="BindAddress">${jboss.bind.address}</attribute>
+      <attribute name="Port">12000</attribute>
+      <attribute name="ExpiryTime">30000</attribute>
+      <attribute name="GossipRequestTimeout">1000</attribute>
+      <attribute name="RoutingClientReplyTimeout">120000</attribute>
+
+   </mbean>
+
+</server>

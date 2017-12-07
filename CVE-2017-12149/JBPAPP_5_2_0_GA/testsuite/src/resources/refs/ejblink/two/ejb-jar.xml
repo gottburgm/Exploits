@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    version="3.0"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd">
+    <enterprise-beans>
+        <session>
+            <ejb-name>EjbLink2Bean</ejb-name>
+            <ejb-class>org.jboss.test.refs.ejblink.EjbLink2Bean</ejb-class>
+            
+            <ejb-ref>
+                <ejb-ref-name>ejb/EjbLink1Bean</ejb-ref-name>
+                <ejb-ref-type>Session</ejb-ref-type>
+                <remote>org.jboss.test.refs.common.EjbLinkIF</remote>
+                <ejb-link>refs-one-ejb.jar#EjbLink1Bean</ejb-link>
+            </ejb-ref>
+            
+            <ejb-local-ref>
+                <ejb-ref-name>ejb/EjbLink3Bean</ejb-ref-name>
+                <ejb-ref-type>Session</ejb-ref-type>
+                <local>org.jboss.test.refs.common.EjbLinkIF</local>
+                <ejb-link>EjbLink3Bean</ejb-link>
+            </ejb-local-ref>
+            
+        </session>
+    </enterprise-beans>
+</ejb-jar>

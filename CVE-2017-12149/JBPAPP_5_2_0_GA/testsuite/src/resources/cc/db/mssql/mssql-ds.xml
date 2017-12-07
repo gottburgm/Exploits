@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  JBoss Server Configuration                                           -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+<!-- $Id: mssql-ds.xml 71536 2008-04-01 07:05:26Z adrian@jboss.org $ -->
+
+  <!-- ======================================================================-->
+  <!-- New ConnectionManager setup for Microsoft SQL Server 2005  driver     -->
+  <!-- Further information about the Microsoft JDBC Driver version 1.1      -->
+  <!-- can be found here:                                                   -->
+  <!-- http://msdn2.microsoft.com/en-us/library/aa496082.aspx               -->  
+  <!-- ===================================================================== -->
+
+<datasources>
+  <local-tx-datasource>
+    <jndi-name>DefaultDS</jndi-name>
+    <connection-url>jdbc:sqlserver://dev30.qa.atl.jboss.com:3918</connection-url>
+    <driver-class>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver-class>
+    <user-name>mmalina</user-name>
+    <password>mmalina</password>
+<transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+        <!-- sql to call when connection is created
+        <new-connection-sql>some arbitrary sql</new-connection-sql>
+        -->
+
+        <!-- sql to call on an existing pooled connection when it is obtained from pool 
+        <check-valid-connection-sql>some arbitrary sql</check-valid-connection-sql>
+        -->
+
+      <!-- corresponding type-mapping in the standardjbosscmp-jdbc.xml (optional) -->
+      <metadata>
+         <type-mapping>MS SQLSERVER2000</type-mapping>
+      </metadata>
+  </local-tx-datasource>
+
+</datasources>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connector xmlns="http://java.sun.com/xml/ns/j2ee"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+           http://java.sun.com/xml/ns/j2ee/connector_1_5.xsd"
+           version="1.5">
+
+   <description>Test Resource Adapter for new jca 1.5 features</description>
+   <display-name>Inflow Test Resource Adapter</display-name>
+   <vendor-name>JBoss, Inc</vendor-name>
+   <eis-type>JBoss Testsuite</eis-type>
+   <resourceadapter-version>4.0</resourceadapter-version>
+
+   <license>
+      <description>
+      COPYRIGHT AND PERMISSION NOTICE
+      Copyright (c) 2004 JBoss, Inc
+      This is released under the terms of the LGPL.
+      See gnu.org for details.
+      </description>
+      <license-required>true</license-required>
+   </license>
+
+   <resourceadapter>
+      <resourceadapter-class>org.jboss.test.jca.inflow.TestResourceAdapter</resourceadapter-class>
+
+      <inbound-resourceadapter>
+         <messageadapter>        
+            <messagelistener>
+               <messagelistener-type>org.jboss.test.jca.inflow.TestMessageListener</messagelistener-type>
+               <activationspec>
+                  <activationspec-class>org.jboss.test.jca.inflow.TestActivationSpec</activationspec-class>
+                  <required-config-property>
+                     <config-property-name>name</config-property-name>
+                  </required-config-property>
+                  <required-config-property>
+                     <description>An int between 1-10</description>
+                     <config-property-name>anInt</config-property-name>
+                  </required-config-property>
+                  <required-config-property>
+                     <description>An Integer between 50-100</description>
+                     <config-property-name>anInteger</config-property-name>
+                  </required-config-property>
+                  <required-config-property>
+                     <description>The 127.0.0.1 address</description>
+                     <config-property-name>localhost</config-property-name>
+                  </required-config-property>
+                  <required-config-property>
+                     <description>java.util.Properties of the form key1=*;key2=*;...</description>
+                     <config-property-name>props</config-property-name>
+                  </required-config-property>
+               </activationspec>
+            </messagelistener>
+         </messageadapter>
+      </inbound-resourceadapter>
+
+   </resourceadapter>
+</connector>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main"/>
+	<classpathentry exported="true" kind="src" path="/ejb3"/>
+	<classpathentry exported="true" kind="src" path="/tomcat"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/ws/lib/jbossws-common.jar" sourcepath="/thirdparty/org/jboss/ws/lib/jbossws-common-src.zip"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/ws/lib/jbossws-framework.jar" sourcepath="/thirdparty/org/jboss/ws/lib/jbossws-framework-src.zip"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-deployers/lib/jboss-deployers-client.jar" sourcepath="/thirdparty/jboss/jboss-deployers/lib/jboss-deployers-client-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/org/jboss/ws/lib/jbossws-spi.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/server"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-kernel.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-kernel-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-dependency.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-dependency-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-ejb3-common/lib/jboss-ejb3-common.jar"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

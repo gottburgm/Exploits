@@ -1,0 +1,26 @@
+<?xml version='1.0'?>
+
+<!-- The JAAS login configuration file for the java:/jaas/ejb-timers
+security domain used by the ejb timer tests
+-->
+<policy xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns="http://www.jboss.org/j2ee/schema/jaas"
+   targetNamespace="http://www.jboss.org/j2ee/schema/jaas"
+   >
+
+    <application-policy name = "ejb-timers">
+       <authentication>
+          <login-module code="org.jboss.security.auth.spi.XMLLoginModule" flag="required">
+             <module-option name="userInfo">
+                <lm:users xmlns:lm="http://www.jboss.org/j2ee/schemas/XMLLoginModule">
+                   <lm:user name="jduke" password="theduke">
+                      <lm:role name="AuthorizedUser"/>
+                   </lm:user>
+                </lm:users>
+             </module-option>
+             <module-option name="unauthenticatedIdentity">guest</module-option>
+          </login-module>
+       </authentication>
+    </application-policy>
+
+</policy>

@@ -1,0 +1,26 @@
+diff -Naur server/standard/deploy/ROOT.war/index.html server/standard/deploy/ROOT.war/index.html
+--- server/standard/deploy/ROOT.war/index.html	2009-08-18 21:53:40.000000000 -0400
++++ server/standard/deploy/ROOT.war/index.html	2009-08-19 08:48:47.000000000 -0400
+@@ -17,10 +17,8 @@
+ 
+ <h3>Manage this JBoss EAP Instance</h3>
+    <ul>      
+-      <li><a href="/admin-console/">Admin Console</a></li>
+       <li><a href="/jmx-console/">JMX Console</a></li>
+-      <li><a href="/web-console/">JBoss Web Console</a></li>
+       <li><a href="/jbossws/">JBoss WS Console</a></li>
+       <li><a href="/status">Tomcat status</a>
+           <a href="/status?full=true">(full)</a>
+           <a href="/status?XML=true">(XML)</a></li>
+diff -Naur server/web/deploy/ROOT.war/index.html server/web/deploy/ROOT.war/index.html
+--- server/web/deploy/ROOT.war/index.html	2009-08-18 21:53:43.000000000 -0400
++++ server/web/deploy/ROOT.war/index.html	2009-08-19 08:07:35.000000000 -0400
+@@ -19,8 +19,7 @@
+    <ul>      
+       <li><a href="/admin-console/">Admin Console</a></li>
+       <li><a href="/jmx-console/">JMX Console</a></li>
+-      <li><a href="/web-console/">JBoss Web Console</a></li>
+       <li><a href="/jbossws/">JBoss WS Console</a></li>
+       <li><a href="/status">Tomcat status</a>
+           <a href="/status?full=true">(full)</a>
+           <a href="/status?XML=true">(XML)</a></li>

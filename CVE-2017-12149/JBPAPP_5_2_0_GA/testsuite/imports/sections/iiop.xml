@@ -1,0 +1,99 @@
+<project name="tests-iiop-jars">
+   <!-- iiop parameter passing test -->
+   <target name="_jars-iiop">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build iioptest.jar -->
+      <jar destfile="${build.lib}/iioptest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/iiop/interfaces/**"/>
+            <include name="org/jboss/test/iiop/util/**"/>
+            <include name="org/jboss/test/iiop/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/iiop">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build iiop.jar -->
+      <jar destfile="${build.lib}/iiop.jar">
+         <metainf dir="${build.resources}/iiop/META-INF"/>
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/iiop/interfaces/**"/>
+            <include name="org/jboss/test/iiop/util/**"/>
+            <include name="org/jboss/test/iiop/ejb/**"/>
+         </fileset>
+      </jar>
+
+      <!-- jbpapp6469 -->
+      <jar destfile="${build.lib}/jbpapp6469.jar">
+        <fileset dir="${build.classes}">
+          <include name="org/jboss/test/iiop/jbpapp6469/**"/>
+        </fileset>
+      </jar>      
+   </target>
+   
+   <!-- iiop TCCL test / JBPAPP-6462-->
+   <target name="_jars-iioptccl">
+      <mkdir dir="${build.lib}"/>
+
+      <!-- EJB -->
+      <jar destfile="${build.lib}/jbpapp6462-ejb.jar">
+	 <metainf dir="${build.resources}/iiop-jbpapp6462/ejb"/>
+         <fileset dir="${build.classes}">
+	    <include name="org/jboss/test/iiop/jbpapp6462/ejb/**"/>
+	    <include name="org/jboss/test/iiop/jbpapp6462/generated/**"/>
+	    <include name="org/jboss/test/iiop/jbpapp6462/servant/**"/>
+	  </fileset>
+      </jar>
+      
+      <!-- Servant 
+      <jar destfile="${build.lib}/jbpapp6462-servant.jar">
+         <fileset dir="${build.classes}">
+	    <include name="org/jboss/test/iiop/jbpapp6462/generated/**"/>
+	    <include name="org/jboss/test/iiop/jbpapp6462/servant/**"/>
+	  </fileset>
+      </jar>      -->
+      
+      <!-- EAR -->
+      <jar destfile="${build.lib}/jbpapp6462.ear">
+	 <metainf dir="${build.resources}/iiop-jbpapp6462/ear"/>
+         <metainf dir="${build.resources}/iiop-jbpapp6462/bean"/>
+	 <fileset dir="${build.lib}">
+	    <include name="jbpapp6462-ejb.jar"/>
+	    <include name="jbpapp6462-servant.jar"/>
+	  </fileset>
+      </jar>
+   </target>
+   
+   <!-- iiop timing test -->
+   <target name="_jars-iiopperf">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build iiopperftest.jar -->
+      <jar destfile="${build.lib}/iiopperftest.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/iiopperf/interfaces/**"/>
+            <include name="org/jboss/test/iiopperf/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/iiopperf">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+      
+      <!-- build iiopperf.jar -->
+      <jar destfile="${build.lib}/iiopperf.jar">
+         <metainf dir="${build.resources}/iiopperf/META-INF"/>
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/iiopperf/interfaces/**"/>
+            <include name="org/jboss/test/iiopperf/ejb/**"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

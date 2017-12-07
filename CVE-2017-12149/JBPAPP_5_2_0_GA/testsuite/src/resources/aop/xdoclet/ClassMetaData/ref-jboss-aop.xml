@@ -1,0 +1,56 @@
+<aop>
+  <advisable class="org.jboss.test.aop.xdoclet.ClassMetaData"/>
+  
+  <class-metadata group="MyFirstGroup" class="org.jboss.test.aop.xdoclet.ClassMetaData">
+    <default>
+      <abc>Blah Blah</abc>
+      <def>Random stuff</def>
+    </default>
+    <method name="get*">
+      <abc>def</abc>
+    </method>
+    <method name="firstMethod">
+      <method-params/>
+      <custom-attribute>Some custom data</custom-attribute>
+    </method>
+    <method name="secondMethod">
+      <method-params/>
+      <custom-attribute>
+        <nested>Nested data</nested>
+        <more>More nested data</more>
+      </custom-attribute>
+    </method>
+    <method name="thirdMethod">
+      <method-params>
+        <method-param>java.lang.String</method-param>
+      </method-params>
+      <custom-attribute/>
+    </method>
+    <field name="test*">
+      <abc>def</abc>
+    </field>
+    <field name="name">
+      <custom-attribute>Blah Blah</custom-attribute>
+    </field>
+  </class-metadata>
+  
+  <class-metadata group="AnotherGroup" class="org.jboss.test.aop.xdoclet.ClassMetaData">
+    <default>
+      <test>true</test>
+    </default>
+    <method name="firstMethod">
+      <method-params/>
+      <test>false</test>
+    </method>
+    <method name="thirdMethod">
+      <method-params>
+        <method-param>java.lang.String</method-param>
+      </method-params>
+      <test>false</test>
+      <logging>true</logging>
+    </method>
+  </class-metadata>
+  
+</aop>
+
+

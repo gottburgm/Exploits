@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===================================================================== -->
+<!--    -->
+<!--  JBoss Server Configuration    -->
+<!-- Thanks to Horia Muntean <horia@bvb.ro>   -->
+<!-- ===================================================================== -->
+
+<!-- $Id: db2-xa-ds.xml 77479 2008-08-26 10:33:09Z alex.loubyansky@jboss.com $ -->
+
+
+<datasources>
+   <xa-datasource>
+     <jndi-name>CrashRecoveryDS</jndi-name>
+        <xa-datasource-class>com.ibm.db2.jcc.DB2XADataSource</xa-datasource-class>
+        
+        <xa-datasource-property name="DatabaseName">jbossqa</xa-datasource-property>
+        @CREDENTIALS@
+        
+        <!-- Note, as opposed to the Type2 driver, DB2 Type 4 requires the PortNumber. By default this is 50000-->
+        <xa-datasource-property name="PortNumber">50000</xa-datasource-property>
+        <xa-datasource-property name="ServerName">vmg06.mw.lab.eng.bos.redhat.com</xa-datasource-property>
+		<xa-datasource-property name="DriverType">4</xa-datasource-property>
+        
+	    <!-- If driverType 4 is used, the following two tags are needed -->     
+        <!-- Must be set if using multiple DB2 XA resources in same transaction -->
+        <isSameRM-override-value>false</isSameRM-override-value>
+        <no-tx-separate-pools></no-tx-separate-pools>
+            
+        <!-- uncomment to enable interleaving <interleaving/> -->
+        
+        <!-- corresponding type-mapping in the standardjbosscmp-jdbc.xml -->
+        <metadata>
+            <type-mapping>DB2</type-mapping>
+        </metadata>
+   </xa-datasource>
+</datasources>

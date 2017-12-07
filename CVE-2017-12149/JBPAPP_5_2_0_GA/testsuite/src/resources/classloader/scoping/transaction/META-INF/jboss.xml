@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE jboss PUBLIC
+ "-//JBoss//DTD JBOSS 4.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+   <loader-repository>jboss.test:loader=scopedtx.jar</loader-repository>
+
+   <enterprise-beans>
+      <session>
+         <ejb-name>ScopedTxTestSession</ejb-name>
+         <call-by-value>true</call-by-value>
+      </session>
+   </enterprise-beans>
+
+</jboss>

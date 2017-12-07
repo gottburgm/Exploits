@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ejb-jar xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+         http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd"
+         version="2.1"
+>
+
+   <enterprise-beans>
+
+      <message-driven>
+         <ejb-name>JCAPropsMDB</ejb-name>
+         <ejb-class>org.jboss.test.jcaprops.support.PropertyTestListenerImpl</ejb-class>
+         <messaging-type>org.jboss.test.jcaprops.support.PropertyTestListener</messaging-type>
+         <transaction-type>Container</transaction-type>
+         <activation-config>
+            <activation-config-property>
+               <activation-config-property-name>stringAS</activation-config-property-name>
+               <activation-config-property-value>stringFromASProperties</activation-config-property-value>
+            </activation-config-property>
+            <!-- Other non-String properties to test the ActivationSpec java bean -->
+            <activation-config-property>
+               <activation-config-property-name>booleanAS</activation-config-property-name>
+               <activation-config-property-value>true</activation-config-property-value>
+            </activation-config-property>
+            <activation-config-property>
+               <activation-config-property-name>byteAS</activation-config-property-name>
+               <activation-config-property-value>11</activation-config-property-value>
+            </activation-config-property>
+            <activation-config-property>
+               <activation-config-property-name>characterAS</activation-config-property-name>
+               <activation-config-property-value>b</activation-config-property-value>
+            </activation-config-property>
+            <activation-config-property>
+               <activation-config-property-name>shortAS</activation-config-property-name>
+               <activation-config-property-value>12</activation-config-property-value>
+            </activation-config-property>
+            <activation-config-property>
+               <activation-config-property-name>integerAS</activation-config-property-name>
+               <activation-config-property-value>13</activation-config-property-value>
+            </activation-config-property>
+            <activation-config-property>
+               <activation-config-property-name>longAS</activation-config-property-name>
+               <activation-config-property-value>14</activation-config-property-value>
+            </activation-config-property>
+            <activation-config-property>
+               <activation-config-property-name>floatAS</activation-config-property-name>
+               <activation-config-property-value>5e16</activation-config-property-value>
+            </activation-config-property>
+            <activation-config-property>
+               <activation-config-property-name>doubleAS</activation-config-property-name>
+               <activation-config-property-value>7e18</activation-config-property-value>
+            </activation-config-property>
+         </activation-config>
+      </message-driven>
+
+   </enterprise-beans>
+
+   <assembly-descriptor>
+
+      <container-transaction>
+         <method>
+            <ejb-name>JCAPropsMDB</ejb-name>
+            <method-name>*</method-name>
+         </method>
+         <trans-attribute>Required</trans-attribute>
+      </container-transaction>
+
+   </assembly-descriptor>
+
+</ejb-jar>

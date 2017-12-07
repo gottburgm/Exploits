@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE jboss PUBLIC
+      "-//JBoss//DTD JBOSS 4.0//EN"
+      "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <message-driven>
+         <ejb-name>TestMDB</ejb-name>
+         <local-jndi-name>TestMDB</local-jndi-name>
+         <mdb-user>${test.messagedriven.user}</mdb-user>
+         <mdb-passwd>${test.messagedriven.password}</mdb-passwd>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>jms-container-invoker-driven-bean</invoker-proxy-binding-name>
+            </invoker>
+         </invoker-bindings>
+      </message-driven>
+   </enterprise-beans>
+   <invoker-proxy-bindings>
+    <invoker-proxy-binding>
+      <name>jms-container-invoker-driven-bean</name>
+      <invoker-mbean>default</invoker-mbean>
+      <proxy-factory>org.jboss.ejb.plugins.jms.JMSContainerInvoker</proxy-factory>
+      <proxy-factory-config>
+        <JMSProviderAdapterJNDI>DefaultJMSProvider</JMSProviderAdapterJNDI>
+        <ServerSessionPoolFactoryJNDI>StdJMSPool</ServerSessionPoolFactoryJNDI>
+        <!-- WARN: Don't set this to zero until a bug in the pooled executor is fixed -->
+        <MinimumSize>1</MinimumSize>
+        <MaximumSize>15</MaximumSize>
+        <KeepAliveMillis>30000</KeepAliveMillis>
+        <MaxMessages>1</MaxMessages>
+        <MDBConfig>
+          <ReconnectIntervalSec>10</ReconnectIntervalSec>
+          <DeliveryActive>${test.messagedriven.DeliveryActive}</DeliveryActive>
+          <DLQConfig>
+            <DestinationQueue>queue/DLQ</DestinationQueue>
+            <MaxTimesRedelivered>${test.messagedriven.DLQMaxResent}</MaxTimesRedelivered>
+            <TimeToLive>0</TimeToLive>
+          </DLQConfig>
+        </MDBConfig>
+      </proxy-factory-config>
+    </invoker-proxy-binding>
+   </invoker-proxy-bindings>
+</jboss>

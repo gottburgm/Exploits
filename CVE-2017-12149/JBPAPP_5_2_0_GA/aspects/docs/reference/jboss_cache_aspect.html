@@ -1,0 +1,97 @@
+<html>
+<body>
+<p>
+<h2>What is JBossCache</h2>
+
+</p><p>
+JBossCache consists of two modules: 
+<ul>
+<li><a href="http://docs.jboss.org/jbcache/TreeCache.html">TreeCache</a>--a replicated transactional tree-structured cache </li>
+<li><a href="http://docs.jboss.org/jbcache/TreeCacheAop.html">TreeCacheAop</a>--an 'object-oriented' cache using AOP to dynamically manage Plain Old Java Objects (POJOs).</li>
+</ul>
+\\
+A <a href="http://docs.jboss.org/jbcache/Tutorial.html">tutorial</a> and <a href="http://docs.jboss.org/jbcache/FAQ.html">faq</a> for both TreeCache and TreeCacheAop are also provided. JBossCache can be used either inside JBoss or as a standalone. 
+</p><p>
+<h3> News</h3>
+
+<ul>
+<li> 05-01-2004 JBossCache 1.01 has been released. This release includes a new version of JGroups, docs update, and some important bug fixes. Please see the accompanying release note and change log for details. </li>
+</ul>
+</p><p>
+<h3> Download</h3>
+
+<ul>
+<li> The code for the standalone JBossCache package can be <a href="http://sourceforge.net/project/showfiles.php?group_id=22866&package_id=102339">downloaded</a> from here (JBossCache-1.*.zip).</li>
+</ul>
+</p><p>
+<h3> Features</h3>
+
+<ul>
+<li> TreeCache (tree structured node based cache)</li>
+<ul>
+<li> cache mode. Supports local, synchronous replication,</li>
+</ul>
+</ul>
+     and asynchronous replication
+<ul>
+<ul>
+<li> transaction. Works with JTA transaction manager. Support transaction</li>
+</ul>
+</ul>
+     isolation levels.
+<ul>
+<ul>
+<li> eviction policy. User can write its own eviction policy via a plugin.</li>
+</ul>
+</ul>
+     There is a org.jboss.cache.eviction.LRUPolicy class as an implementation
+     of <a href="/Wiki.jsp?page=LRU">LRU</a> algorithm.
+<ul>
+<ul>
+<li> Run under JBoss4.0 and 3.2.4 (and up) as a MBean service</li>
+</ul>
+</ul>
+</p><p>
+<ul>
+<li> TreecacheAop ('object-oriented' cache)</li>
+<ul>
+<li> Provides same features as TreeCache: cache mode, transaction, and eviction</li>
+</ul>
+</ul>
+     policy
+<ul>
+<ul>
+<li> Run under JBoss4.0 as a MBean service</li>
+<li> eviction policy. Provides an aop-specific policy implementation,</li>
+</ul>
+</ul>
+     org.jboss.cache.eviction.AopLRUPolicy
+<ul>
+<ul>
+<li> 'object-oriented' features (in replication mode as well):</li>
+<ul>
+<li> inheritance</li>
+<li> aggregation</li>
+<li> object graph handling</li>
+</ul>
+</ul>
+</ul>
+</p><p>
+<h3> Forums</h3>
+
+</p><p>
+<ul>
+<li> <a href="http://www.jboss.org/index.html?module=bb&op=viewforum&f=157">The development forum</a> is for the discussion of changes to the implementation and also user questions (for now).</li>
+</ul>
+</p><p>
+<h3> Authors</h3>
+
+</p><p>
+<ul>
+<li> Bela Ban (BelaAtJBoss.com)</li>
+<li> Ben Wang (Ben.WangAtJBoss.com)</li>
+<li> Harald Gliebe</li>
+</ul>
+</p>
+</body>
+</html>

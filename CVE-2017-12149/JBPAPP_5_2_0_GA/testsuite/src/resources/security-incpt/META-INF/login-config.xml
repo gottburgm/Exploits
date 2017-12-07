@@ -1,0 +1,28 @@
+<?xml version='1.0'?>
+
+<!DOCTYPE policy PUBLIC
+      "-//JBoss//DTD JBOSS Security Config 3.0//EN"
+      "http://www.jboss.org/j2ee/dtd/security_config.dtd">
+
+<policy>
+ 
+  <application-policy name="other2">
+    <authentication>
+      <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+        flag="required">
+        <module-option name="unauthenticatedIdentity">anonymous2</module-option>
+      </login-module>
+    </authentication>
+  </application-policy>
+
+  <application-policy name="other3">
+    <authentication>
+      <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+        flag="required">
+        <module-option name="unauthenticatedIdentity">anonymous3</module-option>
+      </login-module>
+    </authentication>
+  </application-policy>
+  
+</policy>
+

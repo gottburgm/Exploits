@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+   "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+   <description>WebApp Integration Tests</description>
+	<!--distributable/-->
+  
+   <!-- Registers an mbean the test driver can use to check the cache state -->
+   <listener>
+  	  <listener-class>org.jboss.test.cluster.web.CacheHelperServletContextListener</listener-class>
+   </listener>
+  
+  <servlet>
+      <servlet-name>LogoutServlet</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.LogoutServlet</servlet-class>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>LogoutServlet</servlet-name>
+      <url-pattern>/Logout</url-pattern>
+   </servlet-mapping>
+
+   <session-config>
+      <session-timeout>1</session-timeout>
+   </session-config>
+
+   <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>Restricted</web-resource-name>
+         <description>Single SignOn Tests</description>
+         <url-pattern>/*</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+         <description>Only authenticated users can access secure content</description>
+         <role-name>AuthorizedUser</role-name>
+      </auth-constraint>
+   </security-constraint>
+
+   <login-config>
+      <auth-method>FORM</auth-method>
+      <form-login-config>
+         <form-login-page>/login.html</form-login-page>
+         <form-error-page>/error.html</form-error-page>
+      </form-login-config>
+   </login-config>
+
+   <security-role>
+      <role-name>AuthorizedUser</role-name>
+   </security-role>
+</web-app>
+

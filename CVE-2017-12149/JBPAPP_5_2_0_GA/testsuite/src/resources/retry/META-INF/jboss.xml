@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE jboss PUBLIC
+      "-//JBoss//DTD JBOSS 4.0//EN"
+      "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+  <jboss>
+
+    <enterprise-beans>
+      <session>
+	<ejb-name>RetrySession</ejb-name>
+	<jndi-name>RetrySession</jndi-name>
+	<configuration-name>Retry</configuration-name>
+      </session>
+    </enterprise-beans>
+
+    <container-configurations>
+
+      <container-configuration extends="Standard Stateless SessionBean">
+         <container-name>Retry</container-name>
+         <container-interceptors>
+            <interceptor>org.jboss.ejb.plugins.ProxyFactoryFinderInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.LogInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.SecurityInterceptor</interceptor>
+            <!-- CMT -->
+            <interceptor transaction="Container">org.jboss.ejb.plugins.TxInterceptorCMT
+               <retry-handlers>
+                  <handler>org.jboss.test.retry.interfaces.RetryHandler</handler>
+               </retry-handlers>
+            </interceptor>
+            <interceptor transaction="Container" metricsEnabled="true">org.jboss.ejb.plugins.MetricsInterceptor</interceptor>
+            <interceptor transaction="Container">org.jboss.ejb.plugins.StatelessSessionInstanceInterceptor</interceptor>
+            <!-- BMT -->
+            <interceptor transaction="Bean">org.jboss.ejb.plugins.StatelessSessionInstanceInterceptor</interceptor>
+            <interceptor transaction="Bean">org.jboss.ejb.plugins.TxInterceptorBMT</interceptor>
+            <interceptor transaction="Bean" metricsEnabled="true">org.jboss.ejb.plugins.MetricsInterceptor</interceptor>
+            <interceptor>org.jboss.resource.connectionmanager.CachedConnectionInterceptor</interceptor>
+         </container-interceptors>
+      </container-configuration>
+
+    </container-configurations>
+
+  </jboss>

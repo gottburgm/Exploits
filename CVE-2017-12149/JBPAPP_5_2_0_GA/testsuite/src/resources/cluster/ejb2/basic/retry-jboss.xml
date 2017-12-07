@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC
+      "-//JBoss//DTD JBOSS 3.2//EN"
+      "http://www.jboss.org/j2ee/dtd/jboss_3_2.dtd">
+
+<jboss>
+
+   <enterprise-beans>
+      <session>
+         <ejb-name>nextgen_StatelessSession_Retry</ejb-name>
+         <configuration-name>Retry Clustered Stateless SessionBean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>clustered-stateless-rmi-invoker-retry</invoker-proxy-binding-name>
+               <jndi-name>nextgen_StatelessSession_Retry</jndi-name>
+            </invoker>
+         </invoker-bindings>
+         <clustered>true</clustered>
+      </session>
+      <session>
+         <ejb-name>nextgen_StatelessSession_SingleRetry</ejb-name>
+         <configuration-name>Retry Clustered Stateless SessionBean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>clustered-stateless-rmi-invoker-singleretry</invoker-proxy-binding-name>
+               <jndi-name>nextgen_StatelessSession_SingleRetry</jndi-name>
+            </invoker>
+         </invoker-bindings>
+         <clustered>true</clustered>
+      </session>
+      <session>
+         <ejb-name>nextgen_StatefulSession_Retry</ejb-name>
+         <configuration-name>Retry Clustered Stateful SessionBean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>clustered-stateful-rmi-invoker-retry</invoker-proxy-binding-name>
+               <jndi-name>nextgen_StatefulSession_Retry</jndi-name>
+            </invoker>
+         </invoker-bindings>
+         <clustered>true</clustered>
+      </session>
+      <session>
+         <ejb-name>nextgen_StatefulSession_SingleRetry</ejb-name>
+         <configuration-name>Retry Clustered Stateful SessionBean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>clustered-stateful-rmi-invoker-singleretry</invoker-proxy-binding-name>
+               <jndi-name>nextgen_StatefulSession_SingleRetry</jndi-name>
+            </invoker>
+         </invoker-bindings>
+         <clustered>true</clustered>
+      </session>
+      
+      <entity>
+         <ejb-name>nextgen_EntityPK_Retry</ejb-name>
+         <configuration-name>Retry Clustered CMP EntityBean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>clustered-entity-rmi-invoker-retry</invoker-proxy-binding-name>
+               <jndi-name>nextgen_EntityPK_Retry</jndi-name>
+            </invoker>
+         </invoker-bindings>
+         <clustered>true</clustered>
+      </entity>
+      
+      <entity>
+         <ejb-name>nextgen_EntityPK_SingleRetry</ejb-name>
+         <configuration-name>Retry Clustered CMP EntityBean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>clustered-entity-rmi-invoker-singleretry</invoker-proxy-binding-name>
+               <jndi-name>nextgen_EntityPK_SingleRetry</jndi-name>
+            </invoker>
+         </invoker-bindings>
+         <clustered>true</clustered>
+      </entity>
+      
+
+   </enterprise-beans>
+
+   <invoker-proxy-bindings>
+      <!-- Override default clustered invoker bindings -->
+      <invoker-proxy-binding>
+         <name>clustered-stateless-rmi-invoker-retry</name>
+         <invoker-mbean>jboss:service=invoker,type=unifiedha</invoker-mbean>
+         <proxy-factory>org.jboss.proxy.ejb.ProxyFactoryHA</proxy-factory>
+         <proxy-factory-config>
+            <client-interceptors>
+               <home>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.RetryInterceptor</interceptor>
+                  <interceptor>org.jboss.ha.framework.test.ServiceUnavailableClientInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </home>
+               <bean>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.StatelessSessionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.RetryInterceptor</interceptor>
+                  <interceptor>org.jboss.ha.framework.test.ServiceUnavailableClientInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </bean>
+            </client-interceptors>
+         </proxy-factory-config>
+      </invoker-proxy-binding>
+
+      <invoker-proxy-binding>
+         <name>clustered-stateless-rmi-invoker-singleretry</name>
+         <invoker-mbean>jboss:service=invoker,type=unifiedha</invoker-mbean>
+         <proxy-factory>org.jboss.proxy.ejb.ProxyFactoryHA</proxy-factory>
+         <proxy-factory-config>
+            <client-interceptors>
+               <home>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SingleRetryInterceptor</interceptor>
+                  <interceptor>org.jboss.ha.framework.test.ServiceUnavailableClientInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </home>
+               <bean>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.StatelessSessionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SingleRetryInterceptor</interceptor>
+                  <interceptor>org.jboss.ha.framework.test.ServiceUnavailableClientInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </bean>
+            </client-interceptors>
+         </proxy-factory-config>
+      </invoker-proxy-binding>
+
+      <invoker-proxy-binding>
+         <name>clustered-stateful-rmi-invoker-retry</name>
+         <invoker-mbean>jboss:service=invoker,type=unifiedha</invoker-mbean>
+         <proxy-factory>org.jboss.proxy.ejb.ProxyFactoryHA</proxy-factory>
+         <proxy-factory-config>
+            <client-interceptors>
+               <home>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.RetryInterceptor</interceptor>
+                  <interceptor>org.jboss.ha.framework.test.ServiceUnavailableClientInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </home>
+               <bean>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.StatefulSessionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.RetryInterceptor</interceptor>
+                  <interceptor>org.jboss.ha.framework.test.ServiceUnavailableClientInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </bean>
+            </client-interceptors>
+         </proxy-factory-config>
+      </invoker-proxy-binding>
+
+      <invoker-proxy-binding>
+         <name>clustered-stateful-rmi-invoker-singleretry</name>
+         <invoker-mbean>jboss:service=invoker,type=unifiedha</invoker-mbean>
+         <proxy-factory>org.jboss.proxy.ejb.ProxyFactoryHA</proxy-factory>
+         <proxy-factory-config>
+            <client-interceptors>
+               <home>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SingleRetryInterceptor</interceptor>
+                  <interceptor>org.jboss.ha.framework.test.ServiceUnavailableClientInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </home>
+               <bean>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.StatefulSessionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SingleRetryInterceptor</interceptor>
+                  <interceptor>org.jboss.ha.framework.test.ServiceUnavailableClientInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </bean>
+            </client-interceptors>
+         </proxy-factory-config>
+      </invoker-proxy-binding>
+      
+      <invoker-proxy-binding>
+         <name>clustered-entity-rmi-invoker-retry</name>
+         <invoker-mbean>jboss:service=invoker,type=unifiedha</invoker-mbean>
+         <proxy-factory>org.jboss.proxy.ejb.ProxyFactoryHA</proxy-factory>
+         <proxy-factory-config>
+            <client-interceptors>
+               <home>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.RetryInterceptor</interceptor>
+                  <interceptor>org.jboss.ha.framework.test.ServiceUnavailableClientInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </home>
+               <bean>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.EntityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.RetryInterceptor</interceptor>
+                  <interceptor>org.jboss.ha.framework.test.ServiceUnavailableClientInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </bean>
+               <list-entity>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.ListEntityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.RetryInterceptor</interceptor>
+                  <interceptor>org.jboss.ha.framework.test.ServiceUnavailableClientInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </list-entity>
+            </client-interceptors>
+         </proxy-factory-config>
+      </invoker-proxy-binding>
+      
+      <invoker-proxy-binding>
+         <name>clustered-entity-rmi-invoker-singleretry</name>
+         <invoker-mbean>jboss:service=invoker,type=unifiedha</invoker-mbean>
+         <proxy-factory>org.jboss.proxy.ejb.ProxyFactoryHA</proxy-factory>
+         <proxy-factory-config>
+            <client-interceptors>
+               <home>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SingleRetryInterceptor</interceptor>
+                  <interceptor>org.jboss.ha.framework.test.ServiceUnavailableClientInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </home>
+               <bean>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.EntityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.RetryInterceptor</interceptor>
+                  <interceptor>org.jboss.ha.framework.test.ServiceUnavailableClientInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </bean>
+               <list-entity>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.ListEntityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SingleRetryInterceptor</interceptor>
+                  <interceptor>org.jboss.ha.framework.test.ServiceUnavailableClientInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </list-entity>
+            </client-interceptors>
+         </proxy-factory-config>
+      </invoker-proxy-binding>
+      
+   </invoker-proxy-bindings>
+
+
+   <container-configurations>
+      <container-configuration extends="Clustered CMP EntityBean">
+         <container-name>Retry Clustered CMP EntityBean</container-name>
+         <call-logging>true</call-logging>
+         <container-interceptors>
+            <interceptor>org.jboss.ejb.plugins.ProxyFactoryFinderInterceptor</interceptor>
+            <interceptor>org.jboss.ha.framework.test.ExplicitFailoverServerInterceptor</interceptor> <!-- must be before CleanShutdown -->
+            <interceptor>org.jboss.ejb.plugins.CleanShutdownInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.LogInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.security.PreSecurityInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.SecurityInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.TxInterceptorCMT</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntityCreationInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntityLockInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntityInstanceInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntityReentranceInterceptor</interceptor>
+            <interceptor>org.jboss.resource.connectionmanager.CachedConnectionInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntitySynchronizationInterceptor</interceptor>
+         </container-interceptors>
+         <commit-option>A</commit-option>
+      </container-configuration>
+
+      <container-configuration extends="Clustered Stateless SessionBean">
+         <container-name>Retry Clustered Stateless SessionBean</container-name>
+         <call-logging>true</call-logging>
+         <container-interceptors>
+            <interceptor>org.jboss.ejb.plugins.ProxyFactoryFinderInterceptor</interceptor>
+            <interceptor>org.jboss.ha.framework.test.ExplicitFailoverServerInterceptor</interceptor> <!-- must be before CleanShutdown -->
+            <interceptor>org.jboss.ejb.plugins.CleanShutdownInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.LogInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.security.PreSecurityInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.SecurityInterceptor</interceptor>
+            <!-- CMT -->
+            <interceptor transaction="Container">org.jboss.ejb.plugins.TxInterceptorCMT</interceptor>
+            <interceptor transaction="Container">org.jboss.ejb.plugins.StatelessSessionInstanceInterceptor</interceptor>
+            <!-- BMT -->
+            <interceptor transaction="Bean">org.jboss.ejb.plugins.StatelessSessionInstanceInterceptor</interceptor>
+            <interceptor transaction="Bean">org.jboss.ejb.plugins.TxInterceptorBMT</interceptor>
+            <interceptor>org.jboss.resource.connectionmanager.CachedConnectionInterceptor</interceptor>
+         </container-interceptors>
+      </container-configuration>
+
+      <container-configuration extends="Clustered Stateful SessionBean">
+         <container-name>Retry Clustered Stateful SessionBean</container-name>
+         <call-logging>true</call-logging>
+         <container-interceptors>
+            <interceptor>org.jboss.ejb.plugins.ProxyFactoryFinderInterceptor</interceptor>
+            <interceptor>org.jboss.ha.framework.test.ExplicitFailoverServerInterceptor</interceptor> <!-- must be before CleanShutdown -->
+            <interceptor>org.jboss.ejb.plugins.CleanShutdownInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.LogInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.security.PreSecurityInterceptor</interceptor>
+            <!-- CMT -->
+            <interceptor transaction="Container">org.jboss.ejb.plugins.TxInterceptorCMT</interceptor>
+            <interceptor transaction="Container">org.jboss.ejb.plugins.StatefulSessionInstanceInterceptor</interceptor>
+            <!-- BMT -->
+            <interceptor transaction="Bean">org.jboss.ejb.plugins.StatefulSessionInstanceInterceptor</interceptor>
+            <interceptor transaction="Bean">org.jboss.ejb.plugins.TxInterceptorBMT</interceptor>
+            <interceptor>org.jboss.ejb.plugins.SecurityInterceptor</interceptor>
+            <interceptor>org.jboss.resource.connectionmanager.CachedConnectionInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.StatefulHASessionSynchronisationInterceptor</interceptor>
+         </container-interceptors>
+      </container-configuration>
+
+   </container-configurations>
+
+</jboss>

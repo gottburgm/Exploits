@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE application PUBLIC
+   "-//Sun Microsystems, Inc.//DTD J2EE Application 1.3//EN"
+   "http://java.sun.com/dtd/application_1_3.dtd">
+
+<application>
+   <display-name>JBoss Cross Context Session Replication Tests</display-name>
+
+   <module>
+      <web>
+         <web-uri>http-cross-ctx-first.war</web-uri>
+         <context-root>/http-cross-ctx-first</context-root>
+      </web>
+   </module>
+   <module>
+      <web>
+         <web-uri>http-cross-ctx-second.war</web-uri>
+         <context-root>/http-cross-ctx-second</context-root>
+      </web>
+   </module>
+   <module>
+      <web>
+         <web-uri>http-cross-ctx-third.war</web-uri>
+         <context-root>/http-cross-ctx-third</context-root>
+      </web>
+   </module>
+   
+</application>

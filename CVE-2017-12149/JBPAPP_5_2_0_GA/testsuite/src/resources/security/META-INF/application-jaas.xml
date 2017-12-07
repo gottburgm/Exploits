@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE application PUBLIC
+   "-//Sun Microsystems, Inc.//DTD J2EE Application 1.3//EN"
+   "http://java.sun.com/dtd/application_1_3.dtd">
+
+<application>
+    <display-name>JAAS Security Tests</display-name>
+
+    <module>
+       <web>
+           <web-uri>security-jaas.war</web-uri>
+           <context-root>/jaas</context-root>
+       </web>
+    </module>
+
+    <module>
+       <web>
+           <web-uri>custom-principal.war</web-uri>
+           <context-root>/custom-principal</context-root>
+       </web>
+    </module>
+
+   <module>
+      <ejb>security-jaas.jar</ejb>
+   </module>
+</application>
+

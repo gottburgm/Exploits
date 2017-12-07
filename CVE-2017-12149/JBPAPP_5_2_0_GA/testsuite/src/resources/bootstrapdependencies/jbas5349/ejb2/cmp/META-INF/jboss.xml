@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE jboss PUBLIC
+      "-//JBoss//DTD JBOSS 3.2//EN"
+      "http://www.jboss.org/j2ee/dtd/jboss_3_2.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <entity>
+         <ejb-name>SimpleEntityEJB</ejb-name>
+         <local-jndi-name>ejb/SimpleEntity</local-jndi-name>
+      </entity>
+   </enterprise-beans>
+
+   <container-configurations>
+      <container-configuration extends="Standard CMP 2.x EntityBean">
+         <container-name>CMP 2.x and Cache</container-name>
+         <commit-option>A</commit-option>
+      </container-configuration>
+   </container-configurations>
+
+</jboss>

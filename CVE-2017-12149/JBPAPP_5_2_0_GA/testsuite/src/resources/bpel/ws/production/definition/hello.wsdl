@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://jbpm.org/examples/hello"
+  xmlns:tns="http://jbpm.org/examples/hello" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+  xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://schemas.xmlsoap.org/wsdl/ 
+                      http://schemas.xmlsoap.org/wsdl/
+                      http://schemas.xmlsoap.org/ws/2003/05/partner-link/ 
+                      http://schemas.xmlsoap.org/ws/2003/05/partner-link/"   
+  xmlns="http://schemas.xmlsoap.org/wsdl/">
+  
+  <!-- characterizes the relationship between the process and its caller -->
+  <plt:partnerLinkType name="helloPLT">
+    <plt:role name="service">
+      <plt:portType name="tns:helloPT"/>
+    </plt:role>
+  </plt:partnerLinkType>
+
+  <!-- carries the name of a person -->
+  <message name="nameMessage">
+    <part name="name" type="xsd:string"/>
+  </message>
+
+  <!-- carries the greeting -->
+  <message name="greetingMessage">
+    <part name="greeting" type="xsd:string"/>
+  </message>
+
+  <!-- describes the interface presented to callers -->
+  <portType name="helloPT">
+    <operation name="sayHello">
+      <input message="tns:nameMessage"/>
+      <output message="tns:greetingMessage"/>
+    </operation>
+  </portType>
+
+</definitions>

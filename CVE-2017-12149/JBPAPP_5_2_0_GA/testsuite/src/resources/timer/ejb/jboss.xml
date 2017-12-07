@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC
+   "-//JBoss//DTD JBOSS 4.0//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+   <security-domain>java:/jaas/ejb-timers</security-domain>
+   <!-- Missing method-permissions are treated as unchecked -->
+   <missing-method-permissions-excluded-mode>false</missing-method-permissions-excluded-mode>
+
+   <enterprise-beans>
+
+      <entity>
+         <ejb-name>TimerEntity</ejb-name>
+         <jndi-name>ejb/test/timer/TimerEntity</jndi-name>
+         <timer-persistence>false</timer-persistence>         
+      </entity>
+      <entity>
+         <ejb-name>TimerEntityExtStd</ejb-name>
+         <jndi-name>ejb/test/timer/TimerEntityExtStd</jndi-name>
+         <timer-persistence>false</timer-persistence>
+         <configuration-name>Quick Passivation Standard BMP EntityBean</configuration-name>         
+      </entity>
+      <entity>
+         <ejb-name>TimerEntityExtInstPerTx</ejb-name>
+         <jndi-name>ejb/test/timer/TimerEntityExtInstPerTx</jndi-name>
+         <timer-persistence>false</timer-persistence> 
+         <configuration-name>Instance Per Transaction BMP EntityBean</configuration-name>        
+      </entity>      
+      <session>
+         <ejb-name>TimerSLSB</ejb-name>
+         <jndi-name>ejb/test/timer/TimerSLSB</jndi-name>
+         <timer-persistence>false</timer-persistence>
+      </session>
+      <session>
+         <ejb-name>TimerSFSB</ejb-name>
+         <jndi-name>ejb/test/timer/TimerSFSB</jndi-name>
+      </session>
+
+      <entity>
+         <ejb-name>SecuredTimerEntity</ejb-name>
+         <jndi-name>ejb/test/timer/SecuredTimerEntity</jndi-name>
+         <timer-persistence>false</timer-persistence>         
+      </entity>
+      <session>
+         <ejb-name>SecuredTimerSLSB</ejb-name>
+         <jndi-name>ejb/test/timer/SecuredTimerSLSB</jndi-name>
+         <timer-persistence>false</timer-persistence>         
+      </session>
+      <session>
+         <ejb-name>SecuredTimerSFSB</ejb-name>
+         <jndi-name>ejb/test/timer/SecuredTimerSFSB</jndi-name>
+      </session>
+      <session>
+         <ejb-name>NoTimedObjectBean</ejb-name>
+         <jndi-name>ejb/test/timer/NoTimedObjectBean</jndi-name>
+      </session>
+
+      <message-driven>
+         <ejb-name>TimerMDB</ejb-name>
+         <destination-jndi-name>queue/QueueA</destination-jndi-name>
+         <resource-ref>
+            <res-ref-name>jms/QCF</res-ref-name>
+            <jndi-name>ConnectionFactory</jndi-name>
+         </resource-ref>
+      </message-driven>
+      <message-driven>
+         <ejb-name>OnCreateTimerMDB</ejb-name>
+         <destination-jndi-name>queue/QueueC</destination-jndi-name>
+         <timer-persistence>false</timer-persistence>         
+         <resource-ref>
+            <res-ref-name>jms/QCF</res-ref-name>
+            <jndi-name>ConnectionFactory</jndi-name>
+         </resource-ref>
+      </message-driven>
+
+   </enterprise-beans>
+
+  <container-configurations>
+   
+    <container-configuration extends="Standard Pessimistic BMP EntityBean">
+       <container-name>Quick Passivation Standard BMP EntityBean</container-name>
+       <container-cache-conf>
+          <cache-policy>org.jboss.ejb.plugins.LRUEnterpriseContextCachePolicy</cache-policy>
+            <cache-policy-conf>
+              <min-capacity>50</min-capacity>
+              <max-capacity>1000000</max-capacity>
+              <overager-period>5</overager-period>
+              <max-bean-age>20</max-bean-age>
+              <resizer-period>400</resizer-period>
+              <max-cache-miss-period>60</max-cache-miss-period>
+              <min-cache-miss-period>1</min-cache-miss-period>
+              <cache-load-factor>0.75</cache-load-factor>
+           </cache-policy-conf>
+       </container-cache-conf>
+    </container-configuration>
+    
+  </container-configurations>
+
+</jboss>

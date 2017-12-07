@@ -1,0 +1,31 @@
+<project name="tests-seam-jars" xmlns:artifact="urn:maven-artifact-ant">
+
+   <property name="seam_version" value="2.2.6.EAP5"/>
+
+   <target name="_jars-seam">
+   	<!--specify the loaderRef value, name of the loader that is used to load the class. Use this to allow multiple tasks/types to be loaded with the same loader-->
+   	  <typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant" classpathref="apache.maven.ant.tasks.classpath" loaderRef="jars-seam-maven-ant"/>
+   	
+      <mkdir dir="${build.lib}"/>
+
+      <artifact:dependencies filesetId="examples.fileset" versionsId="examples.versions">
+          <dependency groupId="org.jboss.seam.examples" artifactId="jboss-seam-booking" version="${seam_version}" type="ear"/>
+      	  <dependency groupId="org.jboss.seam.examples" artifactId="jboss-seam-booking" version="${seam_version}" type="xml" classifier="ds"/>
+      	  <dependency groupId="org.jboss.seam.examples" artifactId="jboss-seam-dvdstore" version="${seam_version}" type="ear"/>
+      	  <dependency groupId="org.jboss.seam.examples" artifactId="jboss-seam-dvdstore" version="${seam_version}" type="xml" classifier="ds"/>
+      	  <dependency groupId="org.jboss.seam.examples" artifactId="jboss-seam-numberguess" version="${seam_version}" type="ear"/>
+      	  <dependency groupId="org.jboss.seam.examples" artifactId="jboss-seam-jpa" version="${seam_version}" type="war"/>
+      	  <remoterepository id="mead-repository.jboss.org" url="http://download.lab.bos.redhat.com/brewroot/repos/jb-eap-5-rhel-6-build/latest/maven"/>
+      	  <remoterepository id="prod-repository.jboss.org" url="http://repository.jboss.org/maven2-brew"/>
+      	  <remoterepository id="repository.jboss.org" url="http://repository.jboss.org/maven2"/>
+      	  <remoterepository id="snapshots.jboss.org" url="http://snapshots.jboss.org/maven2"/>
+      </artifact:dependencies>
+   	
+   	  <copy todir="${build.lib}">
+   		  <fileset refid="examples.fileset" />
+   		  <mapper classpathref="apache.maven.ant.tasks.classpath" classname="org.apache.maven.artifact.ant.VersionMapper" from="${examples.versions}" to="flatten" />
+   	  </copy>
+   	
+   </target>
+   	  	
+</project>

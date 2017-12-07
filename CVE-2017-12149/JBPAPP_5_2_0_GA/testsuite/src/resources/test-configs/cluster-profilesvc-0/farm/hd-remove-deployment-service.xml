@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+
+   <!-- A Thread pool service -->
+   <mbean code="org.jboss.util.threadpool.BasicThreadPool"
+      name="jboss.system:service=HDRemoveTestThreadPool">
+      <attribute name="Name">RemoveFarmThreadPool</attribute>
+      <attribute name="ThreadGroupName">RemoveFarmThreads</attribute>
+      <!-- How long a thread will live without any tasks in MS -->
+      <attribute name="KeepAliveTime">1000</attribute>
+      <!-- The max number of threads in the pool -->
+      <attribute name="MaximumPoolSize">1</attribute>
+      <!-- The max number of tasks before the queue is full -->
+      <attribute name="MaximumQueueSize">10</attribute>
+      <!-- The behavior of the pool when a task is added and the queue is full.
+      abort - a RuntimeException is thrown
+      run - the calling thread executes the task
+      wait - the calling thread blocks until the queue has room
+      discard - the task is silently discarded without being run
+      discardOldest - check to see if a task is about to complete and enque
+         the new task if possible, else run the task in the calling thread
+      -->
+      <attribute name="BlockingMode">abort</attribute>
+   </mbean>
+
+</server>

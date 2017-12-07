@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<server>
+    <mbean	xmbean-dd="xmdesc/Queue-xmbean.xml"
+    		name="jboss.messaging.destination:service=Queue,name=otherTestQueue"
+    		code="org.jboss.jms.server.destination.QueueService">
+    		
+        <attribute name="JNDIName">otherTestQueue</attribute>
+        <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+        <depends>jboss.messaging:service=PostOffice</depends>
+    </mbean>
+
+</server>

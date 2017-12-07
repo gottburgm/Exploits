@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main"/>
+	<classpathentry kind="src" path="output/parsers"/>
+	<classpathentry kind="src" path="output/gen-src"/>
+	<classpathentry exported="true" kind="src" path="/security"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/ibm-wsdl4j/lib/wsdl4j.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/remoting/lib/jboss-remoting.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/hibernate-entitymanager/lib/ejb3-persistence.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/ws/native/lib/jbossws-native-jaxrpc.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/ws/native/lib/jbossws-native-saaj.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/metadata/lib/jboss-metadata.jar" sourcepath="/thirdparty/jboss/metadata/lib/jboss-metadata-sources.jar">
+		<accessrule kind="discouraged" pattern="org/jboss/ejb3/**"/>		<accessrule kind="discouraged" pattern="org/jboss/metamodel/**"/>	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/sun-jaxb/lib/jaxb-api.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jboss/jnpserver/lib/jnpserver.jar" sourcepath="/thirdparty/jboss/jnpserver/lib/jnpserver-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/org/jboss/ws/lib/jbossws-spi.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/org/jboss/ws/native/lib/jbossws-native-jaxws.jar" sourcepath="/thirdparty/org/jboss/ws/native/lib/jbossws-native-jaxws-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-jpa-deployers/lib/jboss-jpa-deployers.jar" sourcepath="/thirdparty/jboss/jboss-jpa-deployers/lib/jboss-jpa-deployers-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/serialization/lib/jboss-serialization.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/web/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/common-beans/lib/jboss-common-beans.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-dependency.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-dependency-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-kernel.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-kernel-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-bootstrap/lib/jboss-bootstrap.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-man/lib/jboss-managed.jar" sourcepath="/thirdparty/jboss/jboss-man/lib/jboss-managed-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-man/lib/jboss-metatype.jar" sourcepath="/thirdparty/jboss/jboss-man/lib/jboss-metatype-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-mdr/lib/jboss-mdr.jar" sourcepath="/thirdparty/jboss/jboss-mdr/lib/jboss-mdr-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jbossts/lib/jbossjts-integration.jar"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

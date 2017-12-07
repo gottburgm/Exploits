@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<containerStrict xmlns="dummy://www.jboss.org/container"
+>
+   <pojo:bean xmlns:pojo="urn:jboss:bean-deployer" class="TestClass"/>
+</containerStrict>

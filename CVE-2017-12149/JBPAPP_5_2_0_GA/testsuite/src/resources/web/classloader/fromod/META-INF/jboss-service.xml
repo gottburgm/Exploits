@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+
+   <loader-repository>jboss.test:repository=caseE
+     <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
+   </loader-repository>
+
+   <mbean code="org.jboss.test.web.classloader.fromod.TestFromOD"
+          name="jboss.test:service=LegacyWebClassLoaderOtherDomain">
+   </mbean>
+
+</server>

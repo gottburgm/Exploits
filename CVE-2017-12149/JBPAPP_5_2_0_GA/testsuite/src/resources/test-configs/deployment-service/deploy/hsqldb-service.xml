@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Start hypersonic DB -->
+<server>
+   <!-- This mbean should be used only when using tcp connections -->
+   <mbean code="org.jboss.jdbc.HypersonicDatabase" 
+          name="jboss:service=Hypersonic">
+     <attribute name="Port">1701</attribute>
+     <attribute name="Silent">true</attribute>
+     <attribute name="Database">default</attribute>
+     <attribute name="Trace">false</attribute>
+     <attribute name="No_system_exit">true</attribute>
+   </mbean>
+</server>

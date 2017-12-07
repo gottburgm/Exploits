@@ -1,0 +1,48 @@
+<project name="tests-testbean-jars">
+<!-- testbean test -->
+   <target name="_jars-testbean">
+      <mkdir dir="${build.lib}"/>
+
+      <!-- build testbeantest.jar -->
+      <jar destfile="${build.lib}/testbeantest.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/testbean/interfaces/**"/>
+            <include name="org/jboss/test/testbean/test/**"/>
+            <include name="org/jboss/test/testbean2/interfaces/**"/>
+            <include name="org/somepackage/**"/>
+            <include name="org/jboss/test/bmp/interfaces/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/testbean">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+
+      <!-- build testbean.jar -->
+      <jar destfile="${build.lib}/testbean.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/testbean/interfaces/**"/>
+            <include name="org/jboss/test/testbean/bean/**"/>
+            <!--include name="org/jboss/test/testbean2/interfaces/**"/-->
+            <include name="org/somepackage/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/testbean">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+
+      <!-- build testbean2.jar -->
+      <jar destfile="${build.lib}/testbean2.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/testbean/interfaces/**"/>
+            <include name="org/jboss/test/testbean2/interfaces/**"/>
+            <include name="org/jboss/test/testbean2/bean/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/testbean2">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

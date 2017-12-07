@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0"> 
+
+   <!-- Add a stack with JGroups message bundling disabled to the app server's standard JChannelFactory 
+   <bean name="PassExpStackInjector" class="java.lang.Object">      
+      <install bean="JChannelFactory" method="setMultiplexerConfig">
+         <parameter class="java.lang.String">META-INF/passexp-stacks.xml</parameter>
+         <parameter>true</parameter>
+      </install>
+   </bean>
+   -->
+
+   <!-- First we create a Configuration object for the cache -->
+   <bean name="HAPartitionStateTransferTestCacheConfig" 
+   		class="org.jboss.cache.config.Configuration">
+   	
+   	  <!-- When we're installed, register ourself -->
+   	  <install bean="CacheConfigurationRegistry" method="registerConfiguration">
+          <parameter>ha-partition-state-transfer</parameter>
+          <parameter><this/></parameter>
+        </install>
+      
+        <!-- When we're uninstalled, unregister ourself -->
+        <uninstall bean="CacheConfigurationRegistry" method="unregisterConfiguration">
+          <parameter>ha-partition-state-transfer</parameter>
+        </uninstall>
+        
+        <!-- The ClusterPartition beans need to wait until we are completely 
+             installed and have register ourself -->
+        <supply>HAPartitionStateTransferTestCacheConfigSupply</supply>
+        
+        <!-- Externally injected services -->  
+        <property name="runtimeConfig">
+           <bean name="HAPartitionStateTransferTestCacheRuntimeConfig" class="org.jboss.cache.config.RuntimeConfig">
+              <property name="transactionManager"><inject bean="jboss:service=TransactionManager" property="TransactionManager"/></property>
+           </bean>
+        </property>
+        
+        <property name="multiplexerStack">${jboss.default.jgroups.stack:udp}</property>
+
+        <!-- Valid isolation levels are 
+                              SERIALIZABLE
+                              REPEATABLE_READ (default)
+                              READ_COMMITTED
+                              READ_UNCOMMITTED
+                              NONE
+        -->
+        <property name="isolationLevelString">REPEATABLE_READ</property>
+
+        <!-- Valid modes are LOCAL, REPL_ASYNC and REPL_SYNC -->
+        <property name="cacheModeString">REPL_SYNC</property>
+
+        <!-- Name of cluster. Needs to be the same for all nodes in clusters, 
+          in order to find each other -->
+        <property name="clusterName">BadPartitionCache</property>
+
+        <!-- Whether or not to fetch state on joining a cluster  -->
+        <property name="fetchInMemoryState">true</property>
+
+        <!-- The max amount of time (in milliseconds) we wait until the
+            initial state (ie. the contents of the cache) are retrieved from
+            existing members in a clustered environment -->
+        <property name="stateRetrievalTimeout">5000</property>
+
+        <!-- Number of milliseconds to wait until all responses for a
+            synchronous call have been received. -->
+        <property name="syncReplTimeout">20000</property>
+
+        <!-- Max number of milliseconds to wait for a lock acquisition -->
+        <property name="lockAcquisitionTimeout">15000</property>
+        
+        <property name="exposeManagementStatistics">true</property>
+
+   </bean>
+   
+   <bean name="HAPartitionStateTransferTestCacheHandler"
+         class="org.jboss.ha.framework.server.HAPartitionCacheHandlerImpl">
+         <property name="cacheManager"><inject bean="CacheManager"/></property>
+         <property name="cacheConfigName">ha-partition-state-transfer</property>
+   </bean>
+   
+   
+   <!-- ==================================================================== -->
+   <!-- Partition used for testing failure to receive state                  -->
+   <!-- ==================================================================== -->
+   
+   <!-- Service to record and cache any failures in the partition -->
+   <bean name="BadProviderPartitionRecorder"
+         class="org.jboss.test.cluster.hapartition.state.HAPartitionRecorder">
+         <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=BadProviderPartitionRecorder", exposedInterface=org.jboss.test.cluster.hapartition.state.HAPartitionRecorderMBean.class, registerDirectly=true)</annotation>
+   </bean>
+         
+   <bean name="BadProviderPartition"
+   		 class="org.jboss.test.cluster.hapartition.state.StartupTestClusterPartition">     
+      
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=BadProviderPartition", exposedInterface=org.jboss.ha.framework.server.ClusterPartitionMBean.class)</annotation>
+   	        
+      <demand>HAPartitionStateTransferTestCacheConfigSupply</demand>
+      
+   	<!-- ClusterPartition requires a Cache for state management -->
+      <property name="cacheHandler"><inject bean="HAPartitionStateTransferTestCacheHandler"/></property>
+               
+      <!-- Name of the partition being built -->
+      <property name="partitionName">BadProviderPartition</property>
+         
+      <!-- The address used to determine the node name -->
+      <property name="nodeAddress">${jboss.bind.address}</property>
+              
+      <!-- Max time (in ms) to wait for state transfer to complete. Increase for large states -->
+      <property name="stateTransferTimeout">2000</property>
+              
+      <!-- Max time (in ms) to wait for RPC calls to complete. -->
+      <property name="methodCallTimeout">5000</property> 
+      
+      <property name="startupRecorder"><inject bean="BadProviderPartitionRecorder"/></property>
+      
+      <property name="stateTransferTargets">
+         <list>
+           <!--inject bean="BadHAPartitionStateTransfer,returnState=false" state="Configured"/-->
+           <inject bean="BadHAPartitionStateTransfer,returnState=false"/>
+         </list>
+      </property>
+      
+   </bean>
+   
+   <bean name="BadHAPartitionStateTransfer,returnState=false"
+         class="org.jboss.test.cluster.hapartition.state.BadHAPartitionStateTransfer">
+         
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.test:service=BadHAPartitionStateTransfer,returnState=false", exposedInterface=org.jboss.test.cluster.hapartition.state.BadHAPartitionStateTransferMBean.class, registerDirectly=true)</annotation>       
+      
+      <property name="returnState">false</property>
+      <property name="serviceHAName">BadHAPartitionStateTransfer,returnState=false</property>
+      
+   </bean>
+
+   <!-- ==================================================================== -->
+   <!-- Partition used for testing failure to integrate state                -->
+   <!-- ==================================================================== -->
+   
+   <!-- Service to record and cache any failures in the partition -->
+   <bean name="BadStatePartitionRecorder"
+         class="org.jboss.test.cluster.hapartition.state.HAPartitionRecorder">
+         <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=BadStatePartitionRecorder", exposedInterface=org.jboss.test.cluster.hapartition.state.HAPartitionRecorderMBean.class, registerDirectly=true)</annotation>
+   </bean>
+         
+   <bean name="BadStatePartition"
+   		 class="org.jboss.test.cluster.hapartition.state.StartupTestClusterPartition">     
+
+   	<annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=BadStatePartition", exposedInterface=org.jboss.ha.framework.server.ClusterPartitionMBean.class)</annotation>
+   	
+      <demand>HAPartitionStateTransferTestCacheConfigSupply</demand>
+      
+      <!-- ClusterPartition requires a Cache for state management -->
+      <property name="cacheHandler"><inject bean="HAPartitionStateTransferTestCacheHandler"/></property>
+               
+      <!-- Name of the partition being built -->
+      <property name="partitionName">BadStatePartition</property>
+         
+      <!-- The address used to determine the node name -->
+      <property name="nodeAddress">${jboss.bind.address}</property>
+              
+      <!-- Max time (in ms) to wait for state transfer to complete. Increase for large states -->
+      <property name="stateTransferTimeout">2000</property>
+              
+      <!-- Max time (in ms) to wait for RPC calls to complete. -->
+      <property name="methodCallTimeout">5000</property>
+      
+      <property name="startupRecorder"><inject bean="BadStatePartitionRecorder"/></property>
+      
+      <property name="stateTransferTargets">
+         <list>
+           <!--inject bean="BadHAPartitionStateTransfer,returnState=true" state="Configured"/-->
+           <inject bean="BadHAPartitionStateTransfer,returnState=true"/>
+         </list>
+      </property>
+      
+   </bean>
+   
+   <bean name="BadHAPartitionStateTransfer,returnState=true"
+         class="org.jboss.test.cluster.hapartition.state.BadHAPartitionStateTransfer">
+      
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.test:service=BadHAPartitionStateTransfer,returnState=true", exposedInterface=org.jboss.test.cluster.hapartition.state.BadHAPartitionStateTransferMBean.class, registerDirectly=true)</annotation>       
+      
+      <property name="returnState">true</property>
+      <property name="serviceHAName">BadHAPartitionStateTransfer,returnState=true</property>
+      
+   </bean>
+
+   <!-- ==================================================================== -->
+   <!-- Partition used for testing no state                                  -->
+   <!-- ==================================================================== -->
+   
+   <!-- Service to record and cache any failures in the partition -->
+   <bean name="NoStatePartitionRecorder"
+         class="org.jboss.test.cluster.hapartition.state.HAPartitionRecorder">
+         <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=NoStatePartitionRecorder", exposedInterface=org.jboss.test.cluster.hapartition.state.HAPartitionRecorderMBean.class, registerDirectly=true)</annotation>
+   </bean>
+         
+   <bean name="NoStatePartition"
+   		 class="org.jboss.test.cluster.hapartition.state.StartupTestClusterPartition">     
+
+   	<annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=NoStatePartition", exposedInterface=org.jboss.ha.framework.server.ClusterPartitionMBean.class)</annotation>
+   		 
+      <demand>HAPartitionStateTransferTestCacheConfigSupply</demand>
+      
+      <!-- ClusterPartition requires a Cache for state management -->
+      <property name="cacheHandler"><inject bean="HAPartitionStateTransferTestCacheHandler"/></property>
+               
+      <!-- Name of the partition being built -->
+      <property name="partitionName">NoStatePartition</property>
+         
+      <!-- The address used to determine the node name -->
+      <property name="nodeAddress">${jboss.bind.address}</property>
+              
+      <!-- Max time (in ms) to wait for state transfer to complete. Increase for large states -->
+      <property name="stateTransferTimeout">2000</property>
+              
+      <!-- Max time (in ms) to wait for RPC calls to complete. -->
+      <property name="methodCallTimeout">5000</property> 
+      
+      <property name="startupRecorder"><inject bean="NoStatePartitionRecorder"/></property>
+      
+   </bean>
+
+   <!-- ==================================================================== -->
+   <!-- Partition used for testing successful state transfer                 -->
+   <!-- ==================================================================== -->
+   
+   <!-- Service to record and cache any failures in the partition -->
+   <bean name="GoodStatePartitionRecorder"
+         class="org.jboss.test.cluster.hapartition.state.HAPartitionRecorder">
+         <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=GoodStatePartitionRecorder", exposedInterface=org.jboss.test.cluster.hapartition.state.HAPartitionRecorderMBean.class, registerDirectly=true)</annotation>
+   </bean>
+         
+   <bean name="GoodStatePartition"
+   		 class="org.jboss.test.cluster.hapartition.state.StartupTestClusterPartition">     
+
+   	<annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=GoodStatePartition", exposedInterface=org.jboss.ha.framework.server.ClusterPartitionMBean.class)</annotation>
+    
+      <demand>HAPartitionStateTransferTestCacheConfigSupply</demand>
+      
+      <!-- ClusterPartition requires a Cache for state management -->
+      <property name="cacheHandler"><inject bean="HAPartitionStateTransferTestCacheHandler"/></property>
+               
+      <!-- Name of the partition being built -->
+      <property name="partitionName">GoodStatePartition</property>
+         
+      <!-- The address used to determine the node name -->
+      <property name="nodeAddress">${jboss.bind.address}</property>
+              
+      <!-- Max time (in ms) to wait for state transfer to complete. Increase for large states -->
+      <property name="stateTransferTimeout">2000</property>
+              
+      <!-- Max time (in ms) to wait for RPC calls to complete. -->
+      <property name="methodCallTimeout">5000</property> 
+      
+      <property name="startupRecorder"><inject bean="GoodStatePartitionRecorder"/></property>
+      
+      <property name="stateTransferTargets">
+         <list>
+           <inject bean="SimpleHAPartitionStateTransfer" state="Configured"/>
+           <inject bean="CustomStateHAPartitionStateTransfer" state="Configured"/>
+         </list>
+      </property>
+      
+   </bean>
+   
+   <bean name="SimpleHAPartitionStateTransfer"
+         class="org.jboss.test.cluster.hapartition.state.SimpleHAPartitionStateTransfer">
+      
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.test:service=SimpleHAPartitionStateTransfer", exposedInterface=org.jboss.test.cluster.hapartition.state.SimpleHAPartitionStateTransferMBean.class, registerDirectly=true)</annotation>       
+      
+      <!--property name="HAPartition"><inject bean="GoodStatePartition" state="Instantiated"/></property-->
+      <property name="serviceHAName">SimpleHAPartitionStateTransfer</property>
+      
+   </bean>
+   
+   <bean name="CustomStateHAPartitionStateTransfer"
+         class="org.jboss.test.cluster.hapartition.state.CustomStateHAPartitionStateTransfer">
+      
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.test:service=CustomStateHAPartitionStateTransfer", exposedInterface=org.jboss.test.cluster.hapartition.state.CustomStateHAPartitionStateTransferMBean.class, registerDirectly=true)</annotation>       
+      
+      <!--property name="HAPartition"><inject bean="GoodStatePartition" state="Instantiated"/></property-->
+      <property name="serviceHAName">CustomStateHAPartitionStateTransfer</property>
+      
+   </bean>
+
+</deployment>

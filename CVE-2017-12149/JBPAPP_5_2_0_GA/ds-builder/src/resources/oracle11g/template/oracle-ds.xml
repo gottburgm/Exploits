@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  JBoss Server Configuration                                           -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+<!-- $Id: oracle-ds.xml 63175 2007-05-21 16:26:06Z rrajesh $ -->
+<!-- ==================================================================== -->
+<!--  Datasource config for Oracle originally from Steven Coy             -->
+<!-- ==================================================================== -->
+
+
+<datasources>
+  <local-tx-datasource>
+    <jndi-name>@JNDINAME@</jndi-name>
+    <connection-url>jdbc:oracle:thin:@@HOSTNAME@:@PORT@:@DATABASE_NAME@</connection-url>
+    <driver-class>oracle.jdbc.driver.OracleDriver</driver-class>
+    <user-name>@USERNAME@</user-name>
+    <password>@PASSWORD@</password>
+    <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+    <exception-sorter-class-name>org.jboss.resource.adapter.jdbc.vendor.OracleExceptionSorter</exception-sorter-class-name>
+    <min-pool-size>@MINPOOLSIZE@</min-pool-size>
+    <max-pool-size>@MAXPOOLSIZE@</max-pool-size>
+    <metadata>
+       <type-mapping>Oracle9i</type-mapping>
+    </metadata>
+  </local-tx-datasource>
+</datasources>

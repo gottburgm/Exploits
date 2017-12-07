@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ================================================================================ -->
+<!--                                                                                  -->
+<!--  Customized TreeCache Service Configuration for Standalone Tomcat 5 Clustering   -->
+<!--                                                                                  -->
+<!-- ================================================================================ -->
+
+<server>
+
+    <!-- ==================================================================== -->
+    <!-- Defines TreeCache configuration                                      -->
+    <!-- ==================================================================== -->
+
+    <!-- Note we are using TeeCacheAop -->
+    <mbean code="org.jboss.cache.aop.TreeCacheAop"
+        name="jboss.cache:service=TomcatClusteringCache">
+
+        <!-- make sure to specify BatchModeTransactionManager only! -->
+        <attribute name="TransactionManagerLookupClass">org.jboss.cache.BatchModeTransactionManagerLookup</attribute>
+
+        <!--
+            Isolation level : SERIALIZABLE
+                              REPEATABLE_READ (default)
+                              READ_COMMITTED
+                              READ_UNCOMMITTED
+                              NONE
+        -->
+        <attribute name="IsolationLevel">REPEATABLE_READ</attribute>
+
+        <!--
+             Valid modes are LOCAL, REPL_ASYNC and REPL_SYNC
+        -->
+        <attribute name="CacheMode">REPL_ASYNC</attribute>
+
+        <!-- Name of cluster. Needs to be the same for all clusters, in order
+             to find each other
+        -->
+        <attribute name="ClusterName">Tomcat-Cluster</attribute>
+
+        <!-- JGroups protocol stack properties. Can also be a URL,
+             e.g. file:/home/bela/default.xml
+           <attribute name="ClusterProperties"></attribute>
+        -->
+
+        <attribute name="ClusterConfig">
+            <!--
+            The default UDP stack:
+            - If you have a multihomed machine, set the UDP protocol's bind_addr attribute to the
+            appropriate NIC IP address, e.g bind_addr="192.168.0.2".
+            - On Windows machines, because of the media sense feature being broken with multicast
+            (even after disabling media sense) set the UDP protocol's loopback attribute to true
+            -->
+            <config>
+                <UDP mcast_addr="${jboss.partition.udpGroup:230.1.2.7}" 
+                     mcast_port="45577"
+                     ucast_recv_buf_size="20000000"
+                     ucast_send_buf_size="640000"
+                     mcast_recv_buf_size="25000000" 
+                     mcast_send_buf_size="640000" 
+                     loopback="false" 
+                     max_bundle_size="64000" 
+                     max_bundle_timeout="30" 
+                     use_incoming_packet_handler="true" 
+                     use_outgoing_packet_handler="false" 
+                     ip_ttl="2" 
+                     down_thread="false" up_thread="false"
+                     enable_bundling="true"/>
+                <PING timeout="2000"
+                      down_thread="false" up_thread="false" num_initial_members="3"/>
+                <MERGE2 max_interval="100000"
+                        down_thread="false" up_thread="false" min_interval="20000"/>
+	            <FD_SOCK down_thread="false" up_thread="false"/>
+	            <FD shun="true" up_thread="true" down_thread="true"
+	               timeout="20000" max_tries="5"/>
+                <VERIFY_SUSPECT timeout="1500"
+                        up_thread="false" down_thread="false"/>
+                <pbcast.NAKACK max_xmit_size="60000"
+                               use_mcast_xmit="false" gc_lag="50" 
+                               retransmit_timeout="100,200,300,600,1200,2400,4800" 
+                               down_thread="false" up_thread="false"
+                               discard_delivered_msgs="true"/>
+                <UNICAST timeout="300,600,1200,2400,3600" 
+                         down_thread="false" up_thread="false"/>
+                <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000" 
+                               down_thread="false" up_thread="false"
+                               max_bytes="2100000"/>
+                <pbcast.GMS print_local_addr="true" join_timeout="3000" 
+                            down_thread="false" up_thread="false"
+                            join_retry_timeout="2000" shun="true"/>
+                <!-- If your CacheMode is set to REPL_SYNC we recommend you
+                     comment out the FC (flow control) protocol -->
+                <FC max_credits="10000000" down_thread="false" up_thread="false"
+                    min_threshold="0.20"/>
+                <FRAG2 frag_size="60000" down_thread="false" up_thread="false"/>
+                <pbcast.STATE_TRANSFER down_thread="false" up_thread="false"/>
+            </config>
+
+           <!-- Alternate TCP stack: customize it for your environment, change bind_addr and initial_hosts -->
+           <!--
+           <config>
+              <TCP bind_addr="thishost" start_port="7810" loopback="true"/>
+              <TCPPING initial_hosts="thishost[7810],otherhost[7810]" port_range="3" timeout="3500"
+                 num_initial_members="3" up_thread="true" down_thread="true"/>
+              <MERGE2 min_interval="5000" max_interval="10000"/>
+	          <FD_SOCK down_thread="false" up_thread="false"/>
+	          <FD shun="true" up_thread="true" down_thread="true"
+	             timeout="20000" max_tries="5"/>
+              <VERIFY_SUSPECT timeout="1500" down_thread="false" up_thread="false" />
+              <pbcast.NAKACK down_thread="true" up_thread="true" gc_lag="100"
+                 retransmit_timeout="3000"/>
+              <pbcast.STABLE desired_avg_gossip="20000" down_thread="false" up_thread="false" />
+              <pbcast.GMS join_timeout="5000" join_retry_timeout="2000" shun="false"
+                 print_local_addr="true" down_thread="true" up_thread="true"/>
+              <pbcast.STATE_TRANSFER up_thread="true" down_thread="true"/>
+           </config>
+           -->
+
+        </attribute>
+
+        <!-- Max number of milliseconds to wait for a lock acquisition -->
+        <attribute name="LockAcquisitionTimeout">15000</attribute>
+
+        <!--
+          Indicate whether to the cache should unmarshall objects replicated
+          from other cluster nodes, or store them internally as a byte[]
+          until a web app requests them.  TreeCache default is "false", but
+          "true" is recommended in the case of http session replication.
+          Must be "true" if session replication granularity "FIELD" is used.
+        -->
+        <attribute name="UseMarshalling">true</attribute>
+        <!-- 
+        	 Whether or not the entire tree is inactive upon startup, only 
+          responding to replication messages after activateRegion() is 
+          called to activate one or more parts of the when a webapp is
+          deployed.  Must be "true" if "UseMarshalling" is "true".
+        -->
+		  <attribute name="InactiveOnStartup">true</attribute>
+
+        <!-- Buddy Replication config.
+        
+             See http://wiki.jboss.org/wiki/Wiki.jsp?page=JBossCacheBuddyReplicationDesign
+             and the JBoss Cache docs for more on buddy replication.
+             
+             By default, buddy replication is disabled.
+             
+             Following are the configuration elements likely to be changed:
+             
+             buddyReplicationEnabled  true if you want buddy replication; false if data
+                                      should be replicated to all nodes in the cluster
+                                      
+             numBuddies               to how many backup nodes should each node replicate
+                                      its state
+                                      
+             buddyPoolName            allows logical subgrouping of nodes within the cluster;
+                                      if possible, buddies will be chosen from nodes in the 
+                                      same buddy pool
+                                      
+             Do not change the data gravitation related options.             
+        -->
+        <attribute name="BuddyReplicationConfig">
+            <config>
+                <buddyReplicationEnabled>true</buddyReplicationEnabled>
+                <buddyLocatorClass>org.jboss.cache.buddyreplication.NextMemberBuddyLocator</buddyLocatorClass>
+                <buddyLocatorProperties>
+                    numBuddies = 1
+                    ignoreColocatedBuddies = true
+                </buddyLocatorProperties>
+
+                <buddyPoolName>default</buddyPoolName>
+                <buddyCommunicationTimeout>2000</buddyCommunicationTimeout>
+
+                <autoDataGravitation>false</autoDataGravitation>
+                <dataGravitationRemoveOnFind>true</dataGravitationRemoveOnFind>
+                <dataGravitationSearchBackupTrees>true</dataGravitationSearchBackupTrees>
+
+            </config>
+        </attribute>
+
+    </mbean>
+
+</server>

@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+
+<!--
+   | Targets that run the bootstrap dependencies tests
+-->
+ 
+<!-- $Id: tests-bootstrap-dependencies.xml 85945 2009-03-16 19:45:12Z dimitris@jboss.org $ -->
+<project name="main.server.config.bootstrapdependencies" xmlns:server="http://jboss.org/ns/test/ant/server">
+
+  <!--
+  |  Define the Pattern Sets Here
+  --> 
+  <patternset id="bootstrap-dependencies.includes">
+    <include name="org/jboss/test/bootstrapdependencies/jbas5349/test/BootstrapDependenciesTestCase.class"/>
+  </patternset>
+  <patternset id="bootstrap-dependencies.excludes">
+    <exclude name="org/jboss/test/bootstrapdependencies/jbas5349/**/*TestCase.class"/>
+  </patternset>
+
+  <!--
+    | Targets
+  -->
+
+   <!-- JBAS-5349 -->
+   <target name="tests-bootstrap-dependencies" 
+   	description="Tests bootstrap dependencies of the JBossMC.">
+   	  <!-- EJB3 Session -->
+      <antcall target="generalmodule-bootstrap-dependencies-tests">
+         <param name="jboss-junit-configuration" value="EJB3Session"/>
+         <param name="bootstrap.testmodule.name" value="bootstrapdependencies-ejb3-sessionbean.jar"/>
+   	  </antcall>
+      <!-- EJB3 Entity -->
+      <antcall target="generalmodule-bootstrap-dependencies-tests">
+         <param name="jboss-junit-configuration" value="EJB3Entity"/>
+         <param name="bootstrap.testmodule.name" value="bootstrapdependencies-ejb3-entitybean.jar"/>
+      </antcall>
+      <!-- EJB3 Message -->
+      <antcall target="generalmodule-bootstrap-dependencies-tests">
+         <param name="jboss-junit-configuration" value="EJB3Message"/>
+         <param name="bootstrap.testmodule.name" value="bootstrapdependencies-ejb3-messagebean.jar"/>
+      </antcall>
+      <!-- EJB2 Session -->
+      <antcall target="generalmodule-bootstrap-dependencies-tests">
+         <param name="jboss-junit-configuration" value="EJB2Session"/>
+         <param name="bootstrap.testmodule.name" value="bootstrapdependencies-ejb2-sessionbean.jar"/>
+      </antcall>
+      <!-- EJB2 CMP Entity -->
+      <antcall target="generalmodule-bootstrap-dependencies-tests">
+         <param name="jboss-junit-configuration" value="EJB2EntityCMP"/>
+         <param name="bootstrap.testmodule.name" value="bootstrapdependencies-ejb2-entitycmpbean.jar"/>
+      </antcall>
+      <!-- EJB2 Message -->
+      <antcall target="generalmodule-bootstrap-dependencies-tests">
+         <param name="jboss-junit-configuration" value="EJB2Message"/>
+         <param name="bootstrap.testmodule.name" value="bootstrapdependencies-ejb2-messagebean.jar"/>
+      </antcall>
+      <!-- Web WAR -->
+      <antcall target="generalmodule-bootstrap-dependencies-tests">
+         <param name="jboss-junit-configuration" value="WAR"/>
+         <param name="bootstrap.testmodule.name" value="bootstrapdependencies-web.war"/>
+      </antcall>
+      <!-- datasource -->
+      <antcall target="generalmodule-bootstrap-dependencies-tests">
+         <param name="jboss-junit-configuration" value="datasource"/>
+         <param name="bootstrap.testmodule.name" value="bootstrapdependencies-hsqldb-ds.xml"/>
+      </antcall>
+      <!-- RAR -->
+      <antcall target="generalmodule-bootstrap-dependencies-tests">
+         <param name="jboss-junit-configuration" value="RAR"/>
+         <param name="bootstrap.testmodule.name" value="testdeployers-mcf1.rar"/>
+      </antcall>
+    </target>
+	
+   <!-- General module's test -->
+   <target name="generalmodule-bootstrap-dependencies-tests" depends="jbas5349">
+      <create-bootstrapdependencies-config baseconf="all" conf="bootstrapdependenciesJBAS5349-${jboss-junit-configuration}">
+         <module-patternset>
+            <include name="${bootstrap.testmodule.name}"/>
+         </module-patternset>
+      </create-bootstrapdependencies-config>
+      <server:start name="bootstrapdependenciesJBAS5349-${jboss-junit-configuration}"/>
+      <run-junit junit.patternset="bootstrap-dependencies.includes"
+         junit.configuration="${jboss-junit-configuration}" />
+      <server:stop name="bootstrapdependenciesJBAS5349-${jboss-junit-configuration}"/>
+    </target>
+   
+</project>

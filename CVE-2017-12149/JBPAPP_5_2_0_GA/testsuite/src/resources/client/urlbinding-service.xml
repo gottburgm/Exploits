@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server PUBLIC "-//JBoss//DTD MBean Service 4.0//EN"
+          "http://www.jboss.org/j2ee/dtd/jboss-service_4_0.dtd">
+<server>
+  <mbean code="org.jboss.naming.JNDIBindingServiceMgr"
+      name="jboss.tests:service=JNDIBindingServiceMgr">
+      <attribute name="BindingsConfig" serialDataType="jbxb">
+          <jndi:bindings
+              xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns:jndi="urn:jboss:jndi-binding-service:1.0"
+              xs:schemaLocation="urn:jboss:jndi-binding-service:1.0 resource:jndi-binding-service_1_0.xsd"
+              >
+              <jndi:binding name="SomeWebSite">
+                  <jndi:value type="java.net.URL">http://www.somesite.com</jndi:value>
+              </jndi:binding>              
+          </jndi:bindings>
+      </attribute>
+  </mbean>
+  
+</server>

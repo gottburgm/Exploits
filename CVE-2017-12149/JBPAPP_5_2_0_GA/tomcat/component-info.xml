@@ -1,0 +1,29 @@
+<project name="tomcat-component-info">
+
+   <!-- ============================================================ -->
+   <!-- Tomcat                                                         -->
+   <!-- ============================================================ -->
+
+   <component id="tomcat"
+              module="tomcat"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="tomcat6-service.jar"/>
+      <artifact id="tc6-cluster.aop" outputpath="lib"/>
+      <artifact id="jbossweb-tomcat6.sar" artifacttype="dir" outputpath="deploy"/>
+      <artifact id="tc6-cluster-service.xml"/>
+      <artifact id="javax.servlet.jar"/>
+      <artifact id="javax.servlet.jsp.jar"/>
+      <artifact id="jboss-web-metamodel.jar"/>
+      
+      <export>
+         <include input="tomcat6-service.jar"/>
+	 <include input="tc6-cluster.aop"/>	
+      </export>
+   </component>
+
+</project>
+
+
+
+

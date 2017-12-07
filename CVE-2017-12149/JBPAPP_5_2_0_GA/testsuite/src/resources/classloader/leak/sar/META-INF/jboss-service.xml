@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <mbean code="org.jboss.test.classloader.leak.clstore.ClassLoaderTracker"
+          name="jboss.test:service=ClassLoaderTracker">
+          
+       <depends optional-attribute-name="SecurityManagerService"
+         proxy-type="attribute">jboss.security:service=JaasSecurityManager</depends>
+   </mbean>
+</server>

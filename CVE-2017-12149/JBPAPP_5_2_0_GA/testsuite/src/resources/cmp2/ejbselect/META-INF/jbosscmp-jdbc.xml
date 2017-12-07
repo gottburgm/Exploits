@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jbosscmp-jdbc PUBLIC "-//JBoss//DTD JBOSSCMP-JDBC 3.2//EN" "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_2.dtd">
+
+<jbosscmp-jdbc>
+   <defaults>
+   </defaults>
+
+   <enterprise-beans>
+
+     <!--
+       To add beans that you have deployment descriptor info for, add
+       a file to your XDoclet merge directory called jbosscmp-jdbc-beans.xml
+       that contains the <entity></entity> markup for those beans.
+     -->
+
+      <entity>
+         <ejb-name>B</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>TEST_B</table-name>
+
+         <cmp-field>
+            <field-name>id</field-name>
+            <column-name>ID</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>name</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>bool</field-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>longField</field-name>
+
+        </cmp-field>
+
+         <query>
+            <query-method>
+               <method-name>ejbSelectDynamic</method-name>
+               <method-params>
+                  <method-param>java.lang.String</method-param>
+                  <method-param>java.lang.Object[]</method-param>
+               </method-params>
+            </query-method>
+			<dynamic-ql/>
+
+	     </query>
+
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+      <entity>
+         <ejb-name>A</ejb-name>
+         <create-table>true</create-table>
+         <remove-table>true</remove-table>
+         <table-name>TEST_A</table-name>
+
+         <cmp-field>
+            <field-name>id</field-name>
+            <column-name>ID</column-name>
+
+        </cmp-field>
+         <cmp-field>
+            <field-name>intField</field-name>
+            <column-name>INT_FIELD</column-name>
+
+        </cmp-field>
+
+         <query>
+			<description/>
+            <query-method>
+               <method-name>ejbSelectSomeBsDeclaredSQL</method-name>
+               <method-params>
+                  <method-param>org.jboss.test.cmp2.ejbselect.ALocal</method-param>
+               </method-params>
+            </query-method>
+
+            <declared-sql>
+                <select>
+                   <ejb-name><![CDATA[B]]></ejb-name>
+
+                   <alias><![CDATA[b]]></alias>
+                </select>
+                <from><![CDATA[, TEST_A a]]></from>
+                <where><![CDATA[a.ID={0.id} AND b.A_ID=a.ID]]></where>
+            </declared-sql>
+         </query>
+         <query>
+            <query-method>
+               <method-name>ejbSelectDynamic</method-name>
+               <method-params>
+                  <method-param>java.lang.String</method-param>
+                  <method-param>java.lang.Object[]</method-param>
+               </method-params>
+            </query-method>
+            <dynamic-ql/>
+         </query>
+
+<!-- jboss 3.2 features -->
+<!-- optimistic locking does not express the exclusions needed -->
+      </entity>
+
+   </enterprise-beans>
+
+  <relationships>
+    <ejb-relation>
+      <ejb-relation-name>A-B</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>B-has-an-A</ejb-relationship-role-name>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>A-has-Bs</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>id</field-name>
+               <column-name>A_ID</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+  </relationships>
+
+</jbosscmp-jdbc>

@@ -1,0 +1,32 @@
+<assembly>
+  <id>deployment-service-sar</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>deployment-service.jar</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>src/resources/services/deployment</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>META-INF/**</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+  <dependencySets>
+    <dependencySet>
+      <outputFileNameMapping>${artifactId}.jar</outputFileNameMapping>
+      <includes>
+        <include>commons-collections:commons-collections</include>
+        <include>apache-velocity:velocity</include>
+      </includes>
+    </dependencySet>
+  </dependencySets>
+</assembly>

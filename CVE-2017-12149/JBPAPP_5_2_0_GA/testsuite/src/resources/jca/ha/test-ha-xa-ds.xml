@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: test-ha-xa-ds.xml 113233 2012-07-17 15:25:27Z jeff.zhang $ -->
+
+<datasources>
+   <xa-datasource>
+      <jndi-name>MockedHaXaDS</jndi-name>
+      <track-connection-by-tx/>
+
+      <xa-datasource-class>org.jboss.test.jca.adapter.MockedXADataSource</xa-datasource-class>
+      <xa-datasource-property name="URL">haXaUrl1|haXaUrl2</xa-datasource-property>
+	  <url-selector-strategy-class-name>org.jboss.test.jca.support.MyXADataSelector</url-selector-strategy-class-name>
+      <url-property>URL</url-property>
+      <url-delimiter>|</url-delimiter>
+
+      <isSameRM-override-value>false</isSameRM-override-value>
+
+      <check-valid-connection-sql>VALUES CURRENT TIMESTAMP</check-valid-connection-sql>
+   </xa-datasource>
+</datasources>

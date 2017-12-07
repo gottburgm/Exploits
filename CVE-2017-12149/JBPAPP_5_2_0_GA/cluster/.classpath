@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="org/jbossmx/" kind="src" path="src/main"/>
+	<classpathentry kind="src" path="src/examples"/>
+	<classpathentry exported="true" kind="src" path="/server"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/jgroups/lib/jgroups.jar" sourcepath="/thirdparty/jgroups/lib/jgroups-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/apache-logging/lib/commons-logging.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/cluster/lib/jboss-ha-client.jar" sourcepath="/thirdparty/org/jboss/cluster/lib/jboss-ha-client-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/cluster/lib/jboss-ha-server-api.jar" sourcepath="/thirdparty/org/jboss/cluster/lib/jboss-ha-server-api-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/cluster/lib/jboss-ha-server-cache-spi.jar" sourcepath="/thirdparty/org/jboss/cluster/lib/jboss-ha-server-cache-spi-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/thirdparty/org/jboss/cluster/lib/jboss-ha-server-cache-jbc.jar" sourcepath="/thirdparty/org/jboss/cluster/lib/jboss-ha-server-cache-jbc-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/profileservice-spi/lib/jboss-profileservice-spi.jar" sourcepath="/thirdparty/jboss/profileservice-spi/lib/jboss-profileservice-spi-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-kernel.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-kernel-sources.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/jboss-bootstrap/lib/jboss-bootstrap.jar"/>
+	<classpathentry kind="lib" path="/thirdparty/jboss/microcontainer/lib/jboss-dependency.jar" sourcepath="/thirdparty/jboss/microcontainer/lib/jboss-dependency-sources.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/system"/>
+	<classpathentry kind="output" path="output/eclipse-classes"/>
+</classpath>

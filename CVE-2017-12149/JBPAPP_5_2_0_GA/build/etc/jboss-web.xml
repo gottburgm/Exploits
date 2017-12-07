@@ -1,0 +1,5 @@
+<!-- The jboss-web.xml for the dtds war -->
+<jboss-web>
+   <context-root>/j2ee</context-root>
+</jboss-web>
+

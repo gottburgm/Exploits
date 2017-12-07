@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jndi:bindings
+   xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+   xmlns:jndi="urn:jboss:jndi-binding-service"
+   xs:schemaLocation="urn:jboss:jndi-binding-service jndi-binding-service_1_0.xsd"
+   >
+   <jndi:binding name="ctx1/key1">
+      <jndi:value>value1</jndi:value>
+   </jndi:binding>
+   <jndi:binding name="ctx1/user.home">
+      <jndi:value>${user.home}</jndi:value>
+   </jndi:binding>
+   <jndi:binding name="ctx1/key2">
+      <jndi:value type="java.net.URL">http://www.jboss.org</jndi:value>
+   </jndi:binding>
+   <jndi:binding name="ctx2/key1">
+      <custom:properties xmlns:custom="urn:jboss:custom-object-binding"
+         xs:schemaLocation="urn:jboss:custom-object-binding custom-object-binding.xsd">
+         <custom:property>
+            <custom:key>key1</custom:key>
+            <custom:value>value1</custom:value>
+         </custom:property>
+         <custom:property>
+            <custom:key>key2</custom:key>
+            <custom:value>value2</custom:value>
+         </custom:property>
+      </custom:properties>
+   </jndi:binding>
+
+   <jndi:binding name="hosts/localhost">
+      <jndi:value editor="org.jboss.common.beans.property.InetAddressEditor">
+         127.0.0.1
+      </jndi:value>
+   </jndi:binding>
+
+</jndi:bindings>

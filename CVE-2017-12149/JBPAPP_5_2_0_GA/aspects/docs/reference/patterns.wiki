@@ -1,0 +1,8 @@
+!! Gang Of Four Patterns
+
+The GOF patterns can be implementated using AOP to avoid having to repeat the same boiler plate code
+in all your classes.
+
+* [Observable|GOFObservable.html] - Notification of changed state in an object 
+
+* Another obvious candidate is [Visitor | http://www.castle-cadenza.demon.co.uk/visitor.htm] which should fit the same introduction pattern.

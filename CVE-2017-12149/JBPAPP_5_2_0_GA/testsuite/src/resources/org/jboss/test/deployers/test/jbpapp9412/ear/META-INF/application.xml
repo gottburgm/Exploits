@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Note: the META-INF/application.xml needs to exist, else it seems an application.xml is being created.  -->
+
+<application xmlns="http://java.sun.com/xml/ns/javaee"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_5.xsd"
+       version="5">
+
+   <display-name>jbpapp9412.ear</display-name>
+
+   <!-- This is required to pass org.jboss.test.xml.DDValidatorUnitTestCase.testApplicationXml -->
+   <!-- This actual test just needs the ear & the x & y jars -->
+   <module>
+      <java>jbpapp-9412-z.jar</java>
+   </module>
+
+</application>

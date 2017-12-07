@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+   <bean name="Test" class="org.jboss.test.system.controller.integration.support.SimpleBean">
+      <install bean="jboss.test:type=test" method="setSimpleBean">
+         <parameter><this/></parameter>
+      </install>
+   </bean>
+</deployment>

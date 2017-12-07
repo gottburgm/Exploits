@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Security bootstrap configuration
+-->
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <classloader><inject bean="security-classloader:0.0.0"/></classloader>
+
+   <classloader name="security-classloader" xmlns="urn:jboss:classloader:1.0" export-all="NON_EMPTY" import-all="true">
+      <root>${jboss.lib.url}jbosssx-server.jar</root>
+      <root>${jboss.lib.url}jboss-security-spi.jar</root>
+      <root>${jboss.lib.url}jbosssx.jar</root>
+      <root>${jboss.lib.url}jboss-javaee.jar</root>
+   </classloader>
+
+   <!-- JNDI Based Security Management -->
+   <bean name="JNDIBasedSecurityManagement"
+      class="org.jboss.security.integration.JNDIBasedSecurityManagement"/>
+
+   <bean name="SecurityConstantsBridge" class="org.jboss.security.integration.SecurityConstantsBridge">
+      <property name="securityManagement"><inject bean="JNDIBasedSecurityManagement"/></property>
+   </bean>
+
+ </deployment>

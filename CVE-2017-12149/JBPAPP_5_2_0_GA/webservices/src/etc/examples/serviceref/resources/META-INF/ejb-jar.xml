@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ejb-jar version="3.0"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd">
+
+  <enterprise-beans>
+    <session>
+      <ejb-name>EJBClient</ejb-name>
+      <remote>org.jboss.test.ws.jaxws.samples.serviceref.EJBRemote</remote>
+      <ejb-class>org.jboss.test.ws.jaxws.samples.serviceref.EJBClient</ejb-class>
+      <session-type>Stateless</session-type>
+      <transaction-type>Container</transaction-type>
+      
+      <service-ref>
+        <service-ref-name>service1</service-ref-name>
+        <service-interface>javax.xml.ws.Service</service-interface>
+        <wsdl-file>META-INF/wsdl/Endpoint.wsdl</wsdl-file>
+        <service-qname xmlns:ns1="http://serviceref.samples.jaxws.ws.test.jboss.org/">ns1:EndpointService</service-qname>
+      </service-ref>
+    
+      <service-ref>
+        <service-ref-name>service2</service-ref-name>
+        <service-interface>org.jboss.test.ws.jaxws.samples.serviceref.EndpointService</service-interface>
+        <wsdl-file>META-INF/wsdl/Endpoint.wsdl</wsdl-file>
+        <service-qname xmlns:ns1="http://serviceref.samples.jaxws.ws.test.jboss.org/">ns1:EndpointService</service-qname>
+        <port-component-ref>
+          <service-endpoint-interface>org.jboss.test.ws.jaxws.samples.serviceref.Endpoint</service-endpoint-interface>
+          <enable-mtom>true</enable-mtom>
+        </port-component-ref>
+      </service-ref>
+      
+    </session>
+  </enterprise-beans>
+  
+</ejb-jar>
+

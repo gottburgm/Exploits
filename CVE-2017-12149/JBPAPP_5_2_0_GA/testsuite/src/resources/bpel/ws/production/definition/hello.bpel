@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<process name="helloWorld" targetNamespace="http://jbpm.org/examples/hello"
+  xmlns:tns="http://jbpm.org/examples/hello"
+  xmlns:bpel="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://schemas.xmlsoap.org/ws/2003/03/business-process/
+                      http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+  xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/">
+
+  <partnerLinks>
+    <!-- realizes the abstract relationship with the caller -->
+    <partnerLink name="caller" partnerLinkType="tns:helloPLT" myRole="service"/>
+  </partnerLinks>
+
+  <variables>
+    <!-- holds the incoming message -->
+    <variable name="request" messageType="tns:nameMessage"/>
+	 <!-- holds the outgoing message -->
+    <variable name="response" messageType="tns:greetingMessage"/>
+  </variables>
+
+  <sequence>
+    <!-- receive a message carrying the name of a person -->
+    <receive operation="sayHello" partnerLink="caller" portType="tns:helloPT" 
+     variable="request" createInstance="yes"/>
+    <!-- compose a greeting phrase containing the name -->
+    <assign>
+      <copy>
+        <from expression="concat('Hello, ', 
+                          bpel:getVariableData('request', 'name'), '!')"/>
+        <to variable="response" part="greeting"/>
+      </copy>
+    </assign>
+    <!-- reply with a message carrying the greeting -->
+    <reply operation="sayHello" partnerLink="caller" portType="tns:helloPT"
+     variable="response"/>
+  </sequence>
+
+</process>

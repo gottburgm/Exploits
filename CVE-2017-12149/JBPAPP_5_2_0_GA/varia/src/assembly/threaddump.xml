@@ -1,0 +1,29 @@
+<assembly>
+  <id>threaddump</id>
+  <formats>
+    <format>war</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <files>
+    <file>
+      <source>src/resources/varia/threaddump/web.xml</source>
+      <outputDirectory>WEB-INF</outputDirectory>
+    </file>
+  </files>
+  <fileSets>
+    <fileSet>
+      <directory>src/resources/varia/threaddump</directory>
+      <outputDirectory>/</outputDirectory>
+      <excludes>
+        <exclude>WEB-INF/web.xml</exclude>
+      </excludes>
+    </fileSet>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/WEB-INF/classes</outputDirectory>
+      <includes>
+        <include>org/jboss/varia/threaddump/**</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

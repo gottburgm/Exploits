@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+   <bean name="EJB3IORDeployer" class="org.jboss.as.ejb3.deployers.IORDeployer"/>
+</deployment>

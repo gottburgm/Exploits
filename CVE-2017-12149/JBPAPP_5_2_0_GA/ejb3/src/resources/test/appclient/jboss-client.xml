@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-client xmlns="http://www.jboss.com/xml/ns/javaee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.jboss.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/jboss-client_5_0.xsd"
+   version="5.0"
+   id="appclient-test">
+   <jndi-name>applicationclient_test</jndi-name>
+   
+   <resource-env-ref>
+      <resource-env-ref-name>messageReplier</resource-env-ref-name>
+      <jndi-name>queue/messageReplier</jndi-name>
+   </resource-env-ref>
+</jboss-client>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<connection-factories>
+
+	<mbean code="org.jboss.jms.jndi.JMSProviderLoader" name="hornetq:service=JMSProviderLoader,name=JMSProviderTest">
+		<attribute name="ProviderName">TestJMSLocalProvider</attribute>
+		<attribute name="ProviderAdapterClass">org.jboss.jms.jndi.JNDIProviderAdapter
+		</attribute>
+		<attribute name="FactoryRef">java:/ConnectionFactory</attribute>
+		<attribute name="QueueFactoryRef">java:/ConnectionFactory</attribute>
+		<attribute name="TopicFactoryRef">java:/ConnectionFactory</attribute>
+	</mbean>
+
+	<tx-connection-factory>
+		<jndi-name>TestJmsLocal</jndi-name>
+		<rar-name>jms-ra.rar</rar-name>
+		<connection-definition>org.hornetq.ra.HornetQRAConnectionFactory
+		</connection-definition>
+		<config-property name="SessionDefaultType" type="java.lang.String">javax.jms.Topic
+		</config-property>
+		<config-property name="JmsProviderAdapterJNDI" type="java.lang.String">java:/TestJMSLocalProvider
+		</config-property>
+		<max-pool-size>20</max-pool-size>
+	</tx-connection-factory>
+
+
+</connection-factories>

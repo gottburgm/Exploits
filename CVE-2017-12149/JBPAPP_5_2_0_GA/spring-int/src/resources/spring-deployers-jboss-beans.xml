@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+   Spring deployer beans.
+-->
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <bean name="SpringParserDeployer" class="org.jboss.spring.deployers.SpringParserDeployer"/>
+
+   <bean name="ApplicationContextDeployer" class="org.jboss.spring.deployers.ApplicationContextDeployer"/>
+
+   <!--
+      Uncomment this if you want to use only BeanFactory not the full ApplicationContext.
+       And comment the ApplicationContextDeployer, else both will pick-up the SpringMetaData. 
+   -->
+   <!--
+   <bean name="BeanFactoryDeployer" class="org.jboss.spring.deployers.BeanFactoryDeployer"/>
+   -->
+
+</deployment>

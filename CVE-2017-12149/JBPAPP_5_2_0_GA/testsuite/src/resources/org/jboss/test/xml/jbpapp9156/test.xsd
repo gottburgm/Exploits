@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="test_namespace" xmlns="test_namespace" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+
+	<xsd:element name="Test">
+		<xsd:complexType>
+			<xsd:sequence>
+
+				<!-- Test digit tokens w/o beginning, trailing, or adjacent spaces -->
+
+				<xsd:element name="foo">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:pattern value="([0-9] ?)*[0-9]" />
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:element>
+
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+</xsd:schema>

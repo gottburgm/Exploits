@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ejb-jar version="2.1"
+    xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+    http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd"
+    >
+    <enterprise-beans>
+        <session>
+            <description>The bean referenced by TargetSessionReferencer</description>
+            <ejb-name>TargetSession</ejb-name>
+            <home>org.jboss.test.refs.ejbs2x.interfaces.SessionHome</home>
+            <remote>org.jboss.test.refs.ejbs2x.interfaces.Session</remote>
+            <ejb-class>org.jboss.test.refs.ejbs2x.Ejb2xStatelessBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+        </session>
+        <session>
+            <description>The bean referencing TargetSession</description>
+            <ejb-name>TargetSessionReferencer</ejb-name>
+            <home>org.jboss.test.refs.ejbs2x.interfaces.SessionHome</home>
+            <remote>org.jboss.test.refs.ejbs2x.interfaces.Session</remote>
+            <ejb-class>org.jboss.test.refs.ejbs2x.Ejb2xStatelessBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+            <ejb-ref>
+                <ejb-ref-name>ejb/TargetSessionViaEjbLink</ejb-ref-name>
+                <ejb-ref-type>Session</ejb-ref-type>
+                <home>org.jboss.test.refs.ejbs2x.interfaces.SessionHome</home>
+                <remote>org.jboss.test.refs.ejbs2x.interfaces.Session</remote>
+                <ejb-link>TargetSession</ejb-link>
+            </ejb-ref>
+        </session>
+    </enterprise-beans>
+</ejb-jar>

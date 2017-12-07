@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<web-app version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" >
+
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>client</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>com.sun.faces.validateXml</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>com.sun.faces.verifyObjects</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    
+    <!-- Faces Servlet -->
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup> 1 </load-on-startup>
+    </servlet>
+    
+	<!-- Faces Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.faces</url-pattern>
+	 <!-- <url-pattern>/faces/*</url-pattern> -->
+    </servlet-mapping>
+   
+		<welcome-file-list>
+		<welcome-file>/index.faces</welcome-file>
+	</welcome-file-list>
+
+    <error-page>
+    	<exception-type>java.lang.Exception</exception-type>
+    	<location>/error.jsp</location>
+	</error-page>
+
+    
+	<login-config>        
+        <auth-method>BASIC</auth-method>
+        <realm-name>Test Logon</realm-name>
+    </login-config>
+</web-app>

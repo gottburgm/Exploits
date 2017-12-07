@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 3.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_3_0.dtd">
+
+<jboss>
+
+   <enterprise-beans>
+
+     <!--
+       To add beans that you have deployment descriptor info for, add
+       a file to your XDoclet merge directory called jboss-beans.xml that contains
+       the <session></session>, <entity></entity> and <message-driven></message-driven>
+       markup for those beans.
+     -->
+
+      <session>
+         <ejb-name>CacheObjectMeanTester</ejb-name>
+         <jndi-name>test/CacheObjectMeanTester</jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>test/TreeCacheTester</ejb-name>
+         <jndi-name>ejb/test/TreeCacheTester</jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>test/TreeCacheAopTester</ejb-name>
+         <jndi-name>test/TreeCacheAopTester</jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>test/TreeCacheMBeanTester</ejb-name>
+         <jndi-name>ejb/test/TreeCacheMBeanTester</jndi-name>
+
+      </session>
+      <session>
+         <ejb-name>test/TreeCacheAopMBeanTester</ejb-name>
+         <jndi-name>ejb/test/TreeCacheAopMBeanTester</jndi-name>
+
+      </session>
+
+   </enterprise-beans>
+
+   <resource-managers>
+   </resource-managers>
+
+</jboss>

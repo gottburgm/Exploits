@@ -1,0 +1,31 @@
+<project name="tests-xa-jars">
+ <!-- xa test -->
+   <target name="_jars-xa">
+      <mkdir dir="${build.lib}"/>
+
+      <!-- build xatestclient.jar -->
+      <jar destfile="${build.lib}/xatestclient.jar"
+         manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <patternset refid="common.test.client.classes"/>
+            <include name="org/jboss/test/xa/interfaces/**"/>
+            <include name="org/jboss/test/xa/test/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/xa">
+            <include name="*.*"/>
+         </fileset>
+      </jar>
+
+      <!-- build xatest.jar -->
+      <jar destfile="${build.lib}/xatest.jar">
+         <fileset dir="${build.classes}">
+            <patternset refid="jboss.test.util.ejb.set"/>
+            <include name="org/jboss/test/xa/interfaces/**"/>
+            <include name="org/jboss/test/xa/bean/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/xa">
+            <include name="**/*.xml"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC '-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 1.1//EN' 'http://java.sun.com/j2ee/dtds/ejb-jar_1_1.dtd'>
+<ejb-jar>
+   <description>simpleSession Project</description>
+   <display-name>simpleClusterSession</display-name>
+
+   <enterprise-beans>
+      <session>
+         <description>Entry to Container For Simple Service</description>
+         <ejb-name>com.cluster.simple.sessionbeans.SimpleSessionBean</ejb-name>
+         <home>com.cluster.simple.sessionbeans.SimpleSessionHome</home>
+         <remote>com.cluster.simple.sessionbeans.SimpleSession</remote>
+         <ejb-class>com.cluster.simple.sessionbeans.SimpleSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+   </enterprise-beans>
+</ejb-jar>
+

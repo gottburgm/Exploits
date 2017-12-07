@@ -1,0 +1,404 @@
+<!--
+  JGroups protocol stacks definitions used by the JChannelFactory unit tests.
+  Version: $Id:jgroups-channelfactory-stacks.xml 71313 2008-03-26 19:46:59Z bstansberry@jboss.com $
+-->
+<protocol_stacks>
+
+    <stack name="shared1"
+           description="shared stack1">
+        <config>
+          <UDP
+             singleton_name="shared1"
+             mcast_port="${jgroups.udp.mcast_port:35688}"
+             mcast_addr="${jgroups.udp.mcast_addr:228.111.111.111}"
+             tos="8"
+             ucast_recv_buf_size="20000000"
+             ucast_send_buf_size="640000"
+             mcast_recv_buf_size="25000000"
+             mcast_send_buf_size="640000"
+             loopback="true"
+             discard_incompatible_packets="true"
+             max_bundle_size="64000"
+             max_bundle_timeout="30"
+             use_incoming_packet_handler="true"
+             ip_ttl="${jgroups.udp.ip_ttl:2}"
+             enable_bundling="false"
+                 
+             use_concurrent_stack="true"
+
+		     thread_pool.enabled="true"
+		     thread_pool.min_threads="1"
+		     thread_pool.max_threads="200"
+		     thread_pool.keep_alive_time="5000"
+           thread_pool.queue_enabled="false"
+           thread_pool.queue_max_size="1000"
+		     thread_pool.rejection_policy="Run"
+		
+		     oob_thread_pool.enabled="true"
+		     oob_thread_pool.min_threads="1"
+		     oob_thread_pool.max_threads="8"
+		     oob_thread_pool.keep_alive_time="5000"
+		     oob_thread_pool.queue_enabled="false"
+		     oob_thread_pool.queue_max_size="100"
+		     oob_thread_pool.rejection_policy="Run"/>
+          <PING timeout="1000" num_initial_members="1"/>
+          <MERGE2 max_interval="100000" min_interval="20000"/>
+          <FD_SOCK/>
+          <FD timeout="10000" max_tries="5" shun="true"/>
+          <VERIFY_SUSPECT timeout="1500"/>
+          <pbcast.NAKACK use_mcast_xmit="false" gc_lag="0"
+                   retransmit_timeout="300,600,1200,2400,4800"
+                   discard_delivered_msgs="true"/>
+          <UNICAST timeout="300,600,1200,2400,3600"/>
+          <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
+                   max_bytes="400000"/>
+          <pbcast.GMS print_local_addr="true" join_timeout="3000"
+                   shun="true"
+                   view_bundling="true"
+                   view_ack_collection_timeout="5000"/>
+          <FC max_credits="2000000" min_threshold="0.10"/>
+          <FRAG2 frag_size="60000"/>
+          <!-- pbcast.STREAMING_STATE_TRANSFER use_reading_thread="true"/ -->
+          <pbcast.STATE_TRANSFER/>
+          <pbcast.FLUSH timeout="0"/>
+        </config>
+    </stack>
+    
+    <stack name="shared2"
+           description="shared stack2">
+        <config>
+          <UDP
+             singleton_name="shared2"
+             mcast_port="${jgroups.udp.mcast_port:35688}"
+             mcast_addr="${jgroups.udp.mcast_addr:228.111.111.111}"
+             tos="8"
+             ucast_recv_buf_size="20000000"
+             ucast_send_buf_size="640000"
+             mcast_recv_buf_size="25000000"
+             mcast_send_buf_size="640000"
+             loopback="true"
+             discard_incompatible_packets="true"
+             max_bundle_size="64000"
+             max_bundle_timeout="30"
+             use_incoming_packet_handler="true"
+             ip_ttl="${jgroups.udp.ip_ttl:2}"
+             enable_bundling="false"
+                 
+             use_concurrent_stack="true"
+
+           thread_pool.enabled="true"
+           thread_pool.min_threads="1"
+           thread_pool.max_threads="200"
+           thread_pool.keep_alive_time="5000"
+           thread_pool.queue_enabled="false"
+           thread_pool.queue_max_size="1000"
+           thread_pool.rejection_policy="Run"
+      
+           oob_thread_pool.enabled="true"
+           oob_thread_pool.min_threads="1"
+           oob_thread_pool.max_threads="8"
+           oob_thread_pool.keep_alive_time="5000"
+           oob_thread_pool.queue_enabled="false"
+           oob_thread_pool.queue_max_size="100"
+           oob_thread_pool.rejection_policy="Run"/>
+          <PING timeout="1000" num_initial_members="1"/>
+          <MERGE2 max_interval="100000" min_interval="20000"/>
+          <FD_SOCK/>
+          <FD timeout="10000" max_tries="5" shun="true"/>
+          <VERIFY_SUSPECT timeout="1500"/>
+          <pbcast.NAKACK use_mcast_xmit="false" gc_lag="0"
+                   retransmit_timeout="300,600,1200,2400,4800"
+                   discard_delivered_msgs="true"/>
+          <UNICAST timeout="300,600,1200,2400,3600"/>
+          <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
+                   max_bytes="400000"/>
+          <pbcast.GMS print_local_addr="true" join_timeout="3000"
+                   shun="true"
+                   view_bundling="true"
+                   view_ack_collection_timeout="5000"/>
+          <FC max_credits="2000000" min_threshold="0.10"/>
+          <FRAG2 frag_size="60000"/>
+          <!-- pbcast.STREAMING_STATE_TRANSFER use_reading_thread="true"/ -->
+          <pbcast.STATE_TRANSFER/>
+          <pbcast.FLUSH timeout="0"/>
+        </config>
+    </stack>
+    
+    <stack name="unshared1"
+           description="unshared stack 1">
+        <config>
+          <UDP
+             mcast_port="${jgroups.udp.mcast_port:35689}"
+             mcast_addr="${jgroups.udp.mcast_addr:228.112.112.112}"
+             tos="8"
+             ucast_recv_buf_size="20000000"
+             ucast_send_buf_size="640000"
+             mcast_recv_buf_size="25000000"
+             mcast_send_buf_size="640000"
+             loopback="true"
+             discard_incompatible_packets="true"
+             max_bundle_size="64000"
+             max_bundle_timeout="30"
+             use_incoming_packet_handler="true"
+             ip_ttl="${jgroups.udp.ip_ttl:2}"
+             enable_bundling="false"
+                 
+             use_concurrent_stack="true"
+
+           thread_pool.enabled="true"
+           thread_pool.min_threads="1"
+           thread_pool.max_threads="200"
+           thread_pool.keep_alive_time="5000"
+           thread_pool.queue_enabled="false"
+           thread_pool.queue_max_size="1000"
+           thread_pool.rejection_policy="Run"
+      
+           oob_thread_pool.enabled="true"
+           oob_thread_pool.min_threads="1"
+           oob_thread_pool.max_threads="8"
+           oob_thread_pool.keep_alive_time="5000"
+           oob_thread_pool.queue_enabled="false"
+           oob_thread_pool.queue_max_size="100"
+           oob_thread_pool.rejection_policy="Run"/>
+          <PING timeout="1000" num_initial_members="1"/>
+          <MERGE2 max_interval="100000" min_interval="20000"/>
+          <FD_SOCK/>
+          <FD timeout="10000" max_tries="5" shun="true"/>
+          <VERIFY_SUSPECT timeout="1500"/>
+          <pbcast.NAKACK use_mcast_xmit="false" gc_lag="0"
+                   retransmit_timeout="300,600,1200,2400,4800"
+                   discard_delivered_msgs="true"/>
+          <UNICAST timeout="300,600,1200,2400,3600"/>
+          <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
+                   max_bytes="400000"/>
+          <pbcast.GMS print_local_addr="true" join_timeout="3000"
+                   shun="true"
+                   view_bundling="true"
+                   view_ack_collection_timeout="5000"/>
+          <FC max_credits="2000000" min_threshold="0.10"/>
+          <FRAG2 frag_size="60000"/>
+          <!-- pbcast.STREAMING_STATE_TRANSFER use_reading_thread="true"/ -->
+          <pbcast.STATE_TRANSFER/>
+          <pbcast.FLUSH timeout="0"/>
+        </config>
+    </stack>
+    
+    <stack name="unshared2"
+           description="unshared stack 2">
+        <config>
+          <UDP
+             mcast_port="${jgroups.udp.mcast_port:35689}"
+             mcast_addr="${jgroups.udp.mcast_addr:228.112.112.112}"
+             tos="8"
+             ucast_recv_buf_size="20000000"
+             ucast_send_buf_size="640000"
+             mcast_recv_buf_size="25000000"
+             mcast_send_buf_size="640000"
+             loopback="true"
+             discard_incompatible_packets="true"
+             max_bundle_size="64000"
+             max_bundle_timeout="30"
+             use_incoming_packet_handler="true"
+             ip_ttl="${jgroups.udp.ip_ttl:2}"
+             enable_bundling="false"
+                 
+             use_concurrent_stack="true"
+
+           thread_pool.enabled="true"
+           thread_pool.min_threads="1"
+           thread_pool.max_threads="200"
+           thread_pool.keep_alive_time="5000"
+           thread_pool.queue_enabled="false"
+           thread_pool.queue_max_size="1000"
+           thread_pool.rejection_policy="Run"
+      
+           oob_thread_pool.enabled="true"
+           oob_thread_pool.min_threads="1"
+           oob_thread_pool.max_threads="8"
+           oob_thread_pool.keep_alive_time="5000"
+           oob_thread_pool.queue_enabled="false"
+           oob_thread_pool.queue_max_size="100"
+           oob_thread_pool.rejection_policy="Run"/>
+          <PING timeout="1000" num_initial_members="1"/>
+          <MERGE2 max_interval="100000" min_interval="20000"/>
+          <FD_SOCK/>
+          <FD timeout="10000" max_tries="5" shun="true"/>
+          <VERIFY_SUSPECT timeout="1500"/>
+          <pbcast.NAKACK use_mcast_xmit="false" gc_lag="0"
+                   retransmit_timeout="300,600,1200,2400,4800"
+                   discard_delivered_msgs="true"/>
+          <UNICAST timeout="300,600,1200,2400,3600"/>
+          <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
+                   max_bytes="400000"/>
+          <pbcast.GMS print_local_addr="true" join_timeout="3000"
+                   shun="true"
+                   view_bundling="true"
+                   view_ack_collection_timeout="5000"/>
+          <FC max_credits="2000000" min_threshold="0.10"/>
+          <FRAG2 frag_size="60000"/>
+          <!-- pbcast.STREAMING_STATE_TRANSFER use_reading_thread="true"/ -->
+          <pbcast.STATE_TRANSFER/>
+          <pbcast.FLUSH timeout="0"/>
+        </config>
+    </stack>
+    
+    <!--  Here we don't use the concurrent stack, so an incoming packet handler 
+          thread carries message -->
+    <stack name="nonconcurrent1"
+           description="no concurrent stack1">
+        <config>
+          <UDP
+             singleton_name="nonconcurrent1"
+             mcast_port="${jgroups.udp.mcast_port:35799}"
+             mcast_addr="${jgroups.udp.mcast_addr:228.114.114.114}"
+             tos="8"
+             ucast_recv_buf_size="20000000"
+             ucast_send_buf_size="640000"
+             mcast_recv_buf_size="25000000"
+             mcast_send_buf_size="640000"
+             loopback="true"
+             discard_incompatible_packets="true"
+             max_bundle_size="64000"
+             max_bundle_timeout="30"
+             use_incoming_packet_handler="true"
+             ip_ttl="${jgroups.udp.ip_ttl:2}"
+             enable_bundling="false"
+                 
+             use_concurrent_stack="false"
+
+             thread_pool.enabled="false"
+      
+             oob_thread_pool.enabled="false"/>  
+          <PING timeout="1000" num_initial_members="1"/>
+          <MERGE2 max_interval="100000" min_interval="20000"/>
+          <FD_SOCK/>
+          <FD timeout="10000" max_tries="5" shun="true"/>
+          <VERIFY_SUSPECT timeout="1500"/>
+          <pbcast.NAKACK use_mcast_xmit="false" gc_lag="0"
+                   retransmit_timeout="300,600,1200,2400,4800"
+                   discard_delivered_msgs="true"/>
+          <UNICAST timeout="300,600,1200,2400,3600"/>
+          <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
+                   max_bytes="400000"/>
+          <pbcast.GMS print_local_addr="true" join_timeout="3000"
+                   shun="true"
+                   view_bundling="true"
+                   view_ack_collection_timeout="5000"/>
+          <FC max_credits="2000000" min_threshold="0.10"/>
+          <FRAG2 frag_size="60000"/>
+          <!-- pbcast.STREAMING_STATE_TRANSFER use_reading_thread="true"/ -->
+          <pbcast.STATE_TRANSFER/>
+          <pbcast.FLUSH timeout="0"/>
+        </config>
+    </stack>
+    
+    <stack name="nonconcurrent2"
+           description="no concurrent stack2">
+        <config>
+          <UDP
+             singleton_name="nonconcurrent2"
+             mcast_port="${jgroups.udp.mcast_port:35799}"
+             mcast_addr="${jgroups.udp.mcast_addr:228.114.114.114}"
+             tos="8"
+             ucast_recv_buf_size="20000000"
+             ucast_send_buf_size="640000"
+             mcast_recv_buf_size="25000000"
+             mcast_send_buf_size="640000"
+             loopback="true"
+             discard_incompatible_packets="true"
+             max_bundle_size="64000"
+             max_bundle_timeout="30"
+             use_incoming_packet_handler="true"
+             ip_ttl="${jgroups.udp.ip_ttl:2}"
+             enable_bundling="false"
+                 
+             use_concurrent_stack="false"
+
+             thread_pool.enabled="false"
+      
+             oob_thread_pool.enabled="false"/>  
+          <PING timeout="1000" num_initial_members="1"/>
+          <MERGE2 max_interval="100000" min_interval="20000"/>
+          <FD_SOCK/>
+          <FD timeout="10000" max_tries="5" shun="true"/>
+          <VERIFY_SUSPECT timeout="1500"/>
+          <pbcast.NAKACK use_mcast_xmit="false" gc_lag="0"
+                   retransmit_timeout="300,600,1200,2400,4800"
+                   discard_delivered_msgs="true"/>
+          <UNICAST timeout="300,600,1200,2400,3600"/>
+          <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
+                   max_bytes="400000"/>
+          <pbcast.GMS print_local_addr="true" join_timeout="3000"
+                   shun="true"
+                   view_bundling="true"
+                   view_ack_collection_timeout="5000"/>
+          <FC max_credits="2000000" min_threshold="0.10"/>
+          <FRAG2 frag_size="60000"/>
+          <!-- pbcast.STREAMING_STATE_TRANSFER use_reading_thread="true"/ -->
+          <pbcast.STATE_TRANSFER/>
+          <pbcast.FLUSH timeout="0"/>
+        </config>
+    </stack>
+
+    <stack name="queues" description="to check queue configuration">
+        <config>
+          <UDP
+             singleton_name="queues"
+             mcast_port="${jgroups.udp.mcast_port:35688}"
+             mcast_addr="${jgroups.udp.mcast_addr:228.111.111.111}"
+             tos="8"
+             ucast_recv_buf_size="20000000"
+             ucast_send_buf_size="640000"
+             mcast_recv_buf_size="25000000"
+             mcast_send_buf_size="640000"
+             loopback="true"
+             discard_incompatible_packets="true"
+             max_bundle_size="64000"
+             max_bundle_timeout="30"
+             use_incoming_packet_handler="true"
+             ip_ttl="${jgroups.udp.ip_ttl:2}"
+             enable_bundling="false"
+                 
+             use_concurrent_stack="true"
+
+           thread_pool.enabled="true"
+           thread_pool.min_threads="2"
+           thread_pool.max_threads="22"
+           thread_pool.keep_alive_time="3000"
+           thread_pool.queue_enabled="true"
+           thread_pool.queue_max_size="750"
+           thread_pool.rejection_policy="Discard"
+      
+           oob_thread_pool.enabled="true"
+           oob_thread_pool.min_threads="3"
+           oob_thread_pool.max_threads="12"
+           oob_thread_pool.keep_alive_time="4000"
+           oob_thread_pool.queue_enabled="true"
+           oob_thread_pool.queue_max_size="75"
+           oob_thread_pool.rejection_policy="Abort"/>
+          <PING timeout="1000" num_initial_members="1"/>
+          <MERGE2 max_interval="100000" min_interval="20000"/>
+          <FD_SOCK/>
+          <FD timeout="10000" max_tries="5" shun="true"/>
+          <VERIFY_SUSPECT timeout="1500"/>
+          <pbcast.NAKACK use_mcast_xmit="false" gc_lag="0"
+                   retransmit_timeout="300,600,1200,2400,4800"
+                   discard_delivered_msgs="true"/>
+          <UNICAST timeout="300,600,1200,2400,3600"/>
+          <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
+                   max_bytes="400000"/>
+          <pbcast.GMS print_local_addr="true" join_timeout="3000"
+                   shun="true"
+                   view_bundling="true"
+                   view_ack_collection_timeout="5000"/>
+          <FC max_credits="2000000" min_threshold="0.10"/>
+          <FRAG2 frag_size="60000"/>
+          <!-- pbcast.STREAMING_STATE_TRANSFER use_reading_thread="true"/ -->
+          <pbcast.STATE_TRANSFER/>
+          <pbcast.FLUSH timeout="0"/>
+        </config>
+    </stack>
+
+</protocol_stacks>
+
+

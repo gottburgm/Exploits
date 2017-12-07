@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mbean PUBLIC
+   "-//JBoss//DTD JBOSS XMBEAN 1.2//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_xmbean_1_2.dtd">
+
+<mbean>
+   <description>Tests of XMLAttributePersistenceManager</description>
+   <class>org.jboss.test.jmx.xmbean.XMLAttributePersistenceManagerTestService</class>
+
+   <constructor>
+      <description>The default constructor</description>
+      <name>XMLAttributePersistenceManagerTestService</name>
+   </constructor>
+   
+   &defaultAttributes;
+   
+   <!-- Operations -->
+
+   <operation>
+     <name>store</name>
+     <parameter>
+       <name>id</name>
+       <type>java.lang.String</type>
+     </parameter>
+     <parameter>
+       <name>atlist</name>
+       <type>javax.management.AttributeList</type>
+     </parameter>
+   </operation>
+   
+   <operation>
+     <name>load</name>
+     <parameter>
+       <name>id</name>
+       <type>java.lang.String</type>
+     </parameter>
+     <return-type>javax.management.AttributeList</return-type>
+   </operation>
+   
+   <operation>
+     <name>selftest</name>
+   </operation>
+
+   &defaultOperations;
+
+</mbean>

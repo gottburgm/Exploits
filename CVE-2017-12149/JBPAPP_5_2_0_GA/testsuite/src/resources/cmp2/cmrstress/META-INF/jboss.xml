@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 3.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_3_0.dtd">
+
+<jboss>
+
+   <enterprise-beans>
+
+     <!--
+       To add beans that you have deployment descriptor info for, add
+       a file to your XDoclet merge directory called jboss-beans.xml that contains
+       the <session></session>, <entity></entity> and <message-driven></message-driven>
+       markup for those beans.
+     -->
+
+      <entity>
+         <ejb-name>Child</ejb-name>
+         <local-jndi-name>ChildLocal</local-jndi-name>
+
+      </entity>
+      <entity>
+         <ejb-name>Parent</ejb-name>
+         <jndi-name>cmrstress/Parent</jndi-name>
+         <local-jndi-name>ParentLocal</local-jndi-name>
+
+      </entity>
+
+   </enterprise-beans>
+
+   <resource-managers>
+   </resource-managers>
+
+</jboss>

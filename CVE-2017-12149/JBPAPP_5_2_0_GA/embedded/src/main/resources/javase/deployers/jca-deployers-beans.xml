@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    JCA Deployers
+    $Id: jca-deployers-beans.xml 85945 2009-03-16 19:45:12Z dimitris@jboss.org $
+-->
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <bean name="JCAMetaDataRepository" class="org.jboss.resource.metadata.repository.DefaultJCAMetaDataRepository"/>
+            
+   <!-- RAR Deployment -->
+   <bean name="RARParserDeployer" class="org.jboss.resource.deployers.RARParserDeployer">
+      <property name="metaDataRepository"><inject bean="JCAMetaDataRepository"/></property>
+   </bean>
+   
+   <bean name="RARDeployer" class="org.jboss.resource.deployers.RARDeployer">
+      <property name="workManagerName">jboss.jca:service=WorkManager</property>
+      <property name="XATerminatorName">jboss:service=TransactionManager</property>
+   </bean>
+   
+   
+   
+   <!-- ConnectionFactory Deployment - ->  
+   
+   <bean name="ConnectionFactoryDeployer" class="org.jboss.system.deployers.ServiceXSLDeployer">
+      <property name="suffix">-ds.xml</property>
+      <property name="XSLPath">stylesheets/ConnectionFactoryTemplate.xsl</property>
+   </bean>
+   
+   -->
+
+   <bean name="MCFBuilder" class="org.jboss.resource.deployers.builder.ManagedConnectionFactoryBuilder">
+      <property name="metaDataRepository"><inject bean="JCAMetaDataRepository"/></property>
+   </bean>   
+   
+   <bean name="PoolBuilder" class="org.jboss.resource.deployers.builder.ManagedConnectionPoolBuilder"/>
+   <bean name="ConnectionManagerBuilder" class="org.jboss.resource.deployers.builder.ConnectionManagerBuilder"/>
+   <bean name="ConnectionFactoryBindingBuilder" class="org.jboss.resource.deployers.builder.ConnectionFactoryBindingBuilder"/>
+   <bean name="MetaDataTypeMappingBuilder" class="org.jboss.resource.deployers.builder.MetaDataTypeMappingBuilder"/>
+   
+   <bean name="ManagedConnectionFactoryParserDeployer" class="org.jboss.resource.deployers.ManagedConnectionFactoryParserDeployer">
+      <property name="repository"><inject bean="JCAMetaDataRepository"></inject></property>
+      <property name="suffix">-ds.xml</property>      
+   </bean>
+   
+   
+   <bean name="ManagedConnectionFactoryDeployer" class="org.jboss.resource.deployers.ManagedConnectionFactoryDeployer">      
+      <property name="repository"><inject bean="JCAMetaDataRepository"></inject></property>      
+      <property name="builders">
+         <list>
+            <inject bean="MCFBuilder"/>
+            <inject bean="PoolBuilder"/>
+            <inject bean="ConnectionManagerBuilder"/>
+            <inject bean="ConnectionFactoryBindingBuilder"/>
+            <inject bean="MetaDataTypeMappingBuilder"/>            
+         </list>            
+      </property>
+   </bean>
+
+   <!-- The template for creating a datasource -->
+   <bean name="DsDataSourceTemplate" class="org.jboss.resource.deployers.management.DsDataSourceTemplate">
+      <property name="info"><inject bean="DsDataSourceTemplateInfo"/></property>
+   </bean>
+   <bean name="DsDataSourceTemplateInfo"
+      class="org.jboss.resource.deployers.management.DsDataSourceTemplateInfo">
+      <constructor>
+         <parameter>DsDataSourceTemplate</parameter>
+         <parameter>A template for *-ds.xml deployments</parameter>
+         <parameter>org.jboss.resource.metadata.mcf.ManagedConnectionFactoryDeploymentGroup</parameter>
+      </constructor>
+   </bean>
+   
+</deployment>

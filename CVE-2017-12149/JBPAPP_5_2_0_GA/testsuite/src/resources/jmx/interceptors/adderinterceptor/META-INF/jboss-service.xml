@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server
+    PUBLIC "-//JBoss//DTD MBean Service 4.0//EN"
+    "http://www.jboss.org/j2ee/dtd/jboss-service_4_0.dtd">
+
+<server>
+   <mbean code="org.jboss.test.jmx.interceptors.AdderInterceptorService"
+      name="jboss.test:service=adderinterceptor">
+      
+      <depends-list optional-attribute-name="Interceptables">
+         <depends-list-element>jboss.test:service=interceptable</depends-list-element>
+      </depends-list>
+   </mbean>
+</server>

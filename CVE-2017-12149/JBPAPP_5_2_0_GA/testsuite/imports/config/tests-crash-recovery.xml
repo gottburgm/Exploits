@@ -1,0 +1,440 @@
+<?xml version="1.0"?>
+
+<!--
+   | Targets that run JBossTS crash recovery tests 
+-->
+ 
+<!-- $Id$ -->
+<project name="main.server.config.jbossts.crashrecovery" xmlns:server="http://jboss.org/ns/test/ant/server">
+
+
+   <property name="jbossts.crash.recovery.test.dir" value="jbossts" />
+   <property name="jbossts.crash.recovery.test.script.dir" value="${jbossts.crash.recovery.test.dir}/scripts" />
+   <property name="jbossts.crash.recovery.test.resource.dir" value="${jbossts.crash.recovery.test.dir}/resources" />
+   <property name="jbossts.base.jta.server.profile" value="default" />
+   <property name="jbossts.base.jts.server.profile" value="all" />
+	
+  <!--
+    | Targets
+  -->
+
+   <!-- 
+    | JBQA-2176 - JBossTS crash recovery tests with EJB3.
+    |
+    | Usage for all tests:
+    |    ./build.sh tests-ts-crash-recovery
+    |     
+    |  or for particular database:
+    |    ./build.sh tests-ts-crash-recovery -Djbossts.db=psql_8.3 -Djbossts.target=crash-tests-single-db
+    |     
+    |  or for particular test scenario:
+    |    ./build.sh tests-ts-crash-recovery -Djbossts.db=psql_8.3 -Djbossts.tstype=jts -Djbossts.tsdemarc=bmt -Djbossts.testcase=none.rev -Djbossts.target=crash-tests-single
+    |
+    | Usage for cluster tests:
+    |    ./build.sh tests-ts-crash-recovery -Djbossts.db=oracle_rac -Djbossts.tstype=jts -Djbossts.target=crash-tests-single-db-tstype 
+    |
+    | Added new option for settings of datasource credentials:
+    |    -Djbossts.credentials=cr1 - the default one
+    |         <xa-datasource-property name="User">crashrec</xa-datasource-property>
+    |         <xa-datasource-property name="Password">crashrec</xa-datasource-property>
+    |    -Djbossts.credentials=cr2
+    |         <user-name>crash0</user-name>
+    |         <password>crash0</password>
+    |         <recover-user-name>crashrec</recover-user-name>
+    |         <recover-password>crashrec</recover-password>
+    |    -Djbossts.credentials=cr3
+    |         <security-domain>CrashRecoveryDomain0</security-domain>
+    |         <recover-user-name>crashrec</recover-user-name>
+    |         <recover-password>crashrec</recover-password>
+    |    -Djbossts.credentials=cr4
+    |         <security-domain>CrashRecoveryDomain0</security-domain>
+    |         <recover-security-domain>CrashRecoveryDomain</recover-security-domain>
+    |
+    | Note 1: The 'jbossts.credentials' prop is useless in connection with -Djbossts.db=[oracle_rac|oracle_rac_r2].
+    | Note 2: If you want to force the wiping out any txs in doubt from DB before the test you can use the property -DwipeOutTxsInDoubtBeforeTest=true.
+    | Note 3: For EWP, use '-Djbossts.jtaonly=true' to prepare only jta profile in the AS server. Otherwise both JTA/JTS profiles are always created/checked.
+    |
+    | Possible values for the jbossts.db parameter are: 
+    |     psql_8.2 psql_8.3 psql_8.4 psql_9.0 sybase_15 sybase_15.5 oracle_10 oracle_11 oracle_11_r2 db2_9.7 
+    |     mysql_5.0 mysql_5.1 mssql_2005 mssql_2008 oracle_rac oracle_rac_lb oracle_rac_r2 oracle_rac_r2_lb
+    | Data-sources related to these DBs can be found in src/resources/jbossts/resources/.
+    -->
+   <target name="tests-ts-crash-recovery" depends="tests-ts-crash-recovery-jpa"
+   	     description="Runs JBossTS crash recovery tests" />
+   
+   <target name="tests-ts-crash-recovery-jpa" depends="tests-ts-init-jpa, tests-ts-crash-recovery-common" />
+   
+   <!-- 
+    | JBQA-3370 - JBossTS crash recovery tests with HornetQ / JBoss Messaging.
+    |
+    | Usage for all tests:
+    |    ./build.sh tests-ts-crash-recovery-jms
+    |     
+    |  or for particular test scenario:
+    |    ./build.sh tests-ts-crash-recovery-jms -Djbossts.tstype=jts -Djbossts.tsdemarc=cmt -Djbossts.testcase=commit_halt.rev -Djbossts.target=crash-tests-jms-single
+    |
+    | Use '-Djbossts.hornetq=true" to test the HornetQ.
+    | Use '-Djbossts.mrg=true" to test the MRG RA.
+    | 
+    | The default JBossTS recovery configuration for HornetQ takes an InVMConnectorFactory. 
+    | The InVMConnectorFactory is recommended for XA Recovery by HornetQ documentation.
+    | Use '-Djbossts.hornetq.netty=true' to change it to an optional NettyConnectorFactory.
+    |
+    | Instructions for MRG testing:
+    | The tests expect the MRG to be already installed in EAP, i.e. to copy the 3 qpid files into the all and default server profiles:
+    |      qpid-ra.rar, qpid-xarecovery-jboss.jar, qpid-jca-ds.xml
+    | 
+    | Note: If you want to force the wiping out any txs in doubt from DB before the test you can use the property -DwipeOutTxsInDoubtBeforeTest=true. 
+    -->
+   <target name="tests-ts-crash-recovery-jms" depends="select-jms-impl, tests-ts-init-jms, tests-ts-crash-recovery-common" />
+   
+   <target name="tests-ts-sweep-crashrec-profiles">
+      <delete dir="${jboss.dist}/server/crashrecovery-jta" />
+      <delete dir="${jboss.dist}/server/crashrecovery-jts" />
+   </target>
+
+	
+   <!--
+     | Internal targets
+   -->
+	
+   <target name="tests-ts-init-jpa">
+      <property name="jbossts.target" value="crash-tests" />
+      <property name="jbossts.credentials" value="cr1" />
+      <property name="astest.jar.name" value="crashrecovery-astest.jar" />
+      <property name="want.jpa" value="true" />
+   </target>
+   
+   <target name="tests-ts-init-jms">
+      <property name="jbossts.target" value="crash-tests-jms" />
+      <property name="want.jms" value="true" />
+      <property name="astest.jar.name" value="crashrecovery-jms-astest.jar"/>
+   </target>
+   
+   <target name="select-jms-impl">
+      <condition property="want.hornetq" value="true">
+         <isset property="${jbossts.hornetq}"/>
+      </condition>
+      <condition property="want.mrg" value="true">
+         <isset property="${jbossts.mrg}"/>
+      </condition>
+      <condition property="want.messaging" value="true">
+         <not>
+            <or>
+       	       <istrue value="${want.hornetq}"/>
+       	       <istrue value="${want.mrg}"/>
+            </or>
+         </not>
+      </condition>
+   </target>
+	   
+   <target name="tests-ts-crash-recovery-common">
+
+      <!--  prepare jta profile  -->
+      <available file="${jboss.dist}/server/crashrecovery-jta" property="have.crash.recovery.jta.profile" value="true"/>
+      <antcall target="prepare-crashrec-profile-jta" />
+
+      <!--  prepare jts profile  -->
+      <condition property="have.crash.recovery.jts.profile">
+         <or>
+            <available file="${jboss.dist}/server/crashrecovery-jts"/>
+            <isset property="jbossts.jtaonly"/>
+         </or>
+      </condition>
+      <antcall target="prepare-crashrec-profile-jts" />
+   	
+   	  <!--  run the tests  -->
+      <property name="jbossts.max.time" value="420000" />
+      <run-as-test target="${jbossts.target}" />
+
+   </target>
+
+   <!--
+     | Macros and others
+   -->
+
+   <macrodef name="run-as-test">
+      <attribute name="target"/>
+      <sequential>
+         <echo message="starting of ${build.resources}/${jbossts.crash.recovery.test.script.dir}/as-tests.xml"/>
+         <java classname="org.apache.tools.ant.launch.Launcher" fork="true" failonerror="true">
+         	<classpath>
+                <pathelement location="${build.lib}/${astest.jar.name}"/>
+         		<pathelement location="${ant.library.dir}/ant-launcher.jar"/>
+         		<path refid="org.apache.ant.classpath"/>
+         		<path refid="junit.junit.classpath"/>
+         		<path refid="jboss.server.manager.classpath"/>
+                <path refid="jboss.jbossts.classpath"/>
+                <fileset dir="${jbosstest.dist}/client"/>
+         	</classpath>
+            <sysproperty key="ant.home" value="${ant.home}"/>
+            <sysproperty key="ant.library.dir" value="${ant.library.dir}"/>
+            <sysproperty key="java.security.policy" value="${build.resources}/${jbossts.crash.recovery.test.resource.dir}/java.policy"/>
+            <sysproperty key="product.dir" value="${build.resources}/${jbossts.crash.recovery.test.dir}" />
+            <sysproperty key="jboss.home" value="${jbosstest.dist}" />
+            <sysproperty key="jboss.dist" value="${jboss.dist}" />
+            <sysproperty key="astest.jar.dir" value="${build.lib}" />
+            <sysproperty key="astest.jar.name" value="${astest.jar.name}" />
+            <sysproperty key="astest.jar.deploy.dir" value="../../lib" />
+            <sysproperty key="build.reports" value="${build.reports}" />
+            <sysproperty key="sm.legacy.shutdown" value="true" />
+            <sysproperty key="jbossas.startup.timeout" value="480" />
+            <sysproperty key="jbossas.shutdown.timeout" value="240" />
+            <sysproperty key="wipeOutTxsInDoubtBeforeTest" value="${wipeOutTxsInDoubtBeforeTest}" />
+            <sysproperty key="jbossts.db" value="${jbossts.db}" />
+            <sysproperty key="jbossts.tstype" value="${jbossts.tstype}" />
+            <sysproperty key="jbossts.tsdemarc" value="${jbossts.tsdemarc}" />
+            <sysproperty key="jbossts.testcase" value="${jbossts.testcase}" />
+            <sysproperty key="jbossts.credentials" value="${jbossts.credentials}" />
+            <sysproperty key="jbossts.hornetq" value="${jbossts.hornetq}" />
+            <sysproperty key="jbossts.hornetq.netty" value="${jbossts.hornetq.netty}" />
+            <sysproperty key="jbossts.mrg" value="${jbossts.mrg}" />
+            <sysproperty key="testTime" value="${jbossts.max.time}" />
+            <sysproperty key="jboss.test.sign.keystore" value="${basedir}/src/resources/test-configs/cc/cc.keystore" />
+            <syspropertyset>
+               <propertyref prefix="jboss.test.deploy.dir"/>
+               <propertyref prefix="jboss.test.sign.jars"/>
+               <propertyref prefix="cc."/>
+            </syspropertyset>
+            
+            <env key="JBOSS_HOME" value="${jbosstest.dist}" />
+            <arg value="-f"/>
+            <arg value="${build.resources}/${jbossts.crash.recovery.test.script.dir}/as-tests.xml"/>
+            <arg value="@{target}"/>
+            <!--jvmarg value="-Xdebug"/>
+            <jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"/-->
+         </java>
+      </sequential>
+   </macrodef>
+   
+   
+   <target name="prepare-crashrec-profile-jta" unless="have.crash.recovery.jta.profile">
+      <delete dir="${jboss.dist}/server/crashrecovery-jta" />
+      <create-config baseconf="${jbossts.base.jta.server.profile}" newconf="crashrecovery-jta">
+         <patternset> <!-- necessary for CC tests -->
+            <include name="conf/**" />
+            <include name="deployers/**" />
+            <include name="deploy/**" />
+            <include name="deploy-hasingleton/**" />
+            <include name="farm/**" />
+            <include name="lib/**" />
+            <include name="cc.*"/>
+            <include name="ssl.*"/>
+            <include name="localhost.*"/>
+         </patternset>
+      </create-config>
+
+      <antcall target="setup-recovery"><param name="conf" value="crashrecovery-jta"/></antcall>
+   </target>
+   
+   <target name="prepare-crashrec-profile-jts" unless="have.crash.recovery.jts.profile">
+      <delete dir="${jboss.dist}/server/crashrecovery-jts" />
+      <create-config baseconf="${jbossts.base.jts.server.profile}" newconf="crashrecovery-jts">
+         <patternset>
+            <include name="conf/**"/>
+            <include name="deploy/**"/>
+            <include name="deployers/**"/>
+            <include name="lib/**"/>
+         </patternset>
+      </create-config>
+
+      <!-- install JTS transactions into crashrecovery-jts profile -->
+      <ant dir="${jboss.dist}/docs/examples/transactions" target="jts">
+         <property name="target.server.dir" location="${jboss.dist}/server/crashrecovery-jts"/>
+      </ant>
+
+      <antcall target="setup-recovery"><param name="conf" value="crashrecovery-jts"/></antcall>       
+   </target>
+   
+   <target name="setup-recovery" depends="setup-recovery-jpa, setup-recovery-jms" />
+
+   <target name="setup-recovery-jpa" if="want.jpa">
+      <antcall target="setup-recovery-jbossts-jpa" />
+      <antcall target="setup-security-domains" />
+   </target>
+   
+   <target name="setup-recovery-jms" if="want.jms">
+      <antcall target="setup-jms-jboss-messaging" />
+      <antcall target="setup-jms-hornetq" />
+      <antcall target="setup-jms-mrg" />
+   </target>
+   	
+   	
+   <target name="setup-recovery-jbossts-jpa">
+      <echo message="Setting up crash recovery for profile ${conf}.."/>
+      <!-- enable crash recovery and point it to our datasource -->
+      <replace file="${jboss.dist}/server/${conf}/conf/jbossts-properties.xml">
+         <replacetoken><![CDATA[</transaction-service>]]></replacetoken>
+         <replacevalue><![CDATA[   
+    <properties depends="arjuna" name="jta">
+       <!-- xaRecoveryNode should match value in nodeIdentifier or be * -->
+       <property name="com.arjuna.ats.jta.xaRecoveryNode" value="1"/>
+    </properties>
+</transaction-service>]]></replacevalue>
+      </replace>
+      <!-- more verbose logging -->
+      <replace file="${jboss.dist}/server/${conf}/conf/jbossts-properties.xml">
+         <replacetoken><![CDATA[type="System" value="0x00000000"]]></replacetoken>
+         <replacevalue><![CDATA[type="System" value="0xffffffff"]]></replacevalue>
+      </replace>
+   </target>
+
+   <target name="setup-security-domains">
+      <echo message="Setting up security domains for profile ${conf}.."/>
+   	  <replace file="${jboss.dist}/server/${conf}/conf/login-config.xml">
+         <replacetoken><![CDATA[</policy>]]></replacetoken>
+         <replacevalue><![CDATA[
+    <application-policy name="CrashRecoveryDomain">
+        <authentication>
+            <login-module code="org.jboss.resource.security.SecureIdentityLoginModule" flag="required">
+                <module-option name="username">crashrec</module-option>
+                <module-option name="password">-170d8ac0642414f0207a6df87216de44</module-option>
+                <module-option name="managedConnectionFactoryName">jboss.jca:service=XATxCM,name=CrashRecoveryDS</module-option>
+            </login-module>
+        </authentication>
+    </application-policy>
+
+    <application-policy name="CrashRecoveryDomain0">
+        <authentication>
+            <login-module code="org.jboss.resource.security.SecureIdentityLoginModule" flag="required">
+                <module-option name="username">crash0</module-option>
+                <module-option name="password">-47043946269bfc76</module-option>
+                <module-option name="managedConnectionFactoryName">jboss.jca:service=XATxCM,name=CrashRecoveryDS</module-option>
+            </login-module>
+        </authentication>
+    </application-policy>
+</policy>]]></replacevalue>
+      </replace>
+   </target>
+   
+
+   <target name="setup-jms-jboss-messaging" if="want.messaging">
+      <echo message="Setting up JBoss Messaging (queues, ...) for profile ${conf}.."/>
+   	  <replace file="${jboss.dist}/server/${conf}/deploy/messaging/destinations-service.xml">
+         <replacetoken><![CDATA[</server>]]></replacetoken>
+         <replacevalue><![CDATA[
+   <mbean code="org.jboss.jms.server.destination.QueueService"
+      name="jboss.messaging.destination:service=Queue,name=crashRecoveryQueue"
+      xmbean-dd="xmdesc/Queue-xmbean.xml">
+      <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+      <depends>jboss.messaging:service=PostOffice</depends>
+      <attribute name="SecurityConfig">
+         <security>
+            <role name="guest" read="true" write="true" create="true"/>
+         </security>
+      </attribute>
+   </mbean>
+</server>]]></replacevalue>
+      </replace>
+      
+      <echo message="Setting up JBoss Messaging recovery for profile ${conf}.."/>
+      <!-- enable crash recovery and point it to a JMS provider -->
+      <replace file="${jboss.dist}/server/${conf}/conf/jbossts-properties.xml">
+         <replacetoken><![CDATA[</transaction-service>]]></replacetoken>
+         <replacevalue><![CDATA[   
+    <properties depends="arjuna" name="jta">
+       <property name="com.arjuna.ats.jta.recovery.XAResourceRecovery.JBMESSAGING1"
+            value="org.jboss.jms.server.recovery.MessagingXAResourceRecovery;java:/DefaultJMSProvider"/>
+       <!-- xaRecoveryNode should match value in nodeIdentifier or be * -->
+       <property name="com.arjuna.ats.jta.xaRecoveryNode" value="1"/>
+    </properties>
+</transaction-service>]]></replacevalue>
+      </replace>
+      <!-- more verbose logging -->
+      <replace file="${jboss.dist}/server/${conf}/conf/jbossts-properties.xml">
+         <replacetoken><![CDATA[type="System" value="0x00000000"]]></replacetoken>
+         <replacevalue><![CDATA[type="System" value="0xffffffff"]]></replacevalue>
+      </replace>
+   </target>
+   
+   <target name="setup-jms-hornetq" if="want.hornetq">
+      <echo message="Setting up HornetQ (queues, ...) for profile ${conf}.."/>
+      <replace file="${jboss.dist}/server/${conf}/deploy/hornetq/hornetq-jms.xml">
+         <replacetoken><![CDATA[</configuration>]]></replacetoken>
+         <replacevalue><![CDATA[
+   <queue name="crashRecoveryQueue">
+      <entry name="/queue/crashRecoveryQueue"/>
+   </queue>
+</configuration>]]></replacevalue>
+      </replace>
+
+      <!--echo message="Setting up HornetQ recovery for profile ${conf}.."/>
+      <antcall target="setup-jbossts-hornetq-invm" />
+      <antcall target="setup-jbossts-hornetq-netty" /-->
+      
+      <!-- more verbose logging -->
+      <replace file="${jboss.dist}/server/${conf}/conf/jbossts-properties.xml">
+         <replacetoken><![CDATA[type="System" value="0x00000000"]]></replacetoken>
+         <replacevalue><![CDATA[type="System" value="0xffffffff"]]></replacevalue>
+      </replace>
+   </target>
+
+   <target name="setup-jbossts-hornetq-netty" if="jbossts.hornetq.netty">
+      <!-- enable recovery with NettyConnectorFactory -->
+      <replace file="${jboss.dist}/server/${conf}/conf/jbossts-properties.xml">
+         <replacetoken><![CDATA[</transaction-service>]]></replacetoken>
+         <replacevalue><![CDATA[
+    <properties depends="arjuna" name="jta">
+       <property name="com.arjuna.ats.jta.recovery.XAResourceRecovery.HORNETQ1"
+           value="org.hornetq.jms.server.recovery.HornetQXAResourceRecovery;org.hornetq.core.remoting.impl.netty.NettyConnectorFactory"/>
+       <!-- xaRecoveryNode should match value in nodeIdentifier or be * -->
+       <property name="com.arjuna.ats.jta.xaRecoveryNode" value="1"/>
+    </properties>
+</transaction-service>]]></replacevalue>
+      </replace>
+   </target>
+
+   <target name="setup-jbossts-hornetq-invm" unless="jbossts.hornetq.netty">
+      <!-- enable recovery with InVMConnectorFactory -->
+      <replace file="${jboss.dist}/server/${conf}/conf/jbossts-properties.xml">
+         <replacetoken><![CDATA[</transaction-service>]]></replacetoken>
+         <replacevalue><![CDATA[
+    <properties depends="arjuna" name="jta">
+       <property name="com.arjuna.ats.jta.recovery.XAResourceRecovery.HORNETQ1"
+            value="org.hornetq.jms.server.recovery.HornetQXAResourceRecovery;org.hornetq.core.remoting.impl.invm.InVMConnectorFactory"/>
+       <!-- xaRecoveryNode should match value in nodeIdentifier or be * -->
+       <property name="com.arjuna.ats.jta.xaRecoveryNode" value="1"/>
+    </properties>
+</transaction-service>]]></replacevalue>
+      </replace>
+   </target>
+
+   <target name="setup-jms-mrg" if="want.mrg">
+    <!-- enable crash recovery and point it to a JMS provider -->
+    <replace file="${jboss.dist}/server/${conf}/conf/jbossts-properties.xml">
+       <replacetoken><![CDATA[</transaction-service>]]></replacetoken>
+       <replacevalue><![CDATA[   
+  <properties depends="arjuna" name="jta">
+    <property name="com.arjuna.ats.jta.recovery.XAResourceRecovery.QPID1"                                                                                                                                                                       
+          value="org.jboss.mrg.jca.tm.QpidXAResourceRecovery;amqp://guest:guest@/test?brokerlist=&apos;tcp://mrg01.mw.lab.eng.bos.redhat.com:5672&apos;"/>
+<!--        value="org.jboss.mrg.jca.tm.QpidXAResourceRecovery;amqp://guest:guest@/test?brokerlist=&apos;tcp://mrg01.mw.lab.eng.bos.redhat.com:5672?sasl_mechs=&apos;ANONYMOUS&apos;&apos;"/> -->
+     <!-- xaRecoveryNode should match value in nodeIdentifier or be * -->
+     <property name="com.arjuna.ats.jta.xaRecoveryNode" value="1"/>
+  </properties>
+</transaction-service>]]></replacevalue>
+    </replace>
+   	
+    <!-- more verbose logging -->
+    <replace file="${jboss.dist}/server/${conf}/conf/jbossts-properties.xml">
+       <replacetoken><![CDATA[type="System" value="0x00000000"]]></replacetoken>
+       <replacevalue><![CDATA[type="System" value="0xffffffff"]]></replacevalue>
+    </replace>
+   	
+     	  <replace file="${jboss.dist}/server/${conf}/deploy/qpid-jca-ds.xml">
+           <replacetoken><![CDATA[</connection-factories>]]></replacetoken>
+           <replacevalue><![CDATA[
+      	<mbean code="org.jboss.resource.deployment.AdminObject"
+      	     name="qpid.jca:name=CrashRecoveryQueue">
+      	     <attribute name="JNDIName">queue/crashRecoveryQueue</attribute>
+      	     <depends optional-attribute-name="RARName">jboss.jca:service=RARDeployment,name='qpid-ra.rar'</depends>
+      	     <attribute name="Type">javax.jms.Destination</attribute>
+      	     <attribute name="Properties">
+      	          destinationAddress=queue.crashRecoveryQueue;{create:always,node:{type:queue}}
+      	          destinationType=queue
+      	     </attribute>
+      	</mbean>
+</connection-factories>]]></replacevalue>
+        </replace>
+   </target>
+
+</project>

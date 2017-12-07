@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE server>
+<server>
+   <mbean code="org.jboss.naming.JNDIBindingServiceMgr"
+         name="jboss.tests:service=JNDIBindingServiceMgr">
+      <attribute name="BindingsConfig" serialDataType="jbxb">
+         <jndi:bindings
+            xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:jndi="urn:jboss:jndi-binding-service:1.0"
+            xs:schemaLocation="urn:jboss:jndi-binding-service:1.0 resource:jndi-binding-service_2_0.xsd"
+            >
+            <jndi:binding name="urls/jboss-home">
+               <jndi:value type="java.net.URL">http://www.jboss.org</jndi:value>
+            </jndi:binding>
+
+            <jndi:binding name="hosts/localhost">
+               <jndi:value editor="org.jboss.common.beans.property.InetAddressEditor">
+                  127.0.0.1
+               </jndi:value>
+            </jndi:binding>
+
+            <jndi:binding name="maps/testProps">
+               <java:properties xmlns:java="urn:jboss:java-properties"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+                  xs:schemaLocation="urn:jboss:java-properties resource:java-properties_1_0.xsd">
+                  <java:property>
+                     <java:key>key1</java:key>
+                     <java:value>value1</java:value>
+                  </java:property>
+                  <java:property>
+                     <java:key>key2</java:key>
+                     <java:value>value2</java:value>
+                  </java:property>
+               </java:properties>               
+            </jndi:binding>
+         </jndi:bindings>
+      </attribute>
+   </mbean>
+
+</server>

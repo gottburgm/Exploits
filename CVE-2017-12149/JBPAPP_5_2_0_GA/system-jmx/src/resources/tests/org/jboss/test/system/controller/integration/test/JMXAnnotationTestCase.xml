@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<server>
+   <mbean code="org.jboss.test.system.controller.integration.support.MockUnifiedInvoker" name="jboss:service=invoker,type=unified">
+      <depends>jboss:service=TransactionManager</depends>
+   </mbean>
+</server>

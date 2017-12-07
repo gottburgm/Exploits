@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+
+<!DOCTYPE faces-config PUBLIC
+  "-//Sun Microsystems, Inc.//DTD JavaServer Faces Config 1.1//EN"
+  "http://java.sun.com/dtd/web-facesconfig_1_1.dtd">
+
+<faces-config>
+
+  <navigation-rule>
+    <from-view-id>/index.jsp</from-view-id>
+    <navigation-case>
+      <from-outcome>/finalgreeting.jsp</from-outcome>
+      <to-view-id>/finalgreeting.jsp</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <managed-bean>
+    <description>Use a swing Button as a simple javabean</description>
+    <managed-bean-name>foo</managed-bean-name>
+    <managed-bean-class>javax.swing.JButton</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+</faces-config>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: hsqldb-ps-ds.xml 26412 2004-12-05 23:36:39Z starksm $ -->
+
+<datasources>
+
+   <local-tx-datasource>
+      <jndi-name>CachedPSDS</jndi-name>
+      <connection-url>jdbc:hsqldb:${jboss.server.data.dir}${/}hypersonic${/}pscacheDB</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <user-name>sa</user-name>
+      <password></password>
+      <min-pool-size>5</min-pool-size>
+      <max-pool-size>20</max-pool-size>
+      <prepared-statement-cache-size>2</prepared-statement-cache-size>
+   </local-tx-datasource>
+
+</datasources>

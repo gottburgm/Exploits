@@ -1,0 +1,72 @@
+% Deployment Descriptors
+tsfi.app.jboss-cxf.xml 
+tsfi.app.jboss-beans.xml   
+tsfi.app.ejb-jar.xml
+tsfi.app.jboss.xml           
+tsfi.app.web.xml           
+tsfi.app.jboss-web.xml    
+% Certificates
+tsfi.keystore.usercerts    
+% Ports TCP/UDP
+tsfi.port.rmi.https     
+tsfi.port.rmi.http       
+tsfi.port.rmi.jrmp
+tsfi.port.rmi.pooled
+tsfi.port.rmi.unifiedInvoker
+tsfi.port.rmi.jrmpha    
+tsfi.port.web.http
+tsfi.port.web.https
+% Annotations
+tsfi.ann.Clustered
+tsfi.ann.DeclareRoles
+tsfi.ann.DenyAll
+tsfi.ann.Exclude
+tsfi.ann.Permissions
+tsfi.ann.PermitAll
+tsfi.ann.RolesAllowed
+tsfi.ann.RunAs
+tsfi.ann.RunAsPrincipal
+tsfi.ann.SecurityDomain
+tsfi.ann.TransactionAttribute
+tsfi.ann.TransactionManagement
+tsfi.ann.TransactionTimeout
+tsfi.ann.Unchecked
+tsfi.ann.WebContext
+% API
+tsfi.api.jaxws 
+tsfi.api.jta
+tsfi.api.ws
+% Login modules
+tsfi.db.roles                
+tsfi.db.users
+tsfi.app.roles.properties
+tsfi.app.users.properties
+% Startup/Shutdown
+tsfi.cmd.start
+tsfi.cmd.stop
+% Configuration
+tsfi.cfg.conf.jboss-log4j.xml
+tsfi.cfg.conf.jbossts-properties.xml
+tsfi.cfg.conf.login-config.xml
+tsfi.cfg.conf.props.jbossws-roles.properties
+tsfi.cfg.conf.props.jbossws-users.properties
+tsfi.cfg.conf.props.jmx-console-roles.properties
+tsfi.cfg.conf.props.jmx-console-users.properties
+tsfi.cfg.conf.props.messaging-roles.properties
+tsfi.cfg.conf.props.messaging-users.properties
+tsfi.cfg.deploy.admin.jboss-web.xml
+tsfi.cfg.deploy.admin.web.xml
+tsfi.cfg.deploy.cluster.hapartition-jboss-beans.xml
+tsfi.cfg.hi.jboss-web.xml
+tsfi.cfg.hi.web.xml
+tsfi.cfg.deploy.jbossws-management.jboss-web.xml
+tsfi.cfg.deploy.jbossws-management.web.xml
+tsfi.cfg.deploy.jmx-console.jboss-web.xml
+tsfi.cfg.deploy.jmx-console.web.xml
+tsfi.cfg.deploy.jmx-invoker-service.xml
+tsfi.cfg.juddi.jboss-web.xml
+tsfi.cfg.juddi.web.xml
+tsfi.cfg.jms.destinations-service.xml
+tsfi.cfg.jms.jboss-beans.xml
+tsfi.cfg.jms.messaging-service.xml
+tsfi.cfg.deploy.security.security-policies-jboss-beans.xml

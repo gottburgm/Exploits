@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://jbpm.org/examples/hello" xmlns:tns="http://jbpm.org/examples/hello" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <import namespace="http://jbpm.org/examples/hello" location="binding1.wsdl"/>
+  <service name="helloWorldService">
+    <port name="callerPort" binding="tns:helloPTBinding">
+      <soap:address location="REPLACE_WITH_ACTUAL_URI"/>
+    </port>
+  </service>
+</definitions>

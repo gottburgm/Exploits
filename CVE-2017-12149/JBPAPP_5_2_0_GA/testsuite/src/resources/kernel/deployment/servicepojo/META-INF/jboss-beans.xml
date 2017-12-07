@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="urn:jboss:bean-deployer bean-deployer_1_0.xsd"
+            xmlns="urn:jboss:bean-deployer">
+
+   <!-- The test passes if we move the "PoolService" bean definition here! -->
+
+   <bean name="BindAddress1" class="org.jboss.test.kernel.deployment.jboss.beans.servicepojo.BindAddress">
+      <constructor>
+         <parameter>127.0.0.1</parameter>
+         <parameter>1100</parameter>
+      </constructor>
+   </bean>
+   
+   <bean name="BindAddress2" class="org.jboss.test.kernel.deployment.jboss.beans.servicepojo.BindAddress">
+      <constructor>
+         <parameter>192.168.0.20</parameter>
+         <parameter>1200</parameter>
+      </constructor>
+   </bean>
+      
+   <bean name="POJOService" class="org.jboss.test.kernel.deployment.jboss.beans.servicepojo.POJOService">
+      <property name="poolService">
+         <inject bean="PoolService" state="Configured"/>
+      </property>
+      <property name="bindAddresses">
+         <list elementClass="org.jboss.test.kernel.deployment.jboss.beans.servicepojo.BindAddress">
+            <inject bean="BindAddress1" state="Instantiated"/>
+            <inject bean="BindAddress2" state="Instantiated"/>
+         </list>
+      </property>
+      <depends>PoolService</depends>
+   </bean>
+   
+   <bean name="PoolService" class="org.jboss.test.kernel.deployment.jboss.beans.servicepojo.PoolService">
+      <property name="poolSize">20</property>
+      <property name="queueSize">2000</property>
+   </bean>  
+
+</deployment>

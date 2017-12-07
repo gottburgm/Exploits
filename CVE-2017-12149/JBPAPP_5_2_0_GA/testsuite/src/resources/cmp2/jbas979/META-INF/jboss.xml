@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 4.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <entity>
+         <ejb-name>AStoreNotFlushedTrueEJB</ejb-name>
+         <local-jndi-name>AStoreNotFlushedTrue</local-jndi-name>
+         <configuration-name>store-not-flushed=true</configuration-name>
+      </entity>
+      <entity>
+         <ejb-name>AStoreNotFlushedFalseEJB</ejb-name>
+         <local-jndi-name>AStoreNotFlushedFalse</local-jndi-name>
+         <configuration-name>store-not-flushed=false</configuration-name>
+      </entity>
+      <session>
+         <ejb-name>EJBTestRunnerEJB</ejb-name>
+         <jndi-name>ejb/EJBTestRunner</jndi-name>
+      </session>
+      <session>
+         <ejb-name>FacadeEJB</ejb-name>
+         <jndi-name>Facade</jndi-name>
+      </session>
+   </enterprise-beans>
+
+   <container-configurations>
+    <container-configuration extends="Standard Pessimistic CMP 2.x EntityBean">
+      <container-name>store-not-flushed=true</container-name>
+      <store-not-flushed>true</store-not-flushed>
+      <container-cache-conf>
+        <cache-policy>org.jboss.ejb.plugins.LRUEnterpriseContextCachePolicy</cache-policy>
+        <cache-policy-conf>
+          <min-capacity>50</min-capacity>
+          <max-capacity>1000000</max-capacity>
+          <overager-period>1</overager-period>
+          <max-bean-age>3</max-bean-age>
+          <resizer-period>400</resizer-period>
+          <max-cache-miss-period>60</max-cache-miss-period>
+          <min-cache-miss-period>1</min-cache-miss-period>
+          <cache-load-factor>0.75</cache-load-factor>
+        </cache-policy-conf>
+      </container-cache-conf>
+      <commit-option>A</commit-option>
+    </container-configuration>
+
+    <container-configuration extends="Standard Pessimistic CMP 2.x EntityBean">
+      <container-name>store-not-flushed=false</container-name>
+      <store-not-flushed>false</store-not-flushed>
+      <container-cache-conf>
+        <cache-policy>org.jboss.ejb.plugins.LRUEnterpriseContextCachePolicy</cache-policy>
+        <cache-policy-conf>
+          <min-capacity>50</min-capacity>
+          <max-capacity>1000000</max-capacity>
+          <overager-period>1</overager-period>
+          <max-bean-age>3</max-bean-age>
+          <resizer-period>400</resizer-period>
+          <max-cache-miss-period>60</max-cache-miss-period>
+          <min-cache-miss-period>1</min-cache-miss-period>
+          <cache-load-factor>0.75</cache-load-factor>
+        </cache-policy-conf>
+      </container-cache-conf>
+      <commit-option>A</commit-option>
+    </container-configuration>
+   </container-configurations>
+</jboss>

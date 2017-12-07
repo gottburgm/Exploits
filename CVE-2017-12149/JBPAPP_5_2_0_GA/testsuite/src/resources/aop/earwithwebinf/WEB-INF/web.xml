@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE web-app PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+   "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+   <description>AOP in JBoss example, with some intercepted classes in the WEB-INF folder</description>
+
+   <servlet>
+      <servlet-name>EarExampleServlet</servlet-name>
+      <servlet-class>org.jboss.test.aop.earwithwebinf.servlet.EarExampleServlet</servlet-class>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>EarExampleServlet</servlet-name>
+      <url-pattern>/srv/*</url-pattern>
+   </servlet-mapping>
+</web-app>

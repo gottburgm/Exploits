@@ -1,0 +1,19 @@
+<project name="management-component-info">
+   <!-- ============================================================ -->
+   <!-- Management                                                   -->
+   <!-- ============================================================ -->
+
+   <component id="management"
+              module="jboss-management"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="jboss-jsr77.jar"/>
+      <artifact id="jboss-management.jar"/>
+      <artifact id="ejb-management.jar"/>
+      <artifact id="jboss-jsr77-client.jar"/>
+      <export>
+         <include input="jboss-management.jar"/>
+         <include input="jboss-jsr77.jar"/>
+      </export>
+   </component>
+</project>

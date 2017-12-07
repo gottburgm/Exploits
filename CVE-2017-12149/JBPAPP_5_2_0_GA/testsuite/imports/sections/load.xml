@@ -1,0 +1,15 @@
+<project name="tests-load-jars">
+   <!-- load test -->
+   <target name="_jars-load">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build loadtest.jar -->
+      <jar destfile="${build.lib}/load.jar" manifest="${build.etc}/manifest.mf">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/load/test/**"/>
+            <include name="org/jboss/test/testbean/interfaces/**"/>
+            <include name="org/jboss/test/bmp/interfaces/**"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

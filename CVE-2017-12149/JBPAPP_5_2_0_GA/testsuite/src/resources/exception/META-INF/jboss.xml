@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE jboss PUBLIC
+   "-//JBoss//DTD JBOSS 3.2//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_3_2.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <session>
+         <ejb-name>EJBTestRunnerEJB</ejb-name>
+         <jndi-name>ejb/EJBTestRunner</jndi-name>
+      </session>
+
+      <session>
+         <ejb-name>ExceptionTesterEJB</ejb-name>
+         <jndi-name>exception/ExceptionTester</jndi-name>
+         <local-jndi-name>exception/ExceptionTesterLocal</local-jndi-name>
+      </session>
+
+      <session>
+         <ejb-name>CreateExceptionTesterEJB</ejb-name>
+         <jndi-name>exception/CreateExceptionTesterEJB</jndi-name>
+         <local-jndi-name>exception/CreateExceptionTesterLocalEJB</local-jndi-name>
+      </session>
+
+      <session>
+         <ejb-name>SecuredExceptionTesterEJB</ejb-name>
+         <jndi-name>exception/SecuredExceptionTester</jndi-name>
+         <local-jndi-name>exception/SecuredExceptionTesterLocal</local-jndi-name>
+         <configuration-name>Secured Stateless SessionBean</configuration-name>
+      </session>
+
+      <entity>
+         <ejb-name>EntityExceptionTesterEJB</ejb-name>
+         <jndi-name>exception/EntityExceptionTester</jndi-name>
+         <local-jndi-name>exception/EntityExceptionTesterLocal</local-jndi-name>
+         <configuration-name>EntityExceptionTester Container Configuration</configuration-name>
+      </entity>
+   </enterprise-beans>
+
+   <container-configurations>
+      <container-configuration extends="Standard Pessimistic BMP EntityBean">
+         <container-name>EntityExceptionTester Container Configuration</container-name>
+         <commit-option>A</commit-option>
+      </container-configuration>
+
+      <container-configuration extends="Standard Stateless SessionBean">
+         <container-name>Secured Stateless SessionBean</container-name>
+         <security-domain>java:/jaas/other</security-domain>
+      </container-configuration>
+   </container-configurations>
+</jboss>

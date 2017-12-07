@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<server>
+    <mbean	xmbean-dd="xmdesc/Topic-xmbean.xml"
+    		name="jboss.messaging.destination:service=Topic,name=testTopic"
+    		code="org.jboss.jms.server.destination.TopicService">
+
+        <attribute name="JNDIName">testTopic</attribute>
+        <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+        <depends>jboss.messaging:service=PostOffice</depends>
+    </mbean>
+    
+    <mbean	xmbean-dd="xmdesc/Topic-xmbean.xml"
+    		name="jboss.messaging.destination:service=Topic,name=testRemoveTopic"
+    		code="org.jboss.jms.server.destination.TopicService">
+
+        <attribute name="JNDIName">testRemoveTopic</attribute>
+        <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+        <depends>jboss.messaging:service=PostOffice</depends>
+    </mbean>
+    
+</server>

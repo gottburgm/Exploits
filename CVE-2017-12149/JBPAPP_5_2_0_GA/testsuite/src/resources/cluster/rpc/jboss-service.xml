@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+    
+  <mbean code="org.jboss.test.cluster.hapartition.rpc.RPCUser" name="jboss.test:service=RPCTestCase">
+    <attribute name="HAPartition"><inject bean="HAPartition"/></attribute>
+  </mbean>
+  
+  <mbean code="org.jboss.test.cluster.hapartition.rpc.RPCUser" name="jboss.test:service=RPCOneNodeTestCase">
+    <attribute name="HAPartition"><inject bean="HAPartition"/></attribute>
+  </mbean>
+  
+</server>

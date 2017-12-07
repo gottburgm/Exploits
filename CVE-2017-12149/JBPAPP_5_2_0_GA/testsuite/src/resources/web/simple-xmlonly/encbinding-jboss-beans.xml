@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: encbinding-jboss-beans.xml 85945 2009-03-16 19:45:12Z dimitris@jboss.org $ -->
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+    
+    <!-- Define a Jndi binding aspect/annotation that exposes beans via jndi
+    when they are registered with the kernel.
+    -->
+    <aop:lifecycle-configure xmlns:aop="urn:jboss:aop-beans:1.0"
+        name="DependencyAdvice"
+        class="org.jboss.aop.microcontainer.aspects.jndi.JndiLifecycleCallback"
+        classes="@org.jboss.aop.microcontainer.aspects.jndi.JndiBinding"
+        manager-bean="AspectManager"
+        manager-property="aspectManager">
+    </aop:lifecycle-configure>
+
+    <!-- The jndi bindings -->
+    <bean name="ENC.MockDS" class="org.jboss.test.web.mock.MockDataSource">
+        <annotation>@org.jboss.aop.microcontainer.aspects.jndi.JndiBinding(name="java:/MockDS")</annotation>
+    </bean>
+    <bean name="ENC/ejb/bean3" class="org.jboss.test.web.mock.StatelessHomeBean">
+        <annotation>@org.jboss.aop.microcontainer.aspects.jndi.JndiBinding(name="jbosstest/ejbs/UnsecuredEJB")</annotation>
+    </bean>
+    <bean name="ENC/ejb/local/bean3" class="org.jboss.test.web.mock.StatelessLocalHomeBean">
+        <annotation>@org.jboss.aop.microcontainer.aspects.jndi.JndiBinding(name="jbosstest/ejbs/local/ENCBean1")</annotation>
+    </bean>
+    <bean name="ENC/ejb/CtsBmp" class="org.jboss.test.web.mock.EntityHomeBean">
+        <annotation>@org.jboss.aop.microcontainer.aspects.jndi.JndiBinding(name="jbosstest/ejbs/CtsBmp")</annotation>
+    </bean>
+    
+    <bean name="ENC/mdr/ConsumesProducesJNDIName" class="org.jboss.test.web.mock.QueueBean">
+        <annotation>@org.jboss.aop.microcontainer.aspects.jndi.JndiBinding(name="MockQueueA")</annotation>
+    </bean>
+    <bean name="ENC/TestQueue" class="org.jboss.test.web.mock.QueueBean">
+        <annotation>@org.jboss.aop.microcontainer.aspects.jndi.JndiBinding(name="MockQueueB")</annotation>
+    </bean>
+    <bean name="ENC/TestTopic" class="org.jboss.test.web.mock.TopicBean">
+        <annotation>@org.jboss.aop.microcontainer.aspects.jndi.JndiBinding(name="MockTopicA")</annotation>
+    </bean>
+
+</deployment>

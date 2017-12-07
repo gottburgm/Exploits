@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE jboss-web PUBLIC "-//JBoss//DTD Web Application 5.0//EN" "http://www.jboss.org/j2ee/dtd/jboss-web_5_0.dtd">
+
+<jboss-web>
+  <!--class-loading>
+    <loader-repository>jbossws.samples:loader=IsolatedRepository
+      <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
+    </loader-repository>
+  </class-loading-->  
+  <!--service-ref>
+    <service-ref-name>service2</service-ref-name>
+    <wsdl-override>file:/home/hbraun/dev/prj/jbossas/trunk/build/output/jboss-5.0.0.Beta3/server/cts/data/wsdl/WSEjbMultipleClientInje
+ctionTest1.ear/WSEjbMultipleClientInjectionTest1_ejb.jar/HelloService.wsdl</wsdl-override>
+  </service-ref-->
+</jboss-web>

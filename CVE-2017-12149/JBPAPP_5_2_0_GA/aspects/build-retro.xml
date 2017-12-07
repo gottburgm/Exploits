@@ -1,0 +1,742 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+   <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
+   <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+]>
+
+<!-- $Id: build-retro.xml 94979 2009-10-15 18:41:01Z fnasser@redhat.com $ -->
+
+<!--+======================================================================+-->
+<!--| JBoss (The OpenSource J2EE WebOS) Build File                         |-->
+<!--|                                                                      |-->
+<!--| Distributable under LGPL license.                                    |-->
+<!--| See terms of license at http://www.gnu.org.                          |-->
+<!--|                                                                      |-->
+<!--| This file has been designed to work with the 'tools' module and      |-->
+<!--| Buildmagic extentions.                                               |-->
+<!--+======================================================================+-->
+
+<project default="main" name="JBoss/Aspects">
+
+   <!--+====================================================================+-->
+   <!--| Setup                                                              |-->
+   <!--|                                                                    |-->
+   <!--| Include the common build elements.                                 |-->
+   <!--|                                                                    |-->
+   <!--| This defines several different targets, properties and paths.      |-->
+   <!--| It also sets up the basic extention tasks amoung other things.     |-->
+   <!--+====================================================================+-->
+
+   &buildmagic;
+
+   <!-- ================================================================== -->
+   <!-- Initialization                                                     -->
+   <!-- ================================================================== -->
+
+   <!--
+      | Initialize the build system.  Must depend on '_buildmagic:init'.
+      | Other targets should depend on 'init' or things will mysteriously fail.
+    -->
+
+   <target name="init" unless="init.disable" depends="_buildmagic:init">
+   </target>
+
+
+   <!--+====================================================================+-->
+   <!--| Configuration                                                      |-->
+   <!--|                                                                    |-->
+   <!--| This target is invoked by the Buildmagic initialization logic      |-->
+   <!--| and should contain module specific configuration elements.         |-->
+   <!--+====================================================================+-->
+
+   <target name="configure" unless="configure.disable">
+      &libraries;
+      &modules;
+
+      <!-- Module name(s) & version -->
+      <property name="aspects.version" value="jboss-aspect-library-1.3"/>
+      <property name="aop.version" value="jboss-aop_1.3"/>
+      <property name="aspects.title" value="JBoss AOP Aspect Library"/>
+
+      <property name="module.name" value="aspects"/>
+      <property name="module.Name" value="JBoss Aspects"/>
+
+      <!-- Configure thirdparty libraries -->
+      <path id="library.classpath">
+         <path refid="qdox.classpath"/>
+         <path refid="javassist.classpath"/>
+         <path refid="trove.classpath"/>
+         <path refid="xdoclet.xdoclet.classpath"/>
+         <path refid="apache.ant.classpath"/>
+         <path refid="oswego.concurrent.classpath"/>
+         <path refid="junit.junit.classpath"/>
+         <path refid="apache.log4j.classpath"/>
+         <path refid="dom4j.dom4j.classpath"/>
+         <path refid="beanshell.beanshell.classpath"/>
+         <path refid="jboss.remoting.classpath"/>
+         <path refid="apache.xerces.classpath"/>
+         <path refid="jboss.microcontainer.classpath"/>
+      </path>
+
+      <!-- Configure modules -->
+      <path id="dependentmodule.classpath">
+      <path refid="jboss.common.core.classpath"/>
+      <path refid="jboss.common.logging.spi.classpath"/>
+      <path refid="jboss.common.logging.log4j.classpath"/>
+      <path refid="jboss.common.logging.jdk.classpath"/>
+         <path refid="jboss.j2ee.classpath"/>
+         <path refid="jboss.j2se.classpath"/>
+         <path refid="jboss.jmx.classpath"/>
+         <path refid="jboss.system.classpath"/>
+         <path refid="jboss.security.classpath"/>
+         <path refid="jboss.j2se.classpath"/>
+         <path refid="jboss.system.classpath"/>
+         <path refid="jboss.cluster.classpath"/>
+         <path refid="jboss.transaction.classpath"/>
+         <path refid="jboss.aop.classpath"/>
+         <path refid="jboss.server.classpath"/>
+         <path refid="jboss.test.classpath"/>
+      </path>
+
+      <!-- ===== -->
+      <!-- Tasks -->
+      <!-- ===== -->
+
+      <!-- Where source files live -->
+      <property name="source.java" value="${module.source}/main"/>
+      <property name="source15.java" value="${module.source}/jdk15"/>
+      <property name="source.test" value="${module.source}/test"/>
+      <property name="source.etc" value="${module.source}/etc"/>
+      <property name="source.resources" value="${module.source}/resources"/>
+      <property name="source.bin" value="${module.source}/bin"/>
+
+      <!-- Where build generated files will go -->
+      <property name="build.reports" value="${module.output}/reports"/>
+      <property name="build.gen-src" value="${module.output}/gen-src"/>
+      <property name="build.classes" value="${module.output}/classes"/>
+      <property name="build.resources" value="${module.output}/resources"/>
+      <property name="build15.classes" value="${module.output}/classes15"/>
+      <property name="build.lib" value="${module.output}/lib"/>
+      <property name="build.unpacked" value="${module.output}/unpacked"/>
+      <property name="build.api" value="${module.output}/api"/>
+      <property name="build.etc" value="${module.output}/etc"/>
+      <property name="build.todo" value="${module.output}/todo"/>
+      <property name="build.meta.inf" value="${module.output}/META-INF"/>
+
+      <!-- Install/Release structure -->
+      <property name="install.id" value="${module.name}-${module.version}"/>
+      <property name="release.id" value="${install.id}"/>
+      <property name="install.root" value="${module.output}/${install.id}"/>
+
+      <!-- The combined thirdparty classpath -->
+      <path id="thirdparty.classpath">
+         <path refid="library.classpath"/>
+         <path refid="dependentmodule.classpath"/>
+         <!--path refid="apache.commons.classpath"/-->
+      </path>
+
+      <!-- classpath and local.classpath must have a value using with a path -->
+      <property name="classpath" value=""/>
+      <property name="local.classpath" value=""/>
+
+      <!-- The classpath required to build classes. -->
+      <path id="javac.classpath">
+         <pathelement path="${classpath}"/>
+         <pathelement path="${local.classpath}"/>
+         <path refid="thirdparty.classpath"/>
+      </path>
+
+      <!-- xdoclet -->
+      <path id="xdoclet.task.classpath">
+         <path refid="javac.classpath"/>
+         <fileset dir="${xdoclet.xdoclet.lib}">
+            <include name="**/*.jar"/>
+         </fileset>
+      </path>
+      <property name="xdoclet.task.classpath"
+         refid="xdoclet.task.classpath"/>
+
+   </target>
+
+
+   <!--+====================================================================+-->
+   <!--| Compile                                                            |-->
+   <!--|                                                                    |-->
+   <!--| This target should depend on other compile-* targets for each      |-->
+   <!--| different type of compile that needs to be performed, short of     |-->
+   <!--| documentation compiles.                                            |-->
+   <!--+====================================================================+-->
+
+   <target name="compile"
+      description="Compile all source files."
+      depends="_default:compile-etc, _default:compile-resources, compile-classes, compile-classes15">
+      <!-- Add module specific elements here. -->
+   </target>
+
+   <!-- Compile all class files -->
+   <target name="compile-classes">
+      <mkdir dir="${build.classes}"/>
+      <path id="javac14.classpath">
+         <path refid="javac.classpath"/>
+         <pathelement path="${jboss.aop.lib}/jdk14-pluggable-instrumentor.jar"/>
+      </path>
+      <javac destdir="${build.classes}"
+         optimize="${javac.optimize}"
+         target="${javac.target}"
+         source="${javac.source}"
+         debug="${javac.debug}"
+         depend="${javac.depend}"
+         verbose="${javac.verbose}"
+         deprecation="${javac.deprecation}"
+         includeAntRuntime="${javac.include.ant.runtime}"
+         includeJavaRuntime="${javac.include.java.runtime}"
+         includes="${javac.includes}"
+         excludes="${javac.excludes}"
+         failonerror="${javac.fail.onerror}">
+         <src path="${source.java}"/>
+         <classpath refid="javac14.classpath"/>
+      </javac>
+   </target>
+
+   <target name="compile-classes15" depends="init" if="HAVE_JDK_1.5">
+      <mkdir dir="${build15.classes}"/>
+      <path id="javac15.classpath">
+         <pathelement path="${build.classes}"/>
+         <pathelement path="${jboss.aop.lib}/jboss-aop-jdk50.jar"/>
+         <path refid="javac.classpath"/>
+         <pathelement path="${jboss.aop.lib}/pluggable-instrumentor.jar"/>
+      </path>
+      <javac destdir="${build15.classes}"
+         optimize="${javac.optimize}"
+         target="1.5"
+         source="1.5"
+         debug="${javac.debug}"
+         depend="${javac.depend}"
+         verbose="${javac.verbose}"
+         deprecation="${javac.deprecation}"
+         includeAntRuntime="${javac.include.ant.runtime}"
+         includeJavaRuntime="${javac.include.java.runtime}"
+         failonerror="${javac.fail.onerror}">
+         <src path="${source15.java}"/>
+         <classpath refid="javac15.classpath"/>
+      </javac>
+   </target>
+
+   <!--+====================================================================+-->
+   <!--| Generate Output                                                    |-->
+   <!--|                                                                    |-->
+   <!--| Generates the target output for this module. Target output is      |-->
+   <!--| the output which is ment to be released or used by external        |-->
+   <!--| modules.                                                           |-->
+   <!--+====================================================================+-->
+
+   <target name="output"
+      description="Generate all target output."
+      depends="_buildmagic:build-bypass-check"
+      unless="build-bypass.on">
+
+      <call target="compile"/>
+
+      <mkdir dir="${build.lib}"/>
+
+      <!-- Build jboss-aspects.jar -->
+      <jar destfile="${build.lib}/jboss-aspect-library.jar" manifest="${build.etc}/default.mf"
+         update="${jar.update}" index="${jar.index}">
+         <fileset dir="${build.classes}">
+            <!-- Include everything else -->
+            <include name="org/jboss/**"/>
+         </fileset>
+         <fileset dir="${build.etc}">
+            <include name="org/jboss/**/*.xml"/>
+         </fileset>
+         <fileset dir="${build.resources}">
+            <include name="aop-deployer_1_1.xsd"/>
+         </fileset>
+      </jar>
+
+      <jar destfile="${build.lib}/jboss-aspect-library32.jar" manifest="${build.etc}/default.mf"
+         update="${jar.update}" index="${jar.index}">
+         <fileset dir="${build.classes}">
+            <!-- Include everything else -->
+            <include name="org/jboss/**"/>
+         </fileset>
+         <fileset dir="${build.etc}">
+            <include name="org/jboss/**/*.xml"/>
+         </fileset>
+         <zipfileset src="${jboss.common.lib}/jboss-archive-browsing.jar">
+            <include name="org/jboss/util/file/ArchiveBrowser*.class"/>
+            <include name="org/jboss/util/file/ClassFileFilter.class"/>
+            <include name="org/jboss/util/file/DirectoryArchiveBrowser.class"/>
+            <include name="org/jboss/util/file/JarArchiveBrowser.class"/>
+         </zipfileset>
+      </jar>
+
+      <mkdir dir="${build.meta.inf}"/>
+      <copy file="${source.resources}/META-INF/jboss-service.xml" todir="${build.meta.inf}" filtering="true">
+         <filterset>
+            <filter token="SERVICE_NAME" value="org.jboss.aop.deployment.AspectManagerService"/>
+         </filterset>
+      </copy>
+      <jar destfile="${build.lib}/jboss-aop.deployer" manifest="${build.etc}/default.mf"
+         update="${jar.update}" index="${jar.index}">
+         <fileset file="${build.lib}/jboss-aspect-library.jar"/>
+         <fileset file="${jboss.aop.lib}/jboss-aop.jar"/>
+         <fileset file="${project.root}/aspects/src/etc/base-aop.xml"/>
+         <fileset file="${javassist.lib}/javassist.jar"/>
+         <fileset file="${trove.lib}/trove.jar"/>
+         <fileset dir="${module.output}" >
+            <include name="META-INF/jboss-service.xml"/>
+         </fileset>
+      </jar>
+      <delete dir="${build.meta.inf}"/>
+
+      <!-- Generate checksums -->
+      <call target="_default:compile-checksums"/>
+
+   </target>
+
+
+   <target name="jars15"
+      depends="compile-classes15" if="HAVE_JDK_1.5">
+
+      <mkdir dir="${build.lib}"/>
+
+      <!-- Build jboss-aspects-jdk50.jar -->
+      <jar destfile="${build.lib}/jboss-aspect-library-jdk50.jar" manifest="${build.etc}/default.mf"
+         update="${jar.update}" index="${jar.index}">
+         <fileset dir="${build.classes}">
+            <!-- Include everything else -->
+            <include name="org/jboss/**"/>
+            <exclude name="org.jboss.aop.microcontainer.prototype.AnnotationDependencyLister.class"/>
+            <exclude name="org/jboss/aspects/asynchronous/aspects/jboss/Asynchronous.class"/>
+            <exclude name="org/jboss/aspects/asynch/Asynchronous.class"/>
+            <exclude name="org/jboss/aspects/asynch/AsynchExecutor.class"/>
+            <exclude name="org/jboss/aspects/asynch/ThreadPoolExecutor*.class"/>
+            <exclude name="org/jboss/aspects/asynch/FutureImpl.class"/>
+            <exclude name="org/jboss/aspects/Current.class"/>
+            <exclude name="org/jboss/aspects/jmx/MBean.class"/>
+            <exclude name="org/jboss/test/**"/>
+            <exclude name="org/jboss/aspects/Injected.class"/>
+            <exclude name="org/jboss/aspects/dbc/Dbc.class"/>
+            <exclude name="org/jboss/aspects/dbc/Invariant.class"/>
+            <exclude name="org/jboss/aspects/dbc/PostCond.class"/>
+            <exclude name="org/jboss/aspects/dbc/PreCond.class"/>
+            <exclude name="org/jboss/aspects/dbc/StaticInvariant.class"/>
+            <exclude name="org/jboss/aspects/tx/TxType.class"/>
+            <exclude name="org/jboss/aspects/tx/Tx.class"/>
+            <exclude name="org/jboss/aspects/tx/TxLocal.class"/>
+            <exclude name="org/jboss/aspects/txlock/TxSynchronized.class"/>
+            <exclude name="org/jboss/aspects/security/SecurityDomain.class"/>
+            <exclude name="org/jboss/aspects/security/Exclude.class"/>
+            <exclude name="org/jboss/aspects/security/Unchecked.class"/>
+            <exclude name="org/jboss/aspects/security/RunAs.class"/>
+            <exclude name="org/jboss/aspects/security/Permissions.class"/>
+            <exclude name="org/jboss/aspects/patterns/readwritelock/readLockOperation.class"/>
+            <exclude name="org/jboss/aspects/patterns/readwritelock/writeLockOperation.class"/>
+         </fileset>
+         <fileset dir="${build15.classes}">
+            <include name="org/jboss/**"/>
+         </fileset>
+         <fileset dir="${build.etc}">
+            <include name="org/jboss/**/*.xml"/>
+         </fileset>
+      </jar>
+
+      <!-- Build client jar containing the minimum needed for ejb 3 -->
+      <jar destfile="${build.lib}/jboss-aspect-jdk50-client.jar" manifest="${build.etc}/default.mf"
+         update="${jar.update}" index="${jar.index}">
+         <fileset dir="${build.classes}">
+            <!-- Include everything else -->
+            <include name="org/jboss/aspects/asynch/AsynchProvider.class"/>
+            <include name="org/jboss/aspects/asynch/AsynchProxyInterceptor.class"/>
+            <include name="org/jboss/aspects/asynch/AsynchMixin.class"/>
+            <include name="org/jboss/aspects/asynch/Future.class"/>
+            <include name="org/jboss/aspects/asynch/FutureHolder.class"/>
+            <include name="org/jboss/aspects/asynch/FutureInvocationHandler.class"/>
+            <include name="org/jboss/aspects/asynch/RemotableFuture.class"/>
+            <include name="org/jboss/aspects/asynch/TimeoutException.class"/>
+            <include name="org/jboss/aspects/remoting/ClusterConstants.class"/>
+            <include name="org/jboss/aspects/remoting/ClusterChooserInterceptor.class"/>
+            <include name="org/jboss/aspects/remoting/FamilyWrapper.class"/>
+            <include name="org/jboss/aspects/remoting/InvokeRemoteInterceptor.class"/>
+            <include name="org/jboss/aspects/remoting/IsLocalInterceptor.class"/>
+            <include name="org/jboss/aspects/remoting/MergeMetaDataInterceptor.class"/>
+            <include name="org/jboss/aspects/remoting/PojiProxy.class"/>
+             <include name="org/jboss/aspects/tx/ClientTxPropagationInterceptor.class"/>
+            <include name="org/jboss/aspects/security/SecurityClientInterceptor.class"/>
+            <include name="org/jboss/aspects/security/SecurityActions.class"/>
+         </fileset>
+         <fileset dir="${build15.classes}">
+            <include name="org/jboss/aspects/asynch/AsynchExecutor.class"/>
+            <include name="org/jboss/aspects/asynch/FutureImpl.class"/>
+            <include name="org/jboss/aspects/asynch/ThreadPoolExecutor*.class"/>
+         </fileset>
+      </jar>
+
+      <jar destfile="${build.lib}/jboss-aspect-library-jdk50-jb32.jar" manifest="${build.etc}/default.mf"
+         update="${jar.update}" index="${jar.index}">
+         <fileset dir="${build.classes}">
+            <!-- Include everything else -->
+            <include name="org/jboss/**"/>
+            <exclude name="org/jboss/aspects/asynchronous/aspects/jboss/Asynchronous.class"/>
+            <exclude name="org/jboss/aspects/asynch/Asynchronous.class"/>
+            <exclude name="org/jboss/aspects/asynch/AsynchExecutor.class"/>
+            <exclude name="org/jboss/aspects/asynch/ThreadPoolExecutor*.class"/>
+            <exclude name="org/jboss/aspects/asynch/FutureImpl.class"/>
+            <exclude name="org/jboss/aspects/Current.class"/>
+            <exclude name="org/jboss/aspects/jmx/MBean.class"/>
+            <exclude name="org/jboss/test/**"/>
+            <exclude name="org/jboss/aspects/Injected.class"/>
+            <exclude name="org/jboss/aspects/dbc/Dbc.class"/>
+            <exclude name="org/jboss/aspects/dbc/Invariant.class"/>
+            <exclude name="org/jboss/aspects/dbc/PostCond.class"/>
+            <exclude name="org/jboss/aspects/dbc/PreCond.class"/>
+            <exclude name="org/jboss/aspects/dbc/StaticInvariant.class"/>
+            <exclude name="org/jboss/aspects/tx/TxType.class"/>
+            <exclude name="org/jboss/aspects/tx/Tx.class"/>
+            <exclude name="org/jboss/aspects/tx/TxLocal.class"/>
+            <exclude name="org/jboss/aspects/txlock/TxSynchronized.class"/>
+            <exclude name="org/jboss/aspects/security/SecurityDomain.class"/>
+            <exclude name="org/jboss/aspects/security/Exclude.class"/>
+            <exclude name="org/jboss/aspects/security/Unchecked.class"/>
+            <exclude name="org/jboss/aspects/security/RunAs.class"/>
+            <exclude name="org/jboss/aspects/security/Permissions.class"/>
+         </fileset>
+         <fileset dir="${build15.classes}">
+            <include name="org/jboss/**"/>
+         </fileset>
+         <fileset dir="${build.etc}">
+            <include name="org/jboss/**/*.xml"/>
+         </fileset>
+         <zipfileset src="${jboss.common.lib}/jboss-archive-browsing.jar">
+            <include name="org/jboss/util/file/ArchiveBrowser*.class"/>
+            <include name="org/jboss/util/file/ClassFileFilter.class"/>
+            <include name="org/jboss/util/file/DirectoryArchiveBrowser.class"/>
+            <include name="org/jboss/util/file/JarArchiveBrowser.class"/>
+         </zipfileset>
+      </jar>
+
+      <mkdir dir="${build.meta.inf}"/>
+      <copy file="${source.resources}/META-INF/jboss-service.xml" todir="${build.meta.inf}" filtering="true">
+         <filterset>
+            <filter token="SERVICE_NAME" value="org.jboss.aop.deployment.AspectManagerServiceJDK5"/>
+         </filterset>
+      </copy>
+      <jar destfile="${build.lib}/jboss-aop-jdk50.deployer" manifest="${build.etc}/default.mf"
+         update="${jar.update}" index="${jar.index}">
+         <fileset file="${build.lib}/jboss-aspect-library-jdk50.jar"/>
+         <fileset file="${jboss.aop.lib}/jboss-aop-jdk50.jar"/>
+         <fileset file="${project.root}/aspects/src/etc/base-aop.xml"/>
+         <fileset file="${javassist.lib}/javassist.jar"/>
+         <fileset file="${trove.lib}/trove.jar"/>
+         <fileset dir="${module.output}">
+            <include name="META-INF/jboss-service.xml"/>
+         </fileset>
+      </jar>
+      <delete dir="${build.meta.inf}"/>
+   </target>
+
+
+   <!-- ================================================================== -->
+   <!-- Cleaning                                                           -->
+   <!-- ================================================================== -->
+
+   <!-- Clean up all build output -->
+   <target name="clean"
+      description="Cleans up most generated files."
+      depends="_buildmagic:clean">
+   </target>
+
+   <!-- Clean up all generated files -->
+   <target name="clobber"
+      description="Cleans up all generated files."
+      depends="_buildmagic:clobber, clean">
+   </target>
+
+
+   <!-- ================================================================== -->
+   <!-- Install & Release                                                  -->
+   <!-- ================================================================== -->
+
+   <target name="dist" depends="javadocs, init">
+      <delete file="${aop.version}.zip"/>
+      <copy todir="docs" filtering="no">
+         <fileset dir="output">
+            <include name="api/**"/>
+         </fileset>
+      </copy>
+
+      <mkdir dir="${build.unpacked}"/>
+
+      <mkdir dir="${build.unpacked}/jboss-aop.deployer"/>
+      <unjar src="${build.lib}/jboss-aop.deployer"
+         dest="${build.unpacked}/jboss-aop.deployer"/>
+
+      <mkdir dir="${build.unpacked}/jboss-aop-jdk50.deployer"/>
+      <unjar src="${build.lib}/jboss-aop-jdk50.deployer"
+         dest="${build.unpacked}/jboss-aop-jdk50.deployer"/>
+
+
+      <zip zipfile="${aop.version}.zip">
+         <zipfileset dir="../aop/docs" prefix="${aop.version}/docs/aspect-framework">
+            <include name="api/**"/>
+            <include name="index.html"/>
+            <include name="misc/*.html"/>
+            <include name="misc/*.jpg"/>
+            <include name="examples/**"/>
+            <exclude name="**/CVS/**"/>
+            <exclude name="**/*.wiki"/>
+         </zipfileset>
+         <zipfileset dir="../aop/docs/reference/build" prefix="${aop.version}/docs/aspect-framework">
+            <include name="**/*"/>
+            <exclude name="**/CVS/**"/>
+            <exclude name="**/*.wiki"/>
+         </zipfileset>
+         <zipfileset dir="docs" prefix="${aop.version}/docs/aspect-library">
+            <include name="api/**"/>
+            <include name="**/*.html"/>
+            <include name="**/*.jpg"/>
+            <include name="examples/**"/>
+            <exclude name="**/CVS/**"/>
+            <exclude name="**/*.wiki"/>
+         </zipfileset>
+         <zipfileset dir="${build.unpacked}" prefix="${aop.version}/jboss-40-install">
+            <include name="**/*"/>
+         </zipfileset>
+         <zipfileset dir="${build.lib}" prefix="${aop.version}/lib">
+            <include name="jboss-aspect-library.jar"/>
+         </zipfileset>
+         <zipfileset dir="${jboss.aop.lib}" prefix="${aop.version}/lib">
+            <include name="jdk14-pluggable-instrumentor.jar"/>
+            <include name="jboss-aop.jar"/>
+         </zipfileset>
+         <zipfileset dir="${javassist.lib}" prefix="${aop.version}/lib">
+            <include name="javassist.jar"/>
+         </zipfileset>
+         <zipfileset dir="${trove.lib}" prefix="${aop.version}/lib">
+            <include name="trove.jar"/>
+         </zipfileset>
+         <zipfileset dir="${qdox.qdox.lib}" prefix="${aop.version}/lib">
+            <include name="qdox.jar"/>
+         </zipfileset>
+         <zipfileset dir="${jboss.common.lib}" prefix="${aop.version}/lib">
+            <include name="jboss-common.jar"/>
+         </zipfileset>
+         <zipfileset dir="${oswego.concurrent.lib}" prefix="${aop.version}/lib">
+            <include name="concurrent.jar"/>
+         </zipfileset>
+         <zipfileset dir="${beanshell.beanshell.lib}" prefix="${aop.version}/lib">
+            <include name="bsh-1.3.0.jar"/>
+         </zipfileset>
+
+         <zipfileset dir="${build.lib}" prefix="${aop.version}/jboss-32-install-jdk5">
+            <include name="jboss-aspect-library-jdk50-jb32.jar"/>
+         </zipfileset>
+         <zipfileset dir="${jboss.aop.lib}" prefix="${aop.version}/jboss-32-install-jdk5">
+            <include name="jboss-aop-jdk50.jar"/>
+         </zipfileset>
+         <zipfileset dir="${javassist.lib}" prefix="${aop.version}/jboss-32-install-jdk5">
+            <include name="javassist.jar"/>
+         </zipfileset>
+         <zipfileset dir="${trove.lib}" prefix="${aop.version}/jboss-32-install-jdk5">
+            <include name="trove.jar"/>
+         </zipfileset>
+
+
+         <zipfileset dir="${build.lib}" prefix="${aop.version}/jboss-32-install">
+            <include name="jboss-aspect-library32.jar"/>
+         </zipfileset>
+         <zipfileset dir="${jboss.aop.lib}" prefix="${aop.version}/jboss-32-install">
+            <include name="jboss-aop.jar"/>
+         </zipfileset>
+         <zipfileset dir="${javassist.lib}" prefix="${aop.version}/jboss-32-install">
+            <include name="javassist.jar"/>
+         </zipfileset>
+         <zipfileset dir="${trove.lib}" prefix="${aop.version}/jboss-32-install">
+            <include name="trove.jar"/>
+         </zipfileset>
+
+         <zipfileset dir="${build.lib}" prefix="${aop.version}/lib-50">
+            <include name="jboss-aspect-library-jdk50.jar"/>
+            <include name="jboss-aspect-jdk50-client.jar"/>
+         </zipfileset>
+         <zipfileset dir="${jboss.aop.lib}" prefix="${aop.version}/lib-50">
+            <include name="jboss-aop-jdk50.jar"/>
+            <include name="pluggable-instrumentor.jar"/>
+            <include name="jboss-aop-jdk50-client.jar"/>
+         </zipfileset>
+         <zipfileset dir="${javassist.lib}" prefix="${aop.version}/lib-50">
+            <include name="javassist.jar"/>
+         </zipfileset>
+         <zipfileset dir="${trove.lib}" prefix="${aop.version}/lib-50">
+            <include name="trove.jar"/>
+         </zipfileset>
+         <zipfileset dir="${qdox.qdox.lib}" prefix="${aop.version}/lib-50">
+            <include name="qdox.jar"/>
+         </zipfileset>
+         <zipfileset dir="${jboss.common.lib}" prefix="${aop.version}/lib-50">
+            <include name="jboss-common.jar"/>
+         </zipfileset>
+         <zipfileset dir="${oswego.concurrent.lib}" prefix="${aop.version}/lib-50">
+            <include name="concurrent.jar"/>
+         </zipfileset>
+         <zipfileset dir="${beanshell.beanshell.lib}" prefix="${aop.version}/lib-50">
+            <include name="bsh-1.3.0.jar"/>
+         </zipfileset>
+
+         <zipfileset dir="../aop/src/resources/bin" prefix="${aop.version}/bin">
+            <include name="*.sh"/>
+            <include name="*.bat"/>
+            <exclude name="**/CVS/**"/>
+         </zipfileset>
+         <zipfileset file="src/etc/base-aop.xml" prefix="${aop.version}/etc"/>
+         <zipfileset file="RELEASE_NOTES.html" prefix="${aop.version}"/>
+         <zipfileset dir="src" prefix="${aop.version}/src/aspect-library">
+            <include name="jdk15/**/*.java"/>
+            <include name="main/**/*.java"/>
+            <include name="main/**/*.xml"/>
+            <include name="test/**/*.java"/>
+            <include name="test/**/*.xml"/>
+            <include name="resources/**/*.xml"/>
+            <exclude name="**/CVS/**"/>
+         </zipfileset>
+         <zipfileset dir="../aop/src" prefix="${aop.version}/src/aspect-framework">
+            <include name="jdk15/**/*.java"/>
+            <include name="main/**/*.java"/>
+            <include name="main/**/*.xml"/>
+            <include name="test/**/*.java"/>
+            <include name="test/**/*.xml"/>
+            <include name="resources/**/*.xml"/>
+            <exclude name="**/CVS/**"/>
+         </zipfileset>
+      </zip>
+   </target>
+
+   <!-- ================================================================== -->
+   <!-- Misc.                                                              -->
+   <!-- ================================================================== -->
+
+   <target name="main"
+      description="Executes the default target (most)."
+      depends="most"/>
+
+   <target name="all"
+      description="Builds everything."
+      depends="output, jars15, docs"/>
+
+   <target name="most"
+      description="Builds almost everything."
+      depends="output, jars15"/>
+
+   <target name="help"
+      description="Show this help message."
+      depends="_buildmagic:help:standard"/>
+
+   <target name="run-ioc-example" depends="compile">
+      <taskdef name="aopc" classname="org.jboss.aop.ant.AopC" classpathref="jboss.aop.classpath"/>
+      <aopc compilerclasspathref="javac.classpath">
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+         <src path="${build.classes}"/>
+         <include name="test/ioc/POJO.class"/>
+         <aoppath path="${source.test}/test/ioc/META-INF/jboss-aop.xml"/>
+      </aopc>
+      <java fork="yes" failOnError="true" className="test.ioc.IocTest">
+         <sysproperty key="java.system.class.loader" value="org.jboss.aop.standalone.SystemClassLoader"/>
+         <sysproperty key="jboss.aop.path" value="src/test/test/ioc/META-INF/jboss-aop.xml"/>
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+      </java>
+   </target>
+
+
+   <target name="run-asynch-aspect" depends="compile">
+      <taskdef name="aopc" classname="org.jboss.aop.ant.AopC" classpathref="jboss.aop.classpath"/>
+      <taskdef name="annotationc" classname="org.jboss.aop.ant.AnnotationC" classpathref="jboss.aop.classpath"/>
+
+      <path id="annotationc.classpath">
+         <path location="${build.classes}"/>
+      </path>
+      <annotationc compilerclasspathref="javac.classpath" classpathref="annotationc.classpath" bytecode="true">
+         <src path="src/test/."/>
+      </annotationc>
+
+      <aopc compilerclasspathref="javac.classpath">
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+         <src path="${build.classes}"/>
+         <aoppath path="${source.test}/test/asynchronous/META-INF/jboss-aop.xml"/>
+      </aopc>
+
+      <junit printsummary="yes" fork="no" haltonfailure="yes">
+
+         <sysproperty key="jboss.aop.path" value="src/test/test/asynchronous/META-INF/jboss-aop.xml"/>
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+         <formatter type="plain"/>
+         <test fork="yes" name="test.asynchronous.JUnitTestAsynchronousAspects"/>
+      </junit>
+
+   </target>
+
+
+   <target name="run-readwritelock-aspect" depends="compile">
+      <taskdef name="aopc" classname="org.jboss.aop.ant.AopC" classpathref="jboss.aop.classpath"/>
+      <taskdef name="annotationc" classname="org.jboss.aop.ant.AnnotationC" classpathref="jboss.aop.classpath"/>
+
+      <path id="annotationc.classpath">
+         <path location="${build.classes}"/>
+      </path>
+      <annotationc compilerclasspathref="javac.classpath" classpathref="annotationc.classpath" bytecode="true">
+         <src path="src/test/."/>
+      </annotationc>
+
+      <aopc compilerclasspathref="javac.classpath">
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+         <src path="${build.classes}"/>
+         <aoppath path="${source.test}/test/patterns/readwritelock/META-INF/jboss-aop.xml"/>
+      </aopc>
+
+      <junit printsummary="yes" fork="no" haltonfailure="yes">
+
+         <sysproperty key="jboss.aop.path" value="src/test/test/patterns/readwritelock/META-INF/jboss-aop.xml"/>
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+         <formatter type="plain"/>
+         <test fork="yes" name="test.patterns.readwritelock.JUnitTestReadWriteLockAspects"/>
+      </junit>
+
+   </target>
+
+   <target name="run-dbc-aspect" depends="compile">
+      <taskdef name="aopc" classname="org.jboss.aop.ant.AopC" classpathref="jboss.aop.classpath"/>
+      <taskdef name="annotationc" classname="org.jboss.aop.ant.AnnotationC" classpathref="jboss.aop.classpath"/>
+
+      <path id="annotationc.classpath">
+         <path location="${build.classes}"/>
+      </path>
+      <annotationc compilerclasspathref="javac.classpath" classpathref="annotationc.classpath" bytecode="true">
+         <src path="src/test/."/>
+      </annotationc>
+
+      <aopc compilerclasspathref="javac.classpath">
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+         <src path="${build.classes}"/>
+         <aoppath path="${source.test}/test/dbc/META-INF/jboss-aop.xml"/>
+      </aopc>
+
+      <junit printsummary="yes" fork="no" haltonfailure="yes">
+
+         <sysproperty key="jboss.aop.path" value="src/test/test/dbc/META-INF/jboss-aop.xml"/>
+         <classpath refid="javac.classpath"/>
+         <classpath path="${build.classes}"/>
+         <formatter type="plain"/>
+         <test fork="yes" name="test.dbc.DbcTest"/>
+      </junit>
+
+   </target>
+
+</project>

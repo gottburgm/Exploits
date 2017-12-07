@@ -1,0 +1,106 @@
+<aop>
+  <advisable class="org.jboss.test.aop.xdoclet.Secured"/>
+
+  <class-metadata group="security" class="org.jboss.test.aop.xdoclet.Secured">
+    <security-domain>java:/jaas/somewhere</security-domain>
+    <run-as>Andy</run-as>
+
+    <constructor-permission>
+      <role-name>Administrator</role-name>
+      <role-name>Tester</role-name>
+      <constructor>
+        <constructor-params/>
+      </constructor>
+    </constructor-permission>
+    <constructor-permission>
+      <unchecked/>
+      <constructor>
+        <constructor-params>
+          <constructor-param>
+            java.lang.String
+          </constructor-param>
+        </constructor-params>
+      </constructor>
+    </constructor-permission>
+
+    <method-permission>
+      <role-name>Guest</role-name>
+      <method>
+        <method-name>*</method-name>
+      </method>
+    </method-permission>
+    <method-permission>
+      <unchecked/>
+      <method>
+        <method-name>get*</method-name>
+      </method>
+    </method-permission>
+    <method-permission>
+      <role-name>Administrator</role-name>
+      <method>
+        <method-name>set*</method-name>
+      </method>
+    </method-permission>
+    <method-permission>
+      <unchecked/>
+      <method>
+        <method-name>firstMethod</method-name>
+        <method-params/>
+      </method>
+    </method-permission>
+
+    <field-permission>
+      <role-name>Anyone</role-name>
+      <field>
+        <field-name>*</field-name>
+      </field>
+    </field-permission>
+    <field-permission>
+      <unchecked/>
+      <field>
+        <field-name>name*</field-name>
+      </field>
+    </field-permission>
+    <field-permission>
+      <role-name>Administrator</role-name>
+      <field>
+        <field-name>foo*</field-name>
+      </field>
+    </field-permission>
+    <field-permission>
+      <role-name>Administrator</role-name>
+      <field>
+        <field-name>name</field-name>
+      </field>
+    </field-permission>
+
+    <exclude-list>
+      <constructor>
+        <constructor-params>
+          <constructor-param>
+            int
+          </constructor-param>
+        </constructor-params>
+      </constructor>
+
+      <method>
+        <method-name>miss*</method-name>
+      </method>
+      <method>
+        <method-name>secondMethod</method-name>
+        <method-params>
+          <method-param>int</method-param>
+        </method-params>
+      </method>
+
+      <field>
+        <field-name>hidden*</field-name>
+      </field>
+
+      <field>
+        <field-name>testString</field-name>
+      </field>
+    </exclude-list>
+  </class-metadata>
+
+</aop>

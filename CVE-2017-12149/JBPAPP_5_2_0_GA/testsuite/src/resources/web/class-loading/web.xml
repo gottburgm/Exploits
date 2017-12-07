@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4"
+    xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+    http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    
+    <description>Test of overriding class loading model at war level</description>
+    
+    <!-- The Welcome File List -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+    
+    <servlet>
+        <servlet-name>ClasspathServlet2</servlet-name>
+        <servlet-class>org.jboss.test.web.servlets.ClasspathServlet2</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>ClasspathServlet2</servlet-name>
+        <url-pattern>/ClasspathServlet2</url-pattern>
+    </servlet-mapping>
+</web-app>

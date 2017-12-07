@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java-wsdl-mapping xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee    http://www.ibm.com/webservices/xsd/j2ee_jaxrpc_mapping_1_1.xsd">
+  <package-mapping>
+    <package-type>org.jboss.test.webservice.wsrp</package-type>
+    <namespaceURI>urn:oasis:names:tc:wsrp:v1:wsdl</namespaceURI>
+  </package-mapping>
+  <package-mapping>
+    <package-type>org.jboss.test.webservice.wsrp</package-type>
+    <namespaceURI>urn:oasis:names:tc:wsrp:v1:types</namespaceURI>
+  </package-mapping>
+  <package-mapping>
+    <package-type>org.jboss.test.webservice.wsrp</package-type>
+    <namespaceURI>urn:oasis:names:tc:wsrp:v1:intf</namespaceURI>
+  </package-mapping>
+  <java-xml-type-mapping>
+    <java-type>org.jboss.test.webservice.wsrp.LocalizedString</java-type>
+    <root-type-qname xmlns:typeNS="urn:oasis:names:tc:wsrp:v1:types">typeNS:LocalizedString</root-type-qname>
+    <qname-scope>complexType</qname-scope>
+    <variable-mapping>
+      <java-variable-name>lang</java-variable-name>
+      <xml-attribute-name>lang</xml-attribute-name>
+    </variable-mapping>
+    <variable-mapping>
+      <java-variable-name>resourceName</java-variable-name>
+      <xml-attribute-name>resourceName</xml-attribute-name>
+    </variable-mapping>
+    <variable-mapping>
+      <java-variable-name>value</java-variable-name>
+      <xml-element-name>value</xml-element-name>
+    </variable-mapping>
+  </java-xml-type-mapping>
+  <java-xml-type-mapping>
+    <java-type>org.jboss.test.webservice.wsrp.PortletDescription</java-type>
+    <root-type-qname xmlns:typeNS="urn:oasis:names:tc:wsrp:v1:types">typeNS:PortletDescription</root-type-qname>
+    <qname-scope>complexType</qname-scope>
+    <variable-mapping>
+      <java-variable-name>description</java-variable-name>
+      <xml-element-name>description</xml-element-name>
+    </variable-mapping>
+  </java-xml-type-mapping>
+  <java-xml-type-mapping>
+    <java-type>org.jboss.test.webservice.wsrp.GetServiceDescription</java-type>
+    <anonymous-type-qname>urn:oasis:names:tc:wsrp:v1:types:&gt;getServiceDescription</anonymous-type-qname>
+    <qname-scope>complexType</qname-scope>
+    <variable-mapping>
+      <java-variable-name>desiredLocales</java-variable-name>
+      <xml-element-name>desiredLocales</xml-element-name>
+    </variable-mapping>
+  </java-xml-type-mapping>
+  <java-xml-type-mapping>
+    <java-type>org.jboss.test.webservice.wsrp.ServiceDescription</java-type>
+    <root-type-qname xmlns:typeNS="urn:oasis:names:tc:wsrp:v1:types">typeNS:ServiceDescription</root-type-qname>
+    <qname-scope>complexType</qname-scope>
+    <variable-mapping>
+      <java-variable-name>offeredPortlets</java-variable-name>
+      <xml-element-name>offeredPortlets</xml-element-name>
+    </variable-mapping>
+  </java-xml-type-mapping>
+  <java-xml-type-mapping>
+    <java-type>java.lang.String[]</java-type>
+    <anonymous-type-qname>urn:oasis:names:tc:wsrp:v1:types:&gt;getServiceDescription&gt;desiredLocales[0,unbounded]</anonymous-type-qname>
+    <qname-scope>complexType</qname-scope>
+  </java-xml-type-mapping>
+  <java-xml-type-mapping>
+    <java-type>org.jboss.test.webservice.wsrp.PortletDescription[]</java-type>
+    <anonymous-type-qname>urn:oasis:names:tc:wsrp:v1:types:ServiceDescription&gt;offeredPortlets[0,unbounded]</anonymous-type-qname>
+    <qname-scope>complexType</qname-scope>
+  </java-xml-type-mapping>
+  <service-interface-mapping>
+    <service-interface>org.jboss.test.webservice.wsrp.WSRPService</service-interface>
+    <wsdl-service-name xmlns:serviceNS="urn:oasis:names:tc:wsrp:v1:wsdl">serviceNS:WSRPService</wsdl-service-name>
+    <port-mapping>
+      <port-name>WSRPServiceDescriptionService</port-name>
+      <java-port-name>WSRPServiceDescriptionService</java-port-name>
+    </port-mapping>
+  </service-interface-mapping>
+  <service-endpoint-interface-mapping>
+    <service-endpoint-interface>org.jboss.test.webservice.wsrp.WSRP_v1_ServiceDescription_PortType</service-endpoint-interface>
+    <wsdl-port-type xmlns:portTypeNS="urn:oasis:names:tc:wsrp:v1:intf">portTypeNS:WSRP_v1_ServiceDescription_PortType</wsdl-port-type>
+    <wsdl-binding xmlns:bindingNS="urn:oasis:names:tc:wsrp:v1:bind">bindingNS:WSRP_v1_ServiceDescription_Binding_SOAP</wsdl-binding>
+    <service-endpoint-method-mapping>
+      <java-method-name>getServiceDescription</java-method-name>
+      <wsdl-operation>getServiceDescription</wsdl-operation>
+      <method-param-parts-mapping>
+        <param-position>0</param-position>
+        <param-type>org.jboss.test.webservice.wsrp.GetServiceDescription</param-type>
+        <wsdl-message-mapping>
+          <wsdl-message xmlns:wsdlMsgNS="urn:oasis:names:tc:wsrp:v1:intf">wsdlMsgNS:getServiceDescription</wsdl-message>
+          <wsdl-message-part-name>getServiceDescription</wsdl-message-part-name>
+          <parameter-mode>IN</parameter-mode>
+        </wsdl-message-mapping>
+      </method-param-parts-mapping>
+      <wsdl-return-value-mapping>
+        <method-return-value>org.jboss.test.webservice.wsrp.ServiceDescription</method-return-value>
+        <wsdl-message xmlns:wsdlMsgNS="urn:oasis:names:tc:wsrp:v1:intf">wsdlMsgNS:getServiceDescriptionResponse</wsdl-message>
+        <wsdl-message-part-name>getServiceDescriptionResponse</wsdl-message-part-name>
+      </wsdl-return-value-mapping>
+    </service-endpoint-method-mapping>
+  </service-endpoint-interface-mapping>
+</java-wsdl-mapping>

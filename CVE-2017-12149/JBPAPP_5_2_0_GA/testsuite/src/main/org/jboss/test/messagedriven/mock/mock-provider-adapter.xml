@@ -1,0 +1,8 @@
+<provider>
+    
+    <factoryRef>JmsMockConnectionFactory</factoryRef>
+    <name>JmsMockProvider</name>
+    <queueFactoryRef>JmsMockConnectionFactory</queueFactoryRef>
+    <topicFactoryRef>JmsMockConnectionFactory</topicFactoryRef>
+    
+</provider>

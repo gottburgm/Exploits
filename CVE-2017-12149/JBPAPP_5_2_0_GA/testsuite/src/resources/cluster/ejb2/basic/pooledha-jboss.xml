@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC
+  "-//JBoss//DTD JBOSS 4.0//EN"
+  "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+
+   <enterprise-beans>
+      <session>
+         <ejb-name>pooledha_StatelessSession</ejb-name>
+         <configuration-name>Pooled Stateless SessionBean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>pooledha-stateless-invoker</invoker-proxy-binding-name>
+               <jndi-name>pooledha_StatelessSession</jndi-name>
+            </invoker>
+         </invoker-bindings>
+         <clustered>true</clustered>
+      </session>
+     <session>
+        <ejb-name>pooled_StatelessSession</ejb-name>
+       <invoker-bindings>
+          <invoker>
+             <invoker-proxy-binding-name>stateless-pooled-invoker</invoker-proxy-binding-name>
+             <jndi-name>pooled_StatelessSession</jndi-name>
+          </invoker>
+       </invoker-bindings>
+     </session>
+      <session>
+         <ejb-name>pooledha_StatefulSession</ejb-name>
+         <configuration-name>Pooled Stateful SessionBean</configuration-name>
+         <invoker-bindings>
+            <invoker>
+               <invoker-proxy-binding-name>pooledha-stateful-invoker</invoker-proxy-binding-name>
+               <jndi-name>pooledha_StatefulSession</jndi-name>
+            </invoker>
+         </invoker-bindings>
+         <clustered>true</clustered>
+      </session>
+
+   </enterprise-beans>
+
+   <invoker-proxy-bindings>
+      <!-- Override default clustered invoker bindings -->
+      <invoker-proxy-binding>
+         <name>pooledha-stateless-invoker</name>
+         <invoker-mbean>jboss:service=invoker,type=pooledha</invoker-mbean>
+         <proxy-factory>org.jboss.proxy.ejb.ProxyFactoryHA</proxy-factory>
+         <proxy-factory-config>
+            <client-interceptors exposeContainer="true">
+               <home>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </home>
+               <bean>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.StatelessSessionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </bean>
+            </client-interceptors>
+         </proxy-factory-config>
+      </invoker-proxy-binding>
+
+      <invoker-proxy-binding>
+         <name>pooledha-stateful-invoker</name>
+         <invoker-mbean>jboss:service=invoker,type=pooledha</invoker-mbean>
+         <proxy-factory>org.jboss.proxy.ejb.ProxyFactoryHA</proxy-factory>
+         <proxy-factory-config>
+            <client-interceptors exposeContainer="true">
+               <home>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </home>
+               <bean>
+                  <interceptor>org.jboss.ha.framework.test.ExplicitFailoverClientInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.StatefulSessionInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                  <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                  <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+               </bean>
+            </client-interceptors>
+         </proxy-factory-config>
+      </invoker-proxy-binding>
+
+     <invoker-proxy-binding>
+        <name>stateless-pooled-invoker</name>
+        <invoker-mbean>jboss:service=invoker,type=pooled</invoker-mbean>
+        <proxy-factory>org.jboss.proxy.ejb.ProxyFactory</proxy-factory>
+        <proxy-factory-config>
+           <client-interceptors>
+              <home>
+                 <interceptor>org.jboss.proxy.ejb.HomeInterceptor</interceptor>
+                 <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                 <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                 <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                 <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+              </home>
+              <bean>
+                 <interceptor>org.jboss.proxy.ejb.StatelessSessionInterceptor</interceptor>
+                 <interceptor>org.jboss.proxy.SecurityInterceptor</interceptor>
+                 <interceptor>org.jboss.proxy.ejb.SecurityContextInterceptor</interceptor>
+                 <interceptor>org.jboss.proxy.TransactionInterceptor</interceptor>
+                 <interceptor>org.jboss.invocation.InvokerInterceptor</interceptor>
+              </bean>
+           </client-interceptors>
+        </proxy-factory-config>
+     </invoker-proxy-binding>
+
+   </invoker-proxy-bindings>
+
+  <container-configurations>
+    <container-configuration extends="Clustered Stateless SessionBean">
+       <container-name>Pooled Stateless SessionBean</container-name>
+       <invoker-proxy-binding-name>pooledha-stateless-invoker</invoker-proxy-binding-name>
+    </container-configuration>
+    <container-configuration extends="Clustered Stateful SessionBean">
+       <container-name>Pooled Stateful SessionBean</container-name>
+       <invoker-proxy-binding-name>pooledha-stateful-invoker</invoker-proxy-binding-name>
+    </container-configuration>
+  </container-configurations>
+</jboss>

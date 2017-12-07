@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!-- Tests of unmarshalling complex attributes
+-->
+<server>
+
+   <!-- Set the prop3.systemProperty system property -->
+   <mbean code="org.jboss.varia.property.SystemPropertiesService"
+      name="test:name=ComplexAttrTests,action=SystemProperties">
+      <attribute name="Properties">prop3.systemProperty=value3</attribute>
+   </mbean>
+   <!-- Test the javaBean attribute data type syntax -->
+   <mbean code="org.jboss.test.jmx.complexattrs.ComplexAttrTests"
+      name="test:name=ComplexAttrTests,case=#1">
+      <attribute name="Bean1"
+         attributeClass="org.jboss.test.jmx.complexattrs.JavaBean1"
+         serialDataType="javaBean">
+         <property name="bindAddress">127.0.0.1</property>
+         <property name="someDate">Sun Jan  2 23:26:49 PST 2005</property>
+         <property name="props">
+           prop1=value1
+           prop2=value2
+           prop3=${prop3.systemProperty}
+         </property>
+         <property name="names">name1,name2,name3</property>
+         <property name="someURL">http://www.jboss.org</property>
+      </attribute>
+      <attribute name="Bean2"
+         attributeClass="org.jboss.test.jmx.complexattrs.JavaBean2"
+         serialDataType="javaBean">
+         <property name="i">12345678</property>
+         <property name="f">1.23456</property>
+         <property name="d">3.14159265358979323846</property>
+         <property name="l">1234567890</property>
+      </attribute>
+   </mbean>
+
+   <!-- Test the jbossxb attribute data type syntax -->
+   <mbean code="org.jboss.test.jmx.complexattrs.ComplexAttrTests"
+      name="test:name=ComplexAttrTests,case=#2">
+      <attribute name="Bean1"
+         attributeClass="org.jboss.test.jmx.complexattrs.JavaBean1"
+         serialDataType="javaBean">
+         <property name="bindAddress">127.0.0.1</property>
+         <property name="someDate">Sun Jan  2 23:26:49 PST 2005</property>
+         <property name="props">
+           prop1=value1
+           prop2=value2
+           prop3=${prop3.systemProperty}
+         </property>
+         <property name="names">name1,name2,name3</property>
+         <property name="someURL">http://www.jboss.org</property>
+      </attribute>
+      <attribute name="Bean2"
+         attributeClass="org.jboss.test.jmx.complexattrs.JavaBean2"
+         serialDataType="javaBean">
+         <property name="i">12345678</property>
+         <property name="f">1.23456</property>
+         <property name="d">3.14159265358979323846</property>
+         <property name="l">1234567890</property>
+      </attribute>
+   </mbean>
+
+</server>

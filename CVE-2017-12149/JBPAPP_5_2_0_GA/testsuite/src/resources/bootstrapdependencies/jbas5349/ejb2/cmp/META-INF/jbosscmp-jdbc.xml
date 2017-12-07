@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE jbosscmp-jdbc PUBLIC
+   "-//JBoss//DTD JBOSSCMP-JDBC 3.2//EN"
+   "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_2.dtd">
+
+<jbosscmp-jdbc>
+   <defaults>
+   <!--
+      <datasource>java:/MySqlDS</datasource>
+      <datasource-mapping>mySQL</datasource-mapping>
+      <datasource>java:/OracleDS</datasource>
+      <datasource-mapping>Oracle9i</datasource-mapping>
+      <datasource>java:/PostgresDS</datasource>
+      <datasource-mapping>PostgreSQL 7.2</datasource-mapping>
+     
+   -->
+      <create-table>true</create-table>
+      <remove-table>true</remove-table>
+      <pk-constraint>true</pk-constraint>
+      <read-ahead>
+         <strategy>on-load</strategy>
+         <page-size>4</page-size>
+         <eager-load-group>*</eager-load-group>
+      </read-ahead>
+      <clean-read-ahead-on-load>true</clean-read-ahead-on-load>
+   </defaults>
+
+   <enterprise-beans>
+      <entity>
+         <ejb-name>SimpleEntityEJB</ejb-name>
+         <table-name>SimpleEntity</table-name>
+      </entity>
+   </enterprise-beans>
+</jbosscmp-jdbc>

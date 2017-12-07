@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+  version="2.4">
+
+  <servlet>
+    <servlet-name>ExampleService</servlet-name>
+    <servlet-class>org.jboss.test.ws.jaxws.samples.soapbinding.ExampleServiceImpl</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DocBareService</servlet-name>
+    <servlet-class>org.jboss.test.ws.jaxws.samples.soapbinding.DocBareServiceImpl</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DocWrappedService</servlet-name>
+    <servlet-class>org.jboss.test.ws.jaxws.samples.soapbinding.DocWrappedServiceImpl</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ExampleService</servlet-name>
+    <url-pattern>/ExampleService</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DocBareService</servlet-name>
+    <url-pattern>/DocBareService</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DocWrappedService</servlet-name>
+    <url-pattern>/DocWrappedService</url-pattern>
+  </servlet-mapping>
+
+</web-app>
+

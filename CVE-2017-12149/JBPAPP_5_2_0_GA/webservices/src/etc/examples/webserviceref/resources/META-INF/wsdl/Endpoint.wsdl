@@ -1,0 +1,39 @@
+<!--
+  wsimport -d ../../../java -keep -p org.jboss.test.ws.jaxws.webserviceref META-INF/wsdl/Endpoint.wsdl
+-->
+<definitions name='EndpointService' targetNamespace='http://org.jboss.ws/wsref' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://org.jboss.ws/wsref' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ 
+ <message name='Endpoint_echo'>
+  <part name='arg0' type='xsd:string'/>
+ </message>
+ <message name='Endpoint_echoResponse'>
+  <part name='return' type='xsd:string'/>
+ </message>
+ 
+ <portType name='Endpoint'>
+  <operation name='echo' parameterOrder='arg0'>
+   <input message='tns:Endpoint_echo'/>
+   <output message='tns:Endpoint_echoResponse'/>
+  </operation>
+ </portType>
+ 
+ <binding name='EndpointBinding' type='tns:Endpoint'>
+  <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='echo'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://org.jboss.ws/wsref' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://org.jboss.ws/wsref' use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ 
+ <service name='EndpointService'>
+  <port binding='tns:EndpointBinding' name='EndpointPort'>
+   <soap:address location='http://@jboss.bind.address@:8080/jaxws-samples-webserviceref'/>
+  </port>
+ </service>
+ 
+</definitions>

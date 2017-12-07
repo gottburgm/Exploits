@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!DOCTYPE jboss-app
+  PUBLIC  "-//JBoss//DTD J2EE Application 1.4//EN"
+          "http://www.jboss.org/j2ee/dtd/jboss-app_4_0.dtd"
+>
+
+<jboss-app>
+
+   <module><service>unpacked2-mcf1-ds.xml</service></module>
+   <module><service>testdeployers-1-service.xml</service></module>
+   <module><service>unpacked-mbean1.sar</service></module>
+   
+</jboss-app>

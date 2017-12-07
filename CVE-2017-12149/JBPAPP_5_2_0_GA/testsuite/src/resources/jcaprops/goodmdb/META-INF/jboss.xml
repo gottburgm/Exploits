@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 4.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+   <enterprise-beans>
+      <message-driven>
+         <ejb-name>JCAPropsMDB</ejb-name>
+         <resource-adapter-name>testjcaprops-good.rar</resource-adapter-name>
+         <depends>jboss.jca:service=RARDeployment,name='testjcaprops-good.rar'</depends>
+      </message-driven>
+   </enterprise-beans>
+</jboss>

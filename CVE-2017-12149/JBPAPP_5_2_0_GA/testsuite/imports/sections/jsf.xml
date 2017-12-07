@@ -1,0 +1,107 @@
+<project name="tests-jsf-jars">
+   <!-- jsf test -->
+   <target name="_jars-jsf">
+     <mkdir dir="${build.lib}"/>
+     <!-- build jbosstest-jsf.war -->
+     <war destfile="${build.lib}/jbosstest-jsf.war"
+       webxml="${build.resources}/web/WEB-INF/jsftest-web.xml">
+       <fileset dir="${build.resources}/web/html/jsftest">
+         <include name="**/*.jsp"/>
+       </fileset>
+
+       <classes dir="${build.classes}">
+          <include name="org/jboss/test/jsf/webapp/**"/>
+       </classes>
+
+       <webinf dir="${build.resources}/web/html/jsftest/WEB-INF">
+         <include name="**/*"/>
+       </webinf>
+     </war>
+
+     <!-- make WAR for testing legacy WARs that bundle MyFaces -->
+     <war destfile="${build.lib}/bundled-myfaces-hellojsf.war"
+       webxml="${build.resources}/web/WEB-INF/bundled-myfaces-jsf.xml">
+       <lib dir="${apache.myfaces.lib}">
+            <include name="myfaces-api-1.1.3.jar"/>
+            <include name="myfaces-impl-1.1.3.jar"/>
+            <include name="jstl-1.1.0.jar"/>
+       </lib>
+       <lib dir="${apache.beanutils.lib}">
+            <include name="commons-beanutils.jar"/>
+       </lib>
+       <lib dir="${apache.codec.lib}">
+            <include name="commons-codec.jar"/>
+       </lib>
+       <lib dir="${apache.collections.lib}">
+            <include name="commons-collections.jar"/>
+       </lib>
+       <lib dir="${apache.digester.lib}">
+            <include name="commons-digester.jar"/>
+       </lib>
+       <lib dir="${apache.lang.lib}">
+            <include name="commons-lang.jar"/>
+       </lib>
+       <lib dir="${commons.el.lib}">
+            <include name="commons-el.jar"/>
+       </lib>
+
+
+       <fileset dir="${build.resources}/web/html/bundledmyfacesjsftest">
+         <include name="**/*.jsp"/>
+         <include name="**/*.html"/>
+       </fileset>
+
+       <webinf dir="${build.resources}/web/html/bundledmyfacesjsftest/WEB-INF">
+         <include name="**/*"/>
+       </webinf>
+  
+     </war>
+   	
+    <jar destfile="${build.lib}/jbosstest-jsf-ejbs.jar">
+        <fileset dir="${build.classes}">
+           <include name="org/jboss/test/web/ejb3/**"/>
+        </fileset>
+    </jar>
+
+    <war destfile="${build.lib}/jbosstest-jsf-injection.war"
+      webxml="${build.resources}/web/jsfinjection/WEB-INF/web.xml">
+      <fileset dir="${build.resources}/web/jsfinjection">
+        <include name="**/*.jsp"/>
+      </fileset>
+
+      <classes dir="${build.classes}">
+         <include name="org/jboss/test/jsf/managed/**"/>
+      </classes>
+
+      <webinf dir="${build.resources}/web/jsfinjection/WEB-INF">
+        <include name="faces-config.xml"/>
+      </webinf>
+    </war>
+    
+    <war destfile="${build.lib}/jbosstest-alternate-jsf-injection.war"
+      webxml="${build.resources}/web/jsfinjection/WEB-INF/alternate-injection-provider.xml">
+      <fileset dir="${build.resources}/web/jsfinjection">
+        <include name="**/*.jsp"/>
+      </fileset>
+
+      <classes dir="${build.classes}">
+         <include name="org/jboss/test/jsf/managed/**"/>
+      </classes>
+
+      <webinf dir="${build.resources}/web/jsfinjection/WEB-INF">
+        <include name="faces-config.xml"/>
+      </webinf>
+    </war>
+   	
+    <ear earfile="${build.lib}/jbosstest-jsf-injection.ear"
+       appxml="${build.resources}/web/jsfinjection/META-INF/application.xml">
+       <fileset dir="${build.lib}">
+          <include name="jbosstest-jsf-ejbs.jar"/>
+       	  <include name="jbosstest-jsf-injection.war"/>
+       	  <include name="jbosstest-alternate-jsf-injection.war"/>
+       </fileset>
+    </ear>
+   	
+   </target>
+
+</project>

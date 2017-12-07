@@ -1,0 +1,779 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 10">
+<meta name=Originator content="Microsoft Word 10">
+<link rel=File-List href="JBossSpringExample_files/filelist.xml">
+<title>JBoss + Spring example:</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Ale� Justin</o:Author>
+  <o:LastAuthor>Ale� Justin</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>263</o:TotalTime>
+  <o:Created>2005-08-10T12:16:00Z</o:Created>
+  <o:LastSaved>2005-08-10T12:16:00Z</o:LastSaved>
+  <o:Pages>1</o:Pages>
+  <o:Words>614</o:Words>
+  <o:Characters>3505</o:Characters>
+  <o:Company>Genera Lynx d.o.o.</o:Company>
+  <o:Lines>29</o:Lines>
+  <o:Paragraphs>8</o:Paragraphs>
+  <o:CharactersWithSpaces>4111</o:CharactersWithSpaces>
+  <o:Version>10.6626</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:Compatibility>
+   <w:BreakWrappedTables/>
+   <w:SnapToGridInCell/>
+   <w:WrapTextWithPunct/>
+   <w:UseAsianBreakRules/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]-->
+<style>
+<!--
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal {
+   mso-style-parent: "";
+   margin: 0cm;
+   margin-bottom: .0001pt;
+   mso-pagination: widow-orphan;
+   font-size: 12.0pt;
+   font-family: "Times New Roman";
+   mso-fareast-font-family: "Times New Roman";
+}
+
+h2 {
+   mso-style-next: Normal;
+   margin-top: 12.0pt;
+   margin-right: 0cm;
+   margin-bottom: 3.0pt;
+   margin-left: 0cm;
+   mso-pagination: widow-orphan;
+   page-break-after: avoid;
+   mso-outline-level: 2;
+   font-size: 14.0pt;
+   font-family: Arial;
+   font-style: italic;
+}
+
+a:link, span.MsoHyperlink {
+   color: blue;
+   text-decoration: underline;
+   text-underline: single;
+}
+
+a:visited, span.MsoHyperlinkFollowed {
+   color: purple;
+   text-decoration: underline;
+   text-underline: single;
+}
+
+pre {
+   margin: 0cm;
+   margin-bottom: .0001pt;
+   mso-pagination: widow-orphan;
+   tab-stops: 36.0pt;
+   font-size: 10.0pt;
+   font-family: "Courier New";
+   mso-fareast-font-family: "Times New Roman";
+}
+
+span.GramE {
+   mso-style-name: "";
+   mso-gram-e: yes;
+}
+
+@page
+Section1
+{
+   size: 612.0pt 792.0pt
+;
+   margin: 72.0pt 90.0pt 72.0pt 90.0pt
+;
+   mso-header-margin: 35.4pt
+;
+   mso-footer-margin: 35.4pt
+;
+   mso-paper-source: 0
+;
+}
+div.Section1 {
+   page: Section1;
+}
+
+/* List Definitions */
+@list
+l0
+{
+mso-list-id
+:
+-
+132
+;
+mso-list-type
+:
+simple
+;
+mso-list-template-ids
+:
+1016904304
+;
+}
+@list
+l0
+:
+level1
+{
+mso-level-tab-stop
+:
+74.6
+pt
+;
+mso-level-number-position
+:
+left
+;
+margin-left
+:
+74.6
+pt
+;
+text-indent
+:
+-
+18.0
+pt
+;
+}
+@list
+l1
+{
+mso-list-id
+:
+-
+131
+;
+mso-list-type
+:
+simple
+;
+mso-list-template-ids
+:
+1933872080
+;
+}
+@list
+l1
+:
+level1
+{
+mso-level-tab-stop
+:
+60.45
+pt
+;
+mso-level-number-position
+:
+left
+;
+margin-left
+:
+60.45
+pt
+;
+text-indent
+:
+-
+18.0
+pt
+;
+}
+@list
+l2
+{
+mso-list-id
+:
+-
+130
+;
+mso-list-type
+:
+simple
+;
+mso-list-template-ids
+:
+1828635132
+;
+}
+@list
+l2
+:
+level1
+{
+mso-level-tab-stop
+:
+46.3
+pt
+;
+mso-level-number-position
+:
+left
+;
+margin-left
+:
+46.3
+pt
+;
+text-indent
+:
+-
+18.0
+pt
+;
+}
+@list
+l3
+{
+mso-list-id
+:
+-
+129
+;
+mso-list-type
+:
+simple
+;
+mso-list-template-ids
+:
+-
+1641540048
+;
+}
+@list
+l3
+:
+level1
+{
+mso-level-tab-stop
+:
+32.15
+pt
+;
+mso-level-number-position
+:
+left
+;
+margin-left
+:
+32.15
+pt
+;
+text-indent
+:
+-
+18.0
+pt
+;
+}
+@list
+l4
+{
+mso-list-id
+:
+-
+128
+;
+mso-list-type
+:
+simple
+;
+mso-list-template-ids
+:
+2112010756
+;
+}
+@list
+l4
+:
+level1
+{
+mso-level-number-format
+:
+bullet
+;
+mso-level-text
+:
+\F0B7
+
+;
+mso-level-tab-stop
+:
+74.6
+pt
+;
+mso-level-number-position
+:
+left
+;
+margin-left
+:
+74.6
+pt
+;
+text-indent
+:
+-
+18.0
+pt
+;
+font-family
+:
+Symbol
+;
+}
+@list
+l5
+{
+mso-list-id
+:
+-
+127
+;
+mso-list-type
+:
+simple
+;
+mso-list-template-ids
+:
+-
+1777165296
+;
+}
+@list
+l5
+:
+level1
+{
+mso-level-number-format
+:
+bullet
+;
+mso-level-text
+:
+\F0B7
+
+;
+mso-level-tab-stop
+:
+60.45
+pt
+;
+mso-level-number-position
+:
+left
+;
+margin-left
+:
+60.45
+pt
+;
+text-indent
+:
+-
+18.0
+pt
+;
+font-family
+:
+Symbol
+;
+}
+@list
+l6
+{
+mso-list-id
+:
+-
+126
+;
+mso-list-type
+:
+simple
+;
+mso-list-template-ids
+:
+1029624058
+;
+}
+@list
+l6
+:
+level1
+{
+mso-level-number-format
+:
+bullet
+;
+mso-level-text
+:
+\F0B7
+
+;
+mso-level-tab-stop
+:
+46.3
+pt
+;
+mso-level-number-position
+:
+left
+;
+margin-left
+:
+46.3
+pt
+;
+text-indent
+:
+-
+18.0
+pt
+;
+font-family
+:
+Symbol
+;
+}
+@list
+l7
+{
+mso-list-id
+:
+-
+125
+;
+mso-list-type
+:
+simple
+;
+mso-list-template-ids
+:
+-
+563021474
+;
+}
+@list
+l7
+:
+level1
+{
+mso-level-number-format
+:
+bullet
+;
+mso-level-text
+:
+\F0B7
+
+;
+mso-level-tab-stop
+:
+32.15
+pt
+;
+mso-level-number-position
+:
+left
+;
+margin-left
+:
+32.15
+pt
+;
+text-indent
+:
+-
+18.0
+pt
+;
+font-family
+:
+Symbol
+;
+}
+@list
+l8
+{
+mso-list-id
+:
+-
+120
+;
+mso-list-type
+:
+simple
+;
+mso-list-template-ids
+:
+-
+799663524
+;
+}
+@list
+l8
+:
+level1
+{
+mso-level-tab-stop
+:
+18.0
+pt
+;
+mso-level-number-position
+:
+left
+;
+margin-left
+:
+18.0
+pt
+;
+text-indent
+:
+-
+18.0
+pt
+;
+}
+@list
+l9
+{
+mso-list-id
+:
+-
+119
+;
+mso-list-type
+:
+simple
+;
+mso-list-template-ids
+:
+-
+1707604292
+;
+}
+@list
+l9
+:
+level1
+{
+mso-level-number-format
+:
+bullet
+;
+mso-level-text
+:
+\F0B7
+
+;
+mso-level-tab-stop
+:
+18.0
+pt
+;
+mso-level-number-position
+:
+left
+;
+margin-left
+:
+18.0
+pt
+;
+text-indent
+:
+-
+18.0
+pt
+;
+font-family
+:
+Symbol
+;
+}
+ol {
+   margin-bottom: 0cm;
+}
+
+ul {
+   margin-bottom: 0cm;
+}
+
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Table Normal";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";}
+</style>
+<![endif]-->
+</head>
+
+<body lang=EN-US link=blue vlink=purple style='tab-interval:36.0pt'>
+
+<div class=Section1>
+
+<h2>JBoss + <span class=GramE>Spring</span> example:</h2>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>The source shows how simple it is to inject <span
+      class=GramE>Spring</span> managed fine grained POJO beans into EJB components.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>First make sure that you have <span class=GramE>Spring</span>
+   deployer in your JBOSS_HOME/server/default/deploy directory. That should be
+   jboss-spring-jdk5.deployer directory with three jars and META-INF directory
+   inside (jboss-spring-jdk5.jar, spring-beans.jar, spring-core.jar and
+   META-INF/jboss-service.xml).</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>Since our code is dependant on <span class=GramE>Spring</span>
+   library, we must make sure that all of the needed classes are in our classpath.
+   Copy spring-aop.jar, spring-context.jar, spring-web.jar and spring-webmvc.jar
+   into JBOSS_HOME/server/default/lib directory.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>Fix ejb3-interceptors-aop.xml in your JBOSS_HOME/server/default/deploy
+   directory:</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<pre><span style='mso-spacerun:yes'>�� </span>&lt;interceptor class=&quot;org.jboss.ejb3.AllowedOperationsInterceptor&quot;
+   scope=&quot;PER_VM&quot;/&gt;</pre><pre><o:p>&nbsp;</o:p></pre><pre><b
+      style='mso-bidi-font-weight:normal'><span style='mso-spacerun:yes'>�� </span>&lt;interceptor class=&quot;org.jboss.spring.interceptor.SpringInjectionInterceptor&quot;
+   scope=&quot;PER_VM&quot;/&gt;<o:p></o:p></b></pre><pre><o:p>&nbsp;</o:p></pre><pre><span
+      style='mso-spacerun:yes'>�� </span>&lt;typedef name=&quot;ejb3intercepted&quot; expr=&quot;<span
+      class=GramE>class(</span>@javax.ejb.Interceptors) OR class(@javax.ejb.Interceptor) OR has(* *-&gt;@javax.ejb.AroundInvoke(..))&quot;/&gt;
+</pre><pre><o:p>&nbsp;</o:p></pre><pre><span style='mso-spacerun:yes'>�� </span>&lt;domain name=&quot;Stateless Bean&quot;&gt;
+</pre><pre><b
+      style='mso-bidi-font-weight:normal'><span style='mso-spacerun:yes'>����� </span>&lt;bind pointcut=&quot;<span
+      class=GramE>execution(</span>*-&gt;new(..))&quot;&gt;<o:p></o:p></b></pre><pre><b
+      style='mso-bidi-font-weight:normal'><span style='mso-spacerun:yes'>�������� </span>&lt;<span
+      class=GramE>interceptor-ref</span> name=&quot;org.jboss.spring.interceptor.SpringInjectionInterceptor&quot;/&gt;
+   <o:p></o:p></b></pre><pre><b
+      style='mso-bidi-font-weight:normal'><span style='mso-spacerun:yes'>����� </span>&lt;/bind&gt;<o:p></o:p></b>
+</pre>
+
+<p class=MsoNormal><b style='mso-bidi-font-weight:normal'><o:p>&nbsp;</o:p></b></p>
+
+<p class=MsoNormal>The added code is bold.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>Looking at the source code you will see that our
+   RandomizerBean class is declared as @Stateless session bean. The pointcut above
+   will pick up our stateless session bean at instantiation time and perform <span
+      class=GramE>Spring</span> injection interception.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>The second example from source code shows how we can do <span
+      class=GramE>Spring</span> bean injection in a <b style='mso-bidi-font-weight:
+normal'>non</b> AOP way. Look at the HoroscopeBean class which has a @CallbackListener
+   annotation with the value SpringCallbackListener.class. Read the EJB3Trail
+   application�s documentation (<a
+      href="http://trailblazer.demo.jboss.com/EJB3Trail/serviceobjects/lifecycle/index.html">http://trailblazer.demo.jboss.com/EJB3Trail/serviceobjects/lifecycle/index.html</a>)
+   on how callback listeners are used.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>Now you are all set to go. Unzip example�s archive into
+   APP_HOME. Run Ant�s build script (APP_HOME/build.bat in Windows or
+   APP_HOME/build.sh in Linux/Unix). Run default JBoss server (JBOSS_HOME/bin run).
+   Drop JBoss-Spring.ear from APP_HOME/build/jar into JBOSS_HOME/server/default/deploy.
+   The <span class=GramE>Spring</span> injection should take place the moment you
+   will click on the application�s web page (<a
+      href="http://localhost:8080/jboss-spring">http://localhost:8080/jboss-spring</a>).</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>Our <span class=GramE>Spring</span> deployer watches for the
+   Spring components which should have the following suffixes: .spring for archive
+   or �spring.xml for the beans descriptor. Spring beans descriptor inside archive
+   is expected to be in META-INF directory by the name jboss-spring.xml.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>By default our bean factory�s JNDI name equals <span
+      class=GramE>Spring</span> components name: &lt;name&gt;.spring or
+   &lt;name&gt;-spring.xml. It can be overridden inside beans descriptor
+   description tag. You can also set parent bean factory JNDI name:</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<pre>&lt;<span class=GramE>beans</span>&gt;</pre><pre><o:p>&nbsp;</o:p></pre><pre><span
+      style='mso-spacerun:yes'>��� </span>&lt;<span
+      class=GramE>description&gt;</span>BeanFactory=(&lt;name&gt;) ParentBeanFactory=(&lt;parent name&gt;)&lt;/description&gt;
+</pre><pre><o:p>&nbsp;</o:p></pre>
+
+<p class=MsoNormal>There are different ways to deploy your <span class=GramE>Spring</span>
+   beans. One with .ear file we just saw. But you can also deploy only your <span
+      class=GramE>Spring</span> beans and let them be used by different applications.
+   Instead of droping the whole .ear, you can just deploy .spring archive file or
+   only beans descriptor. In descriptor�s case, its name must end with �spring.xml
+   and, as expected, all the classes must already be made available on the
+   classpath to the descriptor.</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>Let�s look this on the example. Just drop spring-pojo.spring
+   file from APP_HOME/build/jar into JBOSS_HOME/server/default/<span class=GramE>deploy
+.</span> As before, bean factory with JNDI name �spring-pojo� gets deployed.
+   You can now include this bean factory by setting its name as the parent bean
+   factory name in your new beans factory xml descriptor:</p>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<pre>&lt;<span class=GramE>beans</span>&gt;</pre><pre><o:p>&nbsp;</o:p></pre><pre><span
+      style='mso-spacerun:yes'>���</span>&lt;<span
+      class=GramE>description&gt;</span>ParentBeanFactory=(spring-pojo)&lt;/description&gt;</pre>
+
+<p class=MsoNormal><o:p>&nbsp;</o:p></p>
+
+<p class=MsoNormal>When undeploying single files, be careful of the order of
+   undeploying � take notice of bean factory hierarchy.</p>
+
+<p class=MsoNormal>When shutting down application server, the <span
+      class=GramE>Spring</span> deployer will take care of correct undeployment
+   order.</p>
+
+</div>
+
+</body>
+
+</html>

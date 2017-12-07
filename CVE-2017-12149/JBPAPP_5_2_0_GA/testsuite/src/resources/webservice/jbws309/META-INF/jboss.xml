@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 4.0//EN"
+ "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+
+<jboss>
+
+  <security-domain>java:/jaas/JBossWS</security-domain>
+
+  <enterprise-beans>
+    <session>
+      <ejb-name>RoleSecuredSLSB</ejb-name>
+      <jndi-name>ejb/RoleSecuredSLSB</jndi-name>
+      <port-component>
+        <port-component-name>RoleSecured</port-component-name>
+        <port-component-uri>/ws4ee-jbws309/RoleSecured</port-component-uri>
+        <auth-method>BASIC</auth-method>
+        <transport-guarantee>NONE</transport-guarantee>
+      </port-component>
+    </session>
+    <session>
+      <ejb-name>BasicSecuredSLSB</ejb-name>
+      <jndi-name>ejb/BasicSecuredSLSB</jndi-name>
+      <port-component>
+        <port-component-name>BasicSecured</port-component-name>
+        <port-component-uri>/ws4ee-jbws309/BasicSecured</port-component-uri>
+        <auth-method>BASIC</auth-method>
+        <transport-guarantee>NONE</transport-guarantee>
+      </port-component>
+    </session>
+  </enterprise-beans>
+</jboss>

@@ -1,0 +1,53 @@
+<!--
+  wsimport -d ../../../java -keep -p org.jboss.test.ws.jaxws.webserviceref META-INF/wsdl/TestEndpoint.wsdl
+-->
+<definitions name='TestEndpointService' targetNamespace='http://org.jboss.ws/wsref' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://org.jboss.ws/wsref' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://org.jboss.ws/wsref' version='1.0' xmlns:tns='http://org.jboss.ws/wsref' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:element name='echo' type='tns:echo'/>
+   <xs:element name='echoResponse' type='tns:echoResponse'/>
+   <xs:complexType name='echo'>
+    <xs:sequence>
+     <xs:element form='qualified' minOccurs='0' name='arg0' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='echoResponse'>
+    <xs:sequence>
+     <xs:element form='qualified' minOccurs='0' name='return' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </types>
+ <message name='TestEndpoint_echo'>
+  <part element='tns:echo' name='echo'/>
+ </message>
+ <message name='TestEndpoint_echoResponse'>
+  <part element='tns:echoResponse' name='echoResponse'/>
+ </message>
+ <portType name='TestEndpoint'>
+  <operation name='echo' parameterOrder='echo'>
+   <input message='tns:TestEndpoint_echo'/>
+   <output message='tns:TestEndpoint_echoResponse'/>
+  </operation>
+ </portType>
+ <binding name='TestEndpointBinding' type='tns:TestEndpoint'>
+  <soap:binding style='document' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='echo'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body use='literal'/>
+   </input>
+   <output>
+    <soap:body use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='TestEndpointService'>
+  <port binding='tns:TestEndpointBinding' name='TestEndpointPort'>
+   <!-- 
+   <soap:address location='http://@jbosstest.host.name@:8080/jaxws-webserviceref/TestEndpoint'/>
+   -->
+   <soap:address location='http://localhost:8080/jaxws-webserviceref/TestEndpoint'/>
+  </port>
+ </service>
+</definitions>

@@ -1,0 +1,41 @@
+<project name="tests-ejb-jars">
+   <target name="_jars-ejbproxy">
+      <mkdir dir="${build.lib}"/>
+      
+      <jar destfile="${build.lib}/ejbproxy-test.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/ejb/proxy/beans/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/ejb/proxy/">
+            <include name="META-INF/*.*"/>
+         </fileset>
+      </jar>
+   </target>
+   <!-- passivationcl test -->
+   <target name="_jars-passivationcl">
+      <mkdir dir="${build.lib}"/>
+      <jar destfile="${build.lib}/passivationcl_entity.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/ejb/passivationcl/entity/**"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/passivationcl_stateful.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/ejb/passivationcl/stateful/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/ejb/passivationcl/stateful">
+            <include name="**"/>
+         </fileset>
+      </jar>
+      <jar destfile="${build.lib}/passivationcl.ear">
+        <fileset dir="${build.resources}/ejb/passivationcl/ear">
+           <include name="META-INF/*.*"/>
+        </fileset>
+        <fileset dir="${build.lib}">
+           <include name="passivationcl_entity.jar"/>
+           <include name="passivationcl_stateful.jar"/>
+        </fileset>
+      </jar>
+   </target>
+
+</project>

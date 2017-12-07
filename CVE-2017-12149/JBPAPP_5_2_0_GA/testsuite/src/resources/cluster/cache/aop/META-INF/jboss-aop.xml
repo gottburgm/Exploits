@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<aop>
+  <prepare expr="field(* $instanceof{org.jboss.test.cluster.cache.aop.Link}->*)" />
+
+  <prepare expr="field(* $instanceof{org.jboss.test.cluster.cache.aop.Student}->*)" />
+
+  <prepare expr="field(* $instanceof{org.jboss.test.cluster.cache.aop.Address}->*)" />
+
+  <prepare expr="field(* $instanceof{org.jboss.test.cluster.cache.aop.Person}->*)" />
+
+</aop>

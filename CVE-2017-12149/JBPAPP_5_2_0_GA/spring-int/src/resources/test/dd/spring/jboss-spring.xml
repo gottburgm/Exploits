@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+   <!-- File line readers -->
+
+   <bean id="fileLineReader" class="org.jboss.tutorial.spring.FileLineReader" abstract="true"/>
+
+   <bean id="randomFileLineReader"
+         class="org.jboss.tutorial.spring.RandomFileWordsCreator"
+         parent="fileLineReader"
+         abstract="true">
+      <property name="intCreator">
+         <ref local="javaRandomIntCreator"/>
+      </property>
+   </bean>
+
+   <!-- Randomizer beans -->
+
+   <bean id="staticWordsCreator" class="org.jboss.tutorial.spring.StaticWordsCreator"/>
+
+   <bean id="fileWordsCreator" parent="fileLineReader">
+      <property name="resource">
+         <value>classpath:words.properties</value>
+      </property>
+   </bean>
+
+   <bean id="randomWordsCreator" parent="randomFileLineReader">
+      <property name="resource">
+         <value>classpath:words.properties</value>
+      </property>
+   </bean>
+
+   <bean id="stateIntCreator" class="org.jboss.tutorial.spring.DummyStateIntCreator"/>
+
+   <bean id="javaRandomIntCreator" class="org.jboss.tutorial.spring.JavaRandomIntCreator"/>
+
+   <!-- Horoscope -->
+
+   <bean id="horoscopeSentenceCreator" parent="fileLineReader">
+      <property name="resource">
+         <value>classpath:horoscope.properties</value>
+      </property>
+   </bean>
+
+</beans>

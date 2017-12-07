@@ -1,0 +1,104 @@
+!!! Read/Write Lock Aspect 
+available within our CVS 
+
+!!Goal 
+This Aspect is an example of an implementation of the Read/Write Lock pattern. 
+It allows u to define at the method level a read/write lock using 
+either annotation or an XML file 
+The implementation is based on the concurrent package from Doug Lea. 
+
+!!Problem 
+
+!Let's see a simple example defining the problem to solve. 
+{{{
+public class Account
+{
+private float balance; 
+
+public Account(float balance) 
+{ 
+ this.balance=balance; 
+} 
+
+public void debit(float amount) 
+{ 
+// Implementation to debit the account balance 
+ ... 
+} 
+
+public void credit(float amount) 
+{ 
+// Implementation to credit the account balance 
+... 
+} 
+
+public String toString() 
+{ 
+// Implementation to format the account description 
+... 
+} 
+}  
+}}} 
+
+The above class required to support concurrency invocation of the method debit,credit 
+and toString method. 
+
+!!Traditional Implementation.
+The traditional solution without AOP would be to implement the same code within the debit 
+and credit account to acquire/release a write lock.A read lock would be required for the toString method. 
+
+!!Solution with Read/Write Lock Aspect 
+
+The concurrency code is refactored within the Read/Write Lock Aspect.So the new Aspect can be applied 
+against any method using annotation or an XML file. 
+
+!Here the new code of the Account class with annotation 
+
+{{{ 
+public class Account 
+{ 
+private float balance; 
+
+public Account(float balance) 
+this.balance=balance; 
+} 
+
+/** 
+* @@org.jboss.aop.patterns.readwritelock.writeLockOperation 
+*/ 
+public void debit(float amount) 
+{ 
+// Implementation to debit the account balance 
+... 
+}
+
+/** 
+* @@org.jboss.aop.patterns.readwritelock.writeLockOperation 
+*/ 
+public void credit(float amount) 
+{
+ // Implementation to credit the account balance 
+... 
+}
+
+/** 
+* @@org.jboss.aop.patterns.readwritelock.readLockOperation 
+*/ 
+public String toString() 
+{
+// Implementation to format the account description 
+...
+}
+}
+}}}
+
+
+!!Configuration 
+
+The deployment description of the Read/Write Lock Aspect 
+*[JBOSS-AOP.xml|readwritelockjboss-aop] 
+
+!!Author 
+
+*Claude Hussenet (mailto:chussenet@yahoo.com) 
+

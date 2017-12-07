@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 3.2//EN" "http://www.jboss.org/j2ee/dtd/jboss_3_2.dtd">
+
+<jboss>
+
+   <enterprise-beans>
+
+        <entity>
+         <ejb-name>CRO</ejb-name>
+         <local-jndi-name>CROLocal</local-jndi-name>
+         <configuration-name>RO CMP2.x EntityBean for cache invalidation</configuration-name>
+         <cache-invalidation>true</cache-invalidation>
+         <cache-invalidation-config>
+            <invalidation-group-name>CGroup</invalidation-group-name>
+         </cache-invalidation-config>
+      </entity>
+      <entity>
+         <ejb-name>CRW</ejb-name>
+         <local-jndi-name>CRWLocal</local-jndi-name>
+         <configuration-name>RW CMP 2.x EntityBean for cache invalidation</configuration-name>
+         <cache-invalidation>true</cache-invalidation>
+         <cache-invalidation-config>
+            <invalidation-group-name>CGroup</invalidation-group-name>
+         </cache-invalidation-config>
+      </entity>
+      <entity>
+         <ejb-name>ARO</ejb-name>
+         <local-jndi-name>AROLocal</local-jndi-name>
+         <configuration-name>RO CMP2.x EntityBean for cache invalidation</configuration-name>
+         <cache-invalidation>true</cache-invalidation>
+         <cache-invalidation-config>
+            <invalidation-group-name>AGroup</invalidation-group-name>
+         </cache-invalidation-config>
+      </entity>
+      <entity>
+         <ejb-name>ARW</ejb-name>
+         <local-jndi-name>ARWLocal</local-jndi-name>
+         <configuration-name>RW CMP 2.x EntityBean for cache invalidation</configuration-name>
+         <cache-invalidation>true</cache-invalidation>
+         <cache-invalidation-config>
+            <invalidation-group-name>AGroup</invalidation-group-name>
+         </cache-invalidation-config>
+      </entity>
+
+      <session>
+         <ejb-name>Facade</ejb-name>
+         <jndi-name>Facade</jndi-name>
+      </session>
+
+   </enterprise-beans>
+
+     <container-configurations>
+
+      <container-configuration>
+         <container-name>RO CMP2.x EntityBean for cache invalidation</container-name>
+         <call-logging>false</call-logging>
+         <invoker-proxy-binding-name>entity-unified-invoker</invoker-proxy-binding-name>
+         <container-interceptors>
+            <interceptor>org.jboss.ejb.plugins.ProxyFactoryFinderInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.LogInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.SecurityInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.TxInterceptorCMT</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntityCreationInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntityLockInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntityInstanceInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntityReentranceInterceptor</interceptor>
+            <interceptor>org.jboss.resource.connectionmanager.CachedConnectionInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntitySynchronizationInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.cmp.jdbc.JDBCRelationInterceptor</interceptor>
+         </container-interceptors>
+         <instance-pool>org.jboss.ejb.plugins.EntityInstancePool</instance-pool>
+         <instance-cache>org.jboss.ejb.plugins.InvalidableEntityInstanceCache</instance-cache>
+         <persistence-manager>org.jboss.ejb.plugins.cmp.jdbc.JDBCStoreManager</persistence-manager>
+         <locking-policy>org.jboss.ejb.plugins.lock.QueuedPessimisticEJBLock</locking-policy>
+         <container-cache-conf>
+            <cache-policy>org.jboss.ejb.plugins.LRUEnterpriseContextCachePolicy</cache-policy>
+            <cache-policy-conf>
+               <min-capacity>50</min-capacity>
+               <max-capacity>1000000</max-capacity>
+               <overager-period>300</overager-period>
+               <max-bean-age>600</max-bean-age>
+               <resizer-period>400</resizer-period>
+               <max-cache-miss-period>60</max-cache-miss-period>
+               <min-cache-miss-period>1</min-cache-miss-period>
+               <cache-load-factor>0.75</cache-load-factor>
+            </cache-policy-conf>
+         </container-cache-conf>
+         <container-pool-conf>
+            <MaximumSize>100</MaximumSize>
+         </container-pool-conf>
+         <commit-option>A</commit-option>
+      </container-configuration>
+
+      <container-configuration>
+         <container-name>RW CMP 2.x EntityBean for cache invalidation</container-name>
+         <call-logging>false</call-logging>
+         <invoker-proxy-binding-name>entity-unified-invoker</invoker-proxy-binding-name>
+         <container-interceptors>
+            <interceptor>org.jboss.ejb.plugins.ProxyFactoryFinderInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.LogInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.SecurityInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.TxInterceptorCMT</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntityCreationInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntityLockInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntityInstanceInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntityReentranceInterceptor</interceptor>
+            <interceptor>org.jboss.resource.connectionmanager.CachedConnectionInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.EntitySynchronizationInterceptor</interceptor>
+            <interceptor>org.jboss.cache.invalidation.triggers.EntityBeanCacheBatchInvalidatorInterceptor</interceptor>
+            <interceptor>org.jboss.ejb.plugins.cmp.jdbc.JDBCRelationInterceptor</interceptor>
+         </container-interceptors>
+         <instance-pool>org.jboss.ejb.plugins.EntityInstancePool</instance-pool>
+         <instance-cache>org.jboss.ejb.plugins.EntityInstanceCache</instance-cache>
+         <persistence-manager>org.jboss.ejb.plugins.cmp.jdbc.JDBCStoreManager</persistence-manager>
+         <locking-policy>org.jboss.ejb.plugins.lock.QueuedPessimisticEJBLock</locking-policy>
+         <container-cache-conf>
+            <cache-policy>org.jboss.ejb.plugins.LRUEnterpriseContextCachePolicy</cache-policy>
+            <cache-policy-conf>
+               <min-capacity>50</min-capacity>
+               <max-capacity>1000000</max-capacity>
+               <overager-period>300</overager-period>
+               <max-bean-age>600</max-bean-age>
+               <resizer-period>400</resizer-period>
+               <max-cache-miss-period>60</max-cache-miss-period>
+               <min-cache-miss-period>1</min-cache-miss-period>
+               <cache-load-factor>0.75</cache-load-factor>
+            </cache-policy-conf>
+         </container-cache-conf>
+         <container-pool-conf>
+            <MaximumSize>100</MaximumSize>
+         </container-pool-conf>
+         <commit-option>A</commit-option>
+      </container-configuration>
+
+   </container-configurations>
+
+</jboss>

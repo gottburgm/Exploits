@@ -1,0 +1,16 @@
+<project name="tests-ejbconf-jars">
+   <!-- jca ejbconf readonly tests -->
+   <target name="_jars-ejbconf">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build ejbconf-test.jar -->
+      <jar destfile="${build.lib}/ejbconf-test.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/ejbconf/beans/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/ejbconf/readonly/">
+            <include name="META-INF/*.*"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

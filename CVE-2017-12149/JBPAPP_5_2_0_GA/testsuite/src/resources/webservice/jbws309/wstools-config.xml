@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+Custom webservices.xml:
+
+<webservices xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:impl="http://org.jboss.test.webservice/jbws309"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://www.ibm.com/webservices/xsd/j2ee_web_services_1_1.xsd"
+  version="1.1">
+
+  <webservice-description>
+    <webservice-description-name>OrganizationService</webservice-description-name>
+    <wsdl-file>META-INF/wsdl/OrganizationService.wsdl</wsdl-file>
+    <jaxrpc-mapping-file>META-INF/jaxrpc-mapping.xml</jaxrpc-mapping-file>
+    <port-component>
+      <port-component-name>RoleSecured</port-component-name>
+      <wsdl-port>impl:RoleSecuredPort</wsdl-port>
+      <service-endpoint-interface>org.jboss.test.webservice.jbws309.Organization</service-endpoint-interface>
+      <service-impl-bean>
+        <ejb-link>RoleSecuredSLSB</ejb-link>
+      </service-impl-bean>
+    </port-component>
+    <port-component>
+      <port-component-name>BasicSecured</port-component-name>
+      <wsdl-port>impl:BasicSecuredPort</wsdl-port>
+      <service-endpoint-interface>org.jboss.test.webservice.jbws309.Organization</service-endpoint-interface>
+      <service-impl-bean>
+        <ejb-link>BasicSecuredSLSB</ejb-link>
+      </service-impl-bean>
+    </port-component>
+  </webservice-description>
+</webservices>
+
+Modify wsdl file:
+
+  <service name="OrganizationService">
+    <port name="BasicSecuredPort" binding="tns:OrganizationBinding">
+      <soap:address location="http://@jbosstest.host.name@:8080/ws4ee-jbws309/BasicSecured"/>
+    </port>
+    <port name="RoleSecuredPort" binding="tns:OrganizationBinding">
+      <soap:address location="http://@jbosstest.host.name@:8080/ws4ee-jbws309/RoleSecured"/>
+    </port>
+  </service>
+
+-->
+
+<configuration xmlns="http://www.jboss.org/jbossws-tools" 
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+     xsi:schemaLocation="http://www.jboss.org/jbossws-tools http://www.jboss.org/jbossws-tools/schema/jbossws-tool_1_0.xsd">
+   <java-wsdl>
+     <service name="OrginizationService" 
+              endpoint="org.jboss.test.webservice.jbws309.Organization"
+              style="rpc">
+     </service>
+     <namespaces target-namespace="http://org.jboss.test.webservice/jbws309"
+                 type-namespace="http://org.jboss.test.webservice/jbws309/types" />
+     <mapping file="jaxrpc-mapping.xml"/>
+     <webservices  ejb-link="RoleSecuredEJB"/>
+   </java-wsdl>  
+</configuration>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  This service ensures that exactly one node in the cluster            -->
+<!--  deploys the services under "test-hasingleton"    		         	   -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+   <bean name="TestHASingletonProfileManager" class="org.jboss.ha.singleton.HASingletonProfileManager">
+      
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss:service=TestHASingletonProfileManager,partition=${jboss.partition.name:DefaultPartition}", exposedInterface=org.jboss.ha.singleton.HASingletonProfileManagerMBean.class, registerDirectly=true)</annotation>
+      
+      <property name="profileName">test-hasingleton</property>
+      
+      <property name="profileService"><inject bean="ProfileService"/></property>
+      <property name="profileFactory"><inject bean="ProfileFactory"/></property>
+      <property name="URIList">
+         <list elementClass="java.net.URI">
+            <value>${jboss.server.home.url}test-hasingleton</value>
+         </list>
+      </property>
+   </bean>
+ 
+   <bean name="TestHASingletonDeployer" 
+   		 class="org.jboss.ha.singleton.HASingletonController">  
+      
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.ha:service=TestHASingletonDeployer", exposedInterface=org.jboss.ha.singleton.HASingletonControllerMBean.class, registerDirectly=true)</annotation>       
+      
+      <depends>HAPartition</depends>
+      <depends>TestHASingletonDeploymentBarrierController</depends>  
+      
+      <property name="HAPartition"><inject bean="HAPartition"/></property>
+      <property name="target"><inject bean="TestHASingletonProfileManager"/></property>
+      <!-- 
+      <property name="targetStartMethod">deploySingletons</property>
+      <property name="targetStartMethodArgument">${jboss.server.home.url}test-hasingleton</property>
+      <property name="targetStopMethod">undeploySingletons</property>
+      <property name="targetStopMethodArgument">${jboss.server.home.url}test-hasingleton</property>
+      -->
+      <property name="targetStartMethod">activateProfile</property>
+      <property name="targetStopMethod">releaseProfile</property>
+      
+      <!-- whether to register thread context classloader for the RPC handler, default is false -->
+      <!--<property name="registerThreadContextClassLoader">false</property>--> 
+      
+      <!-- Whether the singleton should be restarted (i.e. invoke the TargetStopMethod and then the
+           TargetStartMethod) if a cluster merge occurs while this node is the singleton master.
+           A cluster merge means there may have been more than one singleton master during the period
+           when communication between some or all of the nodes in the cluster was disrupted; hence the
+           surviving master may not be aware of state changes made by another master. Restarting the
+           singleton gives it a signal that it should refresh its internal state from any external
+           store.
+           By default this is set to true.
+      -->
+      <property name="restartOnMerge">true</property>  
+      
+   </bean>
+   
+   <bean class="org.jboss.system.BarrierController"
+          name="TestHASingletonDeploymentBarrierController">
+    
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.ha:service=TestHASingletonDeployerBarrierControllerMBean", exposedInterface=org.jboss.system.BarrierControllerMBean.class, registerDirectly=true)</annotation> 
+      
+      <!-- Dependent services will depend on this mbean -->
+      <property name="barrierObjectName">jboss.ha:service=TestHASingletonDeployer,type=Barrier</property>
+    
+      <!-- Whether to subscribe for notifications after startup -->
+      <property name="dynamicSubscriptions">true</property>    
+      <!-- The notification subscription handback that starts the barrier -->
+      <property name="startBarrierHandback">start</property>
+      <!-- The notification subscription handback that stops the barrier -->
+      <property name="stopBarrierHandback">stop</property>
+    
+      <!-- The notifications to subscribe for, along with their handbacks -->
+      <property name="subscriptions">
+         <list>
+            <!--value-->
+               <bean class="org.jboss.system.ListenerServiceMBeanSupport$SubscriptionInfo">
+                     <constructor>
+                        <parameter>jboss.ha:service=TestHASingletonDeployer</parameter>
+                        <parameter>start</parameter>
+                        <parameter>
+                           <bean class="javax.management.NotificationFilterSupport">
+                              <install method="enableType">
+                                 <parameter>org.jboss.ha.singleton.started</parameter>
+                              </install>
+                           </bean>
+                        </parameter>
+                     </constructor>
+               </bean>
+            <!--/value>
+            <value-->
+               <bean class="org.jboss.system.ListenerServiceMBeanSupport$SubscriptionInfo">
+                     <constructor>
+                        <parameter>jboss.ha:service=TestHASingletonDeployer</parameter>
+                        <parameter>stop</parameter>
+                        <parameter>
+                           <bean  class="javax.management.NotificationFilterSupport">
+                              <install method="enableType">
+                                 <parameter>org.jboss.ha.singleton.stopping</parameter>
+                              </install>
+                           </bean>
+                        </parameter>
+                     </constructor>
+               </bean>
+            <!--/value-->        
+         </list>
+      </property>
+   </bean>
+   
+</deployment>

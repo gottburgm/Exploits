@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<connection-factories>
+
+  <no-tx-connection-factory> 
+    <jndi-name>JCAPrimitive</jndi-name> 
+    <rar-name>jcaprimitive.rar</rar-name> 
+    <connection-definition>javax.jms.ConnectionFactory</connection-definition> 
+    <max-pool-size>10</max-pool-size> 
+  </no-tx-connection-factory> 
+
+</connection-factories>

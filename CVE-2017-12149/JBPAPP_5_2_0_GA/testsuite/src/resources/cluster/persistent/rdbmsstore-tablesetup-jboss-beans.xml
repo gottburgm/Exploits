@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0"> 
+
+   <!-- Create the persistent store db table -->
+   <bean name="PersistentStoreTableSetup" class="org.jboss.test.cluster.web.persistent.PersistentStoreTableSetup">
+      <property name="jdbcURL">jdbc:hsqldb:hsql://localhost:1701</property>
+   </bean>
+
+</deployment>

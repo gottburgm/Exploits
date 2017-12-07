@@ -1,0 +1,17 @@
+<project name="test-ejb-iiop-unmarshal-jar">
+   <!-- session test -->
+   <target name="_jars-marshaliiop">
+      <mkdir dir="${build.lib}"/>
+
+      <!-- build test-session-remove.jar -->
+      <jar destfile="${build.lib}/test-ejb-iiop-unmarshal.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/marshaliiop/interfaces/Marshal**"/>
+            <include name="org/jboss/test/marshaliiop/ejb/Marshal**"/>
+         </fileset>
+         <fileset dir="${build.resources}/marshaliiop/ejb-iiop-unmarshall">
+            <include name="**"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

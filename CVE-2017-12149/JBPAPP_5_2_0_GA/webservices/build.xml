@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project [
+   <!ENTITY buildmagic SYSTEM "../tools/etc/buildmagic/buildmagic.ent">
+   <!ENTITY libraries SYSTEM "../thirdparty/libraries.ent">
+   <!ENTITY modules SYSTEM "../tools/etc/buildmagic/modules.ent">
+   <!ENTITY targets SYSTEM "../tools/etc/buildmagic/targets.ent">
+]>
+
+<!-- ====================================================================== -->
+<!--                                                                        -->
+<!--  JBoss, the OpenSource J2EE webOS                                      -->
+<!--                                                                        -->
+<!--  Distributable under LGPL license.                                     -->
+<!--  See terms of license at http://www.gnu.org.                           -->
+<!--                                                                        -->
+<!-- ====================================================================== -->
+
+<project default="main" name="JBoss/Webservices">
+
+  <!-- ================================================================== -->
+  <!-- Setup                                                              -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Include the common Buildmagic elements.
+     |
+     | This defines several different targets, properties and paths.
+     | It also sets up the basic extention tasks amoung other things.
+   -->
+
+  &buildmagic;
+
+  <!--
+     | Include the normal targets.
+   -->
+  &targets;
+
+  <!-- ================================================================== -->
+  <!-- Configuration                                                      -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Configure the build system.
+     |
+     | This target is invoked by the Buildmagic initialization logic and
+     | should contain module specific configuration elements.
+   -->
+
+  <target name="configure" unless="configure.disable">
+
+    <!-- =================== -->
+    <!-- Basic Configuration -->
+    <!-- =================== -->
+
+    <!-- Module name(s) & version -->
+    <property name="module.name" value="webservices"/>
+    <property name="module.Name" value="JBossWS Container Integration"/>
+    <property name="module.version" value="DEV"/>
+
+    <!-- ========= -->
+    <!-- Libraries -->
+    <!-- ========= -->
+
+    &libraries;
+
+    <!-- The combined library classpath -->
+    <path id="library.classpath">
+      <path refid="apache.xerces.classpath"/>
+      <path refid="dom4j.dom4j.classpath"/>
+      <path refid="jboss.aop.classpath"/>
+      <path refid="jboss.common.core.classpath"/>
+      <path refid="jboss.common.logging.spi.classpath"/>
+      <path refid="jboss.jboss.cl.classpath"/>
+      <path refid="jboss.jboss.ejb3.core.classpath" />   
+      <path refid="jboss.jboss.ejb3.common.classpath" />   
+      <path refid="jboss.jboss.ejb3.ext.api.classpath" />   
+      <path refid="jboss.jboss.ejb3.interceptors.classpath" />   
+      <path refid="jboss.jboss.javaee.classpath"/>
+      <path refid="jboss.jboss.man.classpath"/>
+      <path refid="jboss.jboss.security.spi.classpath"/>
+      <path refid="jboss.jboss.vfs.classpath"/>
+      <path refid="jboss.jbosssx.classpath"/>
+      <path refid="org.hornetq.classpath"/>
+      <path refid="org.jboss.ws.native.classpath"/>
+      <path refid="org.jboss.spec.javax.xml.rpc.classpath"/>
+      <path refid="saaj.api.classpath"/>
+      <path refid="org.jboss.ws.classpath"/>
+      <path refid="jboss.jbossxb.classpath"/>
+      <path refid="jboss.metadata.classpath"/>
+      <path refid="jboss.jboss.deployers.classpath"/>      
+      <path refid="jboss.microcontainer.classpath"/>
+      <path refid="sun.jaxb.classpath"/>
+      <path refid="jboss.web.classpath"/>
+    </path>
+
+    &modules;
+
+    <!-- The combined dependant module classpath -->
+    <path id="dependentmodule.classpath">
+      <path refid="jboss.aspects.classpath"/>
+      <path refid="jboss.j2se.classpath"/>
+      <path refid="jboss.jmx.classpath"/>
+      <path refid="jboss.server.classpath"/>
+      <path refid="jboss.security.int.classpath"/>
+      <path refid="jboss.system.classpath"/>
+      <path refid="jboss.systemjmx.classpath"/>
+      <path refid="jboss.tomcat.classpath"/>
+    </path>
+
+    <!-- ===== -->
+    <!-- Tasks -->
+    <!-- ===== -->
+
+    <property name="jar.prefix" value="jbossws-jboss50"/>
+    <property name="javac.target" value="1.5"/>
+    <property name="javac.source" value="1.5"/>
+
+    <call target="_default:task-init"/>
+
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- Compile                                                            -->
+  <!-- ================================================================== -->
+
+  <!--
+     | Compile everything.
+     |
+     | This target should depend on other compile-* targets for each
+     | different type of compile that needs to be performed, short of
+     | documentation compiles.
+   -->
+
+  <target name="compile"
+	  description="Compile all source files."
+	  depends="_default:compile-classes,
+              _default:compile-resources,
+              _default:compile-etc"/>
+
+  <!-- ================================================================== -->
+  <!-- Archives                                                           -->
+  <!-- ================================================================== -->
+
+  <!-- 
+     |  Build all jar files.
+  -->
+  <target name="module-jars" depends="compile">
+
+    <!-- Build jbossws-jboss50.jar -->
+    <jar jarfile="${build.lib}/jbossws-jboss50.jar" manifest="${build.etc}/default.mf">
+      <fileset dir="${build.classes}" />
+      <metainf dir="${build.resources}/jbossws-jboss50.jar/META-INF"/>
+    </jar>
+
+    <!-- Build jbossws-hornetq.jar -->
+    <jar jarfile="${build.lib}/jbossws-hornetq.jar" manifest="${build.etc}/default.mf">
+      <metainf dir="${build.resources}/jbossws-hornetq.jar/META-INF"/>
+    </jar>
+
+    <!-- Build jbossws.deployer -->
+    <zip zipfile="${build.lib}/jbossws-jboss50-deployer.zip">
+      <fileset dir="${build.lib}">
+        <include name="jbossws-jboss50.jar"/>
+      </fileset>
+      <fileset dir="${org.jboss.ws.lib}">
+        <include name="jbossws-common.jar"/>
+      </fileset>
+      <fileset dir="${org.jboss.ws.lib}">
+        <include name="jbossws-framework.jar"/>
+      </fileset>
+      <fileset dir="${build.resources}/jbossws-jboss50.deployer">
+        <include name="META-INF/jbossws-deployer-jboss-beans.xml"/>
+      </fileset>
+    </zip>
+    
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- Deployment                                                         -->
+  <!-- ================================================================== -->
+
+  <!-- 
+     |  Build all jar files.
+  -->
+  <target name="deploy" depends="module-jars">
+
+    <!-- Build jbossws.deployer -->
+    <property name="jbossws.deployer.dir" value="../build/output/jboss-${specification.version}/server/default/deployers/jbossws.deployer"/>
+    <unzip dest="${jbossws.deployer.dir}" src="${build.lib}/jbossws-jboss50-deployer.zip"/>
+    
+  </target>
+</project>

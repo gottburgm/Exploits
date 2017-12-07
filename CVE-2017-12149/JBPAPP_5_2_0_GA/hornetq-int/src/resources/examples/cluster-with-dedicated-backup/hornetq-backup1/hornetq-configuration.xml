@@ -1,0 +1,110 @@
+<!--
+  ~ Copyright 2009 Red Hat, Inc.
+  ~  Red Hat licenses this file to you under the Apache License, version
+  ~  2.0 (the "License"); you may not use this file except in compliance
+  ~  with the License.  You may obtain a copy of the License at
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~  Unless required by applicable law or agreed to in writing, software
+  ~  distributed under the License is distributed on an "AS IS" BASIS,
+  ~  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+  ~  implied.  See the License for the specific language governing
+  ~  permissions and limitations under the License.
+  -->
+
+<configuration xmlns="urn:hornetq"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="urn:hornetq /schema/hornetq-configuration.xsd">
+
+   <clustered>true</clustered>
+
+   <backup>true</backup>
+
+   <shared-store>true</shared-store>
+
+   <allow-failback>false</allow-failback>
+
+   <log-delegate-factory-class-name>org.hornetq.integration.logging.Log4jLogDelegateFactory</log-delegate-factory-class-name>
+   
+   <bindings-directory>../${hornetq.backup1.data.dir:hornetq-backup1}/bindings</bindings-directory>
+
+   <journal-directory>../${hornetq.backup1.data.dir:hornetq-backup1}/journal</journal-directory>
+   
+   <journal-min-files>10</journal-min-files>
+
+   <large-messages-directory>../${hornetq.backup1.data.dir:hornetq-backup1}/largemessages</large-messages-directory>
+
+   <paging-directory>../${hornetq.backup1.data.dir:hornetq-backup1}/paging</paging-directory>
+
+   <connectors>
+      <connector name="netty-connector">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyConnectorFactory</factory-class>
+         <param key="host"  value="${jboss.bind.address:localhost}"/>
+         <param key="port"  value="${hornetq.backup1.remoting.netty.port:5446}"/>
+      </connector>
+
+      <!--invm connector added by the live server on this node, used by the bridges-->
+      <connector name="in-vm">
+         <factory-class>org.hornetq.core.remoting.impl.invm.InVMConnectorFactory</factory-class>
+         <param key="server-id" value="0"/>
+      </connector>
+
+   </connectors>
+
+   <acceptors>   
+      <acceptor name="netty">
+         <factory-class>org.hornetq.core.remoting.impl.netty.NettyAcceptorFactory</factory-class>
+         <param key="host"  value="${jboss.bind.address:localhost}"/>
+         <param key="port"  value="${hornetq.backup1.remoting.netty.port:5446}"/>
+      </acceptor>
+   </acceptors>
+
+    <broadcast-groups>
+        <broadcast-group name="bg-group1">
+            <group-address>231.7.7.7</group-address>
+            <group-port>9876</group-port>
+            <broadcast-period>1000</broadcast-period>
+            <connector-ref>netty-connector</connector-ref>
+        </broadcast-group>
+    </broadcast-groups>
+
+    <discovery-groups>
+        <discovery-group name="dg-group1">
+            <group-address>231.7.7.7</group-address>
+            <group-port>9876</group-port>
+            <refresh-timeout>60000</refresh-timeout>
+        </discovery-group>
+    </discovery-groups>
+
+    <cluster-connections>
+        <cluster-connection name="my-cluster">
+            <address>jms</address>
+            <connector-ref>netty-connector</connector-ref>
+            <discovery-group-ref discovery-group-name="dg-group1"/>
+           <!--max hops defines how messages are redistributed, the default is 1 meaning only distribute to directly
+           connected nodes, to disable set to 0-->
+           <!--<max-hops>0</max-hops>-->
+        </cluster-connection>
+    </cluster-connections>
+
+   <security-settings>
+      <security-setting match="#">
+         <permission type="createNonDurableQueue" roles="guest"/>
+         <permission type="deleteNonDurableQueue" roles="guest"/>
+         <permission type="consume" roles="guest"/>
+         <permission type="send" roles="guest"/>
+      </security-setting>
+   </security-settings>
+
+   <address-settings>
+      <!--default for catch all-->
+      <address-setting match="#">
+         <dead-letter-address>jms.queue.DLQ</dead-letter-address>
+         <expiry-address>jms.queue.ExpiryQueue</expiry-address>
+         <redelivery-delay>0</redelivery-delay>
+         <max-size-bytes>10485760</max-size-bytes>       
+         <message-counter-history-day-limit>10</message-counter-history-day-limit>
+         <address-full-policy>BLOCK</address-full-policy>
+      </address-setting>
+   </address-settings>
+
+</configuration>

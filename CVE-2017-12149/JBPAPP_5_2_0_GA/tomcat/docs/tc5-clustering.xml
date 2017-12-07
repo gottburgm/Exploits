@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.0/docbookx.dtd">
+
+<article lang="en">
+  <articleinfo>
+   <title>Tomcat 5 Clustering In JBoss Release 3.2.6</title>
+
+    <author><firstname>Ben</firstname> <surname>Wang</surname></author>
+
+    <email>ben.wang@jboss.com</email>
+
+    <pubdate>August, 2004</pubdate>
+  </articleinfo>
+
+  <section>
+    <title id="s1">Introduction</title>
+
+    <para>Nowadays http web clustering (or failover) typically employs either
+    a hardware or software front-end load balancer to distribute the load
+    (with capability of session affinity). And the session state replication
+    is then delegated to the web container. Naturally, JBoss also has a
+    session replication layer for Tomcat since release 3.x.</para>
+
+    <para>In JBoss release 3.2.6, we have re-factored the Tomcat 5 http
+    session replication framework using JBossCache
+    (http://www.jboss.org/products/jbosscache) as the underlying in-memory
+    replication store. JBossCache is an open-source replicated, transactional,
+    and fine-grained cache system. Using JBossCache as the framework for
+    session replication offers separation of replication layer concerns (e.g.,
+    replication mode, lock behavior, partitioning, persistence, and
+    transaction) from the Tomcat session handling logics (e.g., sticky
+    session, replication granularity, and trigger). The end result is a
+    reduced development effort in Tomcat application layer and more robust
+    behavior in the overall system.</para>
+
+    <para>Note that current implementation will be ported to JBoss4.1 (instead
+    of 4.0) release in the near future.</para>
+  </section>
+
+  <section>
+    <title id="s1a">Software Design</title>
+
+    <para>This section describes briefly the high level design and the web
+    application deployment process pertaining to the session
+    replication.</para>
+
+    <section>
+      <title>Class Responsibility</title>
+
+      <para>The following is a class diagram focusing on the http session
+      replication using JBossCache as the distributed store service under
+      Tomcat5. <figure>
+          <title>Tomcat5 http session replication class diagram</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="HttpSessionRepl.gif" />
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+
+      <para>In addition to the JBossCacheService class that provides
+      replication service, there are three main interfaces: <itemizedlist>
+          <listitem>
+            <para><literal>org.jboss.web.tomcat.tc5.session.SnapshotManger.</literal>
+            Interface that defines the API to check for necessary session
+            replication. Note that it has a reference to JBossManager to
+            perform session replication. Two concrete implementation classes
+            are: <itemizedlist>
+                <listitem>
+                   
+
+                  <literal>org.jboss.web.tomcat.tc5.session.InstantSnapshotManager</literal>
+
+                   . Use of this snapshot manager will check for dirty session after every single http request (through 
+
+                  <literal>org.jboss.web.tomcat.tc5.session.ClusteredSessionValve</literal>
+
+                   ). If a session is dirty, it will then be replicated. 
+                </listitem>
+
+                <listitem>
+                   
+
+                  <literal>org.jboss.web.tomcat.tc5.session.IntervalSnapshotManager</literal>
+
+                   . Use of this snapshot manager will check for dirty session(s) only periodically (with a configurable timer interval). The dirty session(s) will be replicated when the timer kicks in. 
+                </listitem>
+              </itemizedlist></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>org.apache.catalina.Manager.</literal> This is a
+            Tomcat catalina interface that handles the session management. The
+            JBossCacheManager is the implemented class that also manages both
+            in-memory session and the sessions located in the distributed
+            store.</para>
+
+            <para>The reason that we need to use the in-memory session
+            instance is because of the web class loader can be different from
+            the system one. As a result, we will need to keep a "serialized"
+            version of the session data in the distributed store (done via
+            <literal>org.jboss.invocation.MarshalledValue</literal>) so that
+            the class loading scope will be correct. Otherwise, it will be
+            simply too expensive to retrieve and de-serialize every time from
+            the underneath store.</para>
+
+            <para>Note that because of the dual use of in-memory and
+            distributed store sessions, synchronizing the in-memory data with that of in
+               the distributed store becomes necessary when "sticky session" is not used.
+               I.e., when a http request goes to the clustered nodes randomly and thus generates
+               replication requests if modification is made . To solve
+               this problem, a "cache" invalidation mechanism is employeed. When a underlying
+               node in the distributed store is modified, it will check if this node has
+               session data (through an internal key "VERSION_KEY" to store the session data
+               version). If it is, the version will be retrieved and compared with the corresponding
+               session in-memory. If the version id is newer (i.e., greater), it will mark the in-memory
+               session data as "outdated". Next time, when the session is requested, it will check
+               first if the session is outdated. If it is, it will synchronize with the distrbuted
+               data store first. This feature is implemented in 4.0.2 and later.</para>
+
+            <para>This manager is also called periodically by catalina to
+            process expired session(s) (or session timeout). When a session is
+            timed-out, it will be deleted from the store. However, the
+            operation is local only. That is, the delete operation will not
+            replicate to other cluster nodes since the other nodes will have
+            similar expiring process in place already. Therefore, the session
+            will be expired simultaneously from the whole cluster view.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>org.apache.catalina.Session.</literal> This is a
+            catalina interface that manages the session attributes and track
+            the session life time itself. We have two different concrete
+            implementation classes in this release: <itemizedlist>
+                <listitem>
+                   
+
+                  <literal>org.jboss.web.tomcat.tc5.session.SessionBasedClusteredSession.</literal>
+
+                   This corresponds to the setting in 
+
+                  <literal>jboss-web.xml</literal>
+
+                   of 
+
+                  <literal>replication-granulairty</literal>
+
+                   set to 
+
+                  <literal>session.</literal>
+
+                   That is, whenever a session attribute is changed, it will replicate the whole session, regardless. 
+                </listitem>
+
+                <listitem>
+                   
+
+                  <literal>org.jboss.web.tomcat.tc5.session.AttributeBasedClusteredSession.</literal>
+
+                   This corresponds to the setting in 
+
+                  <literal>jboss-web.xml</literal>
+
+                   of 
+
+                  <literal>replication-granulairty</literal>
+
+                   set to 
+
+                  <literal>attribute.</literal>
+
+                   That is, whenever a session attribute is changed, it will replicate only the modified attribute. Note that this option which is finer grain in nature has the potential for session replication performance boost, especially when the session is carrying a large amount of data. 
+                </listitem>
+              </itemizedlist></para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+
+    <section>
+      <title>Deployment Process</title>
+
+      <para>When a user deploys (or hot-deploys) a web application, the JBoss
+      <literal>org.jboss.web.tomcat.tc5.TomcatDeployer</literal> will first
+      determine if the web application is declared
+      <literal>distributable.</literal> If it is, JBoss will instantiate
+      <literal>JBossCacheManager</literal>, create
+      <literal>SnapshotManager</literal> and then add a
+      <literal>ClusteredSessionValve</literal> to the Tomcat interceptor
+      chain. As a result, every single http request will be intercepted by
+      this valve to process the necessary session replication (through
+      <literal>SnapshotManager</literal>).</para>
+    </section>
+  </section>
+
+  <section>
+    <title id="s2">Features</title>
+
+    <para>Here are the features provided with this release. For clarity, we
+    will divide them into Tomcat and JBossCache level aspects, meaning the
+    configuration will be done either from JBossCache or the TC5 layer.</para>
+
+    <section>
+      <title id="s21">Tomcat level aspect</title>
+
+      <para>In
+      <literal>jbossweb-tomcat5.0/META-INF/jboss-service.xml</literal> , you
+      can configure the followings: <itemizedlist>
+          <listitem>
+            <literal>SnapshotMode</literal>
+
+            <itemizedlist><listitem> <literal>instant</literal> Session
+            replication is performed during each HTTP request. But whether it
+            is instantaneously or not also depends on the replication mode
+            (synchronous or asynchronous) in JBossCache setting. </listitem>
+            <listitem> <literal>Interval</literal> Replicated during a
+            specified time interval. There is an accompanying flag,
+            <literal>SnapshotInterval</literal>, that indicates the snapshot
+            interval in milliseconds. The
+            <literal>IntervalSnapshotManager</literal> will perform session
+            dirty check every <literal>SnapshotInterval.</literal> This
+            manager keeps track of the dirty session(s)
+            internally.</listitem></itemizedlist>
+          </listitem>
+
+          <listitem>
+            <para><literal>UseJK</literal> A flag indicating whether to use
+            the Apache mod_jk(2) for the front end software load balancing
+            with sticky session combined with JvmRoute. If set to true, it
+            will insert a JvmRouteFilter to intercept every request during
+            deployment and replace the JvmRoute if it detects a failover in
+            runtime. In addition, you will need to set the JvmRoute inside
+            Tomcat, e.g., <literal>&lt;Engine name="jboss.web"
+            jvmRoute="Node1" defaultHost="localhost"&gt;</literal> in
+            <literal>jbossweb-tomcat4.0/server.xml</literal>.</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>Note that the above configuration parameters are applied to per
+      Tomcat instance. Change of the parameter will cause Tomcat to
+      re-deploy.</para>
+
+      <para>In each web application, you can also specify in
+      <literal>jboss-web.xml</literal> to customize the clustering behavior.
+      Specifically, there is an element called
+      <literal>replication-config</literal> that contains two sub-elements so
+      far: <itemizedlist>
+          <listitem>
+             
+
+            <literal>replication-trigger</literal>
+
+             It determines what triggers a session replication (or when is a session is considered dirty). It has 4 options: 
+
+            <itemizedlist><listitem><para><literal>ACCESS</literal> Indicating
+            if accessing the session is considered dirty. If set, it is
+            considered dirty with pure access and thus will cause replication.
+            Note that a session is "accessed" during each http request
+            regardless. It will update the access time stamp in the session
+            instance as well. Since the time stamp may not be updated in other
+            clustering nodes (because of no replication), this may cause
+            session in other nodes to expire before the active node if http
+            request does not retrieve or modify any session attributes.
+            </para><para>When this option is set, the session timestamps will
+            be synchronized throughout the cluster nodes. Note that use of
+            this option can have a significant performance impact so you will
+            need to use with caution.</para></listitem> <listitem>
+            <literal>SET_AND_GET</literal> Every session get and set
+            attributes are considered dirty. This option also can have
+            significant performance impact as well.</listitem> <listitem>
+            <literal>SET_AND_NON_PRIMITIVE_GET</literal> Session get and
+            non-primitive get are considered dirty. For example, the http
+            session request may retrieve a non-primitive object instance from
+            the attribute and then modify the instance. If we don't specify
+            that non-primitive get is considered dirty, then the modification
+            will not be replication properly. This is the default value.
+            </listitem> <listitem> <literal>SET</literal> Only set attribute
+            operation is considered dirty. If you are certain that only set
+            attribute operation is necessary for replication, this option will
+            be most optimized in term of
+            performance.</listitem></itemizedlist>
+
+             
+          </listitem>
+
+          <listitem>
+            <literal>replication-granularity</literal>
+
+            <itemizedlist><listitem> <literal>session</literal> Replication is
+            per session instance. As long as it is considered modified when
+            the snapshot manager is called, the whole session object will be
+            serialized. </listitem> <listitem> <literal>attribute</literal>
+            Replication is only for the dirty attributes plus some session
+            data, like, lastAccessTime. For session that carries large amount
+            of data, this option can increase replication performance.
+            </listitem> <listitem> <literal>field</literal> (Not yet
+            supported) Will need aop (aspect-oriented programming) and be
+            available in 4.1. User can have control of even finer grain
+            replication through its own object graph. For example, if one
+            stores another map object into the session as an attribute, we can
+            track the dirty field down to the value object inside the map.
+            </listitem></itemizedlist>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+
+    <section>
+      <title id="s22">JBossCache level aspect</title>
+
+      <para>The main configuration file is
+      <literal>tc5-cluster-service.xml</literal> of which is basically a
+      minimum version of JBossCache configuration xml file (more details
+      later). <itemizedlist>
+          <listitem>
+            <literal>CacheMode</literal>
+
+            <itemizedlist><listitem> <literal>REPL_SYNC</literal> Replication
+            is synchronous and call is blocking until replication succeeds or
+            fails. That is, replication will be completed before the http
+            request returns. </listitem> <listitem>
+            <literal>REPLY_ASYNC</literal> Replication is asynchronous and
+            call is non-blocking. Does not wait for results for the http
+            request to return. When session state replication is allowed to
+            have some latency, this is useful and will have a much better
+            performance throughput. </listitem></itemizedlist>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>In the future release, we will also add the following features
+      from JBossCache. <itemizedlist>
+          <listitem>
+             (sub)-Partitioning. This feature will partition the cluster into different sub-partitions such that replication only happens in the sub-partition nodes. With this feature, the session replication cluster can then be easily scaled. 
+          </listitem>
+
+          <listitem>
+             Persistence. Persist the session data to the backed store. Currently, clustered session does not support any persistency. 
+          </listitem>
+
+          <listitem>
+             Eviction policy and cache data overflow memory size or time-based eviction policy with overflow to back end persistent store. This is useful for users who have long running sessions that needs to support passivation. 
+          </listitem>
+        </itemizedlist></para>
+    </section>
+
+    <section>
+      <title id="s23">Deprecated</title>
+
+      <para>The following features have been deprecated in the new release:
+      <itemizedlist>
+          <listitem>
+            <para><literal>replication-type</literal> in
+            <literal>jboss-web.xml.</literal> User should directly configure
+            the replication type from
+            <literal>tc5-cluster-service.xml</literal> with the element
+            <literal><literal>CacheMode</literal></literal>.</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>UseLocalCache</literal> in
+            <literal>jbossweb-tomcat5.0/META-INF/jboss-service.xml.</literal>
+            Local in-vm session is used by default now.</para>
+          </listitem>
+        </itemizedlist></para>
+    </section>
+  </section>
+
+  <section>
+    <title id="s3">What's New?</title>
+
+    <para>JBossCache can be configured through a xml configuration and
+    deployed under JBoss3.2.6 as a MBean service. Since JBossCache is used not
+    only for clustering but also for <literal>SSO</literal> (single sign on)
+    replication as well, we have introduced a JBossCache tc5 clustering MBean
+    service for everyone to share (such as <literal>SSO</literal>
+    replication). The xml configuration file will be called
+    <literal>tc5-cluster-service.xml</literal>. Once the file is deployed, a
+    MBean called <literal>TomcatClusteringCache</literal> will be
+    created.</para>
+
+    <para>In the file, there are JBossCache configuration parameters but
+    customized for the tc5 clustering. Here is a snippet of the xml:</para>
+
+    <programlisting>&lt;server&gt;
+&lt;mbean code="org.jboss.cache.TreeCache" name="jboss.cache:service=TomcatClusteringCache"&gt;
+  &lt;depends&gt;jboss:service=Naming&lt;/depends&gt; 
+  &lt;depends&gt;jboss:service=TransactionManager&lt;/depends&gt; 
+
+&lt;!-- 
+            Configure the TransactionManager. Default should be JBossTransactionManager.        
+--&gt; 
+  &lt;attribute name="TransactionManagerLookupClass"&gt;org.jboss.cache.JBossTransactionManagerLookup&lt;/attribute&gt; 
+
+&lt;!-- 
+             Valid modes are LOCAL
+                             REPL_ASYNC
+                             REPL_SYNC
+--&gt; 
+  &lt;attribute name="CacheMode"&gt;REPL_ASYNC&lt;/attribute&gt; 
+
+&lt;!-- 
+ Name of cluster. Needs to be the same for all clusters, in order
+             to find each other        
+--&gt; 
+  &lt;attribute name="ClusterName"&gt;TOMCAT-Cluster&lt;/attribute&gt; 
+
+&lt;!-- 
+ JGroups protocol stack properties. Can also be a URL,
+             e.g. file:/home/bela/default.xml
+           &lt;attribute name="ClusterProperties"&gt;&lt;/attribute&gt;
+--&gt; 
+&lt;attribute name="ClusterConfig"&gt;
+  &lt;config&gt;
+    &lt;UDP mcast_addr="228.1.2.5" mcast_port="45566" ip_ttl="64" ip_mcast="true" 
+      mcast_send_buf_size="150000" mcast_recv_buf_size="80000" ucast_send_buf_size="150000" 
+      ucast_recv_buf_size="80000" loopback="false" /&gt;
+     ... more config params here ... 
+  &lt;/config&gt;
+&lt;/attribute&gt;
+
+&lt;/mbean&gt;
+&lt;/server&gt;
+</programlisting>
+  </section>
+
+  <section>
+    <title>Test Case</title>
+
+    <para>All http session clustering test cases are located under
+    <literal>JBoss-3.2/testsuite/src/main/org/jboss/test/cluster/apache-tomcat</literal>
+    directory.</para>
+  </section>
+
+  <section>
+    <title>Sample Usage</title>
+
+    <para>In this section, we describe how to setup a sample web application
+    for http session replication. User should refer to other documentation on
+    how to setup a front end load balancer (e.g., Apache mod_jk(2)).</para>
+
+    <para>To run a web application session replication under the new tc5
+    clustering, you will need to set the application to be distributable as
+    usual. For example, in <literal>web.xml</literal> (under the web app
+    <literal>WEB-INF</literal> directory), <programlisting>&lt;web-app&gt;
+   &lt;distributable/&gt;
+   ...
+&lt;/web-app&gt;
+</programlisting></para>
+
+    <para>Next, you can create an optional <literal>jboss-web.xml</literal>
+    (also under <literal>WEB-INF</literal> directory) that has the following
+    options: <programlisting>&lt;jboss-web&gt;
+   &lt;replication-config&gt;
+      &lt;replication-trigger&gt;SET_AND_NON_PRIMITIVE_GET&lt;/replication-trigger&gt;
+      &lt;replication-granularity&gt;SESSION&lt;/replication-granularity&gt;
+   &lt;/replication-config&gt;
+&lt;/jboss-web&gt;
+</programlisting></para>
+
+    <para>In addition, you will need to start jboss from
+    <literal>all</literal> configuration directory. Under the new
+    <literal>all</literal> configuration, it includes the JBossCache library
+    and also the <literal>tc5-cluster-service.xml</literal>file to deploy the
+    cache as a specific tc5 clustering MBean service.</para>
+
+    <para>Finally, before you start JBoss, you can edit
+    <literal>jboss-service.xml</literal> under
+    <literal>jbossweb-tomcat5.0/META-INF</literal> directory for the
+    following: <programlisting>&lt;jboss-service&gt;
+    &lt;attribute name="SnapshotMode"&gt;instant&lt;/attribute&gt;
+    &lt;attribute name="UseJK"&gt;false&lt;/attribute&gt;
+&lt;/jboss-service&gt;
+</programlisting></para>
+
+    <para>You are now ready to use http session replication!</para>
+  </section>
+</article>

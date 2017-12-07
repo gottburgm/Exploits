@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application-client version="1.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+                      http://java.sun.com/xml/ns/j2ee/application-client_1_4.xsd">
+
+  <display-name>Hello World Service Client</display-name>
+
+  <service-ref>
+
+    <!-- JNDI name bound to the service interface in the client's environment context -->
+    <service-ref-name>service/Hello</service-ref-name>
+    <!-- service interface class -->
+    <service-interface>org.jboss.test.bpel.ws.production.HelloWorldService</service-interface>
+    <!-- placeholder for published WSDL file -->
+    <wsdl-file>USE_JBOSS_CLIENT_XML_OVERRIDE</wsdl-file>
+    <!-- Java<->XML mapping file -->
+    <jaxrpc-mapping-file>META-INF/jaxrpc-mapping.xml</jaxrpc-mapping-file>
+
+    <port-component-ref>
+      <!-- service endpoint interface class -->
+      <service-endpoint-interface>org.jboss.test.bpel.ws.production.HelloPT</service-endpoint-interface>
+    </port-component-ref>
+
+  </service-ref>
+
+</application-client>

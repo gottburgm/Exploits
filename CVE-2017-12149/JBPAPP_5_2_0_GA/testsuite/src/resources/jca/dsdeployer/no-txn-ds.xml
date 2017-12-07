@@ -1,0 +1,23 @@
+<datasources>
+    <no-tx-datasource>
+        <jndi-name>CriPreFillDS</jndi-name>
+        <use-java-context>false</use-java-context>
+        <connection-url>jdbc:hsqldb:mem:PreFillDSDB</connection-url>
+        <driver-class>org.hsqldb.jdbcDriver</driver-class>
+        <username>sa</username>
+        <password></password>
+        <min-pool-size>5</min-pool-size>
+        <max-pool-size>10</max-pool-size>
+        <prefill>True</prefill>
+        <application-managed-security/>
+        <connection-property name="test">Test1</connection-property>
+        <connection-property name="test">Test2</connection-property>
+        <connection-property name="test">Test3</connection-property>
+        <connection-property name="test">Test4</connection-property>
+        <connection-property name="test">Test5</connection-property>
+        
+        <metadata>
+            <type-mapping>Hypersonic SQL</type-mapping>
+        </metadata>
+    </no-tx-datasource>
+</datasources>

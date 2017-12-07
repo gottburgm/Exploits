@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  JBoss Server Configuration                                           -->
+<!-- Thanks to kosulin in the forumns                                      -->
+<!-- ===================================================================== -->
+
+<!-- $Id: sybase-xa-ds.xml 85945 2009-03-16 19:45:12Z dimitris@jboss.org $ -->
+
+<datasources>
+
+   <xa-datasource>
+     <jndi-name>CrashRecoveryDS</jndi-name>
+     <!-- uncomment to enable interleaving <interleaving/> -->
+     <xa-datasource-class>com.sybase.jdbc4.jdbc.SybXADataSource</xa-datasource-class>
+     <xa-datasource-property name="NetworkProtocol">Tds</xa-datasource-property>
+     <xa-datasource-property name="ServerName">vmg07.mw.lab.eng.bos.redhat.com</xa-datasource-property>
+     <xa-datasource-property name="PortNumber">5000</xa-datasource-property>
+     <xa-datasource-property name="DatabaseName">crashrec</xa-datasource-property>
+     @CREDENTIALS@
+     <!--check-valid-connection-sql>select 1 from mytable</check-valid-connection-sql-->
+     <exception-sorter-class-name>org.jboss.resource.adapter.jdbc.vendor.SybaseExceptionSorter</exception-sorter-class-name>
+     <type-mapping>Sybase</type-mapping>
+   </xa-datasource>
+
+</datasources>

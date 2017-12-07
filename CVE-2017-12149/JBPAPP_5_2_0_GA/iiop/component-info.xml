@@ -1,0 +1,22 @@
+<project name="console-component-info">
+
+   <!-- ============================================================ -->
+   <!-- iiop                                                         -->
+   <!-- ============================================================ -->
+
+   <component id="iiop"
+              module="contrib/iiop"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="jboss-iiop.jar" />         
+      <artifact id="jboss-iiop-client.jar"/>
+      <artifact id="iiop-service.xml"/>
+
+      <export>
+         <include input="jboss-iiop.jar"/>
+         <include input="jboss-iiop-client.jar"/>         
+      </export>
+   </component>
+
+
+</project>

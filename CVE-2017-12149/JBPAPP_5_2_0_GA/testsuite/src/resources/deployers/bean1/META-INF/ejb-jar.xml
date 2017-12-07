@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ejb-jar version="2.1"
+         xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+                             http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd"
+      >
+   <enterprise-beans>
+      <!-- Session Beans -->
+         <session>
+         <description>JUnit Session Bean Test Runner</description>
+         <ejb-name>Bean1EJB</ejb-name>
+         <home>org.jboss.test.deployers.ejb.bean1.Bean1Home</home>
+         <remote>org.jboss.test.deployers.ejb.bean1.Bean1Remote</remote>
+         <ejb-class>org.jboss.test.deployers.ejb.bean1.Bean1</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Bean</transaction-type>
+         <env-entry>
+            <env-entry-name>dd-file</env-entry-name>
+            <env-entry-type>java.lang.String</env-entry-type>
+            <env-entry-value>ejb-jar.xml</env-entry-value>
+         </env-entry>
+      </session>
+   </enterprise-beans>
+</ejb-jar>

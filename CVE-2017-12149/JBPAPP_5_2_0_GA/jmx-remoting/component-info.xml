@@ -1,0 +1,12 @@
+<project name="jmx-remoting-component-info">
+   <component id="jmx-remoting"
+              module="jmx-remoting"
+              version="5.0-SNAPSHOT"
+   >
+      <artifact id="jboss-jmx-remoting.jar"/>
+      <artifact id="jboss-jmx-remoting-tests.jar"/>      
+      <export>
+         <include input="jboss-jmx-remoting.jar"/>
+      </export>
+   </component>
+</project>

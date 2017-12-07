@@ -1,0 +1,34 @@
+<assembly>
+  <id>client</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>**/jboss/iiop/CorbaORB.class</include>
+        <include>**/jboss/iiop/StubClassLoader.class</include>
+        <include>**/jboss/iiop/JBossUtilDelegate.class</include>
+        <include>**/jboss/iiop/rmi/*</include>
+        <include>**/jboss/iiop/rmi/marshal/*</include>
+        <include>**/jboss/iiop/rmi/marshal/strategy/StubStrategy.class</include>
+        <include>**/jboss/iiop/rmi/marshal/strategy/StubStrategy$ExceptionReader.class</include>
+        <include>**/jboss/proxy/compiler/**</include>
+        <include>**/jboss/proxy/ejb/DynamicIIOPStub.class</include>
+        <include>**/jboss/proxy/ejb/*ImplIIOP*.class</include>
+        <include>**/jboss/proxy/ejb/IIOPHomeFactory.class</include>
+        <include>**/jboss/tm/**</include>
+        <include>**/jboss/util/Log4jLoggerFactory.class</include>
+        <include>org/omg/stub/javax/ejb/_EJBHome_Stub.class</include>
+        <include>org/omg/stub/javax/ejb/_EJBObject_Stub.class</include>
+      </includes>
+      <excludes>
+        <exclude>**/jboss/tm/iiop/TransactionServiceImpl*</exclude>
+        <exclude>**/jboss/tm/iiop/*POA*</exclude>
+      </excludes>
+    </fileSet>
+  </fileSets>
+</assembly>

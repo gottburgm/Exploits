@@ -1,0 +1,31 @@
+<assembly>
+  <id>http-invoker-sar</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/invoker.war/WEB-INF/classes</outputDirectory>
+      <includes>
+        <include>org/jboss/invocation/http/**</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>src/resources/services/invoker/http</directory>
+      <outputDirectory>/invoker.war/WEB-INF</outputDirectory>
+      <includes>
+        <include>jboss-web.xml</include>
+        <include>-web.xml</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>src/resources/services/invoker/http</directory>
+      <outputDirectory>/META-INF</outputDirectory>
+      <includes>
+        <include>jboss-service.xml</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

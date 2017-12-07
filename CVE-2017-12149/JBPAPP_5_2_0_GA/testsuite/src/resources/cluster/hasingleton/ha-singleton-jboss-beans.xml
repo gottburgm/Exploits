@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+  
+   <bean class="org.jboss.ha.singleton.examples.HASingletonPojoExample" 
+          name="SimpleHaSingletonPojo">
+          
+      <constructor><parameter>test/cluster/hasingleton/simplepojo</parameter></constructor>
+      
+   </bean>
+   
+   <bean class="org.jboss.ha.singleton.HASingletonController" 
+          name="SimpleHaSingletonController"> 
+      
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.ha:service=TestHASingletonControllerBean", exposedInterface=org.jboss.ha.singleton.HASingletonControllerMBean.class, registerDirectly=true)</annotation>
+          
+      <property name="clusterPartition"><inject bean="HAPartition"/></property>
+      <property name="target"><inject bean="SimpleHaSingletonPojo"/></property>
+      <property name="targetStartMethod">startSingleton</property>
+      <property name="targetStopMethod">stopSingleton</property>
+      
+   </bean>   
+  
+</deployment>

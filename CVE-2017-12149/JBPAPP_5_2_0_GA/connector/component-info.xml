@@ -1,0 +1,46 @@
+<project name="connector-component-info">
+
+   <!-- ============================================================ -->
+   <!-- Connector                                                    -->
+   <!-- ============================================================ -->
+
+   <component id="connector"
+              module="jbosscx"
+              version="5.1-SNAPSHOT"
+              specTitle="JBoss"
+              specVersion="5.1.0"
+              specVendor="JBoss (http://www.jboss.org)"
+              implTitle="JBoss"
+              implURL="http://www.jboss.org"
+              implVersion="5.1.0"
+              implVendor="http://www.jboss.org"               
+   >
+      <artifact id="jboss-jca.jar"/>
+      <artifact id="jboss-common-jdbc-wrapper.jar"/>
+      <artifact id="jboss-local-jdbc.jar"/>
+      <artifact id="jboss-local-jdbc.rar"/>
+      <artifact id="jboss-ha-local-jdbc.jar"/>
+      <artifact id="jboss-ha-local-jdbc.rar"/>
+      <artifact id="jboss-xa-jdbc.jar" />
+      <artifact id="jboss-xa-jdbc.rar"/>
+      <artifact id="jboss-ha-xa-jdbc.jar" />
+      <artifact id="jboss-ha-xa-jdbc.rar"/>
+      <artifact id="jms-ra.jar"/>
+      <artifact id="jms-ra.rar"/>
+      <artifact id="mail-ra.jar"/>
+      <artifact id="mail-ra.rar"/>
+      <artifact id="jbosscx-client.jar"/>
+      <artifact id="jboss-ds_1_0.dtd"/>
+      <artifact id="jboss-ds_1_5.dtd"/>
+      <artifact id="jbossjca-service.xml" outputpath="resources/jca-sar"/>
+      <artifact id="hsqldb-ds.xml" outputpath="etc/example-config"/>
+      <artifact id="hajndi-jms-ds.xml" outputpath="etc/example-config"/>
+      <export>
+         <include input="jboss-jca.jar"/>
+         <include input="jboss-common-jdbc-wrapper.jar"/>
+         <include input="jboss-ha-local-jdbc.jar"/>
+      </export>
+   </component>
+
+
+</project>

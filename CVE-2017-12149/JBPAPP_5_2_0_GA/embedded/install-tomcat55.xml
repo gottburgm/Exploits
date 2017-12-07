@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="main" name="JBoss/Embedded">
+
+   <property name="jboss.dir" value="."/>
+
+   <target name="main">
+      <copy todir="${tomcat.dir}/server/lib">
+         <fileset dir="${jboss.dir}/lib">
+            <include name="jboss-embedded-tomcat-bootstrap.jar"/>
+         </fileset>
+      </copy>
+      <copy todir="${tomcat.dir}/common/classes">
+         <fileset dir="${jboss.dir}/bootstrap">
+            <include name="**/*"/>
+            <exclude name="jndi.properties"/>
+         </fileset>
+      </copy>
+      <copy todir="${tomcat.dir}/common/lib">
+         <fileset dir="${jboss.dir}/lib">
+            <include name="*.jar"/>
+            <exclude name="jboss-embedded-tomcat-bootstrap.jar"/>
+         </fileset>
+      </copy>
+
+   </target>
+
+
+</project>

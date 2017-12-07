@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mbean PUBLIC
+   "-//JBoss//DTD JBOSS XMBEAN 1.0//EN"
+   "http://www.jboss.org/j2ee/dtd/jboss_xmbean_1_0.dtd">
+
+<mbean>
+   <description>Tests of AVC Notification Handling</description>
+   <class>org.jboss.test.jmx.xmbean.SelfListenerService</class>
+
+   <constructor>
+      <description>The default constructor</description>
+      <name>SelfListenerService</name>
+   </constructor>
+
+   <!-- Attributes -->
+   <attribute access="read-write" getMethod="getAttr1" setMethod="setAttr1">
+      <name>Attr1</name>
+      <type>boolean</type>
+   </attribute>
+   <attribute access="read-only" getMethod="getGotAttr1AVC">
+      <name>GotAttr1AVC</name>
+      <type>boolean</type>
+   </attribute>
+   
+   <!-- Operations -->
+   <operation>
+      <description>The start lifecycle operation</description>
+      <name>start</name>
+   </operation>
+   <operation>
+      <description>The stop lifecycle operation</description>
+      <name>stop</name>
+   </operation>
+
+</mbean>

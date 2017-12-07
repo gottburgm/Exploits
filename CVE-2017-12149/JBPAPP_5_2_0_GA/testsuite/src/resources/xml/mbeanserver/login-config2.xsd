@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: login-config2.xsd 32753 2005-06-23 14:24:28Z aloubyansky $ -->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+  xmlns:jbxb="http://www.jboss.org/xml/ns/jbxb"
+  targetNamespace="urn:jboss:login-config2"
+  xmlns:jaas="urn:jboss:login-config2">
+
+   <xsd:annotation>
+      <xsd:appinfo>
+         <jaxb:schemaBindings>
+            <jaxb:package name="org.jboss.test.xml.mbeanserver"/>
+         </jaxb:schemaBindings>
+      </xsd:appinfo>
+   </xsd:annotation>
+
+  <xs:element name="policy">
+    <xs:complexType>
+       <xsd:annotation>
+          <xsd:appinfo>
+             <jbxb:class impl="org.jboss.test.xml.mbeanserver.PolicyConfig"/>
+          </xsd:appinfo>
+       </xsd:annotation>
+
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="jaas:application-policy"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="application-policy">
+    <xs:complexType>
+       <xsd:annotation>
+         <xsd:appinfo>
+           <jbxb:class impl="org.jboss.test.xml.mbeanserver.AuthenticationInfoContainer"/>
+           <jbxb:addMethod name="add" valueType="child"/>
+         </xsd:appinfo>
+       </xsd:annotation>
+
+      <xs:sequence>
+        <xs:element ref="jaas:authentication"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="authentication">
+    <xsd:annotation>
+       <xsd:appinfo>
+          <jbxb:skip/>
+       </xsd:appinfo>
+    </xsd:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="jaas:login-module"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="login-module">
+    <xs:complexType>
+       <xsd:annotation>
+          <xsd:appinfo>
+             <jbxb:class impl="org.jboss.test.xml.mbeanserver.AppConfigurationEntryHolder"/>
+          </xsd:appinfo>
+       </xsd:annotation>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="jaas:module-option"/>
+      </xs:sequence>
+      <xs:attribute name="code" use="required" type="xs:string"/>
+      <xs:attribute name="flag" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="required" />
+            <xs:enumeration value="requisite" />
+            <xs:enumeration value="sufficient" />
+            <xs:enumeration value="optional" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="module-option">
+    <xs:complexType mixed="true">
+       <xsd:annotation>
+          <xsd:appinfo>
+             <!-- ModuleOption declares a constructor that takes name as a parameter
+                  while the value should be set with the setter.
+                  This use-case is not supported out-of-the-box. So, we use this container. -->
+             <jbxb:class impl="org.jboss.test.xml.mbeanserver.ModuleOptionContainer"/>
+          </xsd:appinfo>
+       </xsd:annotation>
+      <xs:sequence>
+        <xs:any minOccurs="0" maxOccurs="1" namespace="##other" />
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,96 @@
+<project name="tests-isolation-jars">
+   <!-- isolation test -->
+   <target name="_jars-isolation">
+      <mkdir dir="${build.lib}"/>
+      
+      <!-- build isolationA.jar -->
+      <jar destfile="${build.lib}/isolationA.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/isolation/ejb/a/**"/>
+            <include name="org/jboss/test/isolation/interfaces/**"/>
+            <include name="org/jboss/test/util/Debug.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/isolation/a/ejb">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- build isolationB.jar -->
+      <jar destfile="${build.lib}/isolationB.jar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/isolation/ejb/b/**"/>
+            <include name="org/jboss/test/isolation/interfaces/**"/>
+            <include name="org/jboss/test/util/Debug.class"/>
+         </fileset>
+         <fileset dir="${build.resources}/isolation/b/ejb">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- build isolationA.ear -->
+      <jar destfile="${build.lib}/isolationA.ear">
+         <fileset dir="${build.lib}">
+            <include name="isolationA.jar"/>
+         </fileset>
+         <fileset dir="${build.resources}/isolation/a/ear">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- build isolationB.ear -->
+      <jar destfile="${build.lib}/isolationB.ear">
+         <fileset dir="${build.lib}">
+            <include name="isolationB.jar"/>
+         </fileset>
+         <fileset dir="${build.resources}/isolation/b/ear">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- build isolationC.war -->
+      <war warfile="${build.lib}/isolationC.war"
+         webxml="${build.resources}/isolation/c/war/WEB-INF/web.xml">
+         <webinf dir="${build.resources}/isolation/c/war/WEB-INF">
+            <include name="jboss-web.xml"/>
+         </webinf>
+         <classes dir="${build.classes}">
+            <include name="org/jboss/test/isolation/web/c/**"/>
+         </classes>
+         <classes dir="${build.resources}/isolation/c/war/WEB-INF/classes">
+            <include name="**/*"/>
+         </classes>
+         <lib dir="${apache.log4j.lib}">
+            <include name="log4j.jar"/>
+         </lib>
+      </war>
+      
+      <!-- build isolationC.ear -->
+      <jar destfile="${build.lib}/isolationC.ear">
+         <fileset dir="${build.lib}">
+            <include name="isolationC.war"/>
+         </fileset>
+         <fileset dir="${build.resources}/isolation/c/ear">
+            <include name="META-INF/*.xml"/>
+         </fileset>
+      </jar>
+      
+      <!-- build test-java-class-isolation.sar -->
+      <mkdir dir="${build.resources}/isolation/java/org/jboss/test"/>
+      <copy file="${build.classes}/org/jboss/test/isolation/mbean/JavaClassIsolationMBean.class"
+            tofile="${build.resources}/isolation/java/org/jboss/test/Test.class"/>
+
+      <mkdir dir="${build.resources}/isolation/java/rmi/registry"/>
+      <copy file="${build.classes}/org/jboss/test/isolation/mbean/JavaClassIsolationMBean.class"
+            tofile="${build.resources}/isolation/java/rmi/registry/Registry.class"/>
+
+      <jar destfile="${build.lib}/test-java-class-isolation.sar">
+         <fileset dir="${build.classes}">
+            <include name="org/jboss/test/isolation/mbean/**"/>
+         </fileset>
+         <fileset dir="${build.resources}/isolation/">
+            <include name="META-INF/*.xml"/>
+            <include name="java/**"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

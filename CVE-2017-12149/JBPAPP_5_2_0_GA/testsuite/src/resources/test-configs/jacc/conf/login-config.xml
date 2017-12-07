@@ -1,0 +1,121 @@
+<?xml version='1.0'?>
+<!DOCTYPE policy PUBLIC
+      "-//JBoss//DTD JBOSS Security Config 3.0//EN"
+      "http://www.jboss.org/j2ee/dtd/security_config.dtd">
+
+<policy>
+    <!-- Used by clients within the application server VM such as
+    mbeans and servlets that access EJBs.
+    -->
+  <application-policy name="old-client-login">
+    <authentication>
+      <login-module code="org.jboss.security.ClientLoginModule" flag="required">
+      </login-module>
+    </authentication>
+  </application-policy>
+    <application-policy name = "client-login">
+       <authentication>
+       <login-module code="org.jboss.security.ClientLoginModule" flag="required">
+          <!-- Any existing security context will be restored on logout -->
+          <module-option name="restore-login-identity">true</module-option>
+          </login-module>
+       </authentication>
+    </application-policy>
+
+   <!-- Security domain for JBossMQ -->
+   <application-policy name = "jbossmq">
+      <authentication>
+         <login-module code = "org.jboss.security.auth.spi.DatabaseServerLoginModule"
+            flag = "required">
+            <module-option name = "unauthenticatedIdentity">guest</module-option>
+            <module-option name = "dsJndiName">java:/DefaultDS</module-option>
+            <module-option name = "principalsQuery">SELECT PASSWD FROM JMS_USERS WHERE USERID=?</module-option>
+            <module-option name = "rolesQuery">SELECT ROLEID, 'Roles' FROM JMS_ROLES WHERE USERID=?</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+  
+  <!-- A template configuration for hornetq. This
+    defaults to the UsersRolesLoginModule the same as other and should be
+    changed to a stronger authentication mechanism as required.
+  -->
+  <application-policy name="hornetq">
+    <authentication>
+      <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+        flag="required">
+	<module-option name = "unauthenticatedIdentity">guest</module-option>
+        <module-option name="usersProperties">props/hornetq-users.properties</module-option>
+        <module-option name="rolesProperties">props/hornetq-roles.properties</module-option>
+      </login-module>
+    </authentication>
+  </application-policy>
+
+   <application-policy name = "JmsXARealm">
+      <authentication>
+         <login-module code = "org.jboss.resource.security.ConfiguredIdentityLoginModule"
+            flag = "required">
+            <module-option name = "principal">guest</module-option>
+            <module-option name = "userName">guest</module-option>
+            <module-option name = "password">guest</module-option>
+            <module-option name = "managedConnectionFactoryName">jboss.jca:service=TxCM,name=JmsXA</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+
+   <application-policy name="messaging">
+      <authentication>
+         <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule" flag = "required">
+            <module-option name="unauthenticatedIdentity">guest</module-option>
+            <module-option name="usersProperties">props/messaging-users.properties</module-option>
+            <module-option name="rolesProperties">props/messaging-roles.properties</module-option>
+         </login-module>
+      </authentication>
+   </application-policy>
+
+    <application-policy name = "other">
+       <authentication>
+          <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+             flag = "required">
+             <module-option name="defaultUsersProperties">jacc-users.properties</module-option>
+             <module-option name="defaultRolesProperties">jacc-roles.properties</module-option>
+             <module-option name="usersProperties">users.properties</module-option>
+             <module-option name="rolesProperties">roles.properties</module-option>
+             <module-option name="roleGroupSeperator">.</module-option>
+          </login-module>
+       </authentication>
+    </application-policy>
+    <!-- Security domains for testing new jca framework -->
+    <application-policy name = "HsqlDbRealm">
+       <authentication>
+          <login-module code = "org.jboss.resource.security.ConfiguredIdentityLoginModule"
+             flag = "required">
+             <module-option name = "principal">sa</module-option>
+             <module-option name = "userName">sa</module-option>
+             <module-option name = "password"></module-option>
+             <module-option name = "managedConnectionFactoryName">jboss.jca:service=LocalTxCM,name=DefaultDS</module-option>
+          </login-module>
+       </authentication>
+    </application-policy>
+  
+  <!-- Security domain for JBossWS -->
+  <application-policy name="JBossWS">
+    <authentication>
+      <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule" flag="required">
+        <module-option name="usersProperties">props/jbossws-users.properties</module-option>
+        <module-option name="rolesProperties">props/jbossws-roles.properties</module-option>
+        <module-option name="unauthenticatedIdentity">anonymous</module-option>
+      </login-module>
+    </authentication>
+  </application-policy>
+  
+  <application-policy name="JmsXARealm">
+    <authentication>
+      <login-module code="org.jboss.resource.security.ConfiguredIdentityLoginModule" flag="required">
+        <module-option name="principal">guest</module-option>
+        <module-option name="userName">guest</module-option>
+        <module-option name="password">guest</module-option>
+        <module-option name="managedConnectionFactoryName">jboss.jca:service=TxCM,name=JmsXA</module-option>
+      </login-module>
+    </authentication>
+  </application-policy>
+</policy>

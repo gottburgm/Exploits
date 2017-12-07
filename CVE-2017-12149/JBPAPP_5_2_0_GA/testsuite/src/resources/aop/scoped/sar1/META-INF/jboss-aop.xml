@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aop xmlns="urn:jboss:aop-beans:1.0">
+   <interceptor class="org.jboss.test.aop.scoped.ScopedInterceptor" scope="PER_INSTANCE">
+      <attribute name="value">11</attribute>
+   </interceptor>
+   <aspect class="org.jboss.test.aop.scoped.ScopedAspect">
+      <attribute name="value">21</attribute>
+   </aspect>
+   <aspect factory="org.jboss.test.aop.scoped.ScopedAspectFactory"/>
+   <stack name="stuff">
+      <advice aspect="org.jboss.test.aop.scoped.ScopedAspectFactory" name="test"/>
+   </stack>
+
+   <bind pointcut="all(org.jboss.test.aop.scoped.POJO)">
+      <interceptor-ref name="org.jboss.test.aop.scoped.ScopedInterceptor"/>
+      <advice aspect="org.jboss.test.aop.scoped.ScopedAspect" name="test"/>
+      <stack-ref name="stuff"/>
+   </bind>
+
+   <metadata tag="test" class="org.jboss.test.aop.scoped.POJO">
+      <constructor expr="POJO()">
+         <data>ctor1</data>
+      </constructor>
+      <method expr="void method(..)">
+         <data>method1</data>
+      </method>
+   </metadata>
+   
+   <metadata-loader tag="custom" class="org.jboss.test.aop.scoped.ScopedMetadataLoader"/>
+	<metadata tag="custom" class="org.jboss.test.aop.scoped.POJO">
+	      <data>custom1</data>
+	</metadata>
+   
+   <!-- Make sure we can see global aspects -->
+   <metadata tag="transaction" class="org.jboss.test.aop.scoped.POJO">
+      <method name="method">
+         <trans-attribute>Required</trans-attribute>
+      </method>
+   </metadata>
+
+   <typedef name="type" expr="class(org.jboss.test.aop.scoped.IntroducedPOJO)" />
+   <introduction expr="class($typedef{type})">
+      <interfaces>org.jboss.test.aop.scoped.Scope1Interface</interfaces>
+   </introduction>
+   <bind pointcut="execution(* $typedef{type}->*())">
+      <interceptor-ref name="org.jboss.test.aop.scoped.ScopedInterceptor"/>
+   </bind>
+   
+   <prepare expr="all(org.jboss.test.aop.scoped.excluded.ExcludedPOJO)"/>
+   <prepare expr="all(org.jboss.test.aop.scoped.excluded.included.IncludedPOJO)"/>
+   <prepare expr="all(org.jboss.test.aop.scoped.POJO$$Ignored$$123)"/>
+</aop>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- The Hypersonic embedded database JCA connection factory config -->
+
+<!-- $Id: testMultipleDataSources-ds.xml 42540 2006-03-20 23:34:16Z clin $ -->
+
+<datasources>
+   <local-tx-datasource>
+      <jndi-name>TestDataSource1</jndi-name>
+      <use-java-context>false</use-java-context>
+      <connection-url>jdbc:hsqldb:hsql://localhost:1701</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <user-name>sa</user-name>
+      <password></password>
+      <min-pool-size>3</min-pool-size>
+      <max-pool-size>20</max-pool-size>
+      <idle-timeout-minutes>0</idle-timeout-minutes>
+      <security-domain>HsqlDbRealm</security-domain>
+      <prepared-statement-cache-size>32</prepared-statement-cache-size>
+      <metadata>
+          <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+      <depends>jboss:service=Hypersonic,database=localDB</depends>
+   </local-tx-datasource>
+
+   <local-tx-datasource>
+      <jndi-name>TestDataSource2</jndi-name>
+      <use-java-context>false</use-java-context>
+      <connection-url>jdbc:hsqldb:hsql://localhost:1701</connection-url>
+      <driver-class>org.hsqldb.jdbcDriver</driver-class>
+      <user-name>sa</user-name>
+      <password></password>
+      <min-pool-size>5</min-pool-size>
+      <max-pool-size>20</max-pool-size>
+      <idle-timeout-minutes>0</idle-timeout-minutes>
+      <security-domain>HsqlDbRealm</security-domain>
+      <prepared-statement-cache-size>64</prepared-statement-cache-size>
+      <metadata>
+          <type-mapping>Hypersonic SQL</type-mapping>
+      </metadata>
+      <depends>jboss:service=Hypersonic,database=localDB</depends>
+   </local-tx-datasource>
+   
+</datasources>

@@ -1,0 +1,19 @@
+<assembly>
+  <id>jsr77-client</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>javax/management/j2ee/**</include>
+        <include>org/jboss/management/mejb/*ClientNotificationListener*.class</include>
+        <include>org/jboss/management/mejb/ListenerRegistration.class</include>
+        <include>org/jboss/management/mejb/MEJB.class</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

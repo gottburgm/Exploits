@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+
+<ejb-jar >
+
+   <enterprise-beans>
+
+      <!-- Session Beans -->
+      <session >
+         <ejb-name>Facade</ejb-name>
+         <home>org.jboss.test.cmp2.cacheinvalidation.ejb.FacadeHome</home>
+         <remote>org.jboss.test.cmp2.cacheinvalidation.ejb.Facade</remote>
+         <ejb-class>org.jboss.test.cmp2.cacheinvalidation.ejb.FacadeSessionBean</ejb-class>
+         <session-type>Stateless</session-type>
+         <transaction-type>Container</transaction-type>
+      </session>
+
+      <!-- Entity Beans -->
+         <entity >
+         <ejb-name>CRO</ejb-name>
+
+         <local-home>org.jboss.test.cmp2.cacheinvalidation.ejb.CLocalHome</local-home>
+         <local>org.jboss.test.cmp2.cacheinvalidation.ejb.CLocal</local>
+         <ejb-class>org.jboss.test.cmp2.cacheinvalidation.ejb.CBean</ejb-class>
+         <persistence-type>Container</persistence-type>
+         <prim-key-class>java.lang.Long</prim-key-class>
+         <reentrant>false</reentrant>
+         <cmp-version>2.x</cmp-version>
+         <abstract-schema-name>CRO</abstract-schema-name>
+         <cmp-field >
+            <field-name>id</field-name>
+         </cmp-field>
+         <cmp-field >
+            <field-name>firstName</field-name>
+         </cmp-field>
+         <cmp-field >
+            <field-name>lastName</field-name>
+         </cmp-field>
+         <primkey-field>id</primkey-field>
+      </entity>
+
+      <entity >
+         <ejb-name>CRW</ejb-name>
+         <local-home>org.jboss.test.cmp2.cacheinvalidation.ejb.CLocalHome</local-home>
+         <local>org.jboss.test.cmp2.cacheinvalidation.ejb.CLocal</local>
+         <ejb-class>org.jboss.test.cmp2.cacheinvalidation.ejb.CBean</ejb-class>
+         <persistence-type>Container</persistence-type>
+         <prim-key-class>java.lang.Long</prim-key-class>
+         <reentrant>false</reentrant>
+         <cmp-version>2.x</cmp-version>
+         <abstract-schema-name>CRW</abstract-schema-name>
+         <cmp-field >
+            <field-name>id</field-name>
+         </cmp-field>
+         <cmp-field >
+            <field-name>firstName</field-name>
+         </cmp-field>
+         <cmp-field >
+            <field-name>lastName</field-name>
+         </cmp-field>
+         <primkey-field>id</primkey-field>
+      </entity>
+
+      <entity >
+         <ejb-name>ARO</ejb-name>
+         <local-home>org.jboss.test.cmp2.cacheinvalidation.ejb.ALocalHome</local-home>
+         <local>org.jboss.test.cmp2.cacheinvalidation.ejb.ALocal</local>
+         <ejb-class>org.jboss.test.cmp2.cacheinvalidation.ejb.ABean</ejb-class>
+         <persistence-type>Container</persistence-type>
+         <prim-key-class>java.lang.Long</prim-key-class>
+         <reentrant>true</reentrant>
+         <cmp-version>2.x</cmp-version>
+         <abstract-schema-name>ARO</abstract-schema-name>
+         <cmp-field >
+            <field-name>id</field-name>
+         </cmp-field>
+         <cmp-field >
+            <field-name>name</field-name>
+         </cmp-field>
+         <primkey-field>id</primkey-field>
+      </entity>
+
+      <entity >
+         <ejb-name>ARW</ejb-name>
+         <local-home>org.jboss.test.cmp2.cacheinvalidation.ejb.ALocalHome</local-home>
+         <local>org.jboss.test.cmp2.cacheinvalidation.ejb.ALocal</local>
+         <ejb-class>org.jboss.test.cmp2.cacheinvalidation.ejb.ABean</ejb-class>
+         <persistence-type>Container</persistence-type>
+         <prim-key-class>java.lang.Long</prim-key-class>
+         <reentrant>true</reentrant>
+         <cmp-version>2.x</cmp-version>
+         <abstract-schema-name>ARW</abstract-schema-name>
+         <cmp-field >
+            <field-name>id</field-name>
+         </cmp-field>
+         <cmp-field >
+            <field-name>name</field-name>
+         </cmp-field>
+         <primkey-field>id</primkey-field>
+      </entity>
+
+   </enterprise-beans>
+
+   <!-- Relationships -->
+   <relationships >
+      <ejb-relation >
+         <ejb-relation-name>CRO-ARO</ejb-relation-name>
+
+         <ejb-relationship-role >
+            <ejb-relationship-role-name>C-has-A</ejb-relationship-role-name>
+            <multiplicity>One</multiplicity>
+            <relationship-role-source >
+               <ejb-name>CRO</ejb-name>
+            </relationship-role-source>
+            <cmr-field >
+               <cmr-field-name>a</cmr-field-name>
+            </cmr-field>
+         </ejb-relationship-role>
+
+         <ejb-relationship-role >
+            <ejb-relationship-role-name>A-has-C</ejb-relationship-role-name>
+            <multiplicity>One</multiplicity>
+            <relationship-role-source >
+               <ejb-name>ARO</ejb-name>
+            </relationship-role-source>
+            <cmr-field >
+               <cmr-field-name>c</cmr-field-name>
+            </cmr-field>
+         </ejb-relationship-role>
+
+      </ejb-relation>
+      <ejb-relation >
+         <ejb-relation-name>CRW-ARW</ejb-relation-name>
+
+         <ejb-relationship-role >
+            <ejb-relationship-role-name>C-has-A</ejb-relationship-role-name>
+            <multiplicity>One</multiplicity>
+            <relationship-role-source >
+               <ejb-name>CRW</ejb-name>
+            </relationship-role-source>
+            <cmr-field >
+               <cmr-field-name>a</cmr-field-name>
+            </cmr-field>
+         </ejb-relationship-role>
+
+         <ejb-relationship-role >
+            <ejb-relationship-role-name>A-has-C</ejb-relationship-role-name>
+            <multiplicity>One</multiplicity>
+            <relationship-role-source >
+               <ejb-name>ARW</ejb-name>
+            </relationship-role-source>
+            <cmr-field >
+               <cmr-field-name>c</cmr-field-name>
+            </cmr-field>
+         </ejb-relationship-role>
+
+      </ejb-relation>
+   </relationships>
+
+   <!-- Assembly Descriptor -->
+   <assembly-descriptor >
+
+   <!-- transactions -->
+   <container-transaction >
+      <method >
+         <ejb-name>Facade</ejb-name>
+          <method-name>*</method-name>
+       </method>
+       <trans-attribute>RequiresNew</trans-attribute>
+    </container-transaction>
+
+   </assembly-descriptor>
+
+</ejb-jar>

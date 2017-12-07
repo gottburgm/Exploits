@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4"
+   xmlns="http://java.sun.com/xml/ns/j2ee"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+   http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+   
+   <description>The Cookie Tests Descriptor</description>
+
+   <servlet>
+      <servlet-name>CookieServlet</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.CookieServlet</servlet-class>
+   </servlet>
+   <servlet>
+      <servlet-name>CookieReadServlet</servlet-name>
+      <servlet-class>org.jboss.test.web.servlets.CookieReadServlet</servlet-class>
+   </servlet>
+   
+   
+   <servlet-mapping>
+      <servlet-name>CookieServlet</servlet-name>
+      <url-pattern>/CookieServlet</url-pattern>
+   </servlet-mapping>
+   
+  <servlet-mapping>
+      <servlet-name>CookieReadServlet</servlet-name>
+      <url-pattern>/CookieReadServlet</url-pattern>
+   </servlet-mapping>
+</web-app>
+   

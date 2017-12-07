@@ -1,0 +1,73 @@
+<html>
+<body>
+<p>
+<h2>Transaction Demarcation</h2>
+
+</p><p>
+One of the first AOP services ever implemented for JBoss AOP was transaction demarcation. Modelled directly after EJB, transaction demarcation allows you to delineate at the method level when a transactions should start or stop.. You can define transaction demarcation using the standard J2EE keywords on a plain java class: Required , RequiresNew, Supports, NotSupported, Never. There are two different ways to define it.  One is through XML metadata, the other is through annotations.  The transaction demarcation aspect is trigger by applying XML to a class or by annotating a method or constructor.
+</p><p>
+<i>NOTE</i>. Any exception that propagates through a transaction boundary will cause the transaction to become rolledback.
+</p><p>
+<h3>XML metadata</h3>
+
+If want to totally isolate your Java class from knowing that it delineates transactional boundaries, then you can use XML metadtaa to define JBoss AOP transactions.  You can do this in any JBoss AOP XML file.
+</p><p>
+<pre>
+&lt;aop&gt;
+...
+   &lt;metadata tag="transaction" class="com.acme.POJO"&gt;
+      &lt;default&gt;
+         &lt;trans-attribute&gt;Required&lt;/trans-attribute&gt;
+      &lt;/default&gt;
+      &lt;method name="get.*"&gt;
+         &lt;trans-attribute&gt;RequiresNew&lt;/trans-attribute&gt;
+      &lt;/method&gt;
+      &lt;method name="someMethod3"&gt;
+         &lt;trans-attribute&gt;Supports&lt;/trans-attribute&gt;
+      &lt;/method&gt;
+      &lt;method name="stuff"&gt;
+         &lt;trans-attribute&gt;Never&lt;/trans-attribute&gt;
+      &lt;/field&gt;
+   &lt;/metadata&gt;
+&lt;/aop&gt;
+</pre>
+</p><p>
+</p><p>
+The default &lt;trans-attribute&gt; defines the default transaction attribute for the entire class. All get methods will use RequiresNew. The method someMethod3 will use Supports. The method stuff will Never start a transaction. So you see, its the same as J2EE EJB transactions except you're apply transaction demarcation to plain old Java Classes. 
+</p><p>
+<h3>Annotations</h3>
+
+If you prefer to define transactions directly in your classfiles you can annotate your methods or constructors instead.  JBoss AOP has an Annotation Compiler for JDK 1.4 if you're stuck using that version of Java.  The annotation is <tt>org.jboss.aspects.tx.Tx</tt> and the enumeration type used within this annotation is <tt>org.jboss.aspects.tx.TxType</tt>.  For JDK 1.4, TxType is an enum abstraction provided by JBoss AOP.  For JDK 5.0, TxType is an actual enum.  The <tt>@Tx</tt> annotation can be declared on a method or constructor.
+</p><p>
+<b>Tx Annotations with JDK 1.4</b>
+<pre>
+public class POJO
+{
+   /**
+    * @@org.jboss.aspects.tx.Tx (org.jboss.aspects.tx.TxType.REQUIRED)
+    */
+    public POJO() {}
+
+   /**
+    * @@org.jboss.aspects.tx.Tx (org.jboss.aspects.tx.TxType.NEVER)
+    */
+    public static void staticMethod() {}
+}
+</pre>
+</p><p>
+<b>Tx Annotations with JDK 5.0</b>
+<pre>
+import org.jboss.aspects.tx.*;
+
+public class POJO
+{
+    @Tx(TxType.REQUIRED)
+    public POJO() {}
+
+    @Tx(TxType.NEVER)
+    public static void staticMethod() {}
+}
+</pre>
+</p>
+</body>
+</html>

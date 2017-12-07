@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jbosscmp-jdbc PUBLIC "-//JBoss//DTD JBOSSCMP-JDBC 3.2//EN" "http://www.jboss.org/j2ee/dtd/jbosscmp-jdbc_3_2.dtd">
+
+<jbosscmp-jdbc>
+   <defaults>
+      <create-table>true</create-table>
+      <remove-table>true</remove-table>
+   </defaults>
+
+   <enterprise-beans>
+
+        <entity>
+         <ejb-name>CRW</ejb-name>
+         <table-name>C</table-name>
+      </entity>
+      <entity>
+         <ejb-name>CRO</ejb-name>
+         <table-name>C</table-name>
+      </entity>
+      <entity>
+         <ejb-name>ARW</ejb-name>
+         <table-name>A</table-name>
+      </entity>
+      <entity>
+         <ejb-name>ARO</ejb-name>
+         <table-name>A</table-name>
+      </entity>
+
+   </enterprise-beans>
+
+  <relationships>
+    <ejb-relation>
+      <ejb-relation-name>CRO-ARO</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>C-has-A</ejb-relationship-role-name>
+          <fk-constraint>false</fk-constraint>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>A-has-C</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>id</field-name>
+               <column-name>a_id</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+    <ejb-relation>
+      <ejb-relation-name>CRW-ARW</ejb-relation-name>
+
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>C-has-A</ejb-relationship-role-name>
+          <fk-constraint>false</fk-constraint>
+		  <key-fields/>
+
+      </ejb-relationship-role>
+      <ejb-relationship-role>
+          <ejb-relationship-role-name>A-has-C</ejb-relationship-role-name>
+          <key-fields>
+             <key-field>
+               <field-name>id</field-name>
+               <column-name>a_id</column-name>
+             </key-field>
+          </key-fields>
+
+      </ejb-relationship-role>
+    </ejb-relation>
+  </relationships>
+
+</jbosscmp-jdbc>

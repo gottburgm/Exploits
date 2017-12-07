@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+NOTE: the securityDomain attribute in the BaseCertLoginModule refers to a JaasSecurityDomain 
+mbean service in the tomcat-ssl custom configuration deploy directory.
+-->
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <application-policy xmlns="urn:jboss:security-beans:1.0" name="jaspi-test">
+       <authentication-jaspi>
+         <login-module-stack name="lm-stack">
+            <login-module code="org.jboss.security.auth.spi.BaseCertLoginModule"
+                          flag = "required">
+               <module-option name="password-stacking">useFirstPass</module-option>
+               <module-option name="securityDomain">java:/jaas/jbosstest-ssl</module-option>
+            </login-module>
+            <login-module code="org.jboss.security.auth.spi.UsersRolesLoginModule"
+                          flag = "required">
+               <module-option name="password-stacking">useFirstPass</module-option>
+               <module-option name="usersProperties">ssl-users.properties</module-option>
+               <module-option name="rolesProperties">ssl-roles.properties</module-option>
+               <module-option name="roleGroupSeperator">:</module-option>
+            </login-module>
+         </login-module-stack>
+         <auth-module code="org.jboss.web.tomcat.security.jaspi.modules.HTTPClientCertServerAuthModule" login-module-stack-ref="lm-stack"/>
+       </authentication-jaspi>
+   </application-policy>
+
+</deployment>

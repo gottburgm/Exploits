@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+	<bean name="jvmControl" class="org.jboss.system.server.jmx.JVMShutdown">
+			<property name="JMXKernel"><inject bean="JMXKernel" /></property>
+	</bean>
+</deployment>

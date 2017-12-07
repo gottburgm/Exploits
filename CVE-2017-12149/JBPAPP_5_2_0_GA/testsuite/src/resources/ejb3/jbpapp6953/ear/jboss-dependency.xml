@@ -1,0 +1,3 @@
+<dependency xmlns="urn:jboss:dependency:1.0">
+   <item whenRequired="Real" dependentState="Create">jbpapp6953-ejb2.jar</item>
+</dependency>

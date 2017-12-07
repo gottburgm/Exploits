@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://www.redhat.com/CcTsfiMap"
+            targetNamespace="http://www.redhat.com/CcTsfiMap"
+>
+  <xsd:annotation>
+    <xsd:documentation xml:lang="en">
+     Schema for mapping document between test (test suite, test case) and TSFI.
+     This mapping is created for purpose of Common Criteria evaluation of JBoss AS.
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:element name="testCaseMapping" type="TestCaseMappingType">
+  <!-- Tes suite name has to be unique, so we are enforcing it. -->    
+    <xsd:unique name="testSuiteNameUnique">
+      <xsd:selector xpath="testSuite"/>
+        <xsd:field    xpath="@name"/>
+    </xsd:unique>  
+  </xsd:element>
+  
+  <xsd:complexType name="TestCaseMappingType">
+    <xsd:sequence>
+      <xsd:element name="testSuite" type="TestSuiteType" minOccurs="1" maxOccurs="unbounded">
+      
+        <xsd:unique name="testCaseNameUnique">
+          <xsd:selector xpath="testCase"/>
+          <xsd:field    xpath="@name"/>
+        </xsd:unique>  
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="TestSuiteType">
+    <xsd:sequence>
+      <xsd:element name="desc" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="testCase" type="TestCaseType" minOccurs="1" maxOccurs="unbounded">
+        <xsd:unique name="testNameUnique">
+          <xsd:selector xpath="test"/>
+          <xsd:field    xpath="@name"/>
+        </xsd:unique>  
+      </xsd:element>  
+    </xsd:sequence>
+    <xsd:attribute name="name" type="TestSuiteName" use="required"/>
+  </xsd:complexType>  
+  
+  <!-- Enumeration of all possible test suite names -->
+  <xsd:simpleType name="TestSuiteName">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="EAP"/>   <!-- EAP test suite -->
+      <xsd:enumeration value="CTS"/>   <!-- J2EE TCK 1.4 test suite -->
+      <xsd:enumeration value="EJB3"/>  <!-- EJB3 project test suite -->
+      <xsd:enumeration value="JBM"/>   <!-- JBoss Messaging project test suite -->
+      <xsd:enumeration value="JBWS-Native"/>  <!-- JBoss Webservices - Native project test suite -->
+      <xsd:enumeration value="JBWS-CXF"/>  <!-- JBoss Webservices - CXF project test suite -->
+   </xsd:restriction>
+  </xsd:simpleType>
+  
+  <xsd:complexType name="TestCaseType">
+    <xsd:sequence>
+      <xsd:element name="desc" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="test" type="TestType" minOccurs="1" maxOccurs="unbounded"/>     
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+  </xsd:complexType>  
+  
+  <xsd:complexType name="TestType">
+    <xsd:sequence>
+      <xsd:element name="desc" type="xsd:string" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="TSFI" type="xsd:string" minOccurs="1" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string" use="required"/> 
+  </xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,16 @@
+<assembly>
+  <id>jmxcompliance-MyMBeans2</id>
+  <formats>
+    <format>jar</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>target/test-classes</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <include>org/jboss/test/jmx/compliance/loading/support/Trivial*.class</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</assembly>

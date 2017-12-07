@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ejb-jar version="2.1"
+    xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+    http://java.sun.com/xml/ns/j2ee/ejb-jar_2_1.xsd"
+    >
+    <enterprise-beans>
+        <session>
+            <description>JUnit Session Bean Test Runner</description>
+            <ejb-name>DeployUnitTestCase-testEjb2xDeployment</ejb-name>
+            <home>org.jboss.test.profileservice.ejb2x.BeanHome</home>
+            <remote>org.jboss.test.profileservice.ejb2x.BeanRemote</remote>
+            <ejb-class>org.jboss.test.profileservice.ejb2x.BeanImpl</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+            <env-entry>
+                <env-entry-name>entry1</env-entry-name>
+                <env-entry-type>java.lang.String</env-entry-type>
+                <env-entry-value>entry1Value</env-entry-value>
+            </env-entry>
+        </session>
+    </enterprise-beans>
+</ejb-jar>

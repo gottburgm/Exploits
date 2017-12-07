@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+   <bean name="Test" class="org.jboss.test.system.controller.integration.support.SimpleStringBean">
+      <property name="string1"><inject bean="jboss.test:type=test" property="Attribute1"/></property>
+      <property name="string2"><inject bean="jboss.test:type=test" property="attribute1"/></property>
+   </bean>
+</deployment>
