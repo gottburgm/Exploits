@@ -1,0 +1,29 @@
+<html>
+<body>
+<p>
+<pre>
+/*
+ * JBoss, the OpenSource J2EE webOS
+ *
+ * Distributable under LGPL license.
+ * See terms of license at gnu.org.
+ */
+package org.jboss.test.aop.bean;
+
+/**
+ * A simple logger
+ *
+ * @author &lt;a href="mailto:adrian@jboss.com"&gt;Adrian Brock&lt;/a&gt;
+ * @version $Revision$
+ */
+public class LogUtil
+{
+   public void log(String message)
+   {
+      System.out.println(message);
+   }
+}
+</pre>
+</p>
+</body>
+</html>

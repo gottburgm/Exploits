@@ -1,0 +1,43 @@
+<html>
+<body>
+<p>
+<pre>
+/*
+ * JBoss, the OpenSource J2EE webOS
+ * 
+ * Distributable under LGPL license.
+ * See terms of license at gnu.org.
+ */
+package org.jboss.aop.patterns.observable;
+
+/**
+ * A Subject. This interface is exposed on the advised object.
+ * 
+ * @author &lt;a href="adrian@jboss.com"&gt;Adrian Brock&lt;/a&gt;
+ * @version $Revision$
+ */
+public interface Subject
+{
+   /**
+    * Add an observer
+    * 
+    * @param observer the observer
+    */
+   void addObserver(Observer observer);
+   
+   /**
+    * Remove an observer
+    * 
+    * @param observer the observer
+    */
+   void removeObserver(Observer observer);
+   
+   /**
+    * Notify all observers
+    */
+   void notifyObservers();
+}
+</pre>
+</p>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{{{
+/*
+ * JBoss, the OpenSource J2EE webOS
+ *
+ * Distributable under LGPL license.
+ * See terms of license at gnu.org.
+ */
+package org.jboss.test.aop.bean;
+
+import org.jboss.aop.patterns.observable.Observer;
+import org.jboss.aop.patterns.observable.Subject;
+
+/**
+ * A simple test of the Observerable aspect
+ *
+ * @author <a href="mailto:adrian@jboss.org">Adrian Brock</a>
+ * @version $Revision$
+ */
+public class ObservableTester
+{
+   public static void main(String args) throws Exception 
+   {
+      // Create our pojos - nothing new here
+      Temperature temperature = new Temperature();
+      LogUtil logUtil = new LogUtil();
+      
+      // But look, we can cast them to our introductions
+      Subject subject = (Subject) temperature;
+      Observer observer = (Observer) logUtil;
+      
+      // And link them
+      subject.addObserver(observer);
+
+      // Now this logs the change      
+      temperature.setTemperature(10);
+   }
+}
+}}}

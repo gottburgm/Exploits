@@ -1,0 +1,39 @@
+<html>
+<body>
+<p>
+<pre>
+/*
+ * JBoss, the OpenSource J2EE webOS
+ *
+ * Distributable under LGPL license.
+ * See terms of license at gnu.org.
+ */
+package org.jboss.test.aop.bean;
+
+import org.jboss.aop.patterns.observable.Observer;
+import org.jboss.aop.patterns.observable.Subject;
+
+/**
+ * Log all notifications of Subject changes
+ *
+ * @author &lt;a href="mailto:adrian@jboss.com"&gt;Adrian Brock&lt;/a&gt;
+ * @version $Revision$
+ */
+public class LogUtilObserver implements Observer
+{
+   private LogUtil logUtil;
+   
+   public LogUtilObserver(LogUtil logUtil)
+   {
+      this.logUtil = logUtil;
+   }
+   
+   public void fireChange(Subject subject)
+   {
+      logUtil.log("Received Notification: " + subject.toString());
+   }
+}
+</pre>
+</p>
+</body>
+</html>

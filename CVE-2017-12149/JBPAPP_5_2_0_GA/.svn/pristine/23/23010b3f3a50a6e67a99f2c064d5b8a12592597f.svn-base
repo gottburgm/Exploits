@@ -1,0 +1,32 @@
+<html>
+<body>
+<p>
+<pre>
+/*
+ * JBoss, the OpenSource J2EE webOS
+ * 
+ * Distributable under LGPL license.
+ * See terms of license at gnu.org.
+ */
+package org.jboss.aop.patterns.observable;
+
+/**
+ * An Observer. Implement this interface to register
+ * for subject changes.
+ * 
+ * @author &lt;a href="adrian@jboss.com"&gt;Adrian Brock&lt;/a&gt;
+ * @version $Revision$
+ */
+public interface Observer
+{
+   /**
+    * Notification that a subject has changed
+    * 
+    * @param subject the subject
+    */
+   void fireChange(Subject subject);
+}
+</pre>
+</p>
+</body>
+</html>
