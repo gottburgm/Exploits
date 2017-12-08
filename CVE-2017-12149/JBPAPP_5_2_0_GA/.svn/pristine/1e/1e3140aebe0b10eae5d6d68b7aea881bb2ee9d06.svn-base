@@ -1,3 +1,0 @@
-<!-- This context gives privileges mainly for the legacy Invoker Servlet -->
-<Context path="/jbosstest" privileged="true">
-</Context>

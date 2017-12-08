@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- $Id$ -->
-<mbean name="jboss.test:type=BasicMBeanName" code="BasicMBeanCode">
-    <annotation>@org.jboss.test.system.metadata.annotation.CompType(type="DS",subtype="LocalTX")</annotation>
-</mbean>

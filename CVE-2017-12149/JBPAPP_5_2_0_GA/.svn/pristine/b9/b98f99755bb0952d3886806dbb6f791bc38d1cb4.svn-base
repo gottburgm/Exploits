@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<server>
-   <mbean name="jboss.test:type=BrokenDynamicMBeanAttributes" code="org.jboss.test.system.controller.support.BrokenDynamicMBeanAttributes">
-      <attribute name="Dummy">dummy</attribute>
-   </mbean>
-</server>
